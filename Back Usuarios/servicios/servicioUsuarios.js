@@ -193,8 +193,10 @@ const recuperarContraseña = asyncError(async (req, res, next) => {
 
   const result = await controlUsuarios.obtenerUsuarioCorreo
     (req.query.correo, req.query.password);
+    console.log(result);
   const usuarioStr = JSON.stringify(result);
   const usuarioObj = JSON.parse(usuarioStr);
+ 
   if (usuarioObj === null) {
     const error = new CustomeError('No existe un usuario con ese correo.', 404); // Cambio de zona a usuario
     return next(error);
