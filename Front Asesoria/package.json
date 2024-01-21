@@ -2,8 +2,8 @@
   "name": "sistema-de-apoyo-para-la-consjeria-juridica",
   "private": true,
   "version": "0.0.0",
-  "scripts": {
-    "dev": "vite --host 0.0.0.0",
+  "scripts": { 
+    "dev": "vite --host  --port 3026", 
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -1,4 +1,3 @@
-# Dockerfile
 FROM node:latest
 
 WORKDIR /app
@@ -9,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+EXPOSE 3026
 
 CMD ["npm", "run", "dev"]
 
