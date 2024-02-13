@@ -4,7 +4,7 @@ import { DataAsesoria } from '../components/asesoria/data-asesoria'
 class ConsultaController {
   #pagina = 1
   #numeroPaginas
-
+  #busquedaExitosa = false
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
@@ -22,80 +22,80 @@ class ConsultaController {
     this.agregarMunicipios()
     this.agregarZonas()
     const searchButton = document.getElementById('searchButton');
-     searchButton.addEventListener('click', (event) => {
-         event.preventDefault();
-         this.handleFiltros();
-       });
-   
-       const deleteButton = document.getElementById('deleteButton');
-       deleteButton.style.display = 'none';
-       deleteButton.addEventListener('click', (event) => {
-         event.preventDefault();
-         this.deleteFiltros();
-       });
-       /*  const excel = document.getElementById('filtros-excel');
-       excel.style.display = 'none';
-       const dropdownbuttonexcell = document.getElementById('dropdown-button-excell');
-       dropdownbuttonexcell.addEventListener('click', (event) => {
-         event.preventDefault();
-         this.filtrosexcel();
-       });
-   
-      Botón de descarga del reporte
-       const btnDescargarReporte = document.getElementById('btnDescargarReporte');
-       btnDescargarReporte.addEventListener('click', (event) => {
-         event.preventDefault();
-         this.descargarReporte();
-       });
-       */
-    window.handleConsultarAsesoriasById = this.handleConsultarAsesoriasById
-  }
-/* *
-  // DOMContentLoaded
-  handleDOMContentLoaded = () => {
-    // add permissions
-    this.utils.validatePermissions({})
-    // const searchButton = document.getElementById('searchButton');
+    searchButton.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.handleFiltros();
+    });
 
-    /*   searchButton.addEventListener('click', (event) => {
-         event.preventDefault();
-         this.handleFiltros();
-       });
-   */
-/*
     const deleteButton = document.getElementById('deleteButton');
     deleteButton.style.display = 'none';
     deleteButton.addEventListener('click', (event) => {
       event.preventDefault();
       this.deleteFiltros();
     });
-
-    */
-    /*  const excel = document.getElementById('filtros-excel');
+    const excel = document.getElementById('filtros-excel');
     excel.style.display = 'none';
     const dropdownbuttonexcell = document.getElementById('dropdown-button-excell');
     dropdownbuttonexcell.addEventListener('click', (event) => {
       event.preventDefault();
       this.filtrosexcel();
     });
-
-   Botón de descarga del reporte
-    const btnDescargarReporte = document.getElementById('btnDescargarReporte');
-    btnDescargarReporte.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.descargarReporte();
-    });
-    */
-    
-    
     /*
-    this.handleFiltros();
-    this.handleConsultarAsesorias()
-    this.agregarMunicipios()
-    this.agregarZonas()
-    this.getNumeroPaginas()
+     Botón de descarga del reporte
+      const btnDescargarReporte = document.getElementById('btnDescargarReporte');
+      btnDescargarReporte.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.descargarReporte();
+      });
+      */
     window.handleConsultarAsesoriasById = this.handleConsultarAsesoriasById
-    */
+  }
+  /* *
+    // DOMContentLoaded
+    handleDOMContentLoaded = () => {
+      // add permissions
+      this.utils.validatePermissions({})
+      // const searchButton = document.getElementById('searchButton');
+  
+      /*   searchButton.addEventListener('click', (event) => {
+           event.preventDefault();
+           this.handleFiltros();
+         });
+     */
+  /*
+      const deleteButton = document.getElementById('deleteButton');
+      deleteButton.style.display = 'none';
+      deleteButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.deleteFiltros();
+      });
+  
+      */
+  /*  const excel = document.getElementById('filtros-excel');
+  excel.style.display = 'none';
+  const dropdownbuttonexcell = document.getElementById('dropdown-button-excell');
+  dropdownbuttonexcell.addEventListener('click', (event) => {
+    event.preventDefault();
+    this.filtrosexcel();
+  });
+
+ Botón de descarga del reporte
+  const btnDescargarReporte = document.getElementById('btnDescargarReporte');
+  btnDescargarReporte.addEventListener('click', (event) => {
+    event.preventDefault();
+    this.descargarReporte();
+  });
+  */
+
+
+  /*
+  this.handleFiltros();
+  this.handleConsultarAsesorias()
+  this.agregarMunicipios()
+  this.agregarZonas()
+  this.getNumeroPaginas()
+  window.handleConsultarAsesoriasById = this.handleConsultarAsesoriasById
+  */
   /*}
 */
 
@@ -163,6 +163,8 @@ class ConsultaController {
 
   getNumeroPaginas = async () => {
     const numeroAsesorias = await this.model.getTotalAsesorias()
+    const total = document.getElementById('total')
+    total.innerHTML = ' :' + numeroAsesorias.totalAsesorias
     this.#numeroPaginas = (numeroAsesorias.totalAsesorias) / 10
   }
 
@@ -655,17 +657,17 @@ class ConsultaController {
       }
     }
   */
- /*
-    filtrosexcel = () => {
-      const excel = document.getElementById('filtros-excel');
-      if (excel.style.display === 'block') {
-        excel.style.display = 'none';
-      } else {
-        excel.style.display = 'block';
-      }
+  /*
+   
+      */
+  filtrosexcel = () => {
+    const excel = document.getElementById('filtros-excel');
+    if (excel.style.display === 'block') {
+      excel.style.display = 'none';
+    } else {
+      excel.style.display = 'block';
     }
-     */
-
+  }
   limpiarFiltros = () => {
     const checkboxAsesor = document.getElementById('check-asesor')
     const selectAsesor = document.getElementById('select-asesor')
@@ -699,6 +701,9 @@ class ConsultaController {
     const table = document.getElementById('table-body')
     table.innerHTML = ''
     this.limpiarFiltros()
+    this.#pagina = 1
+    this.#busquedaExitosa=false
+    this.getNumeroPaginas()
     this.handleConsultarAsesorias()
   }
 
@@ -726,20 +731,61 @@ class ConsultaController {
 
   handleConsultarAsesorias = async () => {
     try {
+      if (this.#busquedaExitosa === false) {
+        const deleteButton = document.getElementById('deleteButton');
+        deleteButton.style.display = 'none';
 
-      const deleteButton = document.getElementById('deleteButton');
-      deleteButton.style.display = 'none';
+        const asesoriasResponse = await this.model.getAsesorias(this.#pagina)
+        const asesorias = asesoriasResponse.asesorias
 
-      const asesoriasResponse = await this.model.getAsesorias(this.#pagina)
-      const asesorias = asesoriasResponse.asesorias
+        const table = document.getElementById('table-body')
+        const rowsTable = document.getElementById('table-body').rows.length
+        if (this.validateRows(rowsTable)) {
+          asesorias.forEach(asesoria => {
+            table.appendChild(this.crearRow(asesoria))
+          })
+        }
+      } else {
+        const deleteButton = document.getElementById('deleteButton');
+        deleteButton.style.display = 'block';
 
-      const table = document.getElementById('table-body')
-      const rowsTable = document.getElementById('table-body').rows.length
-      if (this.validateRows(rowsTable)) {
-        asesorias.forEach(asesoria => {
-          table.appendChild(this.crearRow(asesoria))
-        })
+
+
+        const checkboxAsesor = document.getElementById('check-asesor')
+        const checkboxMunicipio = document.getElementById('check-municipio')
+        const checkboxZona = document.getElementById('check-zona')
+        const checkboxDefensor = document.getElementById('check-defensor')
+    
+        const selectAsesor = document.getElementById('select-asesor')
+        const selectMunicipio = document.getElementById('select-municipio')
+        const selectZona = document.getElementById('select-zona')
+        const selectDefensor = document.getElementById('select-defensor')
+    
+        const fechaInicio = document.getElementById('fecha-inicio')
+        const fechaFinal = document.getElementById('fecha-final')
+    
+
+        const filtros = {
+          fecha_inicio: fechaInicio.value,
+          fecha_final: fechaFinal.value,
+          id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
+          id_zona: checkboxZona.checked ? selectZona.value : null,
+          id_asesor: checkboxAsesor.checked ? selectAsesor.value : null,
+          id_defensor: checkboxDefensor.checked ? selectDefensor.value : null,
+        }
+        console.log(filtros)
+        console.log(this.#pagina)
+        const asesoriasResponse = await this.model.getAsesoriasByFiltersPaginacion(this.#pagina,filtros)
+        const asesorias = asesoriasResponse
+        const table = document.getElementById('table-body')
+        const rowsTable = document.getElementById('table-body').rows.length
+        if (this.validateRows(rowsTable)) {
+          asesorias.forEach(asesoria => {
+            table.appendChild(this.crearRow(asesoria))
+          })
+        }
       }
+
     } catch (error) {
       console.error('Error:', error.message)
     }
@@ -806,32 +852,76 @@ class ConsultaController {
     const fechaInicio = document.getElementById('fecha-inicio')
     const fechaFinal = document.getElementById('fecha-final')
 
-    const table = document.getElementById('table-body')
-    table.innerHTML = ''
-    const filtros = {
-      fecha_inicio: fechaInicio.value,
-      fecha_final: fechaFinal.value,
-      id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
-      id_zona: checkboxZona.checked ? selectZona.value : null,
-      id_asesor: checkboxAsesor.checked ? selectAsesor.value : null,
-      id_defensor: checkboxDefensor.checked ? selectDefensor.value : null,
-    }
-    try {
-      console.log(filtros)
-      const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
-      if (asesoriasResponse.length === 0) {
-        const deleteButton = document.getElementById('deleteButton');
-        deleteButton.style.display = 'none';
+  //  const table = document.getElementById('table-body')
+  //  table.innerHTML = ''
+
+
+    //Determinar si fecha inicial y fecha final tienen un rango correcto osea que la fecha final sea mayor a la fecha inicial
+    if (fechaInicio.value > fechaFinal.value) {
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          this.#pagina = 1
+          this.getNumeroPaginas()
+          this.handleConsultarAsesorias()
+        }
+      });
+      modal.message = 'La Fecha Inicial No Puede Ser Mayor A La Fecha Final';
+      modal.open = 'true'
+    } else {
+      const filtros = {
+        fecha_inicio: fechaInicio.value,
+        fecha_final: fechaFinal.value,
+        id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
+        id_zona: checkboxZona.checked ? selectZona.value : null,
+        id_asesor: checkboxAsesor.checked ? selectAsesor.value : null,
+        id_defensor: checkboxDefensor.checked ? selectDefensor.value : null,
       }
-      else {
-        const deleteButton = document.getElementById('deleteButton');
-        deleteButton.style.display = 'block';
+      try {
+        console.log(filtros)
+        const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
+        const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
+        console.log(numeroAsesorias)
+        const total = document.getElementById('total')
+        total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
+
+
+
+        if (asesoriasResponse.length === 0) {
+          const deleteButton = document.getElementById('deleteButton');
+          deleteButton.style.display = 'none';
+
+
+          const modal = document.querySelector('modal-warning');
+
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              this.#pagina = 1
+              this.getNumeroPaginas()
+              this.handleConsultarAsesorias()
+            }
+          });
+
+          modal.message = 'No Existen Coincidencias En La Búsqueda';
+          modal.open = 'true'
+
+        }
+        else {
+          const deleteButton = document.getElementById('deleteButton');
+          deleteButton.style.display = 'block';
+          this.#busquedaExitosa = true
+          this.#pagina = 1
+          this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
+          this.handleConsultarAsesorias()
+         // asesoriasResponse.forEach(asesoria => {
+        //    table.appendChild(this.crearRow(asesoria))
+       //   })
+        }
+
+
+      } catch (error) {
+        console.error('Error:', error.message)
       }
-      asesoriasResponse.forEach(asesoria => {
-        table.appendChild(this.crearRow(asesoria))
-      })
-    } catch (error) {
-      console.error('Error:', error.message)
     }
   }
 

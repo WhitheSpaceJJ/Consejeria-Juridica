@@ -1,5 +1,7 @@
 //Falta relacion de defensor y asesoria y actualizar controles
 const modeloAsesoria = require('../modelos/modeloAsesoria');
+const modeloDistritoJudicial = require('../modelos/modeloDistritoJudicial');
+
 /** Operaciones Basica */
 const controlPersonas = require('./controlPersonas');
 const controlZonas = require('./controlZona');
@@ -14,6 +16,7 @@ const controlAsesor = require('./controlAsesor');
 const controlDefensor = require('./controlDefensor');
 const controlEmpleado = require('./controlEmpleados');
 const { Op, literal } = require("sequelize");
+const Sequelize = require('sequelize');
 
 /**
  * @abstract Función que permite obtener asesorias por filtro
@@ -31,7 +34,7 @@ const obtenerAsesoriasFiltro = async (filtros) => {
     }
 
     // Verificar que las claves sean las esperadas
-    const clavesEsperadas = ['fecha-inicio', 'fecha-final','id_defensor', 'id_municipio', 'id_zona','id_asesor'];
+    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor'];
     const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
     if (clavesInvalidas.length > 0) {
       throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
@@ -43,7 +46,7 @@ const obtenerAsesoriasFiltro = async (filtros) => {
     //if (filtros.fecha_registro) {
     //  whereClause.fecha_registro = filtros.fecha_registro;
     //} else 
-    
+
     if (filtros['fecha-inicio'] && filtros['fecha-final']) {
       whereClause.fecha_registro = {
         [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
@@ -54,12 +57,12 @@ const obtenerAsesoriasFiltro = async (filtros) => {
         { id_empleado: filtros.id_asesor },
         { id_empleado: filtros.id_defensor },
       ];
-    }else if(filtros.id_asesor){
+    } else if (filtros.id_asesor) {
       whereClause.id_empleado = filtros.id_asesor;
-    }else if(filtros.id_defensor){
+    } else if (filtros.id_defensor) {
       whereClause.id_empleado = filtros.id_defensor;
     }
-  
+
     if (filtros.id_municipio) {
       // Asegúrate de que la relación entre Empleado y Municipio esté definida
       // y ajusta el nombre del modelo y la clave foránea según sea necesario
@@ -86,8 +89,8 @@ const obtenerAsesoriasFiltro = async (filtros) => {
         model: modeloAsesoria.DetalleAsesoriaCatalogo,
       },
       //{
-     //   model: modeloAsesoria.Turno,
-     // },
+      //   model: modeloAsesoria.Turno,
+      // },
 
       {
         model: modeloAsesoria.Empleado,
@@ -185,14 +188,14 @@ const obtenerAsesorias = async () => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 
-        //'id_turno', 
-        'id_tipo_juicio']
+        exclude: ['id_asesorado',
+          //'id_turno', 
+          'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-       // modeloAsesoria.Turno,
+        // modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ]
@@ -288,14 +291,14 @@ const obtenerAsesoriaPorId = async (id) => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 
-       // 'id_turno',
-         'id_tipo_juicio']
+        exclude: ['id_asesorado',
+          // 'id_turno',
+          'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-      //  modeloAsesoria.Turno,
+        //  modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ]
@@ -382,14 +385,14 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
       nest: true,
       attributes: {
         exclude: ['id_asesorado',
-        // 'id_turno',
-         'id_tipo_juicio']
+          // 'id_turno',
+          'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.Empleado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-       // modeloAsesoria.Turno,
+        // modeloAsesoria.Turno,
         modeloAsesoria.TipoJuicio
       ]
     });
@@ -576,14 +579,14 @@ const actualizarAsesoria = async (asesoria_pre) => {
     datos_asesoria.id_asesorado = asesorado_pre.id_asesorado;
     datos_asesoria.id_empleado = asesoria_obj.empleado.id_empleado;
     datos_asesoria.id_tipo_juicio = asesoria_obj.tipos_juicio.id_tipo_juicio;
-/*
-    if (asesoria_obj.hasOwnProperty("turno")) {
-      if (typeof asesoria_obj.turno === "object" && Object.keys(asesoria_obj.turno).length > 0) {
-        const turno = await controlTurnos.agregarTurno(asesoria_obj.turno);
-        datos_asesoria.id_turno = turno.id_turno;
-      }
-    }
-*/
+    /*
+        if (asesoria_obj.hasOwnProperty("turno")) {
+          if (typeof asesoria_obj.turno === "object" && Object.keys(asesoria_obj.turno).length > 0) {
+            const turno = await controlTurnos.agregarTurno(asesoria_obj.turno);
+            datos_asesoria.id_turno = turno.id_turno;
+          }
+        }
+    */
     const asesoria_cre = (await modeloAsesoria.Asesoria.update(datos_asesoria, { where: { id_asesoria: datos_asesoria.id_asesoria } }));
     return await obtenerAsesoriaPorIdAsesorado(datos_asesoria.id_asesorado);
   } catch (error) {
@@ -608,14 +611,14 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 
-        //'id_turno',
-         'id_tipo_juicio']
+        exclude: ['id_asesorado',
+          //'id_turno',
+          'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-       // modeloAsesoria.Turno,
+        // modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ],
@@ -703,6 +706,175 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
   }
 };
 
+//Funcion que te regrese una lista de asesorias por asi decirlo si te envian el numero 1 como paramtro te regrese las primeras 10 asesorias, y se te envia el dos que te envie las otras 10 y asi sucesivamente
+
+const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
+  try {
+    // Verificar si el arreglo de filtros tiene al menos una clave
+    const filtroKeys = Object.keys(filtros);
+    if (filtroKeys.length === 0) {
+      throw new Error("El arreglo de filtros debe contener al menos una clave.");
+    }
+    if (filtroKeys.length > 6) {
+      throw new Error("El arreglo de filtros no debe contener más de seis claves.");
+    }
+
+    // Verificar que las claves sean las esperadas
+    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor'];
+    const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
+    if (clavesInvalidas.length > 0) {
+      throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
+    }
+
+
+    const whereClause = {};
+
+    //if (filtros.fecha_registro) {
+    //  whereClause.fecha_registro = filtros.fecha_registro;
+    //} else 
+
+    if (filtros['fecha-inicio'] && filtros['fecha-final']) {
+      whereClause.fecha_registro = {
+        [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
+      };
+    }
+    if (filtros.id_asesor && filtros.id_defensor) {
+      whereClause[Op.or] = [
+        { id_empleado: filtros.id_asesor },
+        { id_empleado: filtros.id_defensor },
+      ];
+    } else if (filtros.id_asesor) {
+      whereClause.id_empleado = filtros.id_asesor;
+    } else if (filtros.id_defensor) {
+      whereClause.id_empleado = filtros.id_defensor;
+    }
+
+    if (filtros.id_municipio) {
+      // Asegúrate de que la relación entre Empleado y Municipio esté definida
+      // y ajusta el nombre del modelo y la clave foránea según sea necesario
+      whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
+    }
+
+    if (filtros.id_zona) {
+      // Asegúrate de que la relación entre Empleado y Zona esté definida
+      // y ajusta el nombre del modelo y la clave foránea según sea necesario
+      whereClause['$empleado.distrito_judicial.id_zona$'] = filtros.id_zona;
+    }
+    // Resto del código...
+
+    const asesorias_pre = await modeloAsesoria.Asesoria.findAll({
+      raw: false,
+      nest: true,
+      attributes: {
+        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+      },
+      include: [{
+        model: modeloAsesoria.Asesorado,
+      },
+      {
+        model: modeloAsesoria.DetalleAsesoriaCatalogo,
+      },
+      //{
+      //   model: modeloAsesoria.Turno,
+      // },
+
+      {
+        model: modeloAsesoria.Empleado,
+        include: [{
+          model: modeloAsesoria.DistritoJudicial,
+        }]
+      },
+      {
+        model: modeloAsesoria.TipoJuicio,
+      }
+      ],
+      where: whereClause,
+    });
+
+    const asesorias = [];
+
+    for (const asesoria_pre of asesorias_pre) {
+      console.log(JSON.stringify(asesoria_pre));
+      const asesoria_obj = JSON.parse(JSON.stringify(asesoria_pre));
+      delete asesoria_obj.id_empleado;
+
+      if (asesoria_obj.detalle_asesorias_catalogos.length > 0) {
+        const recibidos = [];
+        for (const detalle of asesoria_obj.detalle_asesorias_catalogos) {
+          const id_catalogo = detalle.id_catalogo;
+          const catalogo = await controlCatalogoRequisito.obtenerCatalogoRequisitoPorId(id_catalogo);
+          recibidos.push(catalogo);
+        }
+        delete asesoria_obj.detalle_asesorias_catalogos;
+        asesoria_obj.recibidos = recibidos;
+      }
+
+      // Add other data processing steps similar to obtenerAsesoriaPorIdAsesorado here
+      const tipo_empleado = asesoria_obj.empleado.tipo_empleado;
+      if (tipo_empleado === "asesor") {
+        const id_empleado = asesoria_obj.empleado.id_empleado;
+        const asesor = await controlAsesor.obtenerAsesorPorId(id_empleado);
+        asesoria_obj.asesor = asesor;
+        delete asesoria_obj.empleado;
+      } else if (tipo_empleado === "defensor") {
+        const id_empleado = asesoria_obj.empleado.id_empleado;
+        const defensor = await controlDefensor.obtenerDefensorPorId(id_empleado);
+        asesoria_obj.defensor = defensor;
+        delete asesoria_obj.empleado;
+      }
+      delete asesoria_obj.empleado;
+
+      //const zona = await controlZonas.obtenerZonaPorId(asesoria_obj.asesor.id_zona);
+      //  delete asesoria_obj.asesor.id_zona;
+      //      asesoria_obj.asesor.zona = zona;
+
+      const persona = await controlPersonas.obtenerPersonaPorId(asesoria_obj.asesorado.id_asesorado);
+      asesoria_obj.persona = persona;
+
+      if (asesoria_obj.asesorado.id_motivo !== null) {
+        const motivo = await controlMotivo.obtenerMotivoPorId(asesoria_obj.asesorado.id_motivo);
+        delete asesoria_obj.asesorado.id_motivo;
+        asesoria_obj.asesorado.motivo = motivo;
+      }
+
+      const estado_civil = await controlEstadoCivil.obtenerEstadoCivilPorId(asesoria_obj.asesorado.id_estado_civil);
+      delete asesoria_obj.asesorado.id_estado_civil;
+      asesoria_obj.asesorado.estado_civil = estado_civil;
+      const datos_asesoria = {};
+      datos_asesoria.id_asesoria = asesoria_obj.id_asesoria;
+      datos_asesoria.resumen_asesoria = asesoria_obj.resumen_asesoria;
+      datos_asesoria.conclusion_asesoria = asesoria_obj.conclusion_asesoria;
+      datos_asesoria.estatus_requisitos = asesoria_obj.estatus_requisitos;
+      datos_asesoria.fecha_registro = asesoria_obj.fecha_registro;
+      datos_asesoria.usuario = asesoria_obj.usuario;
+      delete asesoria_obj.id_asesoria;
+      delete asesoria_obj.resumen_asesoria;
+      delete asesoria_obj.conclusion_asesoria;
+      delete asesoria_obj.estatus_requisitos;
+      delete asesoria_obj.fecha_registro;
+      delete asesoria_obj.usuario;
+      asesoria_obj.datos_asesoria = datos_asesoria;
+
+      asesorias.push(asesoria_obj);
+    }
+    if (asesorias.length > 0) {
+     //con el atributo de page number me vas a realizar un metodo que regrese las asesorias por pagina con un maximo de 10 elementos osea si de casualidad son 20 elementos y la pagina es 2 me vas a da del 11 al 20 y vicerversa
+     const pageSize = 10;
+     const startIndex = (pageNumber - 1) * pageSize;
+     const endIndex = startIndex + pageSize;
+
+     // Slice the array to get the elements for the specified page
+     const asesoriasOnPage = asesorias.slice(startIndex, endIndex);
+
+     return asesoriasOnPage;
+    }
+    else {
+      return null;
+    }
+  } catch (error) {
+    throw new Error(`Error al consultar las asesorías: ${error.message}`);
+  }
+};
 
 
 /**
@@ -729,7 +901,6 @@ const obtenerAsesoriaPorIdAsesorados = async (ids_asesorados) => {
     return null;
   }
 };
-const Sequelize = require('sequelize');
 
 
 /**
@@ -743,51 +914,85 @@ const obtenerTotalAsesorias = async (filtros) => {
     if (filtroKeys.length === 0) {
       throw new Error("El arreglo de filtros debe contener al menos una clave.");
     }
-    if (filtroKeys.length > 5) {
+    if (filtroKeys.length > 6) {
       throw new Error("El arreglo de filtros no debe contener más de seis claves.");
     }
 
     // Verificar que las claves sean las esperadas
-    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_asesor', 'id_municipio', 'id_zona','id_defensor'];
+    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor'];
     const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
     if (clavesInvalidas.length > 0) {
       throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
     }
 
+
     const whereClause = {};
+
+    //if (filtros.fecha_registro) {
+    //  whereClause.fecha_registro = filtros.fecha_registro;
+    //} else 
 
     if (filtros['fecha-inicio'] && filtros['fecha-final']) {
       whereClause.fecha_registro = {
         [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
       };
     }
-    
-
-    if (filtros.id_asesor || filtros.id_defensor) {
-      whereClause.id_empleado = {
-        [Op.or]: [
-          { id_asesor: filtros.id_asesor },
-          { id_defensor: filtros.id_defensor },
-        ],
-      };
+    if (filtros.id_asesor && filtros.id_defensor) {
+      whereClause[Op.or] = [
+        { id_empleado: filtros.id_asesor },
+        { id_empleado: filtros.id_defensor },
+      ];
+    } else if (filtros.id_asesor) {
+      whereClause.id_empleado = filtros.id_asesor;
+    } else if (filtros.id_defensor) {
+      whereClause.id_empleado = filtros.id_defensor;
     }
+
     if (filtros.id_municipio) {
+      // Asegúrate de que la relación entre Empleado y Municipio esté definida
+      // y ajusta el nombre del modelo y la clave foránea según sea necesario
       whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
     }
 
     if (filtros.id_zona) {
+      // Asegúrate de que la relación entre Empleado y Zona esté definida
+      // y ajusta el nombre del modelo y la clave foránea según sea necesario
       whereClause['$empleado.distrito_judicial.id_zona$'] = filtros.id_zona;
     }
+    // Resto del código...
 
-    const totalAsesorias = await modeloAsesoria.Asesoria.count({
+    const asesorias_pre = await modeloAsesoria.Asesoria.findAll({
+      raw: false,
+      nest: true,
+      attributes: {
+        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+      },
+      include: [{
+        model: modeloAsesoria.Asesorado,
+      },
+      {
+        model: modeloAsesoria.DetalleAsesoriaCatalogo,
+      },
+      //{
+      //   model: modeloAsesoria.Turno,
+      // },
+
+      {
+        model: modeloAsesoria.Empleado,
+        include: [{
+          model: modeloAsesoria.DistritoJudicial,
+        }]
+      },
+      {
+        model: modeloAsesoria.TipoJuicio,
+      }
+      ],
       where: whereClause,
     });
-
-    return totalAsesorias;
+    return asesorias_pre.length;
   } catch (error) {
-    console.log("Error:", error.message);
-    return null;
-    }
+    throw new Error(`Error al consultar las asesorías: ${error.message}`);
+  }
 };
 
 /**
@@ -820,5 +1025,6 @@ module.exports = {
   ,
   obtenerTotalAsesoriasSistema,
   obtenerTotalAsesorias
-
+  ,
+  obtenerAsesoriasFiltroPagina
 };

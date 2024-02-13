@@ -24,6 +24,8 @@ const obtenerAsesoriaFiltro = asyncError(async (req, res, next) => {
 }
 );
 
+
+
 /**
  * @abstract Servicio  que permite obtener una asesoría por filtro para paginación
  * @param {Object} req Request
@@ -44,6 +46,22 @@ const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
   }
 }
 );
+
+const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
+  const filtros = JSON.parse(req.query.filtros);
+  const pagina = req.query.pagina;
+  const result = await controlAsesorias.obtenerAsesoriasFiltroPagina(pagina,filtros);
+  if (result === null || result === undefined) {
+    const error = new CustomeError('No se encontraron asesorías', 404);
+    return next(error);
+  } else {
+    res.status(200).json({
+      asesorias: result
+    });
+  }
+}
+);
+
 
 /**
  * @abstract Servicio  que permite obtener una asesoría por filtro para exportar a excel
@@ -380,5 +398,6 @@ module.exports = {
   , obtenerAsesoriasPagina
   ,
   obtenerAsesoriaTotal,
-  obtenerAsesoriaFiltroTotal
+  obtenerAsesoriaFiltroTotal,
+  obtenerAsesoriasPaginaFiltro
 };

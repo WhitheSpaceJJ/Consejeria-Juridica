@@ -6,6 +6,10 @@ const router = express.Router();
 router.route('/paginacion')
 .get(servicioAsesorias.obtenerAsesoriasPagina);
 
+router.route('/paginacion-filtro')
+.get(servicioAsesorias.obtenerAsesoriasPaginaFiltro);
+
+
 router.route('/buscar')
   .get(servicioAsesorias.obtenerAsesoriaNombre);
 
