@@ -1,5 +1,6 @@
 const modeloDefensor = require('../modelos/modeloDefensor.js');
 const controlEmpleado = require('./controlEmpleados.js');
+//Falta relacion de defensor y asesoria y actualizar controles
 
 /**	
  * @abstract Función que permite obtener todos los defensores

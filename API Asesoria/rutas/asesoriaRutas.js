@@ -18,7 +18,7 @@ router.route('/buscar')
   router.route('/filtro')
   .get(servicioAsesorias.obtenerAsesoriaFiltro);
 
-  router.route('/filtro-excel')
+  router.route('/descargar-excel')
   .get(servicioAsesorias.obtenerAsesoriaFiltroExcel);
 
 

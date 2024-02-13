@@ -90,7 +90,7 @@ const EstadoCivil = sequelize.define(
   }
 );
 
-  
+
 /**
  * @typedef {Object} Genero
  * @property {number} id_genero
@@ -195,7 +195,7 @@ const CatalogoRequisito = sequelize.define(
  * @property {string} telefono
  * @property {number} id_domicilio
  * @property {number} id_genero
- * */  
+ * */
 const Persona = sequelize.define(
   "personas",
   {
@@ -321,6 +321,13 @@ const Turno = sequelize.define(
         is: /^([01]\d|2[0-3]):([0-5]\d)$/,
       },
     },
+    id_asesoria: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }, id_defensor: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   },
   {
     freezeTableName: true,
@@ -494,7 +501,7 @@ const Empleado = sequelize.define(
     tipo_empleado: {
       type: DataTypes.STRING(100),
       allowNull: false, // Don't allow null
-    },id_distrito_judicial:{
+    }, id_distrito_judicial: {
       type: DataTypes.INTEGER,
       allowNull: false,
     }
@@ -666,12 +673,15 @@ const Asesoria = sequelize.define(
     id_empleado: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
+    }
+    /*
+    ,
     id_turno: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: null,
-    },
+    } */ //Se comenta para evitar la relacion
+    ,
     id_asesorado: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -700,8 +710,8 @@ const Asesoria = sequelize.define(
 //Module exports
 module.exports = {
   Turno,
-  Persona,Empleado,DistritoJudicial,
-  MunicipioDistro,Defensor,
+  Persona, Empleado, DistritoJudicial,
+  MunicipioDistro, Defensor,
   Asesorado,
   Asesoria,
   EstadoCivil,

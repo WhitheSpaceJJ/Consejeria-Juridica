@@ -1,7 +1,7 @@
 class APIModel {
   API_URL = 'http://200.58.127.244'
   USERS_API_URL = `${this.API_URL}:3002`
-  ASESORIAS_API_URL = `http://localhost:3009`
+  ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`
   user = JSON.parse(sessionStorage.getItem('user'))
 
@@ -60,8 +60,25 @@ class APIModel {
     }
   }
 
-  async getAsesorias() {
-    const url = `${this.ASESORIAS_API_URL}/asesorias`
+  async getAsesorias(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/asesorias/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getTotalAsesorias(){
+    const url = `${this.ASESORIAS_API_URL}/asesorias/total-asesorias`
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -387,6 +404,54 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
+  
+   /*
+  async getAsesoriasDescarga(filtros, campos) {
+    let url = `${this.ASESORIAS_API_URL}/asesorias/descargar-excel?campos=${campos}`
+    if (filtros === null) {
+      url = `${this.ASESORIAS_API_URL}/asesorias/descargar-excel?campos=${campos}`
+    } else {
+      url = `${this.ASESORIAS_API_URL}/asesorias/descargar-excel?filtros={"fecha-inicio":"${filtros.fecha_inicio}","fecha-final":"${filtros.fecha_final}","id_municipio":${filtros.id_municipio},"id_zona":${filtros.id_zona},"id_defensor":${filtros.id_defensor},"id_asesor":${filtros.id_asesor}}&campos=${campos}`
+    }
+    try {
+      // Construir la URL para el servicio
+      // Realizar la llamada al servicio y descargar el archivo
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
+
+      // Verificar si la respuesta es exitosa y descargar el archivo
+      if (response.ok) {
+        // Configurar los encabezados para la descarga del archivo
+        const dispositionHeader = response.headers.get('content-disposition');
+        const filenameMatch = dispositionHeader && dispositionHeader.match(/filename="(.*)"/);
+        const filename = filenameMatch ? filenameMatch[1] : 'asesorias.xlsx';
+
+        // Descargar el archivo
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return {"status": "success", "message": "Archivo descargado correctamente"};
+      } else {
+        // Manejar errores de la petición
+        throw new Error(`Error en la petición: ${response.status} - ${response.statusText}`);
+      }
+    } catch (error) {
+      // Manejar errores generales
+      throw new Error(`Error en la ejecución del método: ${error.message}`);
+    }
+  }
+   */
+
 }
 
 export { APIModel }

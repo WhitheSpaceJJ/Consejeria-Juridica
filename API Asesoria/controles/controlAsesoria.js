@@ -1,3 +1,4 @@
+//Falta relacion de defensor y asesoria y actualizar controles
 const modeloAsesoria = require('../modelos/modeloAsesoria');
 /** Operaciones Basica */
 const controlPersonas = require('./controlPersonas');
@@ -7,7 +8,7 @@ const controlMotivo = require('./controlMotivo');
 const controlCatalogoRequisito = require('./controlCatalogoRequisito');
 const controlDomicilios = require('./controlDomicilio');
 const controlAsesorados = require('./controlAsesorados');
-const controlTurnos = require('./controlTurno');
+//const controlTurnos = require('./controlTurno');
 const controlDetalleAsesoria = require('./controlDetalleAsesoria');
 const controlAsesor = require('./controlAsesor');
 const controlDefensor = require('./controlDefensor');
@@ -84,9 +85,10 @@ const obtenerAsesoriasFiltro = async (filtros) => {
       {
         model: modeloAsesoria.DetalleAsesoriaCatalogo,
       },
-      {
-        model: modeloAsesoria.Turno,
-      },
+      //{
+     //   model: modeloAsesoria.Turno,
+     // },
+
       {
         model: modeloAsesoria.Empleado,
         include: [{
@@ -183,12 +185,14 @@ const obtenerAsesorias = async () => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+        exclude: ['id_asesorado', 
+        //'id_turno', 
+        'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-        modeloAsesoria.Turno,
+       // modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ]
@@ -284,12 +288,14 @@ const obtenerAsesoriaPorId = async (id) => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+        exclude: ['id_asesorado', 
+       // 'id_turno',
+         'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-        modeloAsesoria.Turno,
+      //  modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ]
@@ -375,13 +381,15 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+        exclude: ['id_asesorado',
+        // 'id_turno',
+         'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.Empleado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-        modeloAsesoria.Turno,
+       // modeloAsesoria.Turno,
         modeloAsesoria.TipoJuicio
       ]
     });
@@ -568,14 +576,14 @@ const actualizarAsesoria = async (asesoria_pre) => {
     datos_asesoria.id_asesorado = asesorado_pre.id_asesorado;
     datos_asesoria.id_empleado = asesoria_obj.empleado.id_empleado;
     datos_asesoria.id_tipo_juicio = asesoria_obj.tipos_juicio.id_tipo_juicio;
-
+/*
     if (asesoria_obj.hasOwnProperty("turno")) {
       if (typeof asesoria_obj.turno === "object" && Object.keys(asesoria_obj.turno).length > 0) {
         const turno = await controlTurnos.agregarTurno(asesoria_obj.turno);
         datos_asesoria.id_turno = turno.id_turno;
       }
     }
-
+*/
     const asesoria_cre = (await modeloAsesoria.Asesoria.update(datos_asesoria, { where: { id_asesoria: datos_asesoria.id_asesoria } }));
     return await obtenerAsesoriaPorIdAsesorado(datos_asesoria.id_asesorado);
   } catch (error) {
@@ -600,12 +608,14 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
       raw: false,
       nest: true,
       attributes: {
-        exclude: ['id_asesorado', 'id_turno', 'id_tipo_juicio']
+        exclude: ['id_asesorado', 
+        //'id_turno',
+         'id_tipo_juicio']
       },
       include: [
         modeloAsesoria.Asesorado,
         modeloAsesoria.DetalleAsesoriaCatalogo,
-        modeloAsesoria.Turno,
+       // modeloAsesoria.Turno,
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ],

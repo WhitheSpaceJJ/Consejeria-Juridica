@@ -1,4 +1,5 @@
 const modeloTurno = require('../modelos/modeloTurno');
+//Falta relacion de defensor y asesoria y actualizar controles
 
 /**
  * @abstract Función que permite obtener todos los turnos

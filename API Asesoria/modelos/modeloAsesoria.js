@@ -6,7 +6,7 @@ const {Asesoria,Empleado,Turno,Asesorado,
  las relaciones con los modelos de asesor, turno,tipo de juicio, asesorado y detalle asesoria catalogo
 */
 Asesoria.belongsTo(Empleado, { foreignKey: "id_empleado" })
-Asesoria.belongsTo(Turno, { foreignKey: "id_turno" })
+//Asesoria.belongsTo(Turno, { foreignKey: "id_turno" })
 Asesoria.belongsTo(Asesorado, { foreignKey: "id_asesorado"})
 Asesoria.hasMany(DetalleAsesoriaCatalogo,{foreignKey:"id_asesoria"});
 Asesoria.belongsTo(TipoJuicio, { foreignKey: "id_tipo_juicio" })
@@ -14,9 +14,11 @@ Asesoria.belongsTo(TipoJuicio, { foreignKey: "id_tipo_juicio" })
 Empleado.belongsTo(DistritoJudicial, { foreignKey: "id_distrito_judicial" });
 
 
+//Falta relacion de defensor y asesoria y actualizar controles
 
 module.exports = {Asesoria
-  ,Turno,Asesorado,Empleado,
+  //,Turno
+  ,Asesorado,Empleado,
   DetalleAsesoriaCatalogo,TipoJuicio,
   DistritoJudicial
 };

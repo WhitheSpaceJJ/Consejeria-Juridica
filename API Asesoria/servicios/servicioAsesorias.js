@@ -54,8 +54,13 @@ const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
  * */
 const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
   const filtros = JSON.parse(req.query.filtros);
+  const result = {};
+  if (filtros === null || filtros === undefined || filtros === '') {
+    result = await controlAsesorias.obtenerAsesorias();
+  } else {
+    result = await controlAsesorias.obtenerAsesoriasFiltro(filtros);
+  }
   const campos = JSON.parse(req.query.campos);
-  const result = await controlAsesorias.obtenerAsesoriasFiltro(filtros);
 
   if (result === null || result === undefined) {
     const error = new CustomeError('No se encontraron asesorías', 404);
@@ -68,6 +73,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     // Mapear los encabezados según los campos solicitados
     const encabezados = [];
     const encabezadosMappings = {
+      'nombre-asesorado': 'Nombre de Asesorado',
       'nombre-usuario': 'Nombre de Usuario',
       'nombre-empleado': 'Nombre Empleado', // Ajusta según sea necesario
       'genero': 'Género',
@@ -82,11 +88,11 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
       'tipo_juicio': 'Tipo de Juicio',
       'conclusion': 'Conclusión',
       'documentos-recibidos': 'Documentos Recibidos',
-      'usuario-cumple-requisitos': 'Usuario Cumple Requisitos',
-      'hora-atencion': 'Hora de Atención',
-      'fecha-atencion': 'Fecha de Atención',
-      'usuario-turnado': 'Usuario Turnado',
-      'responsable-turno': 'Responsable de Turno',
+      //     'usuario-cumple-requisitos': 'Usuario Cumple Requisitos',
+      //     'hora-atencion': 'Hora de Atención',
+      //    'fecha-atencion': 'Fecha de Atención',
+      //      'usuario-turnado': 'Usuario Turnado',
+      //    'responsable-turno': 'Responsable de Turno',
       'resumen': 'Reumen de Hechos',
     };
 
@@ -103,15 +109,18 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
       const persona = asesoria.persona;
       const asesorado = asesoria.asesorado;
       const datosAsesoria = asesoria.datos_asesoria;
-      const turno = asesoria.datos_asesoria;
+      // const turno = asesoria.datos_asesoria;
       const recibidos = asesoria.recibidos;
       const filaDatos = [];
 
       // Mapear los datos según los campos solicitados
       campos.forEach((campo) => {
         switch (campo) {
+          case 'nombre-asesorado':
+            filaDatos.push(persona.nombre + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno);
+            break;
           case 'nombre-usuario':
-            filaDatos.push(persona.nombre);
+            filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
             break;
           case 'nombre-empleado':
             if (asesoria.defensor !== null) {
@@ -157,21 +166,24 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
           case 'documentos-recibidos':
             filaDatos.push(recibidos.map((recibido) => recibido.descripcion_catalogo).join(', '));
             break;
-          case 'usuario-cumple-requisitos':
-            filaDatos.push(datosAsesoria.estatus_requisitos ? 'Sí' : 'No');
-            break;
-          case 'hora-atencion':
-            filaDatos.push(turno.hora_turno ? turno.hora_turno : 'N/A');
-            break;
-          case 'fecha-atencion':
-            filaDatos.push(turno.fecha_turno ? turno.fecha_turno : 'N/A');
-            break;
-          case 'usuario-turnado':
-            filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
-            break;
-          case 'responsable-turno':
-            filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
-            break;
+          /*
+                case 'usuario-cumple-requisitos':
+                  filaDatos.push(datosAsesoria.estatus_requisitos ? 'Sí' : 'No');
+                  break;
+                case 'hora-atencion':
+                  filaDatos.push(turno.hora_turno ? turno.hora_turno : 'N/A');
+                  break;
+                case 'fecha-atencion':
+                  filaDatos.push(turno.fecha_turno ? turno.fecha_turno : 'N/A');
+                  break;
+                case 'usuario-turnado':
+                  filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                  break;
+                case 'responsable-turno':
+                  filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                  break;
+      
+                */
           case 'resumen':
             filaDatos.push(datosAsesoria.resumen_asesoria ? datosAsesoria.resumen_asesoria : '');
             break;
@@ -327,7 +339,7 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
 /**
  * @abstract Servicio  que permite obtener todas las asesorías
  */
-const obtenerAsesoriaTotal=  asyncError(async (req, res, next) => {
+const obtenerAsesoriaTotal = asyncError(async (req, res, next) => {
   const result = await controlAsesorias.obtenerTotalAsesoriasSistema();
   if (result === null || result === undefined) {
     const error = new CustomeError('Error al obtener las asesorías', 404);
@@ -342,7 +354,7 @@ const obtenerAsesoriaTotal=  asyncError(async (req, res, next) => {
 /**
  * @abstract Servicio  que permite obtener todas las asesorías
  */
-const obtenerAsesoriaFiltroTotal= asyncError(async (req, res, next) => {
+const obtenerAsesoriaFiltroTotal = asyncError(async (req, res, next) => {
   const filtros = JSON.parse(req.query.filtros);
   const result = await controlAsesorias.obtenerTotalAsesorias(filtros);
   if (result === null || result === undefined) {
@@ -366,7 +378,7 @@ module.exports = {
   obtenerAsesoriaFiltro,
   obtenerAsesoriaFiltroExcel
   , obtenerAsesoriasPagina
-,
-obtenerAsesoriaTotal,
-obtenerAsesoriaFiltroTotal
+  ,
+  obtenerAsesoriaTotal,
+  obtenerAsesoriaFiltroTotal
 };
