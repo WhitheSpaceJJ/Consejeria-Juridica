@@ -48,6 +48,14 @@ const participante = sequelize.define('participante', {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: 'id_persona_UNIQUE'
+  }, 
+   id_proceso_judicial: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'proceso_judicial',
+      key: 'id_proceso_judicial'
+    }
   }
 }, {
   sequelize,
@@ -89,6 +97,13 @@ const participante = sequelize.define('participante', {
       using: 'BTREE',
       fields: [
         { name: 'id_ocupacion' }
+      ]
+    },
+    {
+      name: 'id_proceso_judicial_idx3',
+      using: 'BTREE',
+      fields: [
+        { name: 'id_proceso_judicial' }
       ]
     }
   ]
