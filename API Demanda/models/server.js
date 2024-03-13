@@ -43,7 +43,7 @@ class Server {
     // Llamamos a los middlewares
     this.middlewares()
     // Conectamos a la base de datos
-  this.conectarBD()
+  //this.conectarBD()
     // Definimos las rutas de la aplicación
     this.routes()
   }
