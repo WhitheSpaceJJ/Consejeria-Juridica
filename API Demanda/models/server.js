@@ -43,7 +43,7 @@ class Server {
     // Llamamos a los middlewares
     this.middlewares()
     // Conectamos a la base de datos
-   // this.conectarBD()
+  this.conectarBD()
     // Definimos las rutas de la aplicación
     this.routes()
   }
@@ -57,7 +57,7 @@ class Server {
   middlewares() {
     // Middleware para parsear el cuerpo de las peticiones a JSON
     this.app.use(express.json())
-    // Middleware para habilitar CORS
+    // Middleware pa ra habilitar CORS
     this.app.use(cors())
   }
 

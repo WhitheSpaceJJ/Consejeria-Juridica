@@ -14,6 +14,13 @@ const escolaridad = sequelize.define('escolaridad', {
   descripcion: {
     type: DataTypes.STRING(50),
     allowNull: false
+  },
+  estatus_general: {
+    type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+    allowNull: false,
+    validate: {
+      isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+    },
   }
 }, {
   sequelize,
