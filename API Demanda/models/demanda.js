@@ -6,15 +6,10 @@ const { DataTypes } = require('sequelize')
 * y establece las relaciones con el modelo de proceso judicial
 */
 const demanda = sequelize.define('demanda', {
-  id_demanda: {
-    autoIncrement: true,
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true
-  },
   id_proceso_judicial: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
+    primaryKey: true,
     references: {
       model: 'proceso_judicial',
       key: 'id_proceso_judicial'
@@ -38,15 +33,8 @@ const demanda = sequelize.define('demanda', {
   timestamps: false,
   indexes: [
     {
-      name: 'PRIMARY',
-      unique: true,
-      using: 'BTREE',
-      fields: [
-        { name: 'id_demanda' }
-      ]
-    },
-    {
       name: 'id_proceso_judicial',
+      unique: true,
       using: 'BTREE',
       fields: [
         { name: 'id_proceso_judicial' }

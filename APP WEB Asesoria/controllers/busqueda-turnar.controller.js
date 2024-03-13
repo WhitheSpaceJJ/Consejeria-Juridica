@@ -19,10 +19,11 @@ class BusquedaTurnarController {
     const [nombre, apellidoPaterno, apellidoMaterno] = inputs
 
     try {
-      if (!validateNonEmptyFields(inputs)) {
+      if (nombre === '' && apellidoPaterno === '' && apellidoMaterno === '') {
         throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.'
+          'Es requerido escribir algun campo(Nombre,Apellido Paterno, Apellido Materno).'
         )
+
       }
 
       const { asesoria } = await this.model.getAsesoriaByFullName({

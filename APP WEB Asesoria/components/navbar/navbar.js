@@ -18,6 +18,8 @@ export class Navbar extends HTMLElement {
     const dropdownNavbarServicio = this.shadowRoot.getElementById(
       'dropdownNavbarServicio'
     )
+
+
     const dropdownConsultaLink = this.shadowRoot.getElementById(
       'dropdownConsultaLink'
     )
@@ -26,6 +28,9 @@ export class Navbar extends HTMLElement {
     )
     const dropdownRegistrosLink = this.shadowRoot.getElementById('dropdownRegistrosLink') // Nuevo
     const dropdownNavbarRegistros = this.shadowRoot.getElementById('dropdownNavbarRegistros') // Nuevo
+
+
+
 
     const mobileMenuToggle =
       this.shadowRoot.getElementById('mobile-menu-toggle')
@@ -53,20 +58,27 @@ export class Navbar extends HTMLElement {
       toggleDropdown(dropdownNavbarServicio, event)
       dropdownNavbarConsulta.classList.add('hidden')
       dropdownNavbarRegistros.classList.add('hidden')
+
     })
+
+  
+
 
     // Agregar eventos de clic para mostrar/ocultar el menú desplegable de "Consulta"
     dropdownConsultaLink.addEventListener('click', event => {
       toggleDropdown(dropdownNavbarConsulta, event)
       dropdownNavbarServicio.classList.add('hidden')
       dropdownNavbarRegistros.classList.add('hidden')
+
     })
     
     // Agregar eventos de clic para mostrar/ocultar el menú desplegable de "Registros" // Nuevo
     dropdownRegistrosLink.addEventListener('click', event => {
       toggleDropdown(dropdownNavbarRegistros, event)
      dropdownNavbarServicio.classList.add('hidden')
-     dropdownNavbarConsulta.classList.add('hidden') // Ocultar el menú de "Consulta" al mostrar "Registros"
+     dropdownNavbarConsulta.classList.add('hidden')
+
+     // Ocultar el menú de "Consulta" al mostrar "Registros"
 })
 
     // Cierra los menús desplegables si se hace clic en cualquier parte del documento
@@ -74,12 +86,14 @@ export class Navbar extends HTMLElement {
       if (event.target !== dropdownServicioLink) {
         dropdownNavbarServicio.classList.add('hidden')
       }
+  
       if (event.target !== dropdownConsultaLink) {
         dropdownNavbarConsulta.classList.add('hidden')
       }
       if (event.target !== dropdownRegistrosLink) {
         dropdownNavbarRegistros.classList.add('hidden')
       }
+ 
       if (event.target !== mobileMenuToggle) {
         navbarDropdown.classList.add('hidden')
       }
