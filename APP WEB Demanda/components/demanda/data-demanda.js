@@ -3,7 +3,7 @@ const template = document.createElement('template')
 const html = await (await fetch('../assets/data-asesoria.html')).text()
 template.innerHTML = html
 
-export class DataAsesoria extends HTMLElement {
+export class DataDemanda extends HTMLElement {
   constructor(asesoria, domicilio) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -79,4 +79,4 @@ export class DataAsesoria extends HTMLElement {
   }
 }
 
-customElements.define('data-asesoria', DataAsesoria)
+customElements.define('data-demanda', DataDemanda)
