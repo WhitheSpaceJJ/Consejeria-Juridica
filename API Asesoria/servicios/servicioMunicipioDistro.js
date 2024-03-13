@@ -82,6 +82,19 @@ const obtenerMunicipioPorId = asyncError(async (req, res, next) => {
 }
 );
 
+const obtenerMunicipiosDistrito = asyncError(async (req, res, next) => {
+    const result = await controlMunicipioDistro.obtenerMunicipiosDistrito(req.params.id);
+    if (result === null || result === undefined) {
+        const error = new CustomeError('No se encontraron municipios', 404);
+        return next(error);
+    } else {
+        res.status(200).json({
+            municipios: result
+        });
+    }
+}
+);
+
 /**
  * @abstract Servicio  que permite actualizar un municipio
  * @param {Object} req Request
@@ -108,5 +121,6 @@ module.exports = {
     obtenerMunicipios,
     eliminarMunicipio,
     obtenerMunicipioPorId,
-    actualizarMunicipio
+    actualizarMunicipio,
+    obtenerMunicipiosDistrito
 }

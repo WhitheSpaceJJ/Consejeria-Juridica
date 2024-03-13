@@ -56,8 +56,8 @@ const agregarZona = async (zona) => {
 
 const eliminarZona = async (id) => {
   try {
-    await modeloZona.Zona.destroy({ where: { id_zona: id } });
-    return true;
+   const result=  await modeloZona.Zona.destroy({ where: { id_zona: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -71,8 +71,8 @@ const eliminarZona = async (id) => {
  */
 const actualizarZona = async (zona) => {
   try {
-    await modeloZona.Zona.update(zona, { where: { id_zona: zona.id_zona } });
-    return true;
+ const result=    await modeloZona.Zona.update(zona, { where: { id_zona: zona.id_zona } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

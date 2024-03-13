@@ -55,8 +55,8 @@ const agregarEstadoCivil = async (estadoCivil) => {
  */
 const eliminarEstadoCivil = async (id) => {
   try {
-    await modeloEstadoCivil.EstadoCivil.destroy({ where: { id_estado_civil: id } });
-    return true;
+    const result=await modeloEstadoCivil.EstadoCivil.destroy({ where: { id_estado_civil: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -70,8 +70,8 @@ const eliminarEstadoCivil = async (id) => {
  */
 const actualizarEstadoCivil = async (estadoCivil) => {
   try {
-    await modeloEstadoCivil.EstadoCivil.update(estadoCivil, { where: { id_estado_civil: estadoCivil.id_estado_civil } });
-    return true;
+    const result = await modeloEstadoCivil.EstadoCivil.update(estadoCivil, { where: { id_estado_civil: estadoCivil.id_estado_civil } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

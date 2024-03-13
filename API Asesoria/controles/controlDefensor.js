@@ -10,8 +10,12 @@ const controlEmpleado = require('./controlEmpleados.js');
 const obtenerDefensores = async () => {
     try {
         return await modeloDefensor.Defensor.findAll({
-            raw: true,
+            raw: false,
             nest: true,
+            include: [{
+              model: modeloDefensor.Empleado
+            }
+            ]
         });
     } catch (error) {
         console.log("Error:", error.message);
@@ -27,8 +31,12 @@ const obtenerDefensores = async () => {
 const obtenerDefensorPorId = async (id) => {
     try {
         return await modeloDefensor.Defensor.findByPk(id, {
-            raw: true,
+            raw: false,
             nest: true,
+            include: [{
+              model: modeloDefensor.Empleado
+            }
+            ]
         });
     } catch (error) {
         console.log("Error:", error.message);
@@ -58,8 +66,8 @@ const agregarDefensor = async (defensor) => {
 
 const eliminarDefensor = async (id) => {
     try {
-        await modeloDefensor.Defensor.destroy({ where: { id_defensor: id } });
-        return true;
+        const result =await modeloDefensor.Defensor.destroy({ where: { id_defensor: id } });
+        return result === 1;
     } catch (error) {
         console.log("Error:", error.message);
         return false;
@@ -74,8 +82,8 @@ const eliminarDefensor = async (id) => {
  * */
 const actualizarDefensor = async (id, defensor) => {
     try {
-        await modeloDefensor.Defensor.update(defensor, { where: { id_defensor: id } });
-        return true;
+       const result= await modeloDefensor.Defensor.update(defensor, { where: { id_defensor: id } });
+        return result[0] === 1;
     } catch (error) {
         console.log("Error:", error.message);
         return false;

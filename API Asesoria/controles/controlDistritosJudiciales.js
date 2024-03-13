@@ -15,7 +15,19 @@ const agregarDistritoJudicial = async (distritoJudicial) => {
  * @returns {Object} Distritos judiciales
  */
 const obtenerDistritosJudiciales = async () => {
-    const distritosJudiciales = await modeloDistritoJudicial.DistritoJudicial.findAll();
+    const distritosJudiciales = await modeloDistritoJudicial.DistritoJudicial.findAll({
+        
+        raw: false,
+        nest: true,
+        attributes: {
+            exclude: ['id_municipio_distrito','id_zona']
+        },
+        include: [
+            modeloDistritoJudicial.MunicipioDistro
+            ,
+            modeloDistritoJudicial.Zona
+        ]
+    });
     return distritosJudiciales;
 };
 
@@ -25,12 +37,12 @@ const obtenerDistritosJudiciales = async () => {
  * @returns {Object} Distrito judicial
  */
 const eliminarDistritoJudicial = async (id) => {
-    const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.destroy({
+    const result = await modeloDistritoJudicial.DistritoJudicial.destroy({
         where: {
-            id: id
+            id_distrito_judicial: id
         }
     });
-    return distritoJudicial;
+    return result === 1;
 };
 
 /**
@@ -40,12 +52,29 @@ const eliminarDistritoJudicial = async (id) => {
  */
 
 const obtenerDistritoJudicial = async (id) => {
-    const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.findOne({
-        where: {
-            id: id
-        }
-    });
-    return distritoJudicial;
+
+    try {
+        const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.findByPk(id,{
+         
+            raw: false,
+            nest: true,
+            attributes: {
+                exclude: ['id_municipio_distrito','id_zona']
+            },
+            include: [
+                modeloDistritoJudicial.MunicipioDistro
+                ,
+                modeloDistritoJudicial.Zona
+            ]
+        });
+        return distritoJudicial;
+    } catch (error) {
+        console.log(error);
+    }
+
+
+
+
 };
 
 /**
@@ -55,12 +84,12 @@ const obtenerDistritoJudicial = async (id) => {
  * @returns {Object} Distrito judicial
  */
 const actualizarDistritoJudicial = async (id, distritoJudicial) => {
-    const distritoJudicialActualizado = await modeloDistritoJudicial.DistritoJudicial.update(distritoJudicial, {
+    const result = await modeloDistritoJudicial.DistritoJudicial.update(distritoJudicial, {
         where: {
-            id: id
+            id_distrito_judicial: id
         }
     });
-    return distritoJudicialActualizado;
+    return result[0] === 1;
 };
 
 //Module exports

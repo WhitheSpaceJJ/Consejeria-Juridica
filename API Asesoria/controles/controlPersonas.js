@@ -1,5 +1,5 @@
 const modeloPersona = require('../modelos/modeloPersona');
-
+const { Op } = require("sequelize");
 /**
  * @abstract Función que permite obtener todas las personas
  * @returns personas
@@ -64,8 +64,8 @@ const agregarPersona = async (persona) => {
  */
 const eliminarPersona = async (id) => {
   try {
-    await modeloPersona.Persona.destroy({ where: { id_persona: id } });
-    return true;
+    const result= await modeloPersona.Persona.destroy({ where: { id_persona: id } });
+    return  result === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -79,8 +79,8 @@ const eliminarPersona = async (id) => {
  */
 const actualizarPersona = async (persona) => {
   try {
-    await modeloPersona.Persona.update(persona, { where: { id_persona: persona.id_persona } });
-    return true;
+    const result = await modeloPersona.Persona.update(persona, { where: { id_persona: persona.id_persona } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -97,20 +97,19 @@ const actualizarPersona = async (persona) => {
  * */
 const obtenerPersonasNombre = async (nombre, apellido_paterno, apellido_materno) => {
   try {
-    //Cambia el codigo de abajo para que encuente todas las personas coincidentes las coloque en un arreglo y que se recorra el arreglo para que este sea añadido a otro arreglos  donde se colocaran los id_asesorado
+    const whereClause = {};
+    if (nombre) {
+      whereClause.nombre = { [Op.like]: `%${nombre}%` };
+    }
+    if (apellido_paterno) {
+      whereClause.apellido_paterno = { [Op.like]: `%${apellido_paterno}%` };
+    }
+    if (apellido_materno) {
+      whereClause.apellido_materno = { [Op.like]: `%${apellido_materno}%` };
+    }
 
     const personas_pre = await modeloPersona.Persona.findAll({
-      where: {
-        nombre: nombre
-        ,
-        apellido_paterno:
-          apellido_paterno
-
-        ,
-        apellido_materno:
-          apellido_materno
-      }
-      ,
+      where: whereClause,
       raw: true,
       nest: true,
       attributes: {
@@ -119,18 +118,13 @@ const obtenerPersonasNombre = async (nombre, apellido_paterno, apellido_materno)
       include: [modeloPersona.Domicilio, modeloPersona.Genero]
     });
 
-    const personas = [];
+    const personas = personas_pre.map(persona_pre => persona_pre.id_persona);
 
-    for (const persona_pre of personas_pre) {
-      personas.push(persona_pre.id_persona);
-    }
-    if (personas.length == 0) {
+    if (personas.length === 0) {
       return null;
+    } else {
+      return personas;
     }
-    else {
-      return personas
-    }
-
   } catch (error) {
     console.log("Error:", error.message);
     return null;
@@ -138,7 +132,6 @@ const obtenerPersonasNombre = async (nombre, apellido_paterno, apellido_materno)
 };
 
 
-const { Op } = require("sequelize");
 
 //Module exports
 module.exports = {

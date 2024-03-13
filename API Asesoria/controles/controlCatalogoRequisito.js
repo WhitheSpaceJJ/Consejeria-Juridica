@@ -56,8 +56,8 @@ const agregarCatalogoRequisito = async (catalogoRequisito) => {
  */
 const eliminarCatalogoRequisito = async (id) => {
   try {
-    await modeloCatalogoRequisito.CatalogoRequisito.destroy({ where: { id_catalogo: id } });
-    return true;
+    const resultado = await modeloCatalogoRequisito.CatalogoRequisito.destroy({ where: { id_catalogo: id } });
+    return resultado === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -71,8 +71,8 @@ const eliminarCatalogoRequisito = async (id) => {
  */
 const actualizarCatalogoRequisito = async (catalogoRequisito) => {
   try {
-    await modeloCatalogoRequisito.CatalogoRequisito.update(catalogoRequisito, { where: { id_catalogo: catalogoRequisito.id_catalogo } });
-    return true;
+   const result= await modeloCatalogoRequisito.CatalogoRequisito.update(catalogoRequisito, { where: { id_catalogo: catalogoRequisito.id_catalogo } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;

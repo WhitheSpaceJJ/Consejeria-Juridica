@@ -56,8 +56,8 @@ const agregarTurno = async (turno) => {
  */
 const eliminarTurno = async (id) => {
   try {
-    await modeloTurno.Turno.destroy({ where: { id_turno: id } });
-    return true;
+   const result = await modeloTurno.Turno.destroy({ where: { id_turno: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -71,8 +71,8 @@ const eliminarTurno = async (id) => {
  */
 const actualizarTurno = async (turno) => {
   try {
-    await modeloTurno.Turno.update(turno, { where: { id_turno: turno.id_turno } });
-    return true;
+  const result=   await modeloTurno.Turno.update(turno, { where: { id_turno: turno.id_turno } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;

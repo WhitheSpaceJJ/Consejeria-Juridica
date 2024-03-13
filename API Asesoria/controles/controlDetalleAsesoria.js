@@ -54,8 +54,8 @@ const agregarDetalleAsesoriaCatalogo = async (detalle) => {
  * */
 const eliminarDetalleAsesoriaCatalogo = async (id) => {
   try {
-    await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.destroy({ where: { id_detalle: id } });
-    return true;
+    const result = await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.destroy({ where: { id_detalle: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -69,8 +69,8 @@ const eliminarDetalleAsesoriaCatalogo = async (id) => {
  * */
 const actualizarDetalleAsesoriaCatalogo = async (detalle) => {
   try {
-    await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.update(detalle, { where: { id_detalle: detalle.id_detalle } });
-    return true;
+  const result=  await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.update(detalle, { where: { id_detalle: detalle.id_detalle } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

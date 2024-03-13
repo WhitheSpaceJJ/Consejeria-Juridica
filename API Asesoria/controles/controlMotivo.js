@@ -56,8 +56,8 @@ const agregarMotivo = async (motivo) => {
  */
 const eliminarMotivo = async (id) => {
   try {
-    await modeloMotivo.Motivo.destroy({ where: { id_motivo: id } });
-    return true;
+    const result = await modeloMotivo.Motivo.destroy({ where: { id_motivo: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -72,8 +72,8 @@ const eliminarMotivo = async (id) => {
 
 const actualizarMotivo = async (motivo) => {
   try {
-    await modeloMotivo.Motivo.update(motivo, { where: { id_motivo: motivo.id_motivo } });
-    return true;
+   const result =  await modeloMotivo.Motivo.update(motivo, { where: { id_motivo: motivo.id_motivo } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

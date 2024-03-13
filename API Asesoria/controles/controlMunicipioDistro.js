@@ -7,7 +7,7 @@ const modeloMunicipioDistro = require('../modelos/modeloMunicipioDistro.js');
 const obtenerMunicipios = async () => {
     try {
         return await modeloMunicipioDistro.MunicipioDistro.findAll({
-            raw: true,
+            raw: false,
             nest: true,
         });
     } catch (error) {
@@ -15,6 +15,20 @@ const obtenerMunicipios = async () => {
         return null;
     }
 };
+const obtenerMunicipiosDistrito = async (id) => {
+    try {
+        return await modeloMunicipioDistro.MunicipioDistro.findAll({
+            where: {
+                id_distrito_judicial: id
+            },
+            raw: false,
+            nest: true,
+        });
+    } catch (error) {
+        console.log("Error:", error.message);
+        return null;
+    }
+}
 
 /**
  * @abstract Función que permite obtener un municipio por su id
@@ -24,7 +38,7 @@ const obtenerMunicipios = async () => {
 const obtenerMunicipioPorId = async (id) => {
     try {
         return await modeloMunicipioDistro.MunicipioDistro.findByPk(id, {
-            raw: true,
+            raw: false,
             nest: true,
         });
     } catch (error) {
@@ -54,8 +68,8 @@ const agregarMunicipio = async (municipio) => {
  * */
 const eliminarMunicipio = async (id) => {
     try {
-        await modeloMunicipioDistro.MunicipioDistro.destroy({ where: { id_municipio: id } });
-        return true;
+      const result =  await modeloMunicipioDistro.MunicipioDistro.destroy({ where: { id_municipio: id } });
+        return result === 1;
     } catch (error) {
         console.log("Error:", error.message);
         return false;
@@ -70,8 +84,8 @@ const eliminarMunicipio = async (id) => {
  * */
 const actualizarMunicipio = async (id, municipio) => {
     try {
-        await modeloMunicipioDistro.MunicipioDistro.update(municipio, { where: { id_municipio: id } });
-        return true;
+        const result = await modeloMunicipioDistro.MunicipioDistro.update(municipio, { where: { id_municipio: id } });
+        return result[0] === 1; 
     } catch (error) {
         console.log("Error:", error.message);
         return false;
@@ -84,5 +98,6 @@ module.exports = {
     obtenerMunicipioPorId,
     agregarMunicipio,
     eliminarMunicipio,
-    actualizarMunicipio
+    actualizarMunicipio,
+    obtenerMunicipiosDistrito
 };

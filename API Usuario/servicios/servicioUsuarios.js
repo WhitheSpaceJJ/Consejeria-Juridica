@@ -119,15 +119,18 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
   if (usuarioObj === null) {
     const error = new CustomeError('La contraseña es incorrecta.', 404); // Cambio de zona a usuario
     return next(error);
-  } else {
+  } else if (usuarioObj.estatus_general === 'INACTIVO') {
+    const error = new CustomeError('El usuario esta desabilitado.', 404); // Cambio de zona a usuario
+    return next(error);
+  }else  if (usuarioObj.estatus_general === 'ACTIVO') {
     const payload = usuarioObj;
     const token = await jwtController.generateToken(payload);
     res.status(200).json({
       token: token,
       role: usuarioObj.tipo_user.tipo_usuario,
-      name: usuarioObj.nombre + " " + usuarioObj.materno + " " + usuarioObj.paterno
+      name: usuarioObj.nombre + " " + usuarioObj.materno + " " + usuarioObj.paterno,
+      distrito_judicial: usuarioObj.id_distrito_judicial
     });
-   
   }
 });
 

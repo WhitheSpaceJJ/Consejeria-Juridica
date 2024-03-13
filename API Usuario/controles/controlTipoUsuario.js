@@ -57,8 +57,8 @@ const agregarTipoUsuario = async (tipoUsuario) => {
 
 const eliminarTipoUsuario = async (id) => {
   try {
-    await modeloTipoUsuario.TipoUser.destroy({ where: { id_tipo_usuario: id } });
-    return true;
+    const result =  await modeloTipoUsuario.TipoUser.destroy({ where: { id_tipo_usuario: id } });
+    return result===1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -73,8 +73,8 @@ const eliminarTipoUsuario = async (id) => {
 
 const actualizarTipoUsuario = async (tipoUsuario) => {
   try {
-    await modeloTipoUsuario.TipoUser.update(tipoUsuario, { where: { id_tipo_usuario: tipoUsuario.id_tipo_usuario } });
-    return tipoUsuario;
+   const result= await modeloTipoUsuario.TipoUser.update(tipoUsuario, { where: { id_tipo_usuario: tipoUsuario.id_tipo_usuario } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
