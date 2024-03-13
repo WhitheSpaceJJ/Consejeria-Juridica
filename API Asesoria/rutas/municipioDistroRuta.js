@@ -12,6 +12,11 @@ router.route('/')
     // Agregar un nuevo municipio
     .post(servicioMunicipiosDistro.agregarMunicipio);
 
+
+    router.route('/distrito/:id')
+    .get(servicioMunicipiosDistro.obtenerMunicipiosDistrito)
+
+
 router.route('/:id')
     // Obtener un municipio por su ID
     .get(servicioMunicipiosDistro.obtenerMunicipioPorId)

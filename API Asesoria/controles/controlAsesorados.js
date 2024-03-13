@@ -1,20 +1,20 @@
 const modeloAsesorado = require('../modelos/modeloAsesorado');
 
- /**
-  *   @abstract Función que permite obtener todos los asesorados
-  * @returns asesorados
-  */    
+/**
+ *   @abstract Función que permite obtener todos los asesorados
+ * @returns asesorados
+ */
 const obtenerAsesorados = async () => {
   try {
     return await modeloAsesorado.Asesorado.findAll({
       raw: true,
       nest: true,
-      
+
       attributes: {
-        exclude: ['id_asesorado', 'id_motivo',"id_estado_civil"]
+        exclude: ['id_asesorado', 'id_motivo', "id_estado_civil"]
       },
-      include:[modeloAsesorado.Motivo,modeloAsesorado.EstadoCivil]
-  
+      include: [modeloAsesorado.Motivo, modeloAsesorado.EstadoCivil]
+
     });
   } catch (error) {
     console.log("Error:", error.message);
@@ -34,10 +34,10 @@ const obtenerAsesoradoPorId = async (id) => {
       nest: true
       ,
       attributes: {
-        exclude: ['id_asesorado', 'id_motivo',"id_estado_civil"]
+        exclude: ['id_asesorado', 'id_motivo', "id_estado_civil"]
       },
-      include:[modeloAsesorado.Motivo,modeloAsesorado.EstadoCivil]
-  
+      include: [modeloAsesorado.Motivo, modeloAsesorado.EstadoCivil]
+
     });
   } catch (error) {
     console.log("Error:", error.message);
@@ -52,7 +52,7 @@ const obtenerAsesoradoPorId = async (id) => {
  * */
 const agregarAsesorado = async (asesorado) => {
   try {
-    return (  await modeloAsesorado.Asesorado.create(asesorado, { raw: true, nest: true })).dataValues;
+    return (await modeloAsesorado.Asesorado.create(asesorado, { raw: true, nest: true })).dataValues;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -66,14 +66,14 @@ const agregarAsesorado = async (asesorado) => {
  */
 const eliminarAsesorado = async (id) => {
   try {
-    await modeloAsesorado.Asesorado.destroy({ where: { id_asesorado: id } });
-    return true;
+    const result =await modeloAsesorado.Asesorado.destroy({ where: { id_asesorado: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
   }
 };
- 
+
 /**
  *   @abstract Función que permite actualizar un asesorado
  * @param {*} asesorado asesorado a actualizar
@@ -81,8 +81,8 @@ const eliminarAsesorado = async (id) => {
  */
 const actualizarAsesorado = async (asesorado) => {
   try {
-    await modeloAsesorado.Asesorado.update(asesorado, { where: { id_asesorado: asesorado.id_asesorado } });
-    return true;
+  const result=   await modeloAsesorado.Asesorado.update(asesorado, { where: { id_asesorado: asesorado.id_asesorado } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;

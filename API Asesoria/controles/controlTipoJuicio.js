@@ -58,8 +58,8 @@ const agregarTipoDeJuicio = async (tipoDeJuicio) => {
  *  */
 const eliminarTipoDeJuicio = async (id) => {
   try {
-    await modeloTipoJuicio.TipoJuicio.destroy({ where: { id_tipo_juicio: id } });
-    return true;
+   const result= await modeloTipoJuicio.TipoJuicio.destroy({ where: { id_tipo_juicio: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -73,8 +73,8 @@ const eliminarTipoDeJuicio = async (id) => {
  */
 const actualizarTipoDeJuicio = async (tipoDeJuicio) => {
   try {
-    await modeloTipoJuicio.TipoJuicio.update(tipoDeJuicio, { where: { id_tipo_juicio: tipoDeJuicio.id_tipo_juicio } });
-    return true;
+    const result = await modeloTipoJuicio.TipoJuicio.update(tipoDeJuicio, { where: { id_tipo_juicio: tipoDeJuicio.id_tipo_juicio } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;

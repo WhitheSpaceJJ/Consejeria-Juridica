@@ -1,5 +1,8 @@
 const {Asesor}=require("../utilidades/modelosBase");
+const {Empleado}=require("./modeloEmpleado");
 /**
  * Modelo de asesor
  */
-module.exports = {Asesor}; 
+Asesor.hasOne(Empleado,{foreignKey: 'id_empleado'});
+
+module.exports = {Asesor, Empleado}; 

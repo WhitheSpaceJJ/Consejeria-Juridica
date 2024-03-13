@@ -8,8 +8,12 @@ const controlEmpleado = require('./controlEmpleados.js');
 const obtenerAsesores = async () => {
   try {
     return await modeloAsesor.Asesor.findAll({
-      raw: true,
+      raw: false,
       nest: true,
+      include: [{
+        model: modeloAsesor.Empleado
+      }
+      ]
     });
   } catch (error) {
     console.log("Error:", error.message);
@@ -27,8 +31,12 @@ const obtenerAsesores = async () => {
 const obtenerAsesorPorId = async (id) => {
   try {
     return await modeloAsesor.Asesor.findByPk(id, {
-      raw: true,
+      raw: false,
       nest: true,
+      include: [{
+        model: modeloAsesor.Empleado
+      }
+      ]
     });
   } catch (error) {
     console.log("Error:", error.message);
@@ -57,8 +65,8 @@ const agregarAsesor = async (asesor) => {
  * */
 const eliminarAsesor = async (id) => {
   try {
-    await modeloAsesor.Asesor.destroy({ where: { id_asesor: id } });
-    return true;
+    const result= await modeloAsesor.Asesor.destroy({ where: { id_asesor: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -72,8 +80,8 @@ const eliminarAsesor = async (id) => {
  * */
 const actualizarAsesor = async (asesor) => {
   try {
-    await modeloAsesor.Asesor.update(asesor, { where: { id_asesor: asesor.id_asesor } });
-    return true;
+    const result = await modeloAsesor.Asesor.update(asesor, { where: { id_asesor: asesor.id_asesor } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

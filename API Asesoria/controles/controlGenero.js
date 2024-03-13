@@ -59,8 +59,8 @@ const agregarGenero = async (genero) => {
 
 const eliminarGenero = async (id) => {
   try {
-    await modeloGenero.Genero.destroy({ where: { id_genero: id } });
-    return true;
+    const result  =await modeloGenero.Genero.destroy({ where: { id_genero: id } });
+    return  result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -75,8 +75,8 @@ const eliminarGenero = async (id) => {
  */
 const actualizarGenero = async (genero) => {
   try {
-    await modeloGenero.Genero.update(genero, { where: { id_genero: genero.id_genero } });
-    return true;
+    const result = await modeloGenero.Genero.update(genero, { where: { id_genero: genero.id_genero } });
+    return result[0] === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;

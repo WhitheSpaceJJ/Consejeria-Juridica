@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Cambiar el valor de un select con JavaScript</h1>
+    <form>
+        <select name="opciones" id="opciones">
+            <option value="opcion1">Opción 1</option>
+            <option value="opcion2">Opción 2</option>
+            <option value="opcion3">Opción 3</option>
+            <option value="opcion4">Opción 4</option>
+            <option value="opcion5">Opción 5</option>
+            <option value="opcion6">Opción 6</option>
+            <option value="opcion7">Opción 7</option>
+            <option value="opcion8">Opción 8</option>
+            <option value="opcion9">Opción 9</option>
+            <option value="opcion10">Opción 10</option>
+        </select>
+    </form>
+    <button id="boton1">Primera opción</button>
+    <button id="boton2">Última opción</button>
+    <script>
+        var miMenu = document.getElementById("opciones");
+        miMenu.value= "opcion3";
+        var miBoton1 = document.getElementById("boton1");
+        boton1.addEventListener("click", function(){
+            miMenu.value= "opcion1";
+        })
+        var miBoton2 = document.getElementById("boton2");
+        boton2.addEventListener("click", function(){
+            miMenu.value= "opcion10";
+        })
+    </script>
+</body>
+</html>

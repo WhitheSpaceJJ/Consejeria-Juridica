@@ -54,8 +54,8 @@ const agregarDomicilio = async (domicilio) => {
  */
 const eliminarDomicilio = async (id) => {
   try {
-    await modeloDomicilio.Domicilio.destroy({ where: { id_domicilio: id } });
-    return true;
+    const result = await modeloDomicilio.Domicilio.destroy({ where: { id_domicilio: id } });
+    return result === 1;
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -69,8 +69,8 @@ const eliminarDomicilio = async (id) => {
  */
 const actualizarDomicilio = async (domicilio) => {
   try {
-    await modeloDomicilio.Domicilio.update(domicilio, { where: { id_domicilio: domicilio.id_domicilio } });
-    return true;
+   const result= await modeloDomicilio.Domicilio.update(domicilio, { where: { id_domicilio: domicilio.id_domicilio } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

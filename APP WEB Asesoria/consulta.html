@@ -43,18 +43,55 @@
               <div id="dropdown" class="
           z-10 hidden w-auto bg-white divide-y divide-gray-100 rounded-lg shadow">
 
-                <!-- MUNICIPIO -->
+                <!-- Fecha -->
                 <article class="flex items-center p-4 rounded">
                   <div class="flex items-center w-2/4 gap-2">
-                    <input id="check-municipio" type="checkbox" value="" name="check-municipio"
-                      class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer" />
-                    <label for="check-municipio"
-                      class="text-sm font-medium text-gray-900 dark:text-gray-300">Municipio</label>
+                    <input id="check-fecha" type="checkbox" value="" name="check-fecha"
+                      class="w-4 h text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+                      checked disabled />
+                    <label for="check-fecha" class="text-sm font-medium text-gray-900 dark:text-gray-300">Fecha</label>
                   </div>
                   <div class="flex items-center justify-center pl-4 ml-4 border-l w-full">
                     <select
                       class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a52a2a] focus:border-[#a52a2a] block w-full p-2.5 cursor-pointer"
-                      id="select-municipio">
+                      id="select-fecha">
+                      <option value="0">Busqueda por fechas</option>
+                      <option value="1">Busqueda por fecha de registro</option>
+                    </select>
+                  </div>
+                </article>
+
+                <!-- Distrito Judicial -->
+                <article class="flex items-center p-4 rounded">
+                  <div class="flex items-center w-2/4 gap-2">
+                    <input id="check-distrito" type="checkbox" value="" name="check-distrito"
+                      class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer" />
+                    <label for="check-distrito"
+                      class="text-sm font-medium text-gray-900 dark:text-gray-300">Distrito</label>
+                  </div>
+                  <div class="flex items-center justify-center pl-4 ml-4 border-l w-full">
+                    <select
+                      class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a52a2a] focus:border-[#a52a2a] block w-full p-2.5 cursor-pointer"
+                      id="select-distrito" title="Al seleccionar un Distrito, los municipios seran actualizados.">
+                      <option value="0">Selecciona una opcion</option>
+                    </select>
+                  </div>
+                </article>
+
+                <!-- MUNICIPIO -->
+                <article class="flex items-center p-4 rounded">
+                  <div class="flex items-center w-2/4 gap-2">
+                    <input id="check-municipio" type="checkbox" value="" name="check-municipio"
+                      class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer" 
+                      
+                      />
+                    <label for="check-municipio"
+                      class="text-sm font-medium text-gray-900 dark:text-gray-300">Municipio</label>
+                  </div>
+                  <div class="flex items-center justify-center pl-4 ml-4 border-l w-full">
+                    <select 
+                      class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a52a2a] focus:border-[#a52a2a] block w-full p-2.5 cursor-pointer"
+                      id="select-municipio" >
                       <option value="0">Selecciona una opcion</option>
                     </select>
                   </div>
@@ -86,7 +123,7 @@
                       class="text-sm font-medium text-gray-900 dark:text-gray-300">Asesor</label>
                   </div>
                   <div class="flex items-center justify-center pl-4 ml-4 border-l w-full">
-                    <select
+                    <select title="Debe de seleccionar una zona, para poder seleccionar un asesor"
                       class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a52a2a] focus:border-[#a52a2a] block w-full p-2.5 cursor-pointer"
                       id="select-asesor" disabled>
                       <option value="0">Selecciona una opcion</option>
@@ -104,7 +141,7 @@
                       class="text-sm font-medium text-gray-900 dark:text-gray-300">Defensor</label>
                   </div>
                   <div class="flex items-center justify-center pl-4 ml-4 border-l w-full">
-                    <select
+                    <select title="Debe de seleccionar una zona, para poder seleccionar un defensor"
                       class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a52a2a] focus:border-[#a52a2a] block w-full p-2.5 cursor-pointer"
                       id="select-defensor" disabled>
                       <option value="0">Selecciona una opcion</option>
@@ -112,15 +149,25 @@
                   </div>
                 </article>
               </div>
-
+              <!--Este div es para el buscador por fechas -->
               <div class="flex items-center justify-between w-full">
                 <div class="relative w-full">
-                  <input type="date" id="fecha-inicio"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-none border border-gray-300 focus:ring-[#a52a2a] focus:border-[#a52a2a] cursor-text"
-                    placeholder="Fecha inicio..." required />
-                  <input type="date" id="fecha-final"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-none border-t-none border-b-none border-l-none border-gray-300 focus:ring-[#a52a2a] focus:border-[#a52a2a] cursor-text mt-0"
-                    placeholder="Fecha final..." required />
+
+                  <div style="display: block;" id="busqueda1">
+                    <input type="date" id="fecha-inicio"
+                      class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-none border border-gray-300 focus:ring-[#a52a2a] focus:border-[#a52a2a] cursor-text"
+                      placeholder="Fecha inicio..." title="Fecha Inicial" required />
+                    <input type="date" id="fecha-final"
+                      class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-none border-t-none border-b-none border-l-none border-gray-300 focus:ring-[#a52a2a] focus:border-[#a52a2a] cursor-text mt-0"
+                      placeholder="Fecha final..." title="Fecha Final" required />
+                  </div>
+                  <div style="display: none;" id="busqueda2" class="h-full">
+                    <input type="date" id="fecha-registro"
+                      class="block  w-full pt-6 pb-6 z-20 text-sm text-gray-900 bg-gray-50 rounded-none border border-gray-300 focus:ring-[#a52a2a] focus:border-[#a52a2a] cursor-text"
+                      placeholder="Fecha Registro..." title="Fecha Registro" required />
+
+                  </div>
+
                 </div>
 
                 <button type="submit" id="searchButton" class="p-2.5 h-full text-sm font-medium text-white bg-[#a52a2a]
@@ -144,7 +191,17 @@
                   </svg>
                   <span class="sr-only">Delete</span>
                 </button>
-
+                <button id="dropdown-button-excell" class="flex-shrink-0 z-20 inline-flex items-center
+                text-sm font-medium text-center text-white bg-green-500 m-2.5
+                border border-green-500 rounded-lg hover:bg-green-600 focus:ring-4 
+                focus:outline-none focus:ring-blue-300 h-full" type="button" title="Descarga Reporte Excel">
+    
+                <svg class="w-full h-4 m-4 font-semibold ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="none" viewBox="0 0 24 24" >
+                  <!-- Cambié el contenido del path para que parezca un archivo de Excel -->
+                  <path fill="currentColor" d="M3 4h10v6H3zm0 8h10v6H3zm12-8h6v6h-6zm0 8h6v6h-6z" />
+                </svg>
+              </button>
 
 
               </div>
@@ -154,150 +211,184 @@
             </div>
           </form>
         </div>
+        <!-- Este div es para la paginacion -->
         <div class="flex items-center justify-between">
-          <button id="dropdown-button-excell" class="flex-shrink-0 z-20 inline-flex items-center
-            text-sm font-medium text-center text-white bg-green-500 p-2
-            border border-green-500 rounded-lg hover:bg-green-600 focus:ring-4 
-            focus:outline-none focus:ring-blue-300 h-full" style="display: none;" type="button">
-
-            <svg class="w-full h-4 m-4 font-semibold ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 24 24">
-              <!-- Cambié el contenido del path para que parezca un archivo de Excel -->
-              <path fill="currentColor" d="M3 4h10v6H3zm0 8h10v6H3zm12-8h6v6h-6zm0 8h6v6h-6z" />
-            </svg>
-          </button>
+          
           <div class="relative w-full p-2 items-center">
-            <button id="anterior" class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 mb-2 rounded w-full">
-                <svg class="w-4 h-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Anterior
+            <button id="anterior"
+              class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 mb-2 rounded w-full">
+              <svg class="w-4 h-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              Anterior
             </button>
-            <button id="siguiente"  class="bg-red-500 hover:bg-red-600 w-full text-white font-medium py-1 px-1 rounded">
-               Siguiente <svg class="w-4 h-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            <button id="siguiente" class="bg-red-500 hover:bg-red-600 w-full text-white font-medium py-1 px-1 rounded">
+              Siguiente <svg class="w-4 h-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
             </button>
-        </div>
-        
+          </div>
+
         </div>
 
 
       </div>
 
     </div>
-    <div class="mb-12" style="display: none;" id="filtros-excel">
+ 
+    <!-- Este div es para la seccion de filtros de excel-->
+    <div  class="mb-12 border-gray-300 shadow-md p-8 md:pt-[5vh]"  id="filtros-excel">
       <!-- Agrega un checkbox para cada campo disponible -->
+      <h2 class="h-full mb-4 text-2xl font-semibold">Seccion Reportes Excel<span id="total"
+        class=" mb-4 text-4xl font-semibold"></span></h2>
       <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Campos Disponibles:</label>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 " >
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="seleccion" id="chkSeleccion" class="form-checkbox">
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Selecionar Campos</span>
+          <input type="checkbox" value="seleccion" id="chkSeleccion" 
+          class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+           checked >
+          <span
+           class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+            >Reporte estándar</span>
         </label>
 
+      
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="nombre-empleado" id="chkNombreEmpleado" class="form-checkbox" checked disabled>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Nombre Empleado (Asesor-Defensor)</span>
-        </label>
-
-        <label class="flex items-center space-x-2">
-          <input type="checkbox" value="nombre-asesorado" id="chkNombreAsesorado" class="form-checkbox" checked
+          <input type="checkbox" value="nombre-asesorado" id="chkNombreAsesorado"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          
             disabled>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Nombre de Asesorado</span>
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Nombre de Asesorado</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="genero" id="chkGenero" class="form-checkbox" checked disabled>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Género</span>
+          <input type="checkbox" value="genero" id="chkGenero"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+           disabled>
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Género</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="estado_civil" id="chkEstadoCivil" class="form-checkbox" checked disabled>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Estado Civil</span>
+          <input type="checkbox" value="estado_civil" id="chkEstadoCivil"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+           disabled>
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Estado Civil</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="numero_hijos" id="chkNumeroHijos" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Número de Hijos</span>
+          <input type="checkbox" value="numero_hijos" id="chkNumeroHijos"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Número de Hijos</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="telefono" id="chkTelefono" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Teléfono</span>
+          <input type="checkbox" value="telefono" id="chkTelefono"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Teléfono</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="colonia" id="chkColonia" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Colonia</span>
+          <input type="checkbox" value="colonia" id="chkColonia"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Colonia</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="trabaja" id="chkTrabaja" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Trabaja</span>
+          <input type="checkbox" value="trabaja" id="chkTrabaja"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Estatus de Trabajo del Asesorado</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="ingreso_mensual" id="chkIngresoMensual" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Ingreso Mensual</span>
+          <input type="checkbox" value="ingreso_mensual" id="chkIngresoMensual"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Ingreso Mensual Asesorado</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="motivo" id="chkMotivo" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Motivo</span>
+          <input type="checkbox" value="motivo" id="chkMotivo"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Causa Motivo, del no trabajo del Asesorado</span>
+        </label>
+        
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" value="nombre-empleado" id="chkNombreEmpleado"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+           disabled>
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Nombre (Asesor o Defensor),  que brindo la Asesoria</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="resumen" id="chkResumen" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Resumen de Hechos</span>
+          <input type="checkbox" value="fecha_registro" id="chkFechaRegistro"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Fecha de Registro</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="tipo_juicio" id="chkTipoJuicio" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Tipo de Juicio</span>
+          <input type="checkbox" value="documentos-recibidos" id="chkDocumentosRecibidos"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled
+            >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Documentos Recibidos</span>
+        </label>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" value="tipo_juicio" id="chkTipoJuicio"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Tipo de Juicio</span>
         </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="conclusion" id="chkConclusion" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Conclusión</span>
+          <input type="checkbox" value="resumen" id="chkResumen"          class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Resumen de Hechos</span>
         </label>
 
+    
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="documentos-recibidos" id="chkDocumentosRecibidos" class="form-checkbox" disabled
-            checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Documentos Recibidos</span>
+          <input type="checkbox" value="conclusion" id="chkConclusion"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Conclusión</span>
         </label>
 
-        <label class="flex items-center space-x-2">
-          <input type="checkbox" value="fecha_registro" id="chkFechaRegistro" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Fecha de Registro</span>
-        </label>
 
         <label class="flex items-center space-x-2">
-          <input type="checkbox" value="nombre-usuario" id="chkNombreUsuario" class="form-checkbox" disabled checked>
-          <span class="text-sm font-medium text-gray-900 dark:text-white">Nombre de Usuario</span>
+          <input type="checkbox" value="nombre-usuario" id="chkNombreUsuario"           class="w-4 text-[#a52a2a] bg-gray-100 border-gray-300 rounded focus:ring-[#a52a2a] focus:ring-2 cursor-pointer"
+          disabled >
+          <span            class="text-sm font-medium text-gray-900 dark:text-gray-300"   
+          >Nombre de Usuario, que registro la Asesoria</span>
         </label>
 
       </div>
-
-      <button id="btnDescargarReporte" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded-md">Descargar
+      <button id="btnDescargarReporte" class="bg-red-500 hover:bg-red-600 text-white font-medium  px-4 py-2 mt-4 rounded-md">Descargar
         Reporte</button>
-
     </div>
 
 
 
+    
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-left text-gray-500">
         <thead class="text-gray-700 uppercase bg-gray-100">
           <tr>
             <th scope="col" class="px-6 py-3">ID</th>
-            <th scope="col" class="px-6 py-3">Nombre</th>
+            <th scope="col" class="px-6 py-3">Nombre Asesorado</th>
             <th scope="col" class="px-6 py-3">Tipo de Juicio</th>
             <th scope="col" class="px-6 py-3">Resumen Asesoria</th>
             <th scope="col" class="px-6 py-3">Usuario</th>
+            <th scope="col" class="px-6 py-3">Fecha de Registro</th>
             <th scope="col" class="px-6 py-3">
               <span class="sr-only">Consultar</span>
             </th>

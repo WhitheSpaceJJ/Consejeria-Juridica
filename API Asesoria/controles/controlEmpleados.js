@@ -72,8 +72,8 @@ const agregarEmpleado = async (empleado) => {
  * */
 const eliminarEmpleado = async (id) => {
     try {
-        await modeloEmpleado.Empleado.destroy({ where: { id_empleado: id } });
-        return true;
+       const result = await modeloEmpleado.Empleado.destroy({ where: { id_empleado: id } });
+        return result === 1;    
     } catch (error) {
         console.log("Error:", error.message);
         return false;
@@ -90,8 +90,8 @@ const eliminarEmpleado = async (id) => {
  * */
 const actualizarEmpleado = async (id, empleado) => {
     try {
-        await modeloEmpleado.Empleado.update(empleado, { where: { id_empleado: id } });
-        return true;
+       const result= await modeloEmpleado.Empleado.update(empleado, { where: { id_empleado: id } });
+        return result[0] === 1; 
     } catch (error) {
         console.log("Error:", error.message);
         return false;

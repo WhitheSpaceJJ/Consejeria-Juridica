@@ -50,7 +50,7 @@ const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
 const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
   const filtros = JSON.parse(req.query.filtros);
   const pagina = req.query.pagina;
-  const result = await controlAsesorias.obtenerAsesoriasFiltroPagina(pagina,filtros);
+  const result = await controlAsesorias.obtenerAsesoriasFiltroPagina(pagina, filtros);
   if (result === null || result === undefined) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
@@ -71,152 +71,430 @@ const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
  * @returns {Object} asesoria de la base de datos
  * */
 const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
-  const filtros = JSON.parse(req.query.filtros);
-  const result = {};
-  if (filtros === null || filtros === undefined || filtros === '') {
-    result = await controlAsesorias.obtenerAsesorias();
-  } else {
-    result = await controlAsesorias.obtenerAsesoriasFiltro(filtros);
-  }
-  const campos = JSON.parse(req.query.campos);
 
-  if (result === null || result === undefined) {
+  const filtros = req.query.filtros;
+  console.log('filtros excel');
+  console.log('filtros', JSON.stringify(filtros));
+
+  let result = {};
+  if (filtros === null || filtros === undefined || filtros === '') {
+    console.log('No hay filtros');
+    try {
+      const resultA = await controlAsesorias.obtenerAsesorias();
+      console.log('resultA', resultA.length);
+      if (resultA.length ===0) {
+        result= null;
+      }else{
+        result = resultA;
+      }
+    } catch (error) {
+      console.log('error', error);
+      result= null;
+    }
+
+  } else {
+    console.log('Hay filtros');
+    try {
+    const    resultB = await controlAsesorias.obtenerAsesoriasFiltro( JSON.parse(req.query.filtros));
+    console.log('resultB', resultB.length);
+      if (resultB.length ===0) {
+        result= null;
+      }
+      else{
+        result = resultB;
+      }
+    } catch (error) {
+      console.log('error', error);
+      result= null;
+    }
+  }
+  console.log('result', result.length);
+  if (result === null ) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
-  } else {
-    const asesoriasFiltradas = result;
-    const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet('Asesorías');
+  }
 
-    // Mapear los encabezados según los campos solicitados
-    const encabezados = [];
-    const encabezadosMappings = {
-      'nombre-asesorado': 'Nombre de Asesorado',
-      'nombre-usuario': 'Nombre de Usuario',
-      'nombre-empleado': 'Nombre Empleado', // Ajusta según sea necesario
-      'genero': 'Género',
-      'colonia': 'Colonia',
-      'trabaja': 'Trabaja',
-      'ingreso_mensual': 'Ingreso Mensual',
-      'motivo': 'Motivo',
-      'estado_civil': 'Estado Civil',
-      'telefono': 'Teléfono',
-      'numero_hijos': 'Número de Hijos',
-      'fecha_registro': 'Fecha de Registro',
-      'tipo_juicio': 'Tipo de Juicio',
-      'conclusion': 'Conclusión',
-      'documentos-recibidos': 'Documentos Recibidos',
-      //     'usuario-cumple-requisitos': 'Usuario Cumple Requisitos',
-      //     'hora-atencion': 'Hora de Atención',
-      //    'fecha-atencion': 'Fecha de Atención',
-      //      'usuario-turnado': 'Usuario Turnado',
-      //    'responsable-turno': 'Responsable de Turno',
-      'resumen': 'Reumen de Hechos',
-    };
+  const verificadorCampos = req.query.campos; 
+  
+  console.log('verificadorCampos', verificadorCampos);
+  if (verificadorCampos === null || verificadorCampos === undefined  || verificadorCampos === '' || verificadorCampos === 'null') {
+    console.log('No hay campos');
+ 
+      console.log('filtros pero no hay error');
+      const campos = ['nombre-asesorado', 'nombre-usuario', 'nombre-empleado', 'genero', 'colonia', 'trabaja', 'ingreso_mensual', 'motivo', 'estado_civil', 'telefono', 'numero_hijos', 'fecha_registro', 'tipo_juicio', 'conclusion', 'documentos-recibidos', 'resumen'];
 
-    campos.forEach((campo) => {
-      if (encabezadosMappings[campo]) {
-        encabezados.push(encabezadosMappings[campo]);
-      }
-    });
+      const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet('Asesorías');
 
-    // Agregar encabezados al libro de Excel
-    sheet.addRow(encabezados);
-    // Agregar datos al libro de Excel
-    asesoriasFiltradas.forEach((asesoria) => {
-      const persona = asesoria.persona;
-      const asesorado = asesoria.asesorado;
-      const datosAsesoria = asesoria.datos_asesoria;
-      // const turno = asesoria.datos_asesoria;
-      const recibidos = asesoria.recibidos;
-      const filaDatos = [];
+      // Mapear los encabezados según los campos solicitados
+      const encabezados = [];
+      const encabezadosMappings = {
+        'nombre-asesorado': 'Nombre de Asesorado',
+        'nombre-usuario': 'Nombre de Usuario',
+        'nombre-empleado': 'Nombre Empleado', // Ajusta según sea necesario
+        'genero': 'Género',
+        'colonia': 'Colonia',
+        'trabaja': 'Trabaja',
+        'ingreso_mensual': 'Ingreso Mensual',
+        'motivo': 'Motivo',
+        'estado_civil': 'Estado Civil',
+        'telefono': 'Teléfono',
+        'numero_hijos': 'Número de Hijos',
+        'fecha_registro': 'Fecha de Registro',
+        'tipo_juicio': 'Tipo de Juicio',
+        'conclusion': 'Conclusión',
+        'documentos-recibidos': 'Documentos Recibidos',
+        //     'usuario-cumple-requisitos': 'Usuario Cumple Requisitos',
+        //     'hora-atencion': 'Hora de Atención',
+        //    'fecha-atencion': 'Fecha de Atención',
+        //      'usuario-turnado': 'Usuario Turnado',
+        //    'responsable-turno': 'Responsable de Turno',
+        'resumen': 'Reumen de Hechos',
+      };
 
-      // Mapear los datos según los campos solicitados
       campos.forEach((campo) => {
-        switch (campo) {
-          case 'nombre-asesorado':
-            filaDatos.push(persona.nombre + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno);
-            break;
-          case 'nombre-usuario':
-            filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
-            break;
-          case 'nombre-empleado':
-            if (asesoria.defensor !== null) {
-              filaDatos.push(asesoria.defensor.nombre_defensor);
-            }
-            else if (asesoria.asesor !== null) {
-              filaDatos.push(asesoria.asesor.nombre_asesor);
-            }
-            break;
-          case 'genero':
-            filaDatos.push(persona.genero.descripcion_genero);
-            break;
-          case 'colonia':
-            filaDatos.push(persona.domicilio.calles_domicilio + ' ' + persona.domicilio.numero_exterior_domicilio + ' ' + persona.domicilio.numero_interior_domicilio);
-            break;
-          case 'trabaja':
-            filaDatos.push(asesorado.estatus_trabajo ? 'Sí' : 'No');
-            break;
-          case 'ingreso_mensual':
-            filaDatos.push(asesorado.ingreso_mensual || 'N/A');
-            break;
-          case 'motivo':
-            filaDatos.push(asesorado.motivo.descripcion_motivo);
-            break;
-          case 'estado_civil':
-            filaDatos.push(asesorado.estado_civil.estado_civil);
-            break;
-          case 'telefono':
-            filaDatos.push(persona.telefono);
-            break;
-          case 'numero_hijos':
-            filaDatos.push(asesorado.numero_hijos);
-            break;
-          case 'fecha_registro':
-            filaDatos.push(datosAsesoria.fecha_registro);
-            break;
-          case 'tipo_juicio':
-            filaDatos.push(asesoria.tipos_juicio.tipo_juicio);
-            break;
-          case 'conclusion':
-            filaDatos.push(datosAsesoria.conclusion_asesoria);
-            break;
-          case 'documentos-recibidos':
-            filaDatos.push(recibidos.map((recibido) => recibido.descripcion_catalogo).join(', '));
-            break;
-          /*
-                case 'usuario-cumple-requisitos':
-                  filaDatos.push(datosAsesoria.estatus_requisitos ? 'Sí' : 'No');
-                  break;
-                case 'hora-atencion':
-                  filaDatos.push(turno.hora_turno ? turno.hora_turno : 'N/A');
-                  break;
-                case 'fecha-atencion':
-                  filaDatos.push(turno.fecha_turno ? turno.fecha_turno : 'N/A');
-                  break;
-                case 'usuario-turnado':
-                  filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
-                  break;
-                case 'responsable-turno':
-                  filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
-                  break;
-      
-                */
-          case 'resumen':
-            filaDatos.push(datosAsesoria.resumen_asesoria ? datosAsesoria.resumen_asesoria : '');
-            break;
+        if (encabezadosMappings[campo]) {
+          encabezados.push(encabezadosMappings[campo]);
         }
       });
-      sheet.addRow(filaDatos);
-    });
 
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', 'attachment; filename=asesorias.xlsx');
+      // Agregar encabezados al libro de Excel
+      sheet.addRow(encabezados);
+      // Agregar datos al libro de Excel
+      asesoriasFiltradas.forEach((asesoria) => {
+        const persona = asesoria.persona;
+        const asesorado = asesoria.asesorado;
+        const datosAsesoria = asesoria.datos_asesoria;
+        // const turno = asesoria.datos_asesoria;
+        const recibidos = asesoria.recibidos;
+        const filaDatos = [];
 
-    await workbook.xlsx.write(res);
-    res.end();
+        // Mapear los datos según los campos solicitados
+        campos.forEach((campo) => {
+          switch (campo) {
+            case 'nombre-asesorado':
+              filaDatos.push(persona.nombre + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno);
+              break;
+            case 'nombre-usuario':
+              filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+              break;
+            case 'nombre-empleado':
+              const key = 'defensor';
+
+              if (key in asesoria && asesoria[key] !== null) {
+                filaDatos.push(asesoria[key].nombre_defensor);
+              } else {
+                // Puedes manejar el caso cuando la clave no existe o es nula según tus necesidades
+                filaDatos.push(asesoria.asesor.nombre_asesor);
+              }
+              /*
+              if (asesoria.defensor !== null) {
+                filaDatos.push(asesoria.defensor.nombre_defensor);
+              }
+              else if (asesoria.asesor !== null) {
+                filaDatos.push(asesoria.asesor.nombre_asesor);
+              }
+              */
+              break;
+            case 'genero':
+              filaDatos.push(persona.genero.descripcion_genero);
+              break;
+            case 'colonia':
+              // Verifica si hay un número exterior antes de concatenar
+              let direccion = persona.domicilio.calle_domicilio;
+
+              if (persona.domicilio.numero_exterior_domicilio) {
+                direccion += ' ' + persona.domicilio.numero_exterior_domicilio;
+              }
+
+              if (persona.domicilio.numero_interior_domicilio) {
+                direccion += ' ' + persona.domicilio.numero_interior_domicilio;
+              }
+
+              filaDatos.push(direccion);
+              break;
+            case 'trabaja':
+              filaDatos.push(asesorado.estatus_trabajo ? 'Sí' : 'No');
+              break;
+            case 'ingreso_mensual':
+              if (asesorado && asesorado.ingreso_mensual) {
+                filaDatos.push(asesorado.ingreso_mensual);
+              } else {
+                filaDatos.push('N/A');
+              }
+              break;
+            case 'motivo':
+              if (asesorado && asesorado.motivo && asesorado.motivo.descripcion_motivo) {
+                filaDatos.push(asesorado.motivo.descripcion_motivo);
+              } else {
+                filaDatos.push('N/A');
+              }
+              break;
+            case 'estado_civil':
+              filaDatos.push(asesorado.estado_civil.estado_civil);
+              break;
+            case 'telefono':
+              filaDatos.push(persona.telefono);
+              break;
+            case 'numero_hijos':
+              filaDatos.push(asesorado.numero_hijos);
+              break;
+            case 'fecha_registro':
+              filaDatos.push(datosAsesoria.fecha_registro);
+              break;
+            case 'tipo_juicio':
+              filaDatos.push(asesoria.tipos_juicio.tipo_juicio);
+              break;
+            case 'conclusion':
+              filaDatos.push(datosAsesoria.conclusion_asesoria);
+              break;
+            case 'documentos-recibidos':
+              let descripcionConcatenada = '';
+
+              // Check if recibidos is defined and is an array
+              if (recibidos && Array.isArray(recibidos) && recibidos.length > 0) {
+                for (let i = 0; i < recibidos.length; i++) {
+                  descripcionConcatenada += recibidos[i].descripcion_catalogo;
+
+                  // Add a comma if not the last element
+                  if (i < recibidos.length - 1) {
+                    descripcionConcatenada += ', ';
+                  }
+                }
+              } else {
+                // Handle the case when recibidos is undefined, not an array, or empty
+                descripcionConcatenada = 'No hay descripciones disponibles';
+              }
+
+              filaDatos.push(descripcionConcatenada);
+              break;
+            /*
+                  case 'usuario-cumple-requisitos':
+                    filaDatos.push(datosAsesoria.estatus_requisitos ? 'Sí' : 'No');
+                    break;
+                  case 'hora-atencion':
+                    filaDatos.push(turno.hora_turno ? turno.hora_turno : 'N/A');
+                    break;
+                  case 'fecha-atencion':
+                    filaDatos.push(turno.fecha_turno ? turno.fecha_turno : 'N/A');
+                    break;
+                  case 'usuario-turnado':
+                    filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                    break;
+                  case 'responsable-turno':
+                    filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                    break;
+        
+                  */
+            case 'resumen':
+              filaDatos.push(datosAsesoria.resumen_asesoria ? datosAsesoria.resumen_asesoria : '');
+              break;
+          }
+        });
+        sheet.addRow(filaDatos);
+      });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=asesorias.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
+
+
+ 
+
+
+
+
+  } else {
+    
+    console.log('Hay campos');
+  
+    const campos = JSON.parse(verificadorCampos);
+    console.log('campos', campos);
+      const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet('Asesorías');
+
+      // Mapear los encabezados según los campos solicitados
+      const encabezados = [];
+      const encabezadosMappings = {
+        'nombre-asesorado': 'Nombre de Asesorado',
+        'nombre-usuario': 'Nombre de Usuario',
+        'nombre-empleado': 'Nombre Empleado', // Ajusta según sea necesario
+        'genero': 'Género',
+        'colonia': 'Colonia',
+        'trabaja': 'Trabaja',
+        'ingreso_mensual': 'Ingreso Mensual',
+        'motivo': 'Motivo',
+        'estado_civil': 'Estado Civil',
+        'telefono': 'Teléfono',
+        'numero_hijos': 'Número de Hijos',
+        'fecha_registro': 'Fecha de Registro',
+        'tipo_juicio': 'Tipo de Juicio',
+        'conclusion': 'Conclusión',
+        'documentos-recibidos': 'Documentos Recibidos',
+        //     'usuario-cumple-requisitos': 'Usuario Cumple Requisitos',
+        //     'hora-atencion': 'Hora de Atención',
+        //    'fecha-atencion': 'Fecha de Atención',
+        //      'usuario-turnado': 'Usuario Turnado',
+        //    'responsable-turno': 'Responsable de Turno',
+        'resumen': 'Reumen de Hechos',
+      };
+
+      campos.forEach((campo) => {
+        if (encabezadosMappings[campo]) {
+          encabezados.push(encabezadosMappings[campo]);
+        }
+      });
+
+      // Agregar encabezados al libro de Excel
+      sheet.addRow(encabezados);
+      // Agregar datos al libro de Excel
+      asesoriasFiltradas.forEach((asesoria) => {
+        const persona = asesoria.persona;
+        const asesorado = asesoria.asesorado;
+        const datosAsesoria = asesoria.datos_asesoria;
+        // const turno = asesoria.datos_asesoria;
+        const recibidos = asesoria.recibidos;
+        const filaDatos = [];
+
+        // Mapear los datos según los campos solicitados
+        campos.forEach((campo) => {
+          switch (campo) {
+            case 'nombre-asesorado':
+              filaDatos.push(persona.nombre + ' ' + persona.apellido_paterno + ' ' + persona.apellido_materno);
+              break;
+            case 'nombre-usuario':
+              filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+              break;
+            case 'nombre-empleado':
+              const key = 'defensor';
+
+              if (key in asesoria && asesoria[key] !== null) {
+                filaDatos.push(asesoria[key].nombre_defensor);
+              } else {
+                // Puedes manejar el caso cuando la clave no existe o es nula según tus necesidades
+                filaDatos.push(asesoria.asesor.nombre_asesor);
+              }
+              /*
+              if (asesoria.defensor !== null) {
+                filaDatos.push(asesoria.defensor.nombre_defensor);
+              }
+              else if (asesoria.asesor !== null) {
+                filaDatos.push(asesoria.asesor.nombre_asesor);
+              }
+              */
+              break;
+            case 'genero':
+              filaDatos.push(persona.genero.descripcion_genero);
+              break;
+            case 'colonia':
+              // Verifica si hay un número exterior antes de concatenar
+              let direccion = persona.domicilio.calle_domicilio;
+
+              if (persona.domicilio.numero_exterior_domicilio) {
+                direccion += ' ' + persona.domicilio.numero_exterior_domicilio;
+              }
+
+              if (persona.domicilio.numero_interior_domicilio) {
+                direccion += ' ' + persona.domicilio.numero_interior_domicilio;
+              }
+
+              filaDatos.push(direccion);
+              break;
+            case 'trabaja':
+              filaDatos.push(asesorado.estatus_trabajo ? 'Sí' : 'No');
+              break;
+            case 'ingreso_mensual':
+              if (asesorado && asesorado.ingreso_mensual) {
+                filaDatos.push(asesorado.ingreso_mensual);
+              } else {
+                filaDatos.push('N/A');
+              }
+              break;
+            case 'motivo':
+              if (asesorado && asesorado.motivo && asesorado.motivo.descripcion_motivo) {
+                filaDatos.push(asesorado.motivo.descripcion_motivo);
+              } else {
+                filaDatos.push('N/A');
+              }
+              break;
+            case 'estado_civil':
+              filaDatos.push(asesorado.estado_civil.estado_civil);
+              break;
+            case 'telefono':
+              filaDatos.push(persona.telefono);
+              break;
+            case 'numero_hijos':
+              filaDatos.push(asesorado.numero_hijos);
+              break;
+            case 'fecha_registro':
+              filaDatos.push(datosAsesoria.fecha_registro);
+              break;
+            case 'tipo_juicio':
+              filaDatos.push(asesoria.tipos_juicio.tipo_juicio);
+              break;
+            case 'conclusion':
+              filaDatos.push(datosAsesoria.conclusion_asesoria);
+              break;
+            case 'documentos-recibidos':
+              let descripcionConcatenada = '';
+
+              // Check if recibidos is defined and is an array
+              if (recibidos && Array.isArray(recibidos) && recibidos.length > 0) {
+                for (let i = 0; i < recibidos.length; i++) {
+                  descripcionConcatenada += recibidos[i].descripcion_catalogo;
+
+                  // Add a comma if not the last element
+                  if (i < recibidos.length - 1) {
+                    descripcionConcatenada += ', ';
+                  }
+                }
+              } else {
+                // Handle the case when recibidos is undefined, not an array, or empty
+                descripcionConcatenada = 'No hay descripciones disponibles';
+              }
+
+              filaDatos.push(descripcionConcatenada);
+              break;
+            /*
+                  case 'usuario-cumple-requisitos':
+                    filaDatos.push(datosAsesoria.estatus_requisitos ? 'Sí' : 'No');
+                    break;
+                  case 'hora-atencion':
+                    filaDatos.push(turno.hora_turno ? turno.hora_turno : 'N/A');
+                    break;
+                  case 'fecha-atencion':
+                    filaDatos.push(turno.fecha_turno ? turno.fecha_turno : 'N/A');
+                    break;
+                  case 'usuario-turnado':
+                    filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                    break;
+                  case 'responsable-turno':
+                    filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
+                    break;
+        
+                  */
+            case 'resumen':
+              filaDatos.push(datosAsesoria.resumen_asesoria ? datosAsesoria.resumen_asesoria : '');
+              break;
+          }
+        });
+        sheet.addRow(filaDatos);
+      });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=asesorias.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
   }
 });
+
+
+
 /**
  * @abstract Servicio  que permite agregar una asesoría
  * @param {Object} req Request

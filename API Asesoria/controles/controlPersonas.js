@@ -64,8 +64,8 @@ const agregarPersona = async (persona) => {
  */
 const eliminarPersona = async (id) => {
   try {
-    await modeloPersona.Persona.destroy({ where: { id_persona: id } });
-    return true;
+    const result= await modeloPersona.Persona.destroy({ where: { id_persona: id } });
+    return  result === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;
@@ -79,8 +79,8 @@ const eliminarPersona = async (id) => {
  */
 const actualizarPersona = async (persona) => {
   try {
-    await modeloPersona.Persona.update(persona, { where: { id_persona: persona.id_persona } });
-    return true;
+    const result = await modeloPersona.Persona.update(persona, { where: { id_persona: persona.id_persona } });
+    return result[0] === 1; 
   } catch (error) {
     console.log("Error:", error.message);
     return false;

@@ -2,38 +2,8 @@ const sequelize = require("./conexion");
 
 const { DataTypes } = require("sequelize");
 
-/**
- * @typedef {Object} Zona
- * @property {number} id_zona
- * @property {string} nombre_zona
- *  */
-const Zona = sequelize.define(
-  "zonas",
-  {
-    id_zona: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
-    nombre_zona: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [0, 50],
-      },
-    },
-  },
-  {
-    freezeTableName: true,
-    timestamps: false,
-    name: {
-      singular: "zona",
-      plural: "zonas",
-    },
-  }
-);
 
+//Modelos con funciones que aceptan cambios; 
 /**
  * @typedef {Object} TipoJuicio 
  * @property {number} id_tipo_juicio
@@ -54,13 +24,23 @@ const TipoJuicio = sequelize.define(
       validate: {
         len: [0, 100],
       },
-    },
+    }
+    ,
+    estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
+
   },
   {
     freezeTableName: true,
     timestamps: false,
   }
 );
+
 
 /**
  * @typedef {Object} EstadoCivil
@@ -83,6 +63,14 @@ const EstadoCivil = sequelize.define(
         len: [0, 50],
       },
     },
+    estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
+
   },
   {
     freezeTableName: true,
@@ -111,7 +99,13 @@ const Genero = sequelize.define(
       validate: {
         len: [0, 25],
       },
-    },
+    }, estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
   },
   {
     freezeTableName: true,
@@ -143,7 +137,13 @@ const Motivo = sequelize.define(
       validate: {
         len: [0, 75],
       },
-    },
+    }, estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
   },
   {
     freezeTableName: true,
@@ -177,13 +177,213 @@ const CatalogoRequisito = sequelize.define(
       validate: {
         len: [0, 75],
       },
-    },
+    }, estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
   },
   {
     freezeTableName: true,
     timestamps: false,
   }
 );
+
+
+
+/**
+ * @typedef {Object} Empleado
+ * @property {number} id_empleado
+ * @property {string} tipo_empleado
+ * */
+
+const Empleado = sequelize.define(
+  "empleados",
+  {
+    id_empleado: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    tipo_empleado: {
+      type: DataTypes.STRING(100),
+      allowNull: false, // Don't allow null
+    }, id_distrito_judicial: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    estatus_general: {
+      type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      },
+    }
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+    name: {
+      singular: "empleado",
+      plural: "empleados",
+    },
+  }
+);
+/**
+ * @typedef {Object} Asesor
+ * @property {number} id_asesor
+ * @property {string} nombre_asesor
+ * @property {number} id_zona
+ * */
+const Asesor = sequelize.define(
+  "asesores",
+  {
+    id_asesor: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+    },
+    nombre_asesor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0, 100],
+      },
+    }
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+    name: {
+      singular: "asesor",
+      plural: "asesores",
+    },
+  }
+);
+
+/**
+ * @typedef {Object} Defensor
+ * @property {number} id_defensor
+ * @property {string} nombre_defensor
+ * */
+
+const Defensor = sequelize.define(
+  "defensores",
+  {
+    id_defensor: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+    },
+    nombre_defensor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0, 100],
+      },
+    }
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+    name: {
+      singular: "defensor",
+      plural: "defensores",
+    },
+  }
+);
+
+
+
+
+//Modelo el cul es la base para el sistema de demanda
+
+/**
+ * @typedef {Object} Turno
+ * @property {number} id_turno
+ * @property {Date} fecha_turno
+ * @property {Time} hora_turno
+ * */
+const Turno = sequelize.define(
+  "turnos",
+  {
+    id_turno: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    fecha_turno: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: true,
+      },
+    },
+    hora_turno: {
+      type: DataTypes.TIME,
+      allowNull: false,
+      validate: {
+        is: /^([01]\d|2[0-3]):([0-5]\d)$/,
+      },
+    },
+    id_asesoria: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }, id_defensor: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+    name: {
+      singular: "turno",
+      plural: "turnos",
+    },
+  }
+);
+
+
+//Modelos clave del sistema
+
+/**
+ * @typedef {Object} Zona
+ * @property {number} id_zona
+ * @property {string} nombre_zona
+ *  */
+const Zona = sequelize.define(
+  "zonas",
+  {
+    id_zona: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    nombre_zona: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0, 50],
+      },
+    },
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+    name: {
+      singular: "zona",
+      plural: "zonas",
+    },
+  }
+);
+
+
 
 /**
  * @typedef {Object} Persona
@@ -288,53 +488,6 @@ const DetalleAsesoriaCatalogo = sequelize.define(
     name: {
       singular: "detalle_asesoria_catalogo",
       plural: "detalle_asesorias_catalogos",
-    },
-  }
-);
-
-/**
- * @typedef {Object} Turno
- * @property {number} id_turno
- * @property {Date} fecha_turno
- * @property {Time} hora_turno
- * */
-const Turno = sequelize.define(
-  "turnos",
-  {
-    id_turno: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
-    fecha_turno: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        isDate: true,
-      },
-    },
-    hora_turno: {
-      type: DataTypes.TIME,
-      allowNull: false,
-      validate: {
-        is: /^([01]\d|2[0-3]):([0-5]\d)$/,
-      },
-    },
-    id_asesoria: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }, id_defensor: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false,
-    name: {
-      singular: "turno",
-      plural: "turnos",
     },
   }
 );
@@ -484,102 +637,6 @@ const MunicipioDistro = sequelize.define(
 );
 
 /**
- * @typedef {Object} Empleado
- * @property {number} id_empleado
- * @property {string} tipo_empleado
- * */
-
-const Empleado = sequelize.define(
-  "empleados",
-  {
-    id_empleado: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
-    tipo_empleado: {
-      type: DataTypes.STRING(100),
-      allowNull: false, // Don't allow null
-    }, id_distrito_judicial: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false,
-    name: {
-      singular: "empleado",
-      plural: "empleados",
-    },
-  }
-);
-/**
- * @typedef {Object} Asesor
- * @property {number} id_asesor
- * @property {string} nombre_asesor
- * @property {number} id_zona
- * */
-const Asesor = sequelize.define(
-  "asesores",
-  {
-    id_asesor: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-    },
-    nombre_asesor: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [0, 100],
-      },
-    }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false,
-    name: {
-      singular: "asesor",
-      plural: "asesores",
-    },
-  }
-);
-
-/**
- * @typedef {Object} Defensor
- * @property {number} id_defensor
- * @property {string} nombre_defensor
- * */
-
-const Defensor = sequelize.define(
-  "defensores",
-  {
-    id_defensor: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-    },
-    nombre_defensor: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [0, 100],
-      },
-    }
-  },
-  {
-    freezeTableName: true,
-    timestamps: false,
-    name: {
-      singular: "defensor",
-      plural: "defensores",
-    },
-  }
-);
-
-/**
  *  @typedef {Object} DistritoJudicial
  * @property {number} id_distrito_judicial
  * @property {string} nombre_distrito_judicial
@@ -621,6 +678,8 @@ const DistritoJudicial = sequelize.define(
   }
 );
 
+
+///Modelo Asesoria el cual posee actualizaciones y nuevos enum
 
 /**
  *  @typedef {Object} Asesoria
@@ -693,10 +752,26 @@ const Asesoria = sequelize.define(
         len: [0, 75],
       },
     },
-    id_tipo_juicio: {
+    id_usuario: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    id_distrito_judicial: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }, id_municipio_distrito: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    estatus_asesoria: {
+      type: DataTypes.ENUM('NO_TURNADA', 'TURNADA', 'CONCLUIDA'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['NO_TURNADA', 'TURNADA', 'CONCLUIDA']], // Validar que solo acepte estos valores
+      },
+    }
+
+    
   },
   {
     freezeTableName: true,
@@ -707,6 +782,9 @@ const Asesoria = sequelize.define(
     },
   }
 );
+
+
+
 //Module exports
 module.exports = {
   Turno,

@@ -10,7 +10,7 @@ const { DataTypes } = require("sequelize");
  * */
 const TipoUser = sequelize.define("tipo_user", {
   id_tipouser
-            : {
+    : {
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: false,
@@ -25,7 +25,7 @@ const TipoUser = sequelize.define("tipo_user", {
   }
 }, {
   timestamps: false,
-  tableName:"tipo_user"
+  tableName: "tipo_user"
 });
 
 /**
@@ -88,20 +88,31 @@ const Usuario = sequelize.define("usuarios", {
     type: DataTypes.INTEGER,
     allowNull: false
   }
-  
+  ,
+  id_distrito_judicial: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  estatus_general: {
+    type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+    allowNull: false,
+    validate: {
+      isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+    },
+  }
 }, {
-  freezeTableName: true, 
-  timestamps: false 
+  freezeTableName: true,
+  timestamps: false
   ,
   name: {
     singular: 'usuario',
     plural: 'usuarios'
-}
+  }
 });
 
 //Module exports
 module.exports = {
   TipoUser
   ,
-Usuario
+  Usuario
 };
