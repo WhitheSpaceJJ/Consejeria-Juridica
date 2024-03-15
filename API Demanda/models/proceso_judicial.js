@@ -32,6 +32,10 @@ const procesoJudicial = sequelize.define('proceso_judicial', {
     type: DataTypes.STRING(25),
     allowNull: true
   },
+  id_turno:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   id_juzgado: {
     type: DataTypes.INTEGER,
     allowNull: true,
@@ -39,7 +43,8 @@ const procesoJudicial = sequelize.define('proceso_judicial', {
       model: 'juzgado',
       key: 'id_juzgado'
     }
-  }
+  },
+  
 }, {
   sequelize,
   tableName: 'proceso_judicial',
