@@ -71,14 +71,6 @@ const participante = sequelize.define('participante', {
       ]
     },
     {
-      name: 'id_persona_UNIQUE',
-      unique: true,
-      using: 'BTREE',
-      fields: [
-        { name: 'id_persona' }
-      ]
-    },
-    {
       name: 'id_escolaridad',
       using: 'BTREE',
       fields: [

@@ -1,6 +1,6 @@
 import { ControllerUtils } from '../lib/controllerUtils'
 
-class      MotivoController  {
+class MotivoController {
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
@@ -10,7 +10,7 @@ class      MotivoController  {
   handleDOMContentLoaded = () => {
     // add permissions
     this.utils.validatePermissions({})
-  }  }
-  
-  export {   MotivoController }
-  
+  }
+}
+
+export { MotivoController }

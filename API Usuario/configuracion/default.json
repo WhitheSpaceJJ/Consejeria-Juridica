@@ -3,8 +3,8 @@
     "database": {
       "host": "localhost",
       "port": 3306,
-      "username": "defensoria",
-      "password": "B0rr3g0!750n",
+      "username": "root",
+      "password": "1234",
       "databaseName": "defensoria_usuarios"
     }
   }

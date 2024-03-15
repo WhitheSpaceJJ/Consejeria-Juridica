@@ -3,47 +3,23 @@ const template = document.createElement('template')
 const html = await (await fetch('../assets/data-asesoria.html')).text()
 template.innerHTML = html
 
-export class DataAsesoria extends HTMLElement {
-  constructor(asesoria, domicilio) {
+export class DataDemanda extends HTMLElement {
+  constructor(asesoria) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
     this.asesoria = asesoria
-    this.domicilio = domicilio
-    this.fillData(this.asesoria, this.domicilio)
+    this.fillData(this.asesoria)
   }
 
   connectedCallback() {
   }
 
   fillData = async () => {
-    const persona = this.asesoria.asesoria.persona
-    const asesorado = this.asesoria.asesoria.asesorado
     const datosAsesoria = this.asesoria.asesoria.datos_asesoria
     const recibidos = this.asesoria.asesoria.recibidos
 
-    const domicilioData = this.domicilio.colonia
-    this.shadowRoot.getElementById(
-      'nombre-asesorado'
-    ).textContent = `${persona.nombre} ${persona.apellido_paterno} ${persona.apellido_materno}`
-    this.shadowRoot.getElementById('edad').textContent = persona.edad
-    this.shadowRoot.getElementById('sexo').textContent = persona.genero.descripcion_genero
-    this.shadowRoot.getElementById('telefono').textContent = persona.telefono
-    if (this.asesoria.asesoria.asesorado.estatus_trabajo) this.shadowRoot.getElementById('trabaja-boolean').textContent = 'Si'
-    else this.shadowRoot.getElementById('trabaja-boolean').textContent = 'No'
-    this.shadowRoot.getElementById('estado-civil').textContent =
-      asesorado.estado_civil.estado_civil
-    this.shadowRoot.getElementById('numero-hijos').textContent =
-      asesorado.numero_hijos
-
-    this.shadowRoot.getElementById('calle').textContent = persona.domicilio.calle_domicilio
-    this.shadowRoot.getElementById('numero-exterior').textContent = persona.domicilio.numero_exterior_domicilio
-    this.shadowRoot.getElementById('numero-interior').textContent = persona.domicilio.numero_interior_domicilio
-    this.shadowRoot.getElementById('codigo-postal').textContent = domicilioData.codigo_postal.codigo_postal
-    this.shadowRoot.getElementById('estado').textContent = domicilioData.estado.nombre_estado
-    this.shadowRoot.getElementById('municipio').textContent = domicilioData.municipio.nombre_municipio
-    this.shadowRoot.getElementById('ciudad').textContent = domicilioData.ciudad.nombre_ciudad
-    this.shadowRoot.getElementById('colonia').textContent = domicilioData.colonia.nombre_colonia
+    
     if (this.asesoria.asesoria.empleado) {
       const empleado = this.asesoria.asesoria.empleado
       if (empleado.hasOwnProperty('nombre_asesor')) {
@@ -79,4 +55,4 @@ export class DataAsesoria extends HTMLElement {
   }
 }
 
-customElements.define('data-asesoria', DataAsesoria)
+customElements.define('data-demanda', DataDemanda)

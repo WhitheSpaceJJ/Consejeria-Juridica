@@ -1,9 +1,9 @@
-import '../components/asesoria/modal-asesoria.js'
-import '../components/asesoria/data-asesoria.js'
+import '../components/demanda/modal-asesoria.js'
+import '../components/demanda/data-demanda.js'
 import '../components/navbar/navbar.js'
 import '../components/modal-warning/modal-warning.js'
 
-class ConsultaView {
+class ConsultaDemandaView {
   constructor(controller) {
     this.controller = controller
     this.filtrosForm = document.getElementById('filtros-form')
@@ -15,10 +15,9 @@ class ConsultaView {
 
     document.addEventListener(
       'DOMContentLoaded',
-      this.controller.handleDOMContentLoaded(),
-      this.controller.handleSelectChange()
+      this.controller.handleDOMContentLoaded()
     )
   }
 }
 
-export { ConsultaView }
+export { ConsultaDemandaView }

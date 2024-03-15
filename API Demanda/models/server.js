@@ -43,7 +43,7 @@ class Server {
     // Llamamos a los middlewares
     this.middlewares()
     // Conectamos a la base de datos
-  this.conectarBD()
+    //this.conectarBD()
     // Definimos las rutas de la aplicación
     this.routes()
   }
@@ -67,7 +67,7 @@ class Server {
     this.app.use(this.paths.ocupacion, verify_jwt, routerOcupacion)
     this.app.use(this.paths.demanda, verify_jwt, routerDemanda)
     this.app.use(this.paths.estadoProcesal, verify_jwt, routerEstadoProcesal)
-    this.app.use(this.paths.procesoJudicial, verify_jwt, routerProcesoJudicial)
+    this.app.use(this.paths.procesoJudicial, /*verify_jwt,*/ routerProcesoJudicial)
     this.app.use(this.paths.juzgado, verify_jwt, routerJuzgado)
     this.app.use(this.paths.juez, verify_jwt, routerJuez)
     this.app.use(this.paths.denuncia, verify_jwt, routerDenuncia)
