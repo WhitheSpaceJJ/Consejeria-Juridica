@@ -8,8 +8,6 @@ class ConsultaDemandaController {
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
-    this.CheckEventListeners()
-    this.ComboBoxEventListeners()
     this.buttonsEventListeners()
   }
 
@@ -17,36 +15,13 @@ class ConsultaDemandaController {
   handleDOMContentLoaded = () => {
     // add permissions
     this.utils.validatePermissions({})
-    this.getNumeroPaginas()
-    this.handleConsultarDemandas()
+    //this.getNumeroPaginas()
+    this.handleConsultarDemanda()
     const searchButton = document.getElementById('searchButton');
-    searchButton.addEventListener('submit', (event) => {
+    searchButton.addEventListener('click', (event) => {
       event.preventDefault();
       this.handleFechas();
     });
-
-    const deleteButton = document.getElementById('deleteButton');
-    deleteButton.style.display = 'none';
-    deleteButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.deleteFiltros();
-    });
-    const excel = document.getElementById('filtros-excel');
-    excel.style.display = 'none';
-    const dropdownbuttonexcell = document.getElementById('dropdown-button-excell');
-    dropdownbuttonexcell.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.filtrosexcel();
-    });
-    /*
-     Botón de descarga del reporte
-      const btnDescargarReporte = document.getElementById('btnDescargarReporte');
-      btnDescargarReporte.addEventListener('click', (event) => {
-        event.preventDefault();
-        this.descargarReporte();
-      });
-      */
-    window.handleConsultarDemandasById = this.handleConsultarDemandasById
   }
 
   buttonsEventListeners = () => {
@@ -71,12 +46,12 @@ class ConsultaDemandaController {
     }
   }
 
-  getNumeroPaginas = async () => {
+ /**  getNumeroPaginas = async () => {
     const numeroDemanda = await this.model.getTotalDemanda()
     const total = document.getElementById('total')
     total.innerHTML = ' :' + numeroDemanda.totalDemanda
     this.#numeroPaginas = (numeroDemanda.totalDemanda) / 10
-  }
+  } */
 
   limpiarFiltros = () => {
     const fechaInicio = document.getElementById('fecha-inicio')
@@ -97,33 +72,15 @@ class ConsultaDemandaController {
     this.handleConsultarDemanda()
   }
 
-  borrarAsesor = () => {
-    const selectAsesor2 = document.getElementById('select-asesor')
-    selectAsesor2.innerHTML = ''
-    const option3 = document.createElement('option')
-    option3.value = 0
-    option3.text = "Selecciona una opcion"
-    selectAsesor2.appendChild(option3)
-  }
-
-  borrarDefensor = () => {
-    const selectdefensor2 = document.getElementById('select-defensor')
-    const option2 = document.createElement('option')
-    selectdefensor2.innerHTML = ''
-    option2.value = 0
-    option2.text = "Selecciona una opcion"
-    selectdefensor2.appendChild(option2)
-  }
-
-
   handleConsultarDemanda = async () => {
     try {
       if (this.#busquedaExitosa === false) {
         const deleteButton = document.getElementById('deleteButton');
         deleteButton.style.display = 'none';
 
-        const demandaResponse = await this.model.getDemandas()
-        const demanda = demandaResponse.demanda
+        const demandaResponse = await this.model.getTotalDemandas()
+        console.log(demandaResponse)
+        const demanda = demandaResponse
 
         const table = document.getElementById('table-body')
         const rowsTable = document.getElementById('table-body').rows.length
@@ -178,12 +135,12 @@ class ConsultaDemandaController {
       const button = document.querySelector('.consulta-button')
       button.disabled = true
       const demanda = await this.model.getDemandaById(id)
-      const participante = demanda.demanda
-      const domicilio = await this.model.getColoniaById(
-        participante.domicilio.id_colonia
-      )
+      const turno = demanda.id_turno
+      const idAsesoria = await this.model.getTurno(turno)
+      const asesoria = await this.model.getAsesoriaById(idAsesoria.turno.id_asesoria)
+
       const modal = document.querySelector('modal-asesoria')
-      const dataDemanda = new DataDemanda(asesoria, domicilio)
+      const dataDemanda = new DataDemanda(asesoria)
 
       const handleModalClose = () => {
         const modalContent = modal.shadowRoot.getElementById('modal-content')
@@ -278,19 +235,40 @@ class ConsultaDemandaController {
                 ${demanda.id_proceso_judicial}
             </td>
             <td class="px-6 py-4">
-                ${demanda.tipo_demanda}
+                ${demanda.fecha_inicio}
             </td>
             <td class="px-6 py-4">
-                ${demanda.descripcion_demanda}
+                ${demanda.fecha_proceso}
             </td>
             <td class="px-6 py-4">
-                ${demanda.fecha_demanda}
+                ${demanda.fecha_conclusion}
+            </td>
+            <td class="px-6 py-4">
+                ${demanda.area_seguimiento}
+            </td>
+            <td class="px-6 py-4">
+                ${demanda.numero_expediente}
+            </td>
+            <td class="px-6 py-4">
+                ${demanda.id_turno}
             </td>
             <td class="px-6 py-4 text-right">
-                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarDemandaById(this.value)" value="${demanda.id_proceso_judicial}">Consultar</button>
+                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" data-id="${demanda.id_proceso_judicial}">Consultar</button>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <button href="#" class="consulta2-button font-medium text-[#db2424] hover:underline" value="${demanda.id_proceso_judicial}">Consultar Datos</button>
             </td>`
+
+            const consultarButtons = row.querySelectorAll('.consulta-button');
+            consultarButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    this.handleConsultarDemandaById(button.getAttribute('data-id'));
+                });
+            });
 
     return row
   }
+
+
 }
 export { ConsultaDemandaController }

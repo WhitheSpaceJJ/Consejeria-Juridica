@@ -1,4 +1,4 @@
-//import '../components/demanda/modal-demanda.js'
+import '../components/demanda/modal-asesoria.js'
 import '../components/demanda/data-demanda.js'
 import '../components/navbar/navbar.js'
 import '../components/modal-warning/modal-warning.js'
@@ -15,8 +15,7 @@ class ConsultaDemandaView {
 
     document.addEventListener(
       'DOMContentLoaded',
-      this.controller.handleDOMContentLoaded(),
-      this.controller.handleSelectChange()
+      this.controller.handleDOMContentLoaded()
     )
   }
 }
