@@ -20,7 +20,7 @@ class ConsultaDemandaController {
     const searchButton = document.getElementById('searchButton');
     searchButton.addEventListener('click', (event) => {
       event.preventDefault();
-      this.handleFechas();
+  //   this.handleFechas();
     });
   }
 

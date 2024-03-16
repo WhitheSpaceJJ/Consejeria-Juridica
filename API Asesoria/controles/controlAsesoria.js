@@ -17,6 +17,9 @@ const controlDefensor = require('./controlDefensor');
 const controlEmpleado = require('./controlEmpleados');
 const { Op, literal } = require("sequelize");
 const Sequelize = require('sequelize');
+const controlDistritoJudicial = require('./controlDistritosJudiciales');
+const controlMunicipios = require('./controlMunicipioDistro');
+
 
 /**
  * @abstract Función que permite obtener asesorias por filtro
@@ -181,11 +184,13 @@ const obtenerAsesoriasFiltro = async (filtros) => {
       datos_asesoria.fecha_registro = asesoria_obj.fecha_registro;
       datos_asesoria.usuario = asesoria_obj.usuario;
       datos_asesoria.id_usuario = asesoria_obj.id_usuario;
-      datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
-      datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
-      datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
-
-
+     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
+    //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
+    datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
+    const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+    asesoria_obj.distrito_judicial = distrito_judicial;
+    const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+     asesoria_obj.municipio = municipio;
 
 
 
@@ -286,14 +291,15 @@ const obtenerAsesorias = async () => {
       datos_asesoria.fecha_registro = asesoria_obj.fecha_registro;
       datos_asesoria.usuario = asesoria_obj.usuario;
       datos_asesoria.id_usuario = asesoria_obj.id_usuario;
-      datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
-      datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
+     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
+    //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
       datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
-      
-
-
-
-      delete asesoria_obj.id_asesoria;
+       const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+       asesoria_obj.distrito_judicial = distrito_judicial;
+       const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+        asesoria_obj.municipio = municipio;
+    
+      delete asesoria_obj.id_asesoria; 
       delete asesoria_obj.resumen_asesoria;
       delete asesoria_obj.conclusion_asesoria;
       delete asesoria_obj.estatus_requisitos;
@@ -398,9 +404,13 @@ const obtenerAsesoriaPorId = async (id) => {
     delete asesoria_obj.fecha_registro;
     delete asesoria_obj.usuario;
     datos_asesoria.id_usuario = asesoria_obj.id_usuario;
-    datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
-    datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
+     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
+    //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
     datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
+    const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+    asesoria_obj.distrito_judicial = distrito_judicial;
+    const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+     asesoria_obj.municipio = municipio;
 
     asesoria_obj.datos_asesoria = datos_asesoria;
 
@@ -455,6 +465,15 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
       asesoria_obj.recibidos = recibidos;
     }
 
+
+    
+    const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+    asesoria_obj.distrito_judicial = distrito_judicial;
+    const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+     asesoria_obj.municipio = municipio;
+
+
+
     //datos_asesoria
     const datos_asesoria = {
       id_asesoria: asesoria_obj.id_asesoria,
@@ -464,8 +483,8 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
       fecha_registro: asesoria_obj.fecha_registro,
       usuario: asesoria_obj.usuario,
       id_usuario: asesoria_obj.id_usuario,
-      id_distrito_judicial: asesoria_obj.id_distrito_judicial,
-      id_municipio_distrito: asesoria_obj.id_municipio_distrito,
+    //  id_distrito_judicial: asesoria_obj.id_distrito_judicial,
+    //  id_municipio_distrito: asesoria_obj.id_municipio_distrito,
       estatus_asesoria: asesoria_obj.estatus_asesoria,
 
 
@@ -478,8 +497,8 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
     delete asesoria_obj.fecha_registro;
     delete asesoria_obj.usuario;
     delete asesoria_obj.id_usuario;
-    delete asesoria_obj.id_distrito_judicial;
-    delete asesoria_obj.id_municipio_distrito;
+    // delete asesoria_obj.id_distrito_judicial;
+    //delete asesoria_obj.id_municipio_distrito;
     delete asesoria_obj.estatus_asesoria;
 
     asesoria_obj.datos_asesoria = datos_asesoria;
@@ -570,6 +589,11 @@ const agregarAsesoria = async (asesoria_pre) => {
       */
     const tipojuicio = asesoria_obj.tipos_juicio;
     datos_asesoria.id_tipo_juicio = tipojuicio.id_tipo_juicio;
+ //   const municipio = asesoria_obj.municipio;
+ //   datos_asesoria.id_municipio_distrito = municipio.id_municipio_distrito; 
+ // const distrito_judicial = asesoria_obj.distrito_judicial;
+ // datos_asesoria.id_distrito_judicial = distrito_judicial.id_distrito_judicial;
+
     const asesoria_cre = (await modeloAsesoria.Asesoria.create(datos_asesoria, { raw: true, nest: true })).dataValues;
     const asesoria_str2 = JSON.stringify(asesoria_cre);
     const asesoria_obj2 = JSON.parse(asesoria_str2);
@@ -752,6 +776,17 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
       delete asesoria_obj.estatus_requisitos;
       delete asesoria_obj.fecha_registro;
       delete asesoria_obj.usuario;
+      
+
+      datos_asesoria.id_usuario = asesoria_obj.id_usuario;
+     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
+    //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
+    datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
+    const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+    asesoria_obj.distrito_judicial = distrito_judicial;
+    const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+     asesoria_obj.municipio = municipio;
+
       asesoria_obj.datos_asesoria = datos_asesoria;
 
       asesorias.push(asesoria_obj);
@@ -939,7 +974,14 @@ const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
       delete asesoria_obj.estatus_requisitos;
       delete asesoria_obj.fecha_registro;
       delete asesoria_obj.usuario;
-      asesoria_obj.datos_asesoria = datos_asesoria;
+      datos_asesoria.id_usuario = asesoria_obj.id_usuario;
+     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
+    //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
+      datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
+       const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
+       asesoria_obj.distrito_judicial = distrito_judicial;
+       const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
+        asesoria_obj.municipio = municipio;
 
       asesorias.push(asesoria_obj);
     }

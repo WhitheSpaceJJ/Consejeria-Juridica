@@ -4,6 +4,7 @@
   role="tabpanel"
   aria-labelledby="asesorado-tab"
   class="flex flex-col gap-6"
+
 >
   <div class="flex flex-col gap-3">
     <label class="font-medium text-black text-md"
@@ -65,6 +66,7 @@
       </select>
     </div>
 
+
     <div class="relative z-0 w-full mt-3 group">
       <label
         for="tipo-juicio"
@@ -80,6 +82,42 @@
       </select>
     </div>
   </div>
+
+
+  <div class="grid md:grid-cols-2 md:gap-6">
+    <div class="relative z-0 w-full mt-3 group" >
+      <label
+        for="distrito"
+        class="font-medium absolute text-md text-black duration-300
+         transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6"
+        >Distrito Judicial</label
+      >
+      <select
+        id="distrito"
+        name="distrito"
+        class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+      >
+      <option selected disabled value="">Selecciona un Distrito</option>
+      </select>
+    </div>
+   
+    <div class="relative z-0 w-full mt-3 group">
+      <label
+        for="municipio"
+        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6"
+        >Municipio</label
+      >
+      <select
+        id="municipio"
+        name="municipio" disabled
+        class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option selected  value="">Selecciona un Municipio</option>
+      </select>
+    </div>
+  </div>
+
+
   <div>
     <label for="resumen" class="block mb-2 font-medium text-black text-md"
       >Resumen de los hechos</label

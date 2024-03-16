@@ -5,12 +5,66 @@ class APIModel {
   DEMANDAS_API_URL = `http://localhost:3026`
   CP_API_URL = `${this.API_URL}:3012`
   user = JSON.parse(sessionStorage.getItem('user'))
+  DEMANDAS_API_URL = `${this.API_URL}:3026`
 
   // eslint-disable-next-line no-useless-constructor
   constructor() {}
 
   // GET methods
+ //--------------------- DEMANDAS ------------------------
 
+ async getTotalDemandas(){
+  const url = `${this.DEMANDAS_API_URL}/proceso-judicial`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
+
+async getDemandaById(id){
+  const url = `${this.DEMANDAS_API_URL}/proceso-judicial/${id}`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
+
+
+// --------------------Turno------------------------
+async getTurno(id){
+  const url = `${this.ASESORIAS_API_URL}/turnos/${id}`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
   async login({ correo, password }) {
     const url = `${this.USERS_API_URL}/usuarios/usuario?correo=${correo}&password=${password}`
     const response = await fetch(url, {

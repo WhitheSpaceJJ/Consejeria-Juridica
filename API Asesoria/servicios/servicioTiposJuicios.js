@@ -20,7 +20,7 @@ const agregarTipoDeJuicio = asyncError(async (req, res, next) => {
   } else {
 
     res.status(201).json({
-        tipoDeJuicio: result
+      tipoDeJuicio: result
     });
   }
 });
@@ -36,15 +36,29 @@ const agregarTipoDeJuicio = asyncError(async (req, res, next) => {
  */
 
 const obtenerTiposDeJuicio = asyncError(async (req, res, next) => {
-  const result = await controlTiposDeJuicio.obtenerTiposDeJuicio();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron tipos de juicio', 404);
-    return next(error);
-  } else {
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
+    const result = await controlTiposDeJuicio.obtenerTiposDeJuicio(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron tipos de juicio', 404);
+      return next(error);
+    } else {
 
-    res.status(200).json({
+      res.status(200).json({
         tiposDeJuicio: result
-    });
+      });
+    }
+  } else {
+    const result = await controlTiposDeJuicio.obtenerTiposDeJuicio(null);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron tipos de juicio', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        tiposDeJuicio: result
+      });
+    }
   }
 });
 
@@ -66,7 +80,7 @@ const eliminarTipoDeJuicio = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-        menssage: "El tipo de juicio ha sido eliminado"
+      menssage: "El tipo de juicio ha sido eliminado"
     });
   }
 });
@@ -86,9 +100,9 @@ const actualizarTipoDeJuicio = asyncError(async (req, res, next) => {
     const error = new CustomeError('Error al actualizar el tipo de juicio', 400);
     return next(error);
   } else {
- 
+
     res.status(200).json({
-        tipoDeJuicio: req.body
+      tipoDeJuicio: req.body
     });
   }
 });
@@ -110,7 +124,7 @@ const obtenerTipoDeJuicioPorId = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-        tipoDeJuicio: result
+      tipoDeJuicio: result
     });
   }
 });

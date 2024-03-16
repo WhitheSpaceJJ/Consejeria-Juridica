@@ -20,12 +20,14 @@ class ConsultaController {
   }
 
   // DOMContentLoaded
-  handleDOMContentLoaded = () => {
+ handleDOMContentLoaded = () => { 
     // add permissions
     this.utils.validatePermissions({})
     this.getNumeroPaginas()
     this.handleConsultarAsesorias()
     this.agregarMunicipios()
+    this.agregarDistritios()
+
     this.agregarZonas()
     this.agregarDistritios()
     const searchButton = document.getElementById('searchButton');
@@ -1298,7 +1300,7 @@ class ConsultaController {
   crearRow = asesoria => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
-
+    console.log(asesoria.datos_asesoria)
     row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                 ${asesoria.datos_asesoria.id_asesoria}
             </td>
@@ -1317,6 +1319,15 @@ class ConsultaController {
             <td class="px-6 py-4">
             ${asesoria.datos_asesoria.fecha_registro}
         </td>
+        <td class="px-6 py-4">
+        ${asesoria.defensor!=null?asesoria.defensor.nombre_defensor:asesoria.asesor.nombre_asesor}
+    </td>
+    <td class="px-6 py-4">
+    ${asesoria.distrito_judicial.nombre_distrito_judicial}
+</td>
+<td class="px-6 py-4">
+${asesoria.municipio.nombre_municipio}
+</td>
             <td class="px-6 py-4 text-right">
                 <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
             </td>`

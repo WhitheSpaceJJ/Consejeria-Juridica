@@ -58,7 +58,7 @@ const obtenerUsuarioCorreoPassword = async (correo, password) => {
   try {
     const usuario = await modelUsuario.Usuario.findOne({
       attributes: {
-        exclude: ['id_tipouser', 'id_zona'],
+  //      exclude: ['id_tipouser', 'id_zona'],
       },
       raw: true,
       nest: true,

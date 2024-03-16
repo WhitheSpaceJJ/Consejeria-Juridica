@@ -25,7 +25,14 @@ export class AsesoriaTab extends HTMLElement {
   #requisitos
   #requisitosValue
   #tipoEmpleado
-  #tipoEmpleadoValue
+  #tipoEmpleadoValue 
+
+  #distritos
+  #distrito
+
+
+
+    #municipio
 
   static get observedAttributes() {
     return ['id', 'data']
@@ -51,8 +58,13 @@ export class AsesoriaTab extends HTMLElement {
     const { defensores } = await this.#api.getDefensores()
     this.#defensores = defensores
 
-    const { tiposDeJuicio } = await this.#api.getTiposJuicio()
-    this.#tiposJuicio = tiposDeJuicio
+    const { tiposDeJuicio } = await this.#api.getTiposJuicio2()
+    this.#tiposJuicio = tiposDeJuicio 
+
+
+
+    this.#distritos =  await this.#api.getDistritos() 
+
 
     this.manageFormFields()
     this.fillInputs()
@@ -62,6 +74,11 @@ export class AsesoriaTab extends HTMLElement {
     this.#asesor = this.shadowRoot.getElementById('asesor')
     this.#defensor = this.shadowRoot.getElementById('defensor')
     this.#tipoJuicio = this.shadowRoot.getElementById('tipo-juicio')
+    this.#municipio = this.shadowRoot.getElementById('municipio')
+    this.#distrito = this.shadowRoot.getElementById('distrito')
+    this.#distrito.addEventListener('change', this.agregarMunicipiosByDistrito)
+
+
     this.#resumen = this.shadowRoot.getElementById('resumen')
     this.#conclusion = this.shadowRoot.getElementById('conclusion')
     this.#recibido = this.shadowRoot.querySelectorAll(
@@ -74,6 +91,27 @@ export class AsesoriaTab extends HTMLElement {
       'input[type="radio"][name="rb-empleado"]'
     )
   }
+  agregarMunicipiosByDistrito = async () => {
+    if(this.#distrito.value === '0'){
+       this.shadowRoot.getElementById('municipio').value = '0'
+       this.shadowRoot.getElementById('municipio').disabled = true
+    }else if(this.#distrito.value !== '0'){
+      const id_distrito =this.#distrito.value
+      const municipios = await this.#api.getMunicipiosByDistrito(id_distrito)
+
+
+      this.shadowRoot.getElementById('municipio').value = '0'
+       this.shadowRoot.getElementById('municipio').disabled = false
+
+
+      municipios.forEach(municipio => {
+        const option = document.createElement('option')
+        option.value = municipio.id_municipio_distrito
+        option.text = municipio.nombre_municipio
+        this.#municipio.appendChild(option)
+      })
+    }
+  }
 
   fillInputs() {
     this.#asesores.forEach(asesor => {
@@ -81,8 +119,8 @@ export class AsesoriaTab extends HTMLElement {
       option.value = asesor.id_asesor
       option.textContent = asesor.nombre_asesor
       this.#asesor.appendChild(option)
-    })
-
+    }) 
+    
     this.#defensores.forEach(defensor => {
       const option = document.createElement('option')
       option.value = defensor.id_defensor
@@ -96,6 +134,15 @@ export class AsesoriaTab extends HTMLElement {
       option.textContent = tipoJuicio.tipo_juicio
       this.#tipoJuicio.appendChild(option)
     })
+
+    this.#distritos.forEach(distrito => {
+      const option = document.createElement('option')
+      option.value = distrito.id_distrito_judicial
+      option.textContent = distrito.nombre_distrito_judicial
+      this.#distrito.appendChild(option)
+    })
+
+
   }
 
   getValues() {
@@ -133,19 +180,50 @@ export class AsesoriaTab extends HTMLElement {
     ]
 
     try {
-      if (!validateNonEmptyFields(inputs)) {
-        throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.'
-        )
+      if (this.#tipoJuicio.value === '0') {
+        throw new ValidationError('Selecciona un tipo de juicio, por favor.')
+      }
+ 
+      if (this.#resumen.value === '') {
+        throw new ValidationError('El resumen no puede estar vacío, por favor ingreselo.')
+      }else if (this.#resumen.value.length > 250) { 
+        throw new ValidationError('El resumen no puede tener más de 250 caracteres, por favor revisa.')
+      }
+
+      if (this.#conclusion.value === '') {
+        throw new ValidationError('La conclusión no puede estar vacía, por favor ingresela.')
+      } else if (this.#conclusion.value.length > 250) {
+        throw new ValidationError('La conclusión no puede tener más de 250 caracteres, por favor revisa.')
+      }
+
+      if (this.#recibidoValue.length === 0) {
+        throw new ValidationError('Selecciona al menos un documento recibido, por favor.')
+      }
+
+      if (!this.#requisitosValue) {
+        throw new ValidationError('Selecciona si cumple con los requisitos, por favor.')
       }
       if (
         (this.#tipoEmpleadoValue === 'asesor' && !this.#asesor.value) ||
         (this.#tipoEmpleadoValue === 'defensor' && !this.#defensor.value)
       ) {
         throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.aaaaaaaaaa'
+          'Es necesario seleccionar un asesor o defensor, por favor revise.'
         )
       }
+
+/*
+      if (!validateNonEmptyFields(inputs)) {
+        throw new ValidationError(
+          'Campos obligatorios en blanco, por favor revise.'
+        )
+      }
+
+      */
+    
+    if(this.#municipio.value === '0' || this.#distrito.value === '0'  ){
+      throw new ValidationError('Selecciona un distrito y un municipio, por favor.')
+    }
 
       return true
     } catch (error) {
@@ -220,6 +298,10 @@ export class AsesoriaTab extends HTMLElement {
       estatus_requisitos: this.#requisitosValue === 'yes',
       fecha_registro: getDate(),
       usuario: this.#api.user.name,
+      id_usuario: this.#api.user.id_usuario, 
+      estatus_asesoria: 'NO_TURNADA',
+      id_distrito_judicial: Number(this.#distrito.value),
+      id_municipio_distrito: Number(this.#municipio.value)
     }
     const recibidos = this.#recibidoValue.map(
       ({ id_catalogo, descripcion_catalogo }) => {

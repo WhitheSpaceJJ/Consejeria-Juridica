@@ -7,12 +7,21 @@ const modeloTipoJuicio = require('../modelos/modeloTipoJuicio');
  * @abstract Función que permite obtener todos los tipos de juicio
  * @returns tipos de juicio
  */
-const obtenerTiposDeJuicio = async () => {
+const obtenerTiposDeJuicio = async (activo) => {
   try {
-    return await modeloTipoJuicio.TipoJuicio.findAll({
-      raw: true,
-      nest: true,
-    });
+    if(activo !== undefined && activo !== null && activo !== ""){
+      return await modeloTipoJuicio.TipoJuicio.findAll({
+        raw: false,
+        nest: true,
+        where: { estatus_general: "ACTIVO" }
+      });
+    }else {
+      return await modeloTipoJuicio.TipoJuicio.findAll({
+        raw: false,
+        nest: true
+      });
+    }
+   
   } catch (error) {
     console.log("Error:", error.message);
     return null;

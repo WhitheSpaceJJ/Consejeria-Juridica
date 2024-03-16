@@ -1,7 +1,7 @@
 class APIModel {
   API_URL = 'http://200.58.127.244'
   USERS_API_URL = `${this.API_URL}:3002`
-  ASESORIAS_API_URL = `http://localhost:3009`
+  ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`
   user = JSON.parse(sessionStorage.getItem('user'))
 
@@ -9,7 +9,133 @@ class APIModel {
   constructor() { }
 
   // GET methods
+  async postTiposJuicio(tipoDeJuicio) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`;
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(tipoDeJuicio),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+  //TiposdeJuicio
+  async putTiposJuicio(id, tipoDeJuicio) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
+    try {
+      console.log(tipoDeJuicio) 
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(tipoDeJuicio),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
 
+   //TiposdeJuicio
+   async getTiposJuicioByID(id) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
+  
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+
+  async getTotalDemandas(){
+    const url = `${this.DEMANDAS_API_URL}/proceso-judicial`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  
+  async getDemandaById(id){
+    const url = `${this.DEMANDAS_API_URL}/proceso-judicial/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  
+  
+  // --------------------Turno------------------------
+  async getTurno(id){
+    const url = `${this.ASESORIAS_API_URL}/turnos/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
   async login({ correo, password }) {
     const url = `${this.USERS_API_URL}/usuarios/usuario?correo=${correo}&password=${password}`
     const response = await fetch(url, {
@@ -76,6 +202,10 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
+
+
+
+  
   //Municipios
   async getMunicipiosByDistrito(idDistro) {
     const url = `${this.ASESORIAS_API_URL}/municipios-distritos/distrito/${idDistro}`
@@ -103,11 +233,13 @@ class APIModel {
       },
     })
     if (response.ok) {
+      console.log("Entro a distritos")
       let data = await response.json()
       data = data.distritosJudiciales
       return data
     }
     else {
+      console.log("Error en la petición")
       throw new Error('Error en la petición')
     }
   }
@@ -312,7 +444,23 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-
+  async getTiposJuicio2() {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio?activo=true`;
+  
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error('Error en la petición');
+    }
+  }
   async putAsesoria({ id, data }) {
     const url = `${this.ASESORIAS_API_URL}/asesorias/${id}`
     const response = await fetch(url, {
