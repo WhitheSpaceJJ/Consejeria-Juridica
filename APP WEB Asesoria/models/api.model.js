@@ -2,7 +2,7 @@ class APIModel {
   API_URL = 'http://200.58.127.244'
   USERS_API_URL = `http://localhost:3002`
   ASESORIAS_API_URL = `http://localhost:3009`
-  CP_API_URL = `${this.API_URL}:3012`
+  CP_API_URL = `http://localhost:3012`
   user = JSON.parse(sessionStorage.getItem('user'))
 
   // eslint-disable-next-line no-useless-constructor
@@ -444,7 +444,23 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-
+  async getTiposJuicio2() {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio?activo=true`;
+  
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error('Error en la petición');
+    }
+  }
   async putAsesoria({ id, data }) {
     const url = `${this.ASESORIAS_API_URL}/asesorias/${id}`
     const response = await fetch(url, {

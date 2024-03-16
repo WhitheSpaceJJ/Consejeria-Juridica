@@ -58,7 +58,7 @@ export class AsesoriaTab extends HTMLElement {
     const { defensores } = await this.#api.getDefensores()
     this.#defensores = defensores
 
-    const { tiposDeJuicio } = await this.#api.getTiposJuicio()
+    const { tiposDeJuicio } = await this.#api.getTiposJuicio2()
     this.#tiposJuicio = tiposDeJuicio 
 
 
