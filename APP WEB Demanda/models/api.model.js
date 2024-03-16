@@ -1,10 +1,10 @@
 class APIModel {
   API_URL = 'http://200.58.127.244'
-  USERS_API_URL = `http://localhost:3002`
-  ASESORIAS_API_URL = `http://localhost:3009`
-  CP_API_URL = `http://localhost:3012`
+  USERS_API_URL = `${this.API_URL}:3002`
+  ASESORIAS_API_URL = `${this.API_URL}:3009`
+  CP_API_URL = `${this.API_URL}:3012`
   user = JSON.parse(sessionStorage.getItem('user'))
-  DEMANDAS_API_URL = `http://localhost:3026`
+  DEMANDAS_API_URL = `${this.API_URL}:3026`
 
   // eslint-disable-next-line no-useless-constructor
   constructor() {}
