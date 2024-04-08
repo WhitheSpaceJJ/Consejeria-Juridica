@@ -91,6 +91,7 @@ const obtenerEmpleado = asyncError(async (req, res, next) => {
  * @param {Object} next Next
  * */
 const actualizarEmpleado = asyncError(async (req, res, next) => {
+
     const result = await controlEmpleado.actualizarEmpleado(req.params.id,req.body);
     if ( result === false) {
         const error = new CustomeError('Error al actualizar el empleado', 400);

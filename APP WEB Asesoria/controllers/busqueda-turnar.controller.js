@@ -26,14 +26,19 @@ class BusquedaTurnarController {
 
       }
 
-      const { asesoria } = await this.model.getAsesoriaByFullName({
+      const { asesorias } = await this.model.getAsesoriaByFullName({
         nombre,
         apellidoPaterno,
         apellidoMaterno,
       })
-
-      sessionStorage.setItem('asesorias', JSON.stringify(asesoria))
-      location.href = 'asesorias-turnar.html'
+      if (asesorias.length === 0) {
+        throw new ValidationError(
+          'No se encontraron resultados con los datos proporcionados'
+        )
+      } else {
+        sessionStorage.setItem('asesorias', JSON.stringify(asesorias))
+        location.href = 'asesorias-turnar.html'
+      }
     } catch (error) {
       if (error instanceof ValidationError) {
         const modal = document.querySelector('modal-warning')
@@ -41,7 +46,7 @@ class BusquedaTurnarController {
         modal.open = true
       } else {
         const modal = document.querySelector('modal-warning')
-        modal.message = 'Error al buscar, por favor intenta de nuevo'
+        modal.message = 'Error al buscar o cero coincidencias, por favor intenta de nuevo'
         modal.open = true
       }
     }

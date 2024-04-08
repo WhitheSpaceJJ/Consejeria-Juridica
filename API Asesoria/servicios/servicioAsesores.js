@@ -31,16 +31,36 @@ const agregarAsesor = asyncError(async (req, res, next) => {
  * @returns {Object} asesores   de la base de datos
  */
 const obtenerAsesores = asyncError(async (req, res, next) => {
-  const result = await controlAsesores.obtenerAsesores();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron asesores', 404);
-    return next(error);
-  } else {
-    res.status(200).json({
-     
-        asesores: result
-    });
+  
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
+    const result = await controlAsesores.obtenerAsesores(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron asesores', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+       
+          asesores: result
+      });
+    }
+  }else {
+    const result = await controlAsesores.obtenerAsesores();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron asesores', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+       
+          asesores: result
+      });
+    }
+    
   }
+
+
+
+
 });
 
 /**

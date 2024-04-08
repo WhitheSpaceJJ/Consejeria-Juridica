@@ -21,7 +21,7 @@ router.route('/:id')
   // Obtener un asesor por su ID
   .get(servicioAsesor.obtenerAsesorPorId)
   // Eliminar un asesor por su ID
-  .delete(servicioAsesor.eliminarAsesor)
+  //.delete(servicioAsesor.eliminarAsesor)
   // Actualizar un asesor por su ID
   .put(servicioAsesor.actualizarAsesor);
 

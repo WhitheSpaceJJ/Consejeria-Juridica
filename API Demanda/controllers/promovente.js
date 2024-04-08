@@ -1,5 +1,6 @@
 const promoventeDAO = require('../data-access/promoventeDAO')
 
+
 /**
  * @abstract Método que permite crear un promovente
  * @param {object} promovente - Objeto que contiene los datos del promovente
@@ -7,15 +8,22 @@ const promoventeDAO = require('../data-access/promoventeDAO')
  */
 const crearPromovente = async (req, res) => {
   try {
-    const { id_participante, espanol } = req.body
+    /**
+        "id_promovente": 1,
+        "espanol": 0,
+        "id_escolaridad": 1,
+        "id_etnia": 1,
+        "id_ocupacion": 1
+     */
+    const { id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion } = req.body
     const promovente = await promoventeDAO.crearPromovente({
-      id_participante,
-      espanol
+      id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion
     })
-    res.json(promovente)
+ 
+    res.status(201).json(promovente)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -27,10 +35,16 @@ const crearPromovente = async (req, res) => {
 const obtenerPromoventes = async (req, res) => {
   try {
     const promoventes = await promoventeDAO.obtenerPromoventes()
-    res.json(promoventes)
+     if(promoventes === null || promoventes.length === 0){
+       res.status(404).json({ message: 'No se encontraron promoventes' })
+      } else{
+    
+        res.status(200).json(promoventes)
+      }
+
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -43,11 +57,17 @@ const obtenerPromoventes = async (req, res) => {
 const obtenerPromovente = async (req, res) => {
   try {
     const { id } = req.params
-    const promovente = await promoventeDAO.obtenerPromoventePorParticipante(Number(id))
-    res.json(promovente)
+    const promovente = await promoventeDAO.obtenerPromovente(Number(id))
+     if( promovente === null){
+       res.status(404).json({ message: 'No se encontró el promovente' })
+      }
+      else{
+       
+        res.status(200).json(promovente)
+      }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -60,15 +80,21 @@ const obtenerPromovente = async (req, res) => {
 const actualizarPromovente = async (req, res) => {
   try {
     const { id } = req.params
-    const { id_participante, espanol } = req.body
-    await promoventeDAO.actualizarPromovente(Number(id), {
-      espanol
+
+    const { id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion } = req.body
+    const result=  await promoventeDAO.actualizarPromovente(Number(id), {
+      id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion
     })
-    const actualizado = await promoventeDAO.obtenerPromoventePorParticipante(Number(id))
-    res.json(actualizado)
+    if(result){
+      const actualizado = await promoventeDAO.obtenerPromovente(Number(id))
+      res.status(200).json(actualizado)
+    }
+    else{
+      res.status(404).json({ message: 'No se encontró el promovente, datos iguales' })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -82,10 +108,15 @@ const eliminarPromovente = async (req, res) => {
   try {
     const { id } = req.params
     const promovente = await promoventeDAO.eliminarPromovente(Number(id))
-    res.json(promovente)
+    if(promovente){
+      res.status(200).json({ message: 'Promovente eliminado con éxito' })
+    }
+    else{
+      res.status(404).json({ message: 'No se encontró el promovente' })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }

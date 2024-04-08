@@ -6,7 +6,13 @@ import '../components/asesoria/asesorado-tab.js'
 import '../components/asesoria/detalles-tab.js'
 
 class AsesoriaView {
-  constructor(controller) {}
+  constructor(controller) {
+    this.controller = controller
+    document.addEventListener(
+      'DOMContentLoaded',
+      this.controller.handleDOMContentLoaded()
+    )
+  }
 }
 
 export { AsesoriaView }

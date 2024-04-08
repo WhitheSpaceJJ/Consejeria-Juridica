@@ -11,7 +11,7 @@ const obtenerDetallesAsesoriaCatalogo = async () => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error detalle asesoria:", error.message);
     return null;
   }
 };
@@ -28,7 +28,7 @@ const obtenerDetalleAsesoriaCatalogoPorId = async (id) => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error detalle asesoria:", error.message);
     return null;
   }
 };
@@ -42,7 +42,7 @@ const agregarDetalleAsesoriaCatalogo = async (detalle) => {
   try {
     return (await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.create(detalle, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error detalle asesoria:", error.message);
     return false;
   }
 };
@@ -57,7 +57,7 @@ const eliminarDetalleAsesoriaCatalogo = async (id) => {
     const result = await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.destroy({ where: { id_detalle: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error detalle asesoria:", error.message);
     return false;
   }
 };
@@ -72,7 +72,7 @@ const actualizarDetalleAsesoriaCatalogo = async (detalle) => {
   const result=  await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.update(detalle, { where: { id_detalle: detalle.id_detalle } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error detalle asesoria:", error.message);
     return false;
   }
 };

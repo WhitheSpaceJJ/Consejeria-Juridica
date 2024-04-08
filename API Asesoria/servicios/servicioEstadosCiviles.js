@@ -33,16 +33,36 @@ const agregarEstadoCivil = asyncError(async (req, res, next) => {
  */
 
 const obtenerEstadosCiviles = asyncError(async (req, res, next) => {
-  const result = await controlEstados.obtenerEstadosCiviles();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron estados civiles', 404);
-    return next(error);
-  } else {
 
-    res.status(200).json({
-        estadosCiviles: result
-    });
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
+    const result = await controlEstados.obtenerEstadosCiviles(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron estados civiles', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          estadosCiviles: result
+      });
+    }
+
+  }else {
+    const result = await controlEstados.obtenerEstadosCiviles();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron estados civiles', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          estadosCiviles: result
+      });
+    }
+    
   }
+
+
+
 });
 
 /**

@@ -15,7 +15,7 @@ router.route('/:id')
   // Obtener un motivo por su ID
   .get(servicioMotivos.obtenerMotivoPorId)
   // Eliminar un motivo por su ID
-  .delete(servicioMotivos.eliminarMotivo)
+ // .delete(servicioMotivos.eliminarMotivo)
   // Actualizar un motivo por su ID
   .put(servicioMotivos.actualizarMotivo);
 

@@ -42,7 +42,76 @@ export class CodigoPostal extends HTMLElement {
     this.#estado = this.shadowRoot.getElementById('estado')
     this.#ciudad = this.shadowRoot.getElementById('ciudad')
     this.#colonia = this.shadowRoot.getElementById('colonia')
-  }
+
+    var calleInput = this.#calle;
+
+    calleInput.addEventListener('input', function () {
+      if (calleInput.value === '') {
+        const modal = document.querySelector('modal-warning');
+        modal.message ='La calle no puede estar vacía, por favor ingresela.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (calleInput.value.length > 75) {
+        const modal = document.querySelector('modal-warning');
+        modal.message ='La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+  
+
+    });
+
+   
+
+
+
+
+  var numeroExteriorInput = this.#numeroExt;
+  var numeroInteriorInput =this.#numeroExt;
+
+  var enterosPattern = /^\d+$/; 
+
+
+  numeroExteriorInput.addEventListener('input', function () {
+   if (!enterosPattern.test(numeroExteriorInput.value)) {
+      const modal = document.querySelector('modal-warning');
+      modal.message = 'El número exterior solo permite números, verifique su respuesta.';
+      modal.title = 'Error de validación';
+      modal.open = true;
+    }   if (numeroExteriorInput.value === '') {
+      const modal = document.querySelector('modal-warning');
+      modal.message = 'El número exterior no puede estar vacío, por favor ingreselo.';
+      modal.title = 'Error de validación';
+      modal.open = true;
+    } else  if (numeroExteriorInput.value.length > 10) {
+      const modal = document.querySelector('modal-warning');
+      modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
+      modal.title = 'Error de validación';
+      modal.open = true;
+    }
+  });
+  numeroInteriorInput.addEventListener('input', function () {
+  
+    if (numeroInteriorInput.value !== '') {
+      if (!enterosPattern.test(numeroInteriorInput.value)) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El número interior solo permite números, verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else
+        if (numeroInteriorInput.length > 10) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+    }
+  });
+  
+
+
+
+}
 
   connectedCallback() {
     this.formCP = this.shadowRoot.getElementById('form-cp')

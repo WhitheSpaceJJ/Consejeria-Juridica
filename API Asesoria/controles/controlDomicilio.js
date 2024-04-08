@@ -11,7 +11,7 @@ const obtenerDomicilios = async () => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error domicilios :", error.message);
     return null;
   }
 };
@@ -28,7 +28,7 @@ const obtenerDomicilioPorId = async (id) => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error domicilios :", error.message);
     return null;
   }
 };
@@ -42,7 +42,7 @@ const agregarDomicilio = async (domicilio) => {
   try {
     return (await modeloDomicilio.Domicilio.create(domicilio, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error domicilios :", error.message);
     return false;
   }
 };
@@ -57,7 +57,7 @@ const eliminarDomicilio = async (id) => {
     const result = await modeloDomicilio.Domicilio.destroy({ where: { id_domicilio: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error domicilios :", error.message);
     return false;
   }
 };
@@ -72,7 +72,7 @@ const actualizarDomicilio = async (domicilio) => {
    const result= await modeloDomicilio.Domicilio.update(domicilio, { where: { id_domicilio: domicilio.id_domicilio } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error domicilios :", error.message);
     return false;
   }
 };

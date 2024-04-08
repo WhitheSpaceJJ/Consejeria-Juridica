@@ -1,3 +1,4 @@
+const e = require('express')
 const estado_procesalDAO = require('../data-access/estado_procesalDAO')
 
 /**
@@ -13,7 +14,7 @@ const obtenerEstadosProcesales = async (req, res) => {
     res.json(estados_procesales)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -31,7 +32,7 @@ const obtenerEstadoProcesal = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -48,7 +49,7 @@ const crearEstadoProcesal = async (req, res) => {
     res.json(estado_procesal)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -62,12 +63,17 @@ const actualizarEstadoProcesal = async (req, res) => {
   try {
     const { id } = req.params
     const { id_estado_procesal, ...data } = req.body
-    await estado_procesalDAO.actualizarEstadoProcesal(Number(id), data)
-    const actualizado = await estado_procesalDAO.obtenerEstadoProcesal(Number(id))
-    res.json(actualizado)
+    const result= await estado_procesalDAO.actualizarEstadoProcesal(Number(id), data)
+    if(result) {
+      const actualizado = await estado_procesalDAO.obtenerEstadoProcesal(Number(id))
+      return res.status(201).json(actualizado)
+    }else{
+      return res.status(500).json({ message: 'Error al realizar la actualizacion del estado procesal, datos iguales' })
+    }
+    
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -81,10 +87,14 @@ const eliminarEstadoProcesal = async (req, res) => {
   try {
     const { id } = req.params
     const estado_procesal = await estado_procesalDAO.eliminarEstadoProcesal(Number(id))
-    res.json(estado_procesal)
+    if(estado_procesal) {
+      return res.status(200).json({ message: 'Estado procesal eliminado' })
+    }else{
+      return res.status(404).json({ message: 'Estado procesal no eliminado, por no encontrarlo' })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }

@@ -15,7 +15,7 @@ router.route('/:id')
   // Obtener un domicilio por su ID
   .get(servicioDomicilios.obtenerDomicilioPorId)
   // Eliminar un domicilio por su ID
-  .delete(servicioDomicilios.eliminarDomicilio)
+ // .delete(servicioDomicilios.eliminarDomicilio)
   // Actualizar un domicilio por su ID
   .put(servicioDomicilios.actualizarDomicilio);
 

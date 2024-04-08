@@ -41,21 +41,222 @@ export class AsesoradoTab extends HTMLElement {
 
     this.init()
   }
-
+  
   async init() {
     this.#api = new APIModel()
 
-    const { generos } = await this.#api.getGeneros()
+    const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
 
-    const { motivos } = await this.#api.getMotivos()
+    const { motivos } = await this.#api.getMotivos2()
     this.#motivos = motivos
 
-    const { estadosCiviles } = await this.#api.getEstadosCiviles()
+    const { estadosCiviles } = await this.#api.getEstadosCiviles2()
     this.#estadosCiviles = estadosCiviles
 
     this.manageFormFields()
     this.fillInputs()
+    // Obtener una referencia al campo de entrada
+    var nombreInput = this.#nombre;
+    var apellidoPaternoInput = this.#apellidoPaterno;
+    var apellidoMaternoInput = this.#apellidoMaterno;
+    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
+    nombreInput.addEventListener('input', function () {
+      var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+      if (nombreInput.value === '') {
+        // Si el campo está vacío, lanzar una excepción
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+        if (!nombrePattern.test(nombreInput.value)) {
+          // Si el campo contiene caracteres no válidos, lanzar una excepción
+
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
+          modal.title = 'Error de validación'
+          modal.open = true
+
+        } else if (nombreInput.value.length > 50) {
+          // Si el campo tiene más de 50 caracteres, lanzar una excepción
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+    });
+
+    apellidoPaternoInput.addEventListener('input', function () {
+      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+      if (apellidoPaternoInput.value === '') {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (apellidoPaternoInput.value.length > 50) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+    });
+
+    apellidoMaternoInput.addEventListener('input', function () {
+      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+      if (apellidoMaternoInput.value === '') {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (apellidoMaternoInput.value.length > 50) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+    });
+
+    var edadInput = this.#edad;
+
+    edadInput.addEventListener('input', function () {
+      var edadPattern = /^\d+$/;
+      if (!edadPattern.test(edadInput.value)) {
+        if (edadInput.value === '') {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'La edad no puede estar vacía, por favor ingresela.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'La edad solo permite números, verifique su respuesta.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+      } else if (edadInput.value > 200) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+    });
+
+    var numeroHijosInput = this.#numeroHijos;
+
+    numeroHijosInput.addEventListener('input', function () {
+      var enterosPattern = /^\d+$/;
+      if (!enterosPattern.test(numeroHijosInput.value)) {
+        if (numeroHijosInput.value === '') {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número de hijos no puede estar vacío, por favor ingreselo.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número de hijos solo permite números, verifique su respuesta.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+      }
+      else if (numeroHijosInput.value > 200) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El número de hijos no puede ser mayor a 200, por favor ingreselo correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+
+    });
+
+    var telefonoInput = this.#telefono;
+
+    telefonoInput.addEventListener('input', function () {
+      var enterosPattern = /^\d+$/;
+
+      if (telefonoInput.value !== '') {
+        if (!enterosPattern.test(telefonoInput.value)) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El teléfono solo debe de tener dígitos, nada de espacios en blanco, por favor ingreselo correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+        else
+          if (telefonoInput.value.length > 10) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El teléfono no debe tener 10 dígitos, por favor ingreselo correctamente.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          }
+        /*else if (telefonoInput.value.length < 10) {
+          const modal = document.querySelector('modal-warning');
+          modal.message ='El teléfono no debe ser menor a 10 dígitos, por favor ingreselo correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+        */
+      }
+
+    });
+
+    /*
+    
+    
+      var numeroExteriorInput = this.#domicilio.data.numeroExt;
+      var numeroInteriorInput =this.#domicilio.data.numeroInt;
+    
+      var nombrePattern = /^[A-Za-z]+$/;
+    
+      numeroExteriorInput.addEventListener('input', function () {
+        if (numeroExteriorInput === '') {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número exterior no puede estar vacío, por favor ingreselo.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else if (nombrePattern.test(numeroExteriorInput)) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número exterior solo permite números, verifique su respuesta.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else if (numeroExteriorInput.length > 10) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+      });
+      numeroInteriorInput.addEventListener('input', function () {
+      
+        if (numeroInteriorInput !== '') {
+          if (nombrePattern.test(numeroInteriorInput)) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El número interior solo permite números, verifique su respuesta.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          } else
+            if (numeroInteriorInput.length > 10) {
+              const modal = document.querySelector('modal-warning');
+              modal.message = 'El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.';
+              modal.title = 'Error de validación';
+              modal.open = true;
+            }
+        }
+      });
+     
+    
+     */
+
   }
 
   manageFormFields() {
@@ -69,6 +270,8 @@ export class AsesoradoTab extends HTMLElement {
     this.#estadoCivil = this.shadowRoot.getElementById('estado-civil')
     this.#numeroHijos = this.shadowRoot.getElementById('numero-hijos')
     this.#domicilio = this.shadowRoot.querySelector('cp-comp')
+
+
   }
 
   fillInputs() {
@@ -116,47 +319,57 @@ export class AsesoradoTab extends HTMLElement {
       this.#domicilio.data.colonia,
     ]
     try {
-      var nombrePattern = /^[A-Za-z]+$/;
-      if(this.#nombre.value ===''){
+    //  var nombrePattern2 = /^[A-Za-z\s]+$/; // Se añade \s para permitir espacios en blanco
+      var nombrePattern2 = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+   //   var nombrePattern = /^[A-Za-z]+$/;
+      var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+      var enterosPattern = /^\d+$/;
+
+      if (this.#nombre.value === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingreselo.')
       }
-      else if (!nombrePattern.test(this.#nombre.value)) {
+      else if (!nombrePattern2.test(this.#nombre.value)) {
         throw new ValidationError('El nombre solo permite letras, verifique su respuesta.')
-       } else if (this.#nombre.value.length > 50) {
+      } else if (this.#nombre.value.length > 50) {
         throw new ValidationError('El nombre no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
       }
 
 
 
-      if(this.#apellidoPaterno.value ===''){
+      if (this.#apellidoPaterno.value === '') {
         throw new ValidationError('El apellido paterno no puede estar vacío, por favor ingreselo.')
       }
-      else if (!nombrePattern.test(this.#apellidoPaterno.value)) {
+      else if (!nombrePattern2.test(this.#apellidoPaterno.value)) {
         throw new ValidationError('El apellido paterno solo permite letras, verifique su respuesta.')
-      }else if (this.#apellidoPaterno.value.length > 50) {
+      } else if (this.#apellidoPaterno.value.length > 50) {
         throw new ValidationError('El apellido paterno no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
       }
 
-      if(this.#apellidoMaterno.value ===''){
+      if (this.#apellidoMaterno.value === '') {
         throw new ValidationError('El apellido materno no puede estar vacío, por favor ingreselo.')
       }
-      else if (!nombrePattern.test(this.#apellidoMaterno.value)) {
+      else if (!nombrePattern2.test(this.#apellidoMaterno.value)) {
         throw new ValidationError('El apellido materno solo permite letras, verifique su respuesta.')
       } else if (this.#apellidoMaterno.value.length > 50) {
         throw new ValidationError('El apellido materno no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
       }
 
-       
-      if(this.#edad.value ===''){
-        throw new ValidationError('La edad no puede estar vacía, por favor ingresela.')
-      }else if(this.#edad.value > 200){
+
+
+      if (!enterosPattern.test(this.#edad.value)) {
+        if (this.#edad.value === '') {
+          throw new ValidationError('La edad no puede estar vacía, por favor ingresela.')
+        } else {
+          throw new ValidationError('La edad solo permite números, verifique su respuesta.')
+        }
+      }
+      else if (this.#edad.value > 200) {
         throw new ValidationError('La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.')
-      }else if (nombrePattern.test(this.#edad.value)) {
-        throw new ValidationError('La edad solo permite números, verifique su respuesta.')
-      } 
+      }
 
 
-      if(this.#sexo.value ===''){
+      if (this.#sexo.value === '') {
         throw new ValidationError('El sexo es obligatorio, por favor seleccione uno.')
       }
       /*
@@ -165,74 +378,92 @@ export class AsesoradoTab extends HTMLElement {
       }
       else 
       */
-      if(this.#telefono.value !==''){
-        if(this.#telefono.value.length > 10){
+      if (this.#telefono.value !== '') {
+        if (!enterosPattern.test(this.#telefono.value)) {
+          throw new ValidationError('El teléfono solo debe de  dígitos, por favor ingreselo correctamente.')
+        }
+        else if (this.#telefono.value.length > 10) {
           throw new ValidationError('El teléfono no debe tener 10 dígitos, por favor ingreselo correctamente.')
+        } else if (this.#telefono.value.length < 10) {
+          throw new ValidationError('El teléfono no debe ser menor a 10 dígitos, por favor ingreselo correctamente.')
         }
       }
-   
-      if (
-        (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
-        (this.#estatusTrabajo === 'no' && !this.#motivo)
-      ) {
-        throw new ValidationError(
-          'Seleccione una opción para el ingreso o el motivo de no trabajar.'
-        )
+
+
+      if (this.#estatusTrabajo === '' || this.#estatusTrabajo === undefined) {
+        throw new ValidationError('Seleccione una opción para el ingreso o el motivo de no trabajar.')
+      } else if (this.#estatusTrabajo === 'yes' && this.#ingreso === undefined) {
+        throw new ValidationError('Seleccione una opción para el ingreso promedio.')
+      } else if (this.#estatusTrabajo === 'no' && this.#motivo.value === '') {
+        throw new ValidationError('Seleccione una opción para el motivo de no trabajar.')
       }
-      
-      if (this.#estadoCivil.value ===''){
+      /*
+            if (
+              (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
+              (this.#estatusTrabajo === 'no' && !this.#motivo)
+            ) {
+              throw new ValidationError(
+                'Seleccione una opción para el ingreso o el motivo de no trabajar.'
+              )
+            }
+      */
+      if (this.#estadoCivil.value === '') {
         throw new ValidationError('El estado civil es obligatorio, por favor seleccione uno.')
       }
-      if(this.#numeroHijos.value ===''){
-        throw new ValidationError('El número de hijos no puede estar vacío, por favor ingreselo.')
-      } else if (this.#numeroHijos.value > 200) {
+
+      if (!enterosPattern.test(this.#numeroHijos.value)) {
+        if (this.#numeroHijos.value === '') {
+          throw new ValidationError('El número de hijos no puede estar vacío, por favor ingreselo.')
+        } else {
+          throw new ValidationError('El número de hijos solo permite números, verifique su respuesta.')
+        }
+      }
+      else if (this.#numeroHijos.value > 200) {
         throw new ValidationError('El número de hijos no puede ser mayor a 200, por favor ingreselo correctamente.')
-      } else if (nombrePattern.test(this.#numeroHijos.value)) {
-        throw new ValidationError('El número de hijos solo permite números, verifique su respuesta.')
       }
 
 
-      if(this.#domicilio.data.calle ===''){
+      if (this.#domicilio.data.calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingresela.')
-      } else if (this.#domicilio.data.calle.length > 75) {  
+      } else if (this.#domicilio.data.calle.length > 75) {
         throw new ValidationError('La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.')
       }
 
-      if(this.#domicilio.data.numeroExt ===''){
+      if (this.#domicilio.data.numeroExt === '') {
         throw new ValidationError('El número exterior no puede estar vacío, por favor ingreselo.')
-      }else if ( nombrePattern.test(this.#domicilio.data.numeroExt)) {
+      } else if (!enterosPattern.test(this.#domicilio.data.numeroExt)) {
         throw new ValidationError('El número exterior solo permite números, verifique su respuesta.')
-      }else       if(this.#domicilio.data.numeroExt.length > 10){
+      } else if (this.#domicilio.data.numeroExt.length > 10) {
         throw new ValidationError('El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.')
       }
-      if(this.#domicilio.data.numeroInt !==''){
-        if (nombrePattern.test(this.#domicilio.data.numeroInt)) {
+      if (this.#domicilio.data.numeroInt !== '') {
+        if (!enterosPattern.test(this.#domicilio.data.numeroInt)) {
           throw new ValidationError('El número interior solo permite números, verifique su respuesta.')
-        }else
-        if (this.#domicilio.data.numeroInt.length > 10) {
-          throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.')
-        }
+        } else
+          if (this.#domicilio.data.numeroInt.length > 10) {
+            throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.')
+          }
       }
 
-      if(this.#domicilio.data.colonia ===''){
-        throw new ValidationError('La colonia es obligatoria, por favor seleccione una.')
+      if (this.#domicilio.data.colonia === '') {
+        throw new ValidationError('La colonia es obligatoria, por favor busque una con el codigo postal.')
       }
 
- /*
-      if (!validateNonEmptyFields(inputs)) {
-        throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.'
-        )
-      }
-      if (
-        (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
-        (this.#estatusTrabajo === 'no' && !this.#motivo)
-      ) {
-        throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.'
-        )
-      } 
-      */
+      /*
+           if (!validateNonEmptyFields(inputs)) {
+             throw new ValidationError(
+               'Campos obligatorios en blanco, por favor revise.'
+             )
+           }
+           if (
+             (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
+             (this.#estatusTrabajo === 'no' && !this.#motivo)
+           ) {
+             throw new ValidationError(
+               'Campos obligatorios en blanco, por favor revise.'
+             )
+           } 
+           */
 
       return true
     } catch (error) {

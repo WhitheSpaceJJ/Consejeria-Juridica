@@ -32,7 +32,7 @@ router.route('/')
 
 router.route('/:id')
   .get(servicioAsesorias.obtenerAsesoriaPorId)
-  .delete(servicioAsesorias.eliminarAsesoria)
+  //.delete(servicioAsesorias.eliminarAsesoria)
   .put(servicioAsesorias.actualizarAsesoria)
   ;
 

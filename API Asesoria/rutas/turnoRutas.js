@@ -5,6 +5,9 @@ const servicioTurnos = require('../servicios/servicioTurnos');
 // Creamos un nuevo router
 const router = express.Router();
 
+router.route('/defensor/:id')
+.get(servicioTurnos.obtenerTurnoPorDefensorId)
+
 router.route('/')
   // Obtener todos los turnos
   .get(servicioTurnos.obtenerTurnos)
@@ -15,7 +18,7 @@ router.route('/:id')
   // Obtener un turno por su ID
   .get(servicioTurnos.obtenerTurnoPorId)
   // Eliminar un turno por su ID
-  .delete(servicioTurnos.eliminarTurno)
+ // .delete(servicioTurnos.eliminarTurno)
   // Actualizar un turno por su ID
   .put(servicioTurnos.actualizarTurno);
 

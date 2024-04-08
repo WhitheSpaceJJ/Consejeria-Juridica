@@ -18,7 +18,7 @@ router.route('/:id')
     // Obtener un defensor por su ID
     .get(servicioDefensor.obtenerDefensorPorId)
     // Eliminar un defensor por su ID
-    .delete(servicioDefensor.eliminarDefensor)
+   // .delete(servicioDefensor.eliminarDefensor)
     // Actualizar un defensor por su ID
     .put(servicioDefensor.actualizarDefensor);  
 

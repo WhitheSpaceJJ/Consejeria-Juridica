@@ -23,7 +23,7 @@ const obtenerTiposDeJuicio = async (activo) => {
     }
    
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error tipo juicios:", error.message);
     return null;
   }
 };
@@ -41,7 +41,7 @@ const obtenerTipoDeJuicioPorId = async (id) => {
       nest: true,
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error tipo juicios:", error.message);
     return null;
   }
 };
@@ -55,7 +55,7 @@ const agregarTipoDeJuicio = async (tipoDeJuicio) => {
   try {
     return (await modeloTipoJuicio.TipoJuicio.create(tipoDeJuicio, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error tipo juicios:", error.message);
     return false;
   }
 };
@@ -70,7 +70,7 @@ const eliminarTipoDeJuicio = async (id) => {
    const result= await modeloTipoJuicio.TipoJuicio.destroy({ where: { id_tipo_juicio: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error tipo juicios:", error.message);
     return false;
   }
 };
@@ -85,7 +85,7 @@ const actualizarTipoDeJuicio = async (tipoDeJuicio) => {
     const result = await modeloTipoJuicio.TipoJuicio.update(tipoDeJuicio, { where: { id_tipo_juicio: tipoDeJuicio.id_tipo_juicio } });
     return result[0] === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error tipo juicios:", error.message);
     return false;
   }
 };

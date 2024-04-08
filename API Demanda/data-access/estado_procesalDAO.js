@@ -23,9 +23,17 @@ class EstadoProcesalDAO {
    */
   async actualizarEstadoProcesal(id_estado_procesal, { descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial }) {
     try {
-      const estadoProcesal = await estado_procesal.findByPk(id_estado_procesal)
-      const result = await estadoProcesal.update({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial }, { where: { id_estado_procesal } })
-      return result
+      const result = await estado_procesal.update({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial }, { where: { id_estado_procesal } })
+      return result[0] == 1
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async obtenerEstadoProcesalPorProcesoJudicial(id_proceso_judicial) {
+    try {
+      const estadoProcesal = await estado_procesal.findAll({ where: { id_proceso_judicial:id_proceso_judicial } })
+      return estadoProcesal
     } catch (error) {
       throw error
     }
@@ -38,9 +46,8 @@ class EstadoProcesalDAO {
    */
   async eliminarEstadoProcesal(id_estado_procesal) {
     try {
-      const deleteEstadoProcesal = await estado_procesal.findByPk(id_estado_procesal)
-      await deleteEstadoProcesal.destroy()
-      return 'Estado procesal eliminado con éxito'
+      const deleteEstadoProcesal = await estado_procesal.destroy( { where: { id_estado_procesal } })
+      return deleteEstadoProcesal === 1
     } catch (error) {
       throw error
     }

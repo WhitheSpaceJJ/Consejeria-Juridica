@@ -8,20 +8,29 @@ const participanteDAO = require('../data-access/participanteDAO')
  */
 const crearParticipante = async (req, res) => {
   try {
-    const { nombre, edad, id_escolaridad, id_etnia, id_ocupacion, id_persona,id_proceso_judicial } = req.body
+    /**
+             "nombre": "Judith",
+            "apellido_paterno": "Orozco",
+            "apellido_materno": "Hernandez",
+            "edad": 34,
+            "telefono": "2323233434",
+            "id_genero": 2,
+            "id_proceso_judicial": 1
+     */
+    const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial } = req.body
     const participante = await participanteDAO.crearParticipante({
       nombre,
+      apellido_paterno,
+      apellido_materno,
       edad,
-      id_escolaridad,
-      id_etnia,
-      id_ocupacion,
-      id_persona,
+      telefono,
+      id_genero,
       id_proceso_judicial
     })
     res.json(participante)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -33,13 +42,17 @@ const crearParticipante = async (req, res) => {
 const obtenerParticipantes = async (req, res) => {
   try {
     const participantes = await participanteDAO.obtenerParticipantes()
-    if (participantes.length === 0) {
-      return res.status(204).json(participantes)
+    if (participantes === null || participantes.length === 0) {
+      res.json({
+        message: "No hay participantes registrados"
+      })
     }
-    res.json(participantes)
+    else {
+      res.status(200).json(participantes)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -53,10 +66,17 @@ const obtenerParticipante = async (req, res) => {
   try {
     const { id } = req.params
     const participante = await participanteDAO.obtenerParticipante(Number(id))
-    res.json(participante)
+    if (participante === null) {
+      res.json({
+        message: "No se encontró el participante"
+      })
+    }
+    else {
+      res.status(200).json(participante)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -69,13 +89,28 @@ const obtenerParticipante = async (req, res) => {
 const actualizarParticipante = async (req, res) => {
   try {
     const { id } = req.params
-    const { id_participante, ...data } = req.body
-    await participanteDAO.actualizarParticipante(Number(id), data)
-    const actualizado = await participanteDAO.obtenerParticipante(Number(id))
-    res.json(actualizado)
+    const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial } = req.body
+    const result = await participanteDAO.actualizarParticipante(Number(id), {
+      nombre,
+      apellido_paterno,
+      apellido_materno,
+      edad,
+      telefono,
+      id_genero,
+      id_proceso_judicial
+    })
+    if (result) {
+      const actualizado = await participanteDAO.obtenerParticipante(Number(id))
+      res.status(200).json(actualizado)
+    }
+    else {
+      res.json({
+        message: "No se actualizó el participante, datos iguales"
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -89,10 +124,19 @@ const eliminarParticipante = async (req, res) => {
   try {
     const { id } = req.params
     const participante = await participanteDAO.eliminarParticipante(Number(id))
-    res.json(participante)
+    if (participante) {
+      res.json({
+        message: "Participante eliminado"
+      })
+    }
+    else {
+      res.json({
+        message: "No se eliminó el participante"
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }

@@ -11,7 +11,7 @@ const obtenerMunicipios = async () => {
             nest: true,
         });
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return null;
     }
 };
@@ -25,7 +25,7 @@ const obtenerMunicipiosDistrito = async (id) => {
             nest: true,
         });
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return null;
     }
 }
@@ -42,7 +42,7 @@ const obtenerMunicipioPorId = async (id) => {
             nest: true,
         });
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return null;
     }
 };
@@ -56,7 +56,7 @@ const agregarMunicipio = async (municipio) => {
     try {
         return (await modeloMunicipioDistro.MunicipioDistro.create(municipio, { raw: true, nest: true })).dataValues;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return false;
     }
 };
@@ -71,7 +71,7 @@ const eliminarMunicipio = async (id) => {
       const result =  await modeloMunicipioDistro.MunicipioDistro.destroy({ where: { id_municipio: id } });
         return result === 1;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return false;
     }
 };
@@ -87,7 +87,7 @@ const actualizarMunicipio = async (id, municipio) => {
         const result = await modeloMunicipioDistro.MunicipioDistro.update(municipio, { where: { id_municipio: id } });
         return result[0] === 1; 
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error municipios distritos:", error.message);
         return false;
     }
 };

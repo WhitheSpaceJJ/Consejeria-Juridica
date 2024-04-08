@@ -15,7 +15,7 @@ router.route('/:id')
   // Obtener un tipo de juicio por su ID
   .get(servicioTiposDeJuicio.obtenerTipoDeJuicioPorId)
   // Eliminar un tipo de juicio por su ID
-  .delete(servicioTiposDeJuicio.eliminarTipoDeJuicio)
+ // .delete(servicioTiposDeJuicio.eliminarTipoDeJuicio)
   // Actualizar un tipo de juicio por su ID
   .put(servicioTiposDeJuicio.actualizarTipoDeJuicio);
 

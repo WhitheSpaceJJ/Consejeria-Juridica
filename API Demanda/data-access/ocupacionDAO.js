@@ -7,9 +7,9 @@ class OcupacionDAO {
  * @param {object} ocupacion - Objeto que contiene los datos de la ocupación
  * @returns {object} Retorna el objeto de la ocupación creada si la operación fue exitosa, de lo contrario lanza un error
  */
-  async crearOcupacion({ descripcion_ocupacion }) {
+  async crearOcupacion({ descripcion_ocupacion ,estatus_general}) {
     try {
-      const ocupacion = await Ocupacion.create({ descripcion_ocupacion })
+      const ocupacion = await Ocupacion.create({ descripcion_ocupacion,estatus_general })
       return ocupacion
     } catch (err) {
       throw err
@@ -20,10 +20,15 @@ class OcupacionDAO {
  * @abstract Método que permite obtener todas las ocupaciones de la base de datos
  * @returns {array} Retorna un arreglo de objetos de ocupaciones si la operación fue exitosa, de lo contrario lanza un error
  */
-  async obtenerOcupaciones() {
+  async obtenerOcupaciones(activo) {
     try {
+      if (activo !== undefined && activo !== null && activo !== "") {
+        const ocupaciones = await Ocupacion.findAll({ where: { estatus_general: "ACTIVO" } })
+        return ocupaciones
+      }else{
       const ocupaciones = await Ocupacion.findAll()
       return ocupaciones
+      }
     } catch (err) {
       throw err
     }
@@ -49,10 +54,10 @@ class OcupacionDAO {
  * @param {object} ocupacion - Objeto que contiene los nuevos datos de la ocupación
  * @returns {object} Retorna el objeto de la ocupación actualizada si la operación fue exitosa, de lo contrario lanza un error
  */
-  async actualizarOcupacion(id_ocupacion, { descripcion_ocupacion }) {
+  async actualizarOcupacion(id_ocupacion, { descripcion_ocupacion,estatus_general }) {
     try {
-      const ocupacion = await Ocupacion.update({ descripcion_ocupacion }, { where: { id_ocupacion } })
-      return ocupacion
+      const ocupacion = await Ocupacion.update({ descripcion_ocupacion ,estatus_general}, { where: { id_ocupacion } })
+      return ocupacion[0]==1
     } catch (err) {
       throw err
     }
@@ -65,9 +70,8 @@ class OcupacionDAO {
  */
   async eliminarOcupacion(id) {
     try {
-      const ocupacion = await Ocupacion.findByPk(id)
-      await ocupacion.destroy()
-      return 'Ocupación eliminada con éxito'
+      const ocupacion = await Ocupacion.destroy({ where: { id_ocupacion: id } })
+      return ocupacion === 1
     } catch (err) {
       throw err
     }

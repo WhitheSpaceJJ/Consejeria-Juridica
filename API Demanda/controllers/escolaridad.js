@@ -4,16 +4,26 @@ const escolaridadDAO = require('../data-access/escolaridadDAO')
  * @abstract Método que permite obtener todas las escolaridades
  * @returns {array} Retorna un arreglo de objetos de escolaridades si la operación fue exitosa, de lo contrario lanza un error
  */
-const obtenerEscolaridades = async (_, res) => {
+const obtenerEscolaridades = async (req, res) => {
   try {
-    const escolaridades = await escolaridadDAO.obtenerEscolaridades()
-    if (escolaridades.length === 0) {
-      return res.status(204).json(escolaridades);
+    const activo = req.query.activo;
+    if (activo !== undefined && activo !== null && activo !== "") {
+      const escolaridades = await escolaridadDAO.obtenerEscolaridades(activo)
+      if (escolaridades.length === 0) {
+        return res.status(204).json(escolaridades);
+      }
+      res.json(escolaridades)
+    } else {
+      const escolaridades = await escolaridadDAO.obtenerEscolaridades()
+      if (escolaridades.length === 0) {
+        return res.status(204).json(escolaridades);
+      }
+      res.json(escolaridades)
     }
-    res.json(escolaridades)
+
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -27,10 +37,17 @@ const obtenerEscolaridad = async (req, res) => {
   try {
     const { id } = req.params
     const escolaridad = await escolaridadDAO.obtenerEscolaridadPorId(Number(id))
-    res.json(escolaridad)
+    if (escolaridad === null || escolaridad === undefined) {
+      res.status(404).json({
+        message: 'Escolaridad no encontrada'
+      })
+    }
+    else {
+      res.status(200).json(escolaridad)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -42,14 +59,14 @@ const obtenerEscolaridad = async (req, res) => {
  */
 const crearEscolaridad = async (req, res) => {
   try {
-    const { descripcion } = req.body
+    const { descripcion, estatus_general } = req.body
 
-    const escolaridad = await escolaridadDAO.crearEscolaridad({ descripcion })
+    const escolaridad = await escolaridadDAO.crearEscolaridad({ descripcion, estatus_general })
 
     res.json(escolaridad)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -62,13 +79,20 @@ const crearEscolaridad = async (req, res) => {
 const actualizarEscolaridad = async (req, res) => {
   try {
     const { id } = req.params
-    const { descripcion } = req.body
-    await escolaridadDAO.actualizarEscolaridad(Number(id), { descripcion })
-    const escolaridad = await escolaridadDAO.obtenerEscolaridadPorId(Number(id))
-    res.json(escolaridad)
+    const { descripcion, estatus_general } = req.body
+    const result = await escolaridadDAO.actualizarEscolaridad(Number(id), { descripcion, estatus_general })
+    if (result) {
+      const escolaridad = await escolaridadDAO.obtenerEscolaridadPorId(Number(id))
+      res.status(200).json(escolaridad)
+    } else {
+      res.status(404).json({
+        message: 'Escolaridad no actualizada,ya que son los mismos datos'
+      })
+    }
+
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -82,10 +106,18 @@ const eliminarEscolaridad = async (req, res) => {
   try {
     const { id } = req.params
     const escolaridad = await escolaridadDAO.eliminarEscolaridad(Number(id))
-    res.json(escolaridad)
+    if (escolaridad) {
+      res.status(200).json({
+        message: 'Escolaridad eliminada'
+      })
+    } else {
+      res.status(404).json({
+        message: 'Escolaridad no encontrada'
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }

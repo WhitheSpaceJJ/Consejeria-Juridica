@@ -1,5 +1,9 @@
 const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
 
+
+
+
+
 /**
  * @abstract Método que permite crear un proceso judicial
  * @param {object} procesoJudicial - Objeto que contiene los datos del proceso judicial
@@ -7,19 +11,16 @@ const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
  */
 const crearProcesoJudicial = async (req, res) => {
   try {
-    const { fecha_inicio, fecha_proceso, fecha_conclusion, area_seguimiento, numero_expediente, id_juzgado } = req.body
-    const procesoJudicial = await procesoJudicialDAO.crearProcesoJudicial({
-      fecha_inicio,
-      fecha_proceso,
-      fecha_conclusion,
-      area_seguimiento,
-      numero_expediente,
-      id_juzgado
-    })
-    res.json(procesoJudicial)
+
+ const { turno, promovente, imputado, proceso } = req.body
+
+  const procesoJudicial = await procesoJudicialDAO.crearProcesoJudicial({
+    turno, promovente, imputado, proceso
+  })
+  res.json(procesoJudicial)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -31,13 +32,49 @@ const crearProcesoJudicial = async (req, res) => {
 const obtenerProcesosJudiciales = async (req, res) => {
   try {
     const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudiciales()
-    if (procesosJudiciales.length === 0) {
-      return res.status(204).json(procesosJudiciales)
+    if (procesosJudiciales === null || procesosJudiciales.length === 0) {
+      res.status(404).json({
+        message: "No hay procesos judiciales registrados"
+      })
     }
-    res.json(procesosJudiciales)
+    else {
+      res.status(200).json(procesosJudiciales)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
+    })
+  }
+}
+const obtenerProcesosJudicialesPorDefensor = async (req, res) => {
+  try {
+    const estatus_proceso = req.query.estatus_proceso
+    const id_defensor = req.query.id_defensor
+    if (estatus_proceso === undefined || estatus_proceso === null || estatus_proceso === "") {
+      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensor(id_defensor)
+      if (procesosJudiciales === null || procesosJudiciales.length === 0) {
+        res.status(404).json({
+          message: "No hay procesos judiciales registrados"
+        })
+      }
+      else {
+        res.status(200).json(procesosJudiciales)
+      }
+    } else {
+      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensor(id_defensor, estatus_proceso)
+      if (procesosJudiciales === null || procesosJudiciales.length === 0) {
+        res.status(404).json({
+          message: "No hay procesos judiciales registrados"
+        })
+      }
+      else {
+        res.status(200).json(procesosJudiciales)
+      }
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
     })
   }
 }
@@ -51,10 +88,17 @@ const obtenerProcesoJudicial = async (req, res) => {
   try {
     const { id } = req.params
     const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicial(Number(id))
-    res.json(procesoJudicial)
+    if (procesoJudicial === null) {
+      res.status(404).json({
+        message: "Proceso judicial no encontrado"
+      })
+    }
+    else {
+      res.status(200).json(procesoJudicial)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -67,13 +111,38 @@ const obtenerProcesoJudicial = async (req, res) => {
 const actualizarProcesoJudicial = async (req, res) => {
   try {
     const { id } = req.params
-    const { id_proceso_judicial, ...data } = req.body
-    await procesoJudicialDAO.actualizarProcesoJudicial(Number(id), data)
-    const actualizado = await procesoJudicialDAO.obtenerProcesoJudicial(Number(id))
-    res.json(actualizado)
+    const { fecha_inicio, fecha_estatus,
+      control_interno,
+      numero_expediente,
+      id_turno,
+      id_distrito_judicial,
+      id_municipio_distrito,
+      id_tipo_juicio,
+      estatus_proceso,
+      id_juzgado } = req.body
+    const result = await procesoJudicialDAO.actualizarProcesoJudicial(Number(id), {
+      fecha_estatus,
+      fecha_inicio, control_interno,
+      numero_expediente,
+      id_turno,
+      id_distrito_judicial,
+      id_municipio_distrito,
+      id_tipo_juicio,
+      estatus_proceso,
+      id_juzgado
+    })
+    if (result) {
+      const actualizado = await procesoJudicialDAO.obtenerProcesoJudicial(Number(id))
+      res.status(200).json(actualizado)
+    }
+    else {
+      res.status(404).json({
+        message: "Proceso judicial no actualizado, datos iguales"
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -87,10 +156,18 @@ const eliminarProcesoJudicial = async (req, res) => {
   try {
     const { id } = req.params
     const procesoJudicial = await procesoJudicialDAO.eliminarProcesoJudicial(Number(id))
-    res.json(procesoJudicial)
+    if (procesoJudicial === false) {
+      res.status(404).json({
+        message: "Proceso judicial no  eliminado"
+      })
+    }
+    else {
+      res.status(200).json({ message: "Proceso judicial eliminado con éxito" })
+    }
+
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -100,5 +177,6 @@ module.exports = {
   obtenerProcesosJudiciales,
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
-  eliminarProcesoJudicial
+  eliminarProcesoJudicial,
+  obtenerProcesosJudicialesPorDefensor
 }

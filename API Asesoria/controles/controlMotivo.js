@@ -5,14 +5,23 @@ const modeloMotivo = require('../modelos/modeloMotivo');
  * @abstract Funcion que permite obtener todos los motivos
  * @returns motivos
  */
-const obtenerMotivos = async () => {
+const obtenerMotivos = async (activo) => {
   try {
-    return await modeloMotivo.Motivo.findAll({
-      raw: true,
-      nest: true,
-    });
+    if (activo !== undefined && activo !== null && activo !== "") {
+      return await modeloMotivo.Motivo.findAll({
+        raw: true,
+        nest: true,
+        where: { estatus_general: "ACTIVO" }
+      });
+
+    } else {
+      return await modeloMotivo.Motivo.findAll({
+        raw: true,
+        nest: true,
+      });
+    }
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error motivos:", error.message);
     return null;
   }
 };
@@ -26,11 +35,11 @@ const obtenerMotivos = async () => {
 const obtenerMotivoPorId = async (id) => {
   try {
     return await modeloMotivo.Motivo.findByPk(id, {
-      raw: true,
+      raw: false,
       nest: true,
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error motivos:", error.message);
     return null;
   }
 };
@@ -44,7 +53,7 @@ const agregarMotivo = async (motivo) => {
   try {
     return (await modeloMotivo.Motivo.create(motivo, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error motivos:", error.message);
     return false;
   }
 };
@@ -59,7 +68,7 @@ const eliminarMotivo = async (id) => {
     const result = await modeloMotivo.Motivo.destroy({ where: { id_motivo: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error motivos:", error.message);
     return false;
   }
 };
@@ -72,10 +81,10 @@ const eliminarMotivo = async (id) => {
 
 const actualizarMotivo = async (motivo) => {
   try {
-   const result =  await modeloMotivo.Motivo.update(motivo, { where: { id_motivo: motivo.id_motivo } });
-    return result[0] === 1; 
+    const result = await modeloMotivo.Motivo.update(motivo, { where: { id_motivo: motivo.id_motivo } });
+    return result[0] === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error motivos:", error.message);
     return false;
   }
 };

@@ -326,9 +326,6 @@ const Turno = sequelize.define(
     hora_turno: {
       type: DataTypes.TIME,
       allowNull: false,
-      validate: {
-        is: /^([01]\d|2[0-3]):([0-5]\d)$/,
-      },
     },
     id_asesoria: {
       type: DataTypes.INTEGER,
@@ -336,6 +333,12 @@ const Turno = sequelize.define(
     }, id_defensor: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },    estatus_general: {
+      type: DataTypes.ENUM('EN_SEGUIMIENTO', 'NO_SEGUIMIENTO'), // Usar ENUM con los valores permitidos
+      allowNull: false,
+      validate: {
+        isIn: [['EN_SEGUIMIENTO', 'NO_SEGUIMIENTO']], // Validar que solo acepte estos valores
+      }, 
     }
   },
   {
@@ -514,7 +517,7 @@ const Asesorado = sequelize.define(
       allowNull: false,
     },
     id_motivo: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: null,
     },
@@ -764,10 +767,10 @@ const Asesoria = sequelize.define(
       allowNull: false,
     },
     estatus_asesoria: {
-      type: DataTypes.ENUM('NO_TURNADA', 'TURNADA', 'CONCLUIDA'), // Usar ENUM con los valores permitidos
+      type: DataTypes.ENUM('NO_TURNADA', 'TURNADA'), // Usar ENUM con los valores permitidos
       allowNull: false,
       validate: {
-        isIn: [['NO_TURNADA', 'TURNADA', 'CONCLUIDA']], // Validar que solo acepte estos valores
+        isIn: [['NO_TURNADA', 'TURNADA']], // Validar que solo acepte estos valores
       },
     }
 

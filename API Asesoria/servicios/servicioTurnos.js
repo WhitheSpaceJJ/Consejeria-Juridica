@@ -46,6 +46,7 @@ const obtenerTurnos = asyncError(async (req, res, next) => {
 });
 
 
+
 /**
  * @abstract Servicio  que permite eliminar un turno
  * @param {Object} req Request
@@ -109,11 +110,25 @@ const obtenerTurnoPorId = asyncError(async (req, res, next) => {
   }
 });
 
+const obtenerTurnoPorDefensorId = asyncError(async (req, res, next) => {
+  const result = await controlTurnos.obtenerTurnoPorDefensorId(req.params.id);
+  if (result === null || result === undefined) {
+    const error = new CustomeError('Error al obtener el turno', 404);
+    return next(error);
+  } else {
+
+    res.status(200).json({
+        turnos: result
+    });
+  }
+});
+
 //Module exports
 module.exports = {
   agregarTurno,
   obtenerTurnos,
   eliminarTurno,
   actualizarTurno,
-  obtenerTurnoPorId
+  obtenerTurnoPorId,
+  obtenerTurnoPorDefensorId
 };

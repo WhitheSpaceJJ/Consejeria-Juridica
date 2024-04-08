@@ -17,7 +17,7 @@ const obtenerAsesorados = async () => {
 
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error asesorados:", error.message);
     return null;
   }
 };
@@ -40,7 +40,7 @@ const obtenerAsesoradoPorId = async (id) => {
 
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error asesorados:", error.message);
     return null;
   }
 };
@@ -54,7 +54,7 @@ const agregarAsesorado = async (asesorado) => {
   try {
     return (await modeloAsesorado.Asesorado.create(asesorado, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error asesorados:", error.message);
     return false;
   }
 };
@@ -69,7 +69,7 @@ const eliminarAsesorado = async (id) => {
     const result =await modeloAsesorado.Asesorado.destroy({ where: { id_asesorado: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error asesorados:", error.message);
     return false;
   }
 };
@@ -84,7 +84,7 @@ const actualizarAsesorado = async (asesorado) => {
   const result=   await modeloAsesorado.Asesorado.update(asesorado, { where: { id_asesorado: asesorado.id_asesorado } });
     return result[0] === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error asesorados:", error.message);
     return false;
   }
 };

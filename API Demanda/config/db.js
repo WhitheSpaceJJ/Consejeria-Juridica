@@ -2,12 +2,12 @@ const { Sequelize } = require('sequelize');
 
 // Crear instancia de Sequelize y establecer conexión a la base de datos
 const sequelize = new Sequelize(
-  "defensoria_demandas" || process.env.DB_NAME,
-  "consejeria" || process.env.DB_USER,
-  "B0rr3g0!750n" || process.env.DB_PASSWORD,
+ process.env.DB_NAME ||   "defensoria_demandas",
+  process.env.DB_USER ||  "root" ,
+   process.env.DB_PASSWORD || "root",
     {
-        host:"localhost"|| process.env.DB_HOST,
-        port:3306|| process.env.DB_PORT,
+        host: process.env.DB_HOST || "localhost",
+        port: process.env.DB_PORT || 3306,
         dialect: 'mysql',
         logging: false
     }

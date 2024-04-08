@@ -1,19 +1,29 @@
+const e = require('express');
 const juzgadoDAO = require('../data-access/juzgadoDAO')
 
 /**
  * @abstract Método que permite obtener todos los juzgados
  * @returns {array} Retorna un arreglo de objetos de juzgados si la operación fue exitosa, de lo contrario lanza un error
  */
-const obtenerJuzgados = async (_, res) => {
+const obtenerJuzgados = async (req, res) => {
   try {
-    const juzgados = await juzgadoDAO.obtenerJuzgados()
-    if (juzgados.length === 0) {
-      return res.status(204).json(juzgados)
+    const activo = req.query.activo;
+    if (activo !== undefined && activo !== null && activo !== "") {
+      const juzgados = await juzgadoDAO.obtenerJuzgados(activo)
+      if (juzgados.length === 0) {
+        return res.status(204).json(juzgados)
+      }
+      res.json(juzgados)
+    } else {
+      const juzgados = await juzgadoDAO.obtenerJuzgados()
+      if (juzgados.length === 0) {
+        return res.status(204).json(juzgados)
+      }
+      res.json(juzgados)
     }
-    res.json(juzgados)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -30,7 +40,7 @@ const obtenerJuzgado = async (req, res) => {
     res.json(juzgado)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -42,12 +52,12 @@ const obtenerJuzgado = async (req, res) => {
  */
 const crearJuzgado = async (req, res) => {
   try {
-    const { nombre_juzgado } = req.body
-    const juzgado = await juzgadoDAO.crearJuzgado({ nombre_juzgado })
+    const { nombre_juzgado, estatus_general } = req.body
+    const juzgado = await juzgadoDAO.crearJuzgado({ nombre_juzgado, estatus_general })
     res.json(juzgado)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -60,15 +70,21 @@ const crearJuzgado = async (req, res) => {
 const actualizarJuzgado = async (req, res) => {
   try {
     const { id } = req.params
-    const { nombre_juzgado } = req.body
-    await juzgadoDAO.actualizarJuzgado(Number(id), {
-      nombre_juzgado
+    const { nombre_juzgado, estatus_general } = req.body
+    const result = await juzgadoDAO.actualizarJuzgado(Number(id), {
+      nombre_juzgado, estatus_general
     })
-    const juzgado = await juzgadoDAO.obtenerJuzgado(Number(id))
-    res.json(juzgado)
+    if (result) {
+      const juzgado = await juzgadoDAO.obtenerJuzgado(Number(id))
+      res.status(200).json(juzgado)
+    } else {
+      return res.status(404).json({
+        message: 'Datos a actualizar completamente iguales a los datos actuales'
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -82,10 +98,19 @@ const eliminarJuzgado = async (req, res) => {
   try {
     const { id } = req.params
     const juez = await juzgadoDAO.eliminarJuzgado(Number(id))
-    res.json(juez)
+    if(juez){
+      res.status(200).json({
+        message: 'Juzgado eliminado'
+      })
+    }
+     else {
+      res.status(404).json({
+        message: 'Juzgado no eliminado'
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }

@@ -1,6 +1,9 @@
 const template = document.createElement('template')
 
 class TurnarTabs extends HTMLElement {
+ // #tabs = ['asesorado', 'asesoria', 'detalles']
+  //#activeTab
+
   constructor() {
     super()
     this.attachShadow({ mode: 'open' }).appendChild(
@@ -10,6 +13,7 @@ class TurnarTabs extends HTMLElement {
     this.btnAsesorado = this.shadowRoot.getElementById('btn-asesorado')
     this.btnDomicilio = this.shadowRoot.getElementById('btn-domicilio')
     this.btnTurno = this.shadowRoot.getElementById('btn-turno')
+ //   this.#activeTab = 'asesorado'
 
     this.addClickEventListeners()
   }
@@ -38,6 +42,7 @@ class TurnarTabs extends HTMLElement {
   }
 
   showTabSection(tabId) {
+   // this.#activeTab = tabId
     const tabSections = document.querySelectorAll(
       'asesorado-tab, domicilio-tab, turno-tab'
     )
@@ -51,8 +56,37 @@ class TurnarTabs extends HTMLElement {
     })
     tabToDisplay.style.display = 'block'
   }
+  /*
+  verifyChange = tabId => {
+  if (tabId === this.#activeTab) {
+      return 'No se puede cambiar a la misma pestaña'
+    }
+    if (!this.#tabs.includes(tabId)) return 'La pestaña no existe'
+
+    const asesoradoTab = document.querySelector('asesorado-full-tab')
+    const asesoriaTab = document.querySelector('asesoria-tab')
+   
+    if (
+      tabId === this.#tabs[1] &&
+      (!asesoradoTab.isComplete)
+    ) {
+      return 'No se puede cambiar de pestaña si no se han completado los datos'
+    }
+    if (
+      tabId === this.#tabs[2] &&
+      (!asesoradoTab.isComplete || !asesoriaTab.isComplete)
+    ) {
+      return 'No se puede cambiar de pestaña si no se han completado los datos'
+    }
+
+  }
+    */
+
 
   dispatchEventTabChangeEvent(tabId) {
+  //  const msg = this.verifyChange(tabId)
+  //  if (msg) throw new Error(msg)
+
     const event = new CustomEvent('tab-change', {
       bubbles: true,
       composed: true,

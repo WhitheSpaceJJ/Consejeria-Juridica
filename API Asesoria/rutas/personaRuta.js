@@ -19,7 +19,7 @@ router.route('/:id')
   // Obtener una persona por su ID
   .get(servicioPersonas.obtenerPersonaPorId)
   // Eliminar una persona por su ID
-  .delete(servicioPersonas.eliminarPersona)
+ // .delete(servicioPersonas.eliminarPersona)
   // Actualizar una persona por su ID
   .put(servicioPersonas.actualizarPersona);
 

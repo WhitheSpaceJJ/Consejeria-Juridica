@@ -10,15 +10,15 @@ router.route('/')
     // Obtener todos los distritos judiciales
     .get(servicioDistritosJudiciales.obtenerDistritosJudiciales)
     // Agregar un nuevo distrito judicial
-    .post(servicioDistritosJudiciales.agregarDistritoJudicial);
+   // .post(servicioDistritosJudiciales.agregarDistritoJudicial);
 
 router.route('/:id')
     // Obtener un distrito judicial por su ID
     .get(servicioDistritosJudiciales.obtenerDistritoJudicial)
     // Eliminar un distrito judicial por su ID
-    .delete(servicioDistritosJudiciales.eliminarDistritoJudicial)
+   // .delete(servicioDistritosJudiciales.eliminarDistritoJudicial)
     // Actualizar un distrito judicial por su ID
-    .put(servicioDistritosJudiciales.actualizarDistritoJudicial);
+    //.put(servicioDistritosJudiciales.actualizarDistritoJudicial);
 
 
 // Exportamos el router

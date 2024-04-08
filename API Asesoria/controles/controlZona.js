@@ -12,7 +12,7 @@ const obtenerZonas = async () => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error zona:", error.message);
     return null;
   }
 };
@@ -29,7 +29,7 @@ const obtenerZonaPorId = async (id) => {
       nest: true
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error zona:", error.message);
     return null;
   }
 };
@@ -43,7 +43,7 @@ const agregarZona = async (zona) => {
   try {
     return (await modeloZona.Zona.create(zona, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error zona:", error.message);
     return false;
   }
 };
@@ -59,7 +59,7 @@ const eliminarZona = async (id) => {
    const result=  await modeloZona.Zona.destroy({ where: { id_zona: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error zona:", error.message);
     return false;
   }
 };
@@ -74,7 +74,7 @@ const actualizarZona = async (zona) => {
  const result=    await modeloZona.Zona.update(zona, { where: { id_zona: zona.id_zona } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error zona:", error.message);
     return false;
   }
 };

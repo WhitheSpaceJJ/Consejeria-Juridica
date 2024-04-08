@@ -31,16 +31,36 @@ const agregarGenero = asyncError(async (req, res, next) => {
  * @returns {Object} géneros de la base de datos
  */
 const obtenerGeneros = asyncError(async (req, res, next) => {
-  const result = await controlGeneros.obtenerGeneros();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron géneros', 404);
-    return next(error);
-  } else {
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
 
-    res.status(200).json({
-        generos: result
-    });
+    const result = await controlGeneros.obtenerGeneros(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron géneros', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          generos: result
+      });
+    }
+  }else {
+    const result = await controlGeneros.obtenerGeneros();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron géneros', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          generos: result
+      });
+    }
+
+    
   }
+
+
+
 });
 
 /**

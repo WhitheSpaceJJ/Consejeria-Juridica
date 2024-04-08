@@ -18,7 +18,7 @@ router.route('/:id')
   // Petición GET para obtener un Asesorado específico por ID
   .get(servicioAsesorados.obtenerAsesoradoPorId)
   // Petición DELETE para eliminar un Asesorado específico por ID
-  .delete(servicioAsesorados.eliminarAsesorado)
+  //.delete(servicioAsesorados.eliminarAsesorado)
   // Petición PUT para actualizar un Asesorado específico por ID
   .put(servicioAsesorados.actualizarAsesorado);
 
