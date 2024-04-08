@@ -6,9 +6,9 @@ class ImputadoDAO {
  * @param {object} imputado - Objeto que contiene los datos del imputado
  * @returns {object} Retorna el objeto del imputado creado si la operación fue exitosa, de lo contrario lanza un error
  */
-  async crearImputado({ id_participante, delito }) {
+  async crearImputado({ id_imputado }) {
     try {
-      const imputado = await Imputado.create({ id_participante, delito })
+      const imputado = await Imputado.create({ id_imputado })
       return imputado
     } catch (err) {
       throw err
@@ -48,14 +48,16 @@ class ImputadoDAO {
  * @param {object} imputado - Objeto que contiene los nuevos datos del imputado
  * @returns {object} Retorna el objeto del imputado actualizado si la operación fue exitosa, de lo contrario lanza un error
  */
-  async actualizarImputado(idParticipante, { delito }) {
+
+  async actualizarImputado(id_imputado_, { id_imputado }) {
     try {
-      const imputado = await Imputado.update({ delito }, { where: { id_participante: idParticipante } })
-      return imputado
+      const imputado = await Imputado.update({ id_imputado }, { where: { id_imputado: id_imputado_ } })
+      return imputado[0] === 1
     } catch (err) {
       throw err
     }
   }
+  
 
   /**
  * @abstract Método que permite eliminar un imputado de la base de datos
@@ -64,9 +66,8 @@ class ImputadoDAO {
  */
   async eliminarImputado(id) {
     try {
-      const imputado = await Imputado.findByPk(id)
-      await imputado.destroy()
-      return 'Imputado eliminado con exito.'
+      const imputado = await Imputado.destroy( { where: { id_imputado: id } })
+      return imputado ===1
     } catch (err) {
       throw err
     }

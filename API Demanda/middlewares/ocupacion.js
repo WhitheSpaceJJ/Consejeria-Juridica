@@ -22,9 +22,12 @@ async function existeOcupacion(req, res, next) {
  * @returns {object} Retorna un mensaje de error si la ocupacion no existe, de lo contrario pasa al siguiente middleware
  */
 async function validateFormatoCrearJson(req, res, next) {
-  const { descripcion_ocupacion } = req.body
+  const { descripcion_ocupacion ,estatus_general} = req.body
   if (!descripcion_ocupacion) {
     return res.status(400).json({ message: "El campo descripcion ocupacion es obligatorio" })
+  }
+  if (!estatus_general) {
+    return res.status(400).json({ message: "El campo estatus general es obligatorio" })
   }
   next()
 }
@@ -48,6 +51,10 @@ async function validateActualizarOcupacion(req, res, next) {
   const { descripcion_ocupacion } = req.body
   if (!descripcion_ocupacion) {
     return res.status(400).json({ message: "El campo descripcion ocupacion es obligatorio" })
+  }
+  const { estatus_general } = req.body
+  if (!estatus_general) {
+    return res.status(400).json({ message: "El campo estatus general es obligatorio" })
   }
   next()
 }

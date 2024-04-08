@@ -5,8 +5,8 @@ const { DataTypes } = require('sequelize')
 * Modelo de imputado el cual contiene los atributos de un imputado
 * y establece las relaciones con el modelo de participante
 */
-const imputado = sequelize.define('Imputado', {
-  id_participante: {
+const imputado = sequelize.define('imputado', {
+  id_imputado: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
@@ -14,14 +14,10 @@ const imputado = sequelize.define('Imputado', {
       model: 'participante',
       key: 'id_participante'
     }
-  },
-  delito: {
-    type: DataTypes.STRING(255),
-    allowNull: false
   }
 }, {
   sequelize,
-  tableName: 'Imputado',
+  tableName: 'imputado',
   timestamps: false,
   indexes: [
     {
@@ -29,7 +25,7 @@ const imputado = sequelize.define('Imputado', {
       unique: true,
       using: 'BTREE',
       fields: [
-        { name: 'id_participante' }
+        { name: 'id_imputado' }
       ]
     }
   ]

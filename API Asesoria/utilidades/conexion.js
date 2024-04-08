@@ -1,18 +1,21 @@
-const config = require('../configuracion/default.json');
-const { Sequelize } = require('sequelize');
 
-// Conexion a la base de datos
-const sequelize = new Sequelize(
-  config.database.databaseName,
-  config.database.username,
-  config.database.password,
-  {
-    host: config.database.host,
-    port: config.database.port,
-    dialect: 'mysql',
-    logging: false,
-  }
-);
+//Obtencion del Sequelize para la conexion a la base de datos
+const { Sequelize } = require("sequelize");
+//  Obtenemos las variables de entorno para la conexion a la base de datos
+const {
+  DATABASE,
+  DBUSER,
+  DBPASSWORD,
+  DBHOST,
+  DBPORT,
+} = require('../configuracion/default.js');
 
-// Exportar la conexion
-module.exports = sequelize;
+// Crear la conexión a la base de datos
+const sequelize = new Sequelize(DATABASE, DBUSER, DBPASSWORD, {
+  host: DBHOST,
+  port: DBPORT,
+  dialect: "mysql",
+  logging: false,
+});
+
+module.exports = sequelize; // Exportar la conexión para que pueda ser usada en otros archivos

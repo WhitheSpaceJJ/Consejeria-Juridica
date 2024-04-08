@@ -53,6 +53,7 @@ export class DetallesTab extends HTMLElement {
 
     this.btnCrearAsesoria.addEventListener('click', async () => {
       try {
+        console.log(this.#asesoria)
         await this.#api.postAsesoria(this.#asesoria)
         this.#showModal(
           'La asesoría se ha creado correctamente',

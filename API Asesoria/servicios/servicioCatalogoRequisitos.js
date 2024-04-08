@@ -31,16 +31,32 @@ const agregarCatalogoRequisito = asyncError(async (req, res, next) => {
  */
 
 const obtenerCatalogoRequisitos = asyncError(async (req, res, next) => {
-  const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitos();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron requisitos del catálogo', 404);
-    return next(error);
-  } else {
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") { 
+    const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitos(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron requisitos del catálogo', 404);
+      return next(error);
+    } else {
 
-    res.status(200).json({
+      res.status(200).json({
         requisitosCatalogo: result
-    });
+      });
+    }
+  }else {
+    const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitos(null);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron requisitos del catálogo', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        requisitosCatalogo: result
+      });
+    }
   }
+
+
 });
 
 /**

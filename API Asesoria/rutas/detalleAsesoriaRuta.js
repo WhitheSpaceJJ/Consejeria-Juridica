@@ -18,7 +18,7 @@ router.route('/:id')
   // Obtener un detalle de asesoría del catálogo por su ID
   .get(servicioDetalleAsesoria.obtenerDetalleAsesoriaCatalogoPorId)
   // Eliminar un detalle de asesoría del catálogo por su ID
-  .delete(servicioDetalleAsesoria.eliminarDetalleAsesoriaCatalogo)
+  //.delete(servicioDetalleAsesoria.eliminarDetalleAsesoriaCatalogo)
   // Actualizar un detalle de asesoría del catálogo por su ID
   .put(servicioDetalleAsesoria.actualizarDetalleAsesoriaCatalogo);
 

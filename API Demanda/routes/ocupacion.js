@@ -9,14 +9,14 @@ const {
   actualizarOcupacion,
   eliminarOcupacion
 } = require('../controllers/ocupacion')
-
+/*
 // Importamos los middlewares de las ocupaciones
 const {
   existeOcupacion,
   validateActualizarOcupacion,
   validateFormatoCrearJson
 } = require('../middlewares/ocupacion')
-
+*/
 // Creamos una nueva instancia de Router
 const router = Router()
 
@@ -24,16 +24,21 @@ const router = Router()
 router.get('/', obtenerOcupaciones)
 
 // Definimos la ruta para obtener una ocupación por su id
-router.get('/:id', [existeOcupacion], obtenerOcupacion)
+router.get('/:id', //[existeOcupacion], 
+obtenerOcupacion)
 
 // Definimos la ruta para crear una nueva ocupación
-router.post('/', validateFormatoCrearJson, crearOcupacion)
+router.post('/', 
+//validateFormatoCrearJson,
+ crearOcupacion)
 
 // Definimos la ruta para actualizar una ocupación por su id
-router.put('/:id', [existeOcupacion, validateActualizarOcupacion], actualizarOcupacion)
+router.put('/:id',// [existeOcupacion, validateActualizarOcupacion], 
+actualizarOcupacion)
 
 // Definimos la ruta para eliminar una ocupación por su id
-router.delete('/:id', [existeOcupacion], eliminarOcupacion)
+//router.delete('/:id',// [existeOcupacion], 
+//eliminarOcupacion)
 
 // Exportamos el router
 module.exports = router

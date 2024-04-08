@@ -17,9 +17,9 @@ router.route('/:id')
   // Obtener un requisito del catálogo por su ID
   .get(servicioCatalogoRequisitos.obtenerCatalogoRequisitoPorId)
   // Eliminar un requisito del catálogo por su ID
-  .delete(servicioCatalogoRequisitos.eliminarCatalogoRequisito)
+  //.delete(servicioCatalogoRequisitos.eliminarCatalogoRequisito)
   // Actualizar un requisito del catálogo por su ID
-  .put(servicioCatalogoRequisitos.actualizarCatalogoRequisito);
+  //.put(servicioCatalogoRequisitos.actualizarCatalogoRequisito);
 
 
 // Exportamos el router

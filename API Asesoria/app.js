@@ -1,7 +1,7 @@
 // Variable para cargar el módulo de express 
 const express = require('express');
 // Puerto en el que se ejecutará el servidor
-const port = 3009;
+const {PORT,HOSTTOKEN} = require("./configuracion/default.js");
 // Rutas de la aplicación
 const zonasRutas = require("./rutas/zonaRutas");
 const domiciliosRutas = require("./rutas/domicilioRutas");
@@ -56,7 +56,7 @@ const jwtMiddleware = async (req, res, next) => {
   const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
 
   let token_client = grpc.loadPackageDefinition(packageDefinition).tokenService;
-  const validador = new token_client.TokenService('200.58.127.244:161', grpc.credentials.createInsecure());
+  const validador = new token_client.TokenService(HOSTTOKEN, grpc.credentials.createInsecure());
   
   validador.validarToken({ token: token }, function (err, response) {
     if (response.message === "Token inválido") {
@@ -90,18 +90,18 @@ app.use('/motivos',
 app.use('/zonas',
  //jwtMiddleware, 
  zonasRutas);
-app.use('/detalle-asesoria',
+//app.use('/detalle-asesoria',
  //jwtMiddleware, 
- detalleAsesoriaRutas);
-app.use('/domicilios', 
+// detalleAsesoriaRutas);
+//app.use('/domicilios', 
 //jwtMiddleware, 
-domiciliosRutas);
+//domiciliosRutas);
 app.use('/turnos', 
 //jwtMiddleware, 
 turnoRutas);
-app.use('/personas',
+//app.use('/personas',
  //jwtMiddleware, 
- personasRutas);
+ //personasRutas);
 app.use('/asesorados', 
 //jwtMiddleware, 
 asesoradoRutas);
@@ -130,6 +130,6 @@ app.all("*", (req, res, next) => {
 // Middleware para manejar los errores
 app.use(errorController);
 // Iniciamos el servidor
-app.listen(port, () => {
-  console.log(`Aplicación corriendo en el puerto ${port}`);
+app.listen(PORT, () => {
+  console.log(`Aplicación corriendo en el puerto ${PORT}`);
 });

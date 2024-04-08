@@ -103,6 +103,9 @@ class AsesoriasTurnarController {
             <td class="px-6 py-4">
                 ${asesoria.datos_asesoria.usuario}
             </td>
+            <td class="px-6 py-4">
+            ${asesoria.datos_asesoria.estatus_asesoria}
+        </td>
             <td class="px-6 py-4 text-right">
                 <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
             </td>

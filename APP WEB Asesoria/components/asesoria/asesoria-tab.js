@@ -25,14 +25,14 @@ export class AsesoriaTab extends HTMLElement {
   #requisitos
   #requisitosValue
   #tipoEmpleado
-  #tipoEmpleadoValue 
+  #tipoEmpleadoValue
 
   #distritos
   #distrito
 
 
 
-    #municipio
+  #municipio
 
   static get observedAttributes() {
     return ['id', 'data']
@@ -52,22 +52,60 @@ export class AsesoriaTab extends HTMLElement {
   async init() {
     this.#api = new APIModel()
 
-    const { asesores } = await this.#api.getAsesores()
+    const { asesores } = await this.#api.getAsesores2()
     this.#asesores = asesores
 
-    const { defensores } = await this.#api.getDefensores()
+    const { defensores } = await this.#api.getDefensores2()
     this.#defensores = defensores
 
     const { tiposDeJuicio } = await this.#api.getTiposJuicio2()
-    this.#tiposJuicio = tiposDeJuicio 
+    this.#tiposJuicio = tiposDeJuicio
 
 
 
-    this.#distritos =  await this.#api.getDistritos() 
+    this.#distritos = await this.#api.getDistritos()
 
 
     this.manageFormFields()
     this.fillInputs()
+
+    var resumenInput = this.#resumen;
+
+    resumenInput.addEventListener('input', function () {
+      if (resumenInput.value === '') {
+
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El resumen no puede estar vacío, por favor ingreselo.'
+        modal.title = 'Error de validación'
+        modal.open = true
+
+      } else if (resumenInput.value.length > 250) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El resumen no puede tener más de 250 caracteres, por favor revisa.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+
+    });
+
+    var conclusionInput = this.#conclusion;
+
+    conclusionInput.addEventListener('input', function () {
+
+      if (conclusionInput.value === '') {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'La conclusión no puede estar vacía, por favor ingresela.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else if (conclusionInput.value.length > 250) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'La conclusión no puede tener más de 250 caracteres, por favor revisa.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+    });
+
+
   }
 
   manageFormFields() {
@@ -81,9 +119,14 @@ export class AsesoriaTab extends HTMLElement {
 
     this.#resumen = this.shadowRoot.getElementById('resumen')
     this.#conclusion = this.shadowRoot.getElementById('conclusion')
+
+
+
     this.#recibido = this.shadowRoot.querySelectorAll(
       '#recibido input[type="checkbox"]'
     )
+
+
     this.#requisitos = this.shadowRoot.querySelectorAll(
       'input[type="radio"][name="rb-requisitos"]'
     )
@@ -92,16 +135,16 @@ export class AsesoriaTab extends HTMLElement {
     )
   }
   agregarMunicipiosByDistrito = async () => {
-    if(this.#distrito.value === '0'){
-       this.shadowRoot.getElementById('municipio').value = '0'
-       this.shadowRoot.getElementById('municipio').disabled = true
-    }else if(this.#distrito.value !== '0'){
-      const id_distrito =this.#distrito.value
+    if (this.#distrito.value === '0') {
+      this.shadowRoot.getElementById('municipio').value = '0'
+      this.shadowRoot.getElementById('municipio').disabled = true
+    } else if (this.#distrito.value !== '0') {
+      const id_distrito = this.#distrito.value
       const municipios = await this.#api.getMunicipiosByDistrito(id_distrito)
 
 
       this.shadowRoot.getElementById('municipio').value = '0'
-       this.shadowRoot.getElementById('municipio').disabled = false
+      this.shadowRoot.getElementById('municipio').disabled = false
 
 
       municipios.forEach(municipio => {
@@ -119,8 +162,8 @@ export class AsesoriaTab extends HTMLElement {
       option.value = asesor.id_asesor
       option.textContent = asesor.nombre_asesor
       this.#asesor.appendChild(option)
-    }) 
-    
+    })
+
     this.#defensores.forEach(defensor => {
       const option = document.createElement('option')
       option.value = defensor.id_defensor
@@ -180,13 +223,29 @@ export class AsesoriaTab extends HTMLElement {
     ]
 
     try {
-      if (this.#tipoJuicio.value === '0') {
+
+      if (
+        (this.#tipoEmpleadoValue === 'asesor' && !this.#asesor.value) ||
+        (this.#tipoEmpleadoValue === 'defensor' && !this.#defensor.value)
+      ) {
+        throw new ValidationError(
+          'Es necesario seleccionar un asesor o defensor, por favor revise.'
+        )
+      }
+
+      if (this.#tipoJuicio.value === '') {
         throw new ValidationError('Selecciona un tipo de juicio, por favor.')
       }
- 
+
+      if (this.#municipio.value === '' || this.#distrito.value === '') {
+        throw new ValidationError('Selecciona un distrito y un municipio, por favor.')
+      }
+
+
+
       if (this.#resumen.value === '') {
         throw new ValidationError('El resumen no puede estar vacío, por favor ingreselo.')
-      }else if (this.#resumen.value.length > 250) { 
+      } else if (this.#resumen.value.length > 250) {
         throw new ValidationError('El resumen no puede tener más de 250 caracteres, por favor revisa.')
       }
 
@@ -203,27 +262,16 @@ export class AsesoriaTab extends HTMLElement {
       if (!this.#requisitosValue) {
         throw new ValidationError('Selecciona si cumple con los requisitos, por favor.')
       }
-      if (
-        (this.#tipoEmpleadoValue === 'asesor' && !this.#asesor.value) ||
-        (this.#tipoEmpleadoValue === 'defensor' && !this.#defensor.value)
-      ) {
-        throw new ValidationError(
-          'Es necesario seleccionar un asesor o defensor, por favor revise.'
-        )
-      }
 
-/*
-      if (!validateNonEmptyFields(inputs)) {
-        throw new ValidationError(
-          'Campos obligatorios en blanco, por favor revise.'
-        )
-      }
+      /*
+            if (!validateNonEmptyFields(inputs)) {
+              throw new ValidationError(
+                'Campos obligatorios en blanco, por favor revise.'
+              )
+            }
+      
+            */
 
-      */
-    
-    if(this.#municipio.value === '0' || this.#distrito.value === '0'  ){
-      throw new ValidationError('Selecciona un distrito y un municipio, por favor.')
-    }
 
       return true
     } catch (error) {
@@ -243,6 +291,33 @@ export class AsesoriaTab extends HTMLElement {
 
   connectedCallback() {
     this.btnNext = this.shadowRoot.getElementById('btn-asesoria-next')
+
+    // Mueve la creación de elementos del sombreado aquí
+    const recibidoDiv = this.shadowRoot.getElementById('recibido');
+    this.#api.getCatalogos2().then(({ requisitosCatalogo }) => {
+      requisitosCatalogo.forEach(requisito => {
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.classList.add('flex', 'items-center');
+
+        const input = document.createElement('input');
+        input.id = `cbx-${requisito.descripcion_catalogo.toLowerCase().replace(' ', '-')}`;
+        input.type = 'checkbox';
+        input.value = requisito.id_catalogo;
+        input.name = 'recibido';
+        input.dataset.name = requisito.descripcion_catalogo;
+        input.classList.add('w-4', 'h-4', 'text-blue-600', 'bg-gray-100', 'border-gray-300', 'rounded', 'focus:ring-blue-500', 'focus:ring-2');
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.classList.add('text-sm', 'text-black', 'ms-2');
+        label.textContent = requisito.descripcion_catalogo;
+
+        checkboxDiv.appendChild(input);
+        checkboxDiv.appendChild(label);
+        recibidoDiv.appendChild(checkboxDiv);
+      });
+    });
+
     const radioButtons = this.shadowRoot.querySelectorAll(
       'input[name="rb-empleado"]'
     )
@@ -274,7 +349,7 @@ export class AsesoriaTab extends HTMLElement {
       this.dispatchEvent(event)
     })
 
-    document.addEventListener('tab-change', event => {})
+    document.addEventListener('tab-change', event => { })
   }
 
   #showModal(message, title, onCloseCallback) {
@@ -298,7 +373,7 @@ export class AsesoriaTab extends HTMLElement {
       estatus_requisitos: this.#requisitosValue === 'yes',
       fecha_registro: getDate(),
       usuario: this.#api.user.name,
-      id_usuario: this.#api.user.id_usuario, 
+      id_usuario: this.#api.user.id_usuario,
       estatus_asesoria: 'NO_TURNADA',
       id_distrito_judicial: Number(this.#distrito.value),
       id_municipio_distrito: Number(this.#municipio.value)
@@ -324,16 +399,16 @@ export class AsesoriaTab extends HTMLElement {
       this.#tipoEmpleadoValue === 'asesor'
         ? this.#asesor.options[this.#asesor.selectedIndex].text
         : this.#defensor.options[this.#defensor.selectedIndex].text
-    const empleado = 
-    this.#tipoEmpleadoValue === 'asesor'
-    ?
-    {
-      id_empleado: Number(idEmpleado),
-      nombre_asesor: nombreEmpleado,
-    } :  {
-      id_empleado: Number(idEmpleado),
-      nombre_defensor: nombreEmpleado,
-    } 
+    const empleado =
+      this.#tipoEmpleadoValue === 'asesor'
+        ?
+        {
+          id_empleado: Number(idEmpleado),
+          nombre_asesor: nombreEmpleado,
+        } : {
+          id_empleado: Number(idEmpleado),
+          nombre_defensor: nombreEmpleado,
+        }
 
     return {
       datos_asesoria,

@@ -16,12 +16,11 @@ const jwtMiddleware = async (req, res, next) => {
       message: 'Token no proporcionado.'
     })
   }
-
   // Extraer el token del encabezado "Authorization"
   const token = tokenHeader.replace('Bearer ', '') // Quita "Bearer " del encabezado
 
   const tokenClient = grpc.loadPackageDefinition(packageDefinition).tokenService
-  const validador = new tokenClient.TokenService('200.58.127.244:161', grpc.credentials.createInsecure())
+  const validador = new tokenClient.TokenService(process.env.HOSTTOKEN , grpc.credentials.createInsecure())
 
   validador.validarToken({ token }, function (err, response) {
     if (err) {

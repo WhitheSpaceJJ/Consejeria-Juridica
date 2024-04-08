@@ -5,14 +5,22 @@ const modeloCatalogoRequisito = require('../modelos/modeloCatalogoRequisito');
  *  @abstract Función que permite obtener todos los catalogos de requisitos
  * @returns catalogos de requisitos
  */
-const obtenerCatalogoRequisitos = async () => {
+const obtenerCatalogoRequisitos = async (activo) => {
   try {
-    return await modeloCatalogoRequisito.CatalogoRequisito.findAll({
-      raw: true,
-      nest: true,
-    });
+    if(activo !== undefined && activo !== null && activo !== ""){
+      return await modeloCatalogoRequisito.CatalogoRequisito.findAll({
+        raw: false,
+        nest: true,
+        where: { estatus_general: "ACTIVO" }
+      });
+    }else {
+      return await modeloCatalogoRequisito.CatalogoRequisito.findAll({
+        raw: false,
+        nest: true
+      });
+    }
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de catalogo requisito:", error.message);
     return null;
   }
 };
@@ -24,15 +32,17 @@ const obtenerCatalogoRequisitos = async () => {
  *  */
 const obtenerCatalogoRequisitoPorId = async (id) => {
   try {
-    return await modeloCatalogoRequisito.CatalogoRequisito.findByPk(id, {
-      raw: true,
-      nest: true,
-    });
+      return await modeloCatalogoRequisito.CatalogoRequisito.findByPk(id,{
+        raw: false,
+        nest: true
+      });
+  
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de catalogo requisito:", error.message);
     return null;
   }
 };
+
 
 /**
  * @abstract Función que permite agregar un catalogo de requisito
@@ -44,7 +54,7 @@ const agregarCatalogoRequisito = async (catalogoRequisito) => {
  
     return (await modeloCatalogoRequisito.CatalogoRequisito.create(catalogoRequisito, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de catalogo requisito:", error.message);
     return false;
   }
 };
@@ -59,7 +69,7 @@ const eliminarCatalogoRequisito = async (id) => {
     const resultado = await modeloCatalogoRequisito.CatalogoRequisito.destroy({ where: { id_catalogo: id } });
     return resultado === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de catalogo requisito:", error.message);
     return false;
   }
 };
@@ -74,7 +84,7 @@ const actualizarCatalogoRequisito = async (catalogoRequisito) => {
    const result= await modeloCatalogoRequisito.CatalogoRequisito.update(catalogoRequisito, { where: { id_catalogo: catalogoRequisito.id_catalogo } });
     return result[0] === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de catalogo requisito:", error.message);
     return false;
   }
 };

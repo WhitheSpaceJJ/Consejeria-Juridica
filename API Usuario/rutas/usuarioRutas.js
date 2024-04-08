@@ -20,7 +20,7 @@ router.route('/recuperacion')
 // La petición GET utiliza el método obtenerUsuarioPorId del servicio de usuarios
 // La petición POST utiliza el método agregarUsuario del servicio de usuarios
 router.route('/')
-  .get(servicioUsuarios.obtenerUsuarioPorId)
+  .get(servicioUsuarios.obtenerUsuarios)
   .post(servicioUsuarios.agregarUsuario);
 
 // Definimos la ruta '/:id' que responde a una petición GET, DELETE y PUT
@@ -29,7 +29,7 @@ router.route('/')
 // La petición PUT utiliza el método actualizarUsuario del servicio de usuarios
 router.route('/:id')
   .get(servicioUsuarios.obtenerUsuarioPorId)
-  .delete(servicioUsuarios.eliminarUsuario)
+  //.delete(servicioUsuarios.eliminarUsuario)
   .put(servicioUsuarios.actualizarUsuario);
 
 // Exportamos el router

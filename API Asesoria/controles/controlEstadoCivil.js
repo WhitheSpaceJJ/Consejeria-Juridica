@@ -4,14 +4,22 @@ const modeloEstadoCivil = require('../modelos/modeloEstadoCivil');
  * @abstract Función que permite obtener todos los estados civiles
  * @returns estados civiles
  */
-const obtenerEstadosCiviles = async () => {
+const obtenerEstadosCiviles = async (activo) => {
   try {
+    if (activo !== undefined && activo !== null && activo !== "") {
+      return await modeloEstadoCivil.EstadoCivil.findAll({
+        raw: true,
+        nest: true,
+        where: { estatus_general: "ACTIVO" }
+      });
+    }else{
     return await modeloEstadoCivil.EstadoCivil.findAll({
       raw: true,
       nest: true,
     });
+  }
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error estados civiles:", error.message);
     return null;
   }
 };
@@ -25,11 +33,11 @@ const obtenerEstadosCiviles = async () => {
 const obtenerEstadoCivilPorId = async (id) => {
   try {
     return await modeloEstadoCivil.EstadoCivil.findByPk(id, {
-      raw: true,
+      raw: false,
       nest: true,
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error estados civiles:", error.message);
     return null;
   }
 };
@@ -43,7 +51,7 @@ const agregarEstadoCivil = async (estadoCivil) => {
   try {
     return ( await modeloEstadoCivil.EstadoCivil.create(estadoCivil, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error estados civiles:", error.message);
     return false;
   }
 };
@@ -58,7 +66,7 @@ const eliminarEstadoCivil = async (id) => {
     const result=await modeloEstadoCivil.EstadoCivil.destroy({ where: { id_estado_civil: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error estados civiles:", error.message);
     return false;
   }
 };
@@ -73,7 +81,7 @@ const actualizarEstadoCivil = async (estadoCivil) => {
     const result = await modeloEstadoCivil.EstadoCivil.update(estadoCivil, { where: { id_estado_civil: estadoCivil.id_estado_civil } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error estados civiles:", error.message);
     return false;
   }
 };

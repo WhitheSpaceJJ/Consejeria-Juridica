@@ -6,14 +6,23 @@ const etniaDAO = require('../data-access/etniaDAO')
  */
 const obtenerEtnias = async (req, res) => {
   try {
-    const etnias = await etniaDAO.obtenerEtnias()
-    if (etnias.length === 0) {
-      return res.status(204).json(etnias)
+    const activo = req.query.activo;
+    if (activo !== undefined && activo !== null && activo !== "") {
+      const etnias = await etniaDAO.obtenerEtnias(activo)
+      if (etnias.length === 0) {
+        return res.status(204).json(etnias)
+      }
+      res.json(etnias)
+    } else {
+      const etnias = await etniaDAO.obtenerEtnias()
+      if (etnias.length === 0) {
+        return res.status(204).json(etnias)
+      }
+      res.json(etnias)
     }
-    res.json(etnias)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -30,7 +39,7 @@ const obtenerEtnia = async (req, res) => {
     res.json(etnia)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -42,12 +51,12 @@ const obtenerEtnia = async (req, res) => {
  */
 const crearEtnia = async (req, res) => {
   try {
-    const { nombre } = req.body
-    const etnia = await etniaDAO.crearEtnia({ nombre })
+    const { nombre, estatus_general } = req.body
+    const etnia = await etniaDAO.crearEtnia({ nombre, estatus_general })
     res.json(etnia)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -60,15 +69,21 @@ const crearEtnia = async (req, res) => {
 const actualizarEtnia = async (req, res) => {
   try {
     const { id } = req.params
-    const { nombre } = req.body
-    await etniaDAO.actualizarEtnia(Number(id), {
-      nombre
+    const { nombre, estatus_general } = req.body
+    const result = await etniaDAO.actualizarEtnia(Number(id), {
+      nombre, estatus_general
     })
-    const actualizado = await etniaDAO.obtenerEtnia(Number(id))
-    res.json(actualizado)
+    if (!result) {
+      return res.status(404).json({
+        message: error.message
+      })
+    } else {
+      const actualizado = await etniaDAO.obtenerEtnia(Number(id))
+      res.status(200).json(actualizado)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -82,10 +97,19 @@ const eliminarEtnia = async (req, res) => {
   try {
     const { id } = req.params
     const etnia = await etniaDAO.eliminarEtnia(Number(id))
-    res.json(etnia)
+     if(etnia){
+      res.status(200).json({
+        message: 'Etnia eliminada'
+      })
+    }
+    else{
+      res.status(404).json({
+        message: 'Etnia no eliminada'
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }

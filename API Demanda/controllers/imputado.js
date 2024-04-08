@@ -8,12 +8,14 @@ const obtenerImputados = async (req, res) => {
   try {
     const imputados = await imputadoDAO.obtenerImputados()
     if (imputados.length === 0) {
-      return res.status(204).json(imputados)
+      res.status(404).json({ message: 'No se encontraron imputados' })
     }
-    res.json(imputados)
+    else{
+      res.status(200).json(imputados)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -27,10 +29,15 @@ const obtenerImputado = async (req, res) => {
   try {
     const { id } = req.params
     const imputado = await imputadoDAO.obtenerImputado(Number(id))
-    res.json(imputado)
+    if (!imputado) {
+      res.status(404).json({ message: 'No se encontró el imputado' })
+    }
+    else{
+      res.status(200).json(imputado)
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message:error.message
     })
   }
 }
@@ -42,12 +49,12 @@ const obtenerImputado = async (req, res) => {
  */
 const crearImputado = async (req, res) => {
   try {
-    const { id_participante, delito } = req.body
-    const imputado = await imputadoDAO.crearImputado({ id_participante, delito })
-    res.json(imputado)
+    const { id_imputado } = req.body
+    const imputado = await imputadoDAO.crearImputado({ id_imputado })
+    res.status(201).json(imputado)
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -57,19 +64,29 @@ const crearImputado = async (req, res) => {
  * @param {object} imputado - Objeto que contiene los datos del imputado
  * @returns {object} Retorna el objeto del imputado actualizado si la operación fue exitosa, de lo contrario lanza un error
  */
+
 const actualizarImputado = async (req, res) => {
   try {
     const { id } = req.params
-    const { id_imputado, ...data } = req.body
-    await imputadoDAO.actualizarImputado(Number(id), data)
-    const actualizado = await imputadoDAO.obtenerImputado(Number(id))
-    res.json(actualizado)
+    const { id_imputado } = req.body
+    const result=   await imputadoDAO.actualizarImputado(Number(id), {id_imputado})
+    if(result ===false){
+      res.status(404).json({
+        message: 'No se actualizó el imputado,datos iguales'
+      })
+    }
+    else{
+      res.json({
+        message: 'Imputado actualizado'
+      })
+    }
   } catch (error) {
     res.status(500).json({
       message: 'Error al realizar la consulta con bd'
     })
   }
 }
+
 
 /**
  * @abstract Método que permite eliminar un imputado
@@ -80,10 +97,15 @@ const eliminarImputado = async (req, res) => {
   try {
     const { id } = req.params
     const imputado = await imputadoDAO.eliminarImputado(Number(id))
-    res.json(imputado)
+    if (imputado === false) {
+      res.status(404).json({ message: 'No se encontró el imputado, por lo tanto no se pudo eliminar' })
+    }
+    else{
+      res.status(200).json( { message: 'Imputado eliminado' })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Error al realizar la consulta con bd'
+      message: error.message
     })
   }
 }
@@ -92,6 +114,6 @@ module.exports = {
   obtenerImputados,
   obtenerImputado,
   crearImputado,
-  actualizarImputado,
+ actualizarImputado,
   eliminarImputado
 }

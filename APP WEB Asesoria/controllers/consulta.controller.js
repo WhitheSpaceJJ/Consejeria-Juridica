@@ -20,7 +20,7 @@ class ConsultaController {
   }
 
   // DOMContentLoaded
- handleDOMContentLoaded = () => { 
+  handleDOMContentLoaded = () => {
     // add permissions
     this.utils.validatePermissions({})
     this.getNumeroPaginas()
@@ -106,8 +106,8 @@ class ConsultaController {
 
 
   handlePrevPage = async () => {
-    console.log(this.#pagina)
-    console.log(this.#numeroPaginas)
+    //console.log(this.#pagina)
+    // console.log(this.#numeroPaginas)
     if (this.#pagina > 1) {
       this.#pagina--
       this.handleConsultarAsesorias()
@@ -115,8 +115,8 @@ class ConsultaController {
   }
 
   handleNextPage = async () => {
-    console.log(this.#pagina)
-    console.log(this.#numeroPaginas)
+    //console.log(this.#pagina)
+    // console.log(this.#numeroPaginas)
     if (this.#pagina < this.#numeroPaginas) {
       this.#pagina++
       this.handleConsultarAsesorias()
@@ -124,10 +124,17 @@ class ConsultaController {
   }
 
   getNumeroPaginas = async () => {
+    try{
     const numeroAsesorias = await this.model.getTotalAsesorias()
     const total = document.getElementById('total')
     total.innerHTML = ' :' + numeroAsesorias.totalAsesorias
     this.#numeroPaginas = (numeroAsesorias.totalAsesorias) / 10
+    }catch(error){
+      const modal = document.querySelector('modal-warning');
+      modal.message = 'Error al obtener el total de asesorias, intente de nuevo mas tarde';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
   }
 
   handleSelectChange = () => {
@@ -728,9 +735,9 @@ class ConsultaController {
         }
         catch (error) {
           const modal = document.querySelector('modal-warning');
-          modal.message = 'La descarga del reporte no ha sido exitosa, intente de nuevo mas tarde';
+          modal.message = 'La descarga del reporte no ha sido exitosa,error en el servidor o no existen elementos.';
           modal.open = 'true'
-          console.log(error)
+          //   console.log(error)
         }
 
       } else {
@@ -805,7 +812,7 @@ class ConsultaController {
               const modal = document.querySelector('modal-warning');
               modal.message = 'La descarga del reporte no ha sido exitosa, intente de nuevo mas tarde';
               modal.open = 'true'
-              console.log(error)
+              //   console.log(error)
             }
           }
         } else if (selectBusqueqda.value === '1') {
@@ -834,7 +841,7 @@ class ConsultaController {
             const modal = document.querySelector('modal-warning');
             modal.message = 'La descarga del reporte no ha sido exitosa, intente de nuevo mas tarde';
             modal.open = 'true'
-            console.log(error)
+            //   console.log(error)
           }
 
         }
@@ -852,13 +859,13 @@ class ConsultaController {
 
   handleConsultarAsesorias = async () => {
     try {
-      console.log(this.#pagina)
-      console.log(this.#numeroPaginas)
-      console.log(this.#busquedaExitosa)
+      //console.log(this.#pagina)
+      // console.log(this.#numeroPaginas)
+      // console.log(this.#busquedaExitosa)
       if (this.#busquedaExitosa === false) {
         const deleteButton = document.getElementById('deleteButton');
         deleteButton.style.display = 'none';
-
+        try{
         const asesoriasResponse = await this.model.getAsesorias(this.#pagina)
         const asesorias = asesoriasResponse.asesorias
 
@@ -869,10 +876,17 @@ class ConsultaController {
             table.appendChild(this.crearRow(asesoria))
           })
         }
+        }catch(error){ 
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'Error al obtener las asesorias, intente de nuevo mas tarde';
+          modal.title = 'Error'
+          modal.open = 'true'
+
+        }
       } else if (this.#busquedaExitosa === true) {
         const deleteButton = document.getElementById('deleteButton');
         deleteButton.style.display = 'block';
-        console.log("Busqueda Exitosa")
+        // console.log("Busqueda Exitosa")
 
 
         const checkboxAsesor = document.getElementById('check-asesor')
@@ -899,10 +913,10 @@ class ConsultaController {
 
 
 
-        console.log("Busqueda Fecha V")
-        console.log(selectBusqueqda.value)
+        //  console.log("Busqueda Fecha V")
+        //  console.log(selectBusqueqda.value)
         if (selectBusqueqda.value === '0') {
-          console.log("Busqueda por fechas")
+          // console.log("Busqueda por fechas")
           const filtros = {
             fecha_inicio: fechaInicio.value,
             fecha_final: fechaFinal.value,
@@ -913,11 +927,11 @@ class ConsultaController {
             id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
             fecha_registro: null
           }
-          console.log(filtros)
-          console.log(this.#pagina)
+          //   console.log(filtros)
+          //  console.log(this.#pagina)
           const asesoriasResponse = await this.model.getAsesoriasByFiltersPaginacion(this.#pagina, filtros)
-          console.log("PAgina ", this.#pagina)
-          console.log(asesoriasResponse)
+          //   console.log("PAgina ", this.#pagina)
+          //   console.log(asesoriasResponse)
           const asesorias = asesoriasResponse
           const table = document.getElementById('table-body')
           const rowsTable = document.getElementById('table-body').rows.length
@@ -927,7 +941,7 @@ class ConsultaController {
             })
           }
         } else {
-          console.log("Busqueda por fecha")
+          // console.log("Busqueda por fecha")
 
           const filtros = {
             fecha_inicio: null,
@@ -939,10 +953,10 @@ class ConsultaController {
             id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
             fecha_registro: fechaRegistro.value
           }
-          console.log(filtros)
-          console.log(this.#pagina)
+          //    console.log(filtros)
+          //  console.log(this.#pagina)
           const asesoriasResponse = await this.model.getAsesoriasByFiltersPaginacion(this.#pagina, filtros)
-          console.log("Busqueda por fechas")
+          //   console.log("Busqueda por fechas")
           console.log(asesoriasResponse)
           const asesorias = asesoriasResponse
           const table = document.getElementById('table-body')
@@ -1021,16 +1035,16 @@ class ConsultaController {
       modal.open = 'true'
     }
     else {
-      if(selectBusqueda.value === '0'){
+      if (selectBusqueda.value === '0') {
         if (fechaInicio.value === '' || fechaFinal.value === '') {
           const modal = document.querySelector('modal-warning');
-  
+
           modal.message = 'Es requerido seleccionar una fecha de inicio y una fecha final para poder descargar o consultar las asesorias';
           modal.open = 'true'
-  
-        }else if (fechaInicio.value > fechaFinal.value) {
+
+        } else if (fechaInicio.value > fechaFinal.value) {
           const modal = document.querySelector('modal-warning');
-  
+
           modal.message = 'La Fecha Inicial No Puede Ser Mayor A La Fecha Final';
           modal.open = 'true'
         } else {
@@ -1038,16 +1052,16 @@ class ConsultaController {
           const checkboxMunicipio = document.getElementById('check-municipio')
           const checkboxZona = document.getElementById('check-zona')
           const checkboxDefensor = document.getElementById('check-defensor')
-  
+
           const selectAsesor = document.getElementById('select-asesor')
           const selectMunicipio = document.getElementById('select-municipio')
           const selectZona = document.getElementById('select-zona')
           const selectDefensor = document.getElementById('select-defensor')
-  
+
           const selectDistrito = document.getElementById('select-distrito')
-  
+
           if (selectBusqueda.value === '0') {
-  
+
             const filtros = {
               fecha_inicio: fechaInicio.value,
               fecha_final: fechaFinal.value,
@@ -1059,21 +1073,21 @@ class ConsultaController {
               fecha_registro: null
             }
             try {
-              console.log(filtros)
+              //     console.log(filtros)
               const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
               const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
-              console.log(numeroAsesorias)
+              //     console.log(numeroAsesorias)
               const total = document.getElementById('total')
               total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
-  
-  
-  
+
+
+
               if (asesoriasResponse.length === 0) {
                 const deleteButton = document.getElementById('deleteButton');
                 deleteButton.style.display = 'none';
-  
+
                 const modal = document.querySelector('modal-warning');
-  
+
                 modal.setOnCloseCallback(() => {
                   if (modal.open === 'false') {
                     this.#pagina = 1
@@ -1082,27 +1096,27 @@ class ConsultaController {
                     this.handleConsultarAsesorias()
                   }
                 });
-  
+
                 modal.message = 'No Existen Coincidencias En La Búsqueda';
                 modal.open = 'true'
-  
+
               }
               else {
                 this.bloquearFiltros()
                 const deleteButton = document.getElementById('deleteButton')
-  
+
                 deleteButton.style.display = 'block';
                 this.#busquedaExitosa = true
                 this.#pagina = 1
                 this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
                 this.handleConsultarAsesorias()
               }
-  
-  
+
+
             } catch (error) {
               console.error('Error:', error.message)
             }
-  
+
           }
           else {
             const filtros = {
@@ -1116,21 +1130,21 @@ class ConsultaController {
               fecha_registro: fechaRegistro.value
             }
             try {
-              console.log(filtros)
+              //      console.log(filtros)
               const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
               const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
-              console.log(numeroAsesorias)
+              //    console.log(numeroAsesorias)
               const total = document.getElementById('total')
               total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
-  
-  
-  
+
+
+
               if (asesoriasResponse.length === 0) {
                 const deleteButton = document.getElementById('deleteButton');
                 deleteButton.style.display = 'none';
-  
+
                 const modal = document.querySelector('modal-warning');
-  
+
                 modal.setOnCloseCallback(() => {
                   if (modal.open === 'false') {
                     this.#pagina = 1
@@ -1139,10 +1153,10 @@ class ConsultaController {
                     this.handleConsultarAsesorias()
                   }
                 });
-  
+
                 modal.message = 'No Existen Coincidencias En La Búsqueda';
                 modal.open = 'true'
-  
+
               }
               else {
                 const deleteButton = document.getElementById('deleteButton');
@@ -1153,146 +1167,146 @@ class ConsultaController {
                 this.handleConsultarAsesorias()
                 this.bloquearFiltros()
               }
-  
-  
+
+
             } catch (error) {
               console.error('Error:', error.message)
             }
           }
         }
 
-      }else {
-          if(fechaRegistro.value === ''){
-            const modal = document.querySelector('modal-warning');
-            modal.message = 'Es requerido seleccionar una fecha de registro para poder descargar o consultar las asesorias';
-            modal.open = 'true'
-          }else {
-            const checkboxAsesor = document.getElementById('check-asesor')
-            const checkboxMunicipio = document.getElementById('check-municipio')
-            const checkboxZona = document.getElementById('check-zona')
-            const checkboxDefensor = document.getElementById('check-defensor')
-    
-            const selectAsesor = document.getElementById('select-asesor')
-            const selectMunicipio = document.getElementById('select-municipio')
-            const selectZona = document.getElementById('select-zona')
-            const selectDefensor = document.getElementById('select-defensor')
-    
-            const selectDistrito = document.getElementById('select-distrito')
-    
-            if (selectBusqueda.value === '0') {
-    
-              const filtros = {
-                fecha_inicio: fechaInicio.value,
-                fecha_final: fechaFinal.value,
-                id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
-                id_zona: selectZona.value !== '0' ? selectZona.value : null,
-                id_asesor: selectAsesor.value !== '0' ? selectAsesor.value : null,
-                id_defensor: selectDefensor.value !== '0' ? selectDefensor.value : null,
-                id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
-                fecha_registro: null
-              }
-              try {
-                console.log(filtros)
-                const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
-                const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
-                console.log(numeroAsesorias)
-                const total = document.getElementById('total')
-                total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
-    
-    
-    
-                if (asesoriasResponse.length === 0) {
-                  const deleteButton = document.getElementById('deleteButton');
-                  deleteButton.style.display = 'none';
-    
-                  const modal = document.querySelector('modal-warning');
-    
-                  modal.setOnCloseCallback(() => {
-                    if (modal.open === 'false') {
-                      this.#pagina = 1
-                      this.getNumeroPaginas()
-                      this.limpiarFiltros()
-                      this.handleConsultarAsesorias()
-                    }
-                  });
-    
-                  modal.message = 'No Existen Coincidencias En La Búsqueda';
-                  modal.open = 'true'
-    
-                }
-                else {
-                  this.bloquearFiltros()
-                  const deleteButton = document.getElementById('deleteButton')
-    
-                  deleteButton.style.display = 'block';
-                  this.#busquedaExitosa = true
-                  this.#pagina = 1
-                  this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
-                  this.handleConsultarAsesorias()
-                }
-    
-    
-              } catch (error) {
-                console.error('Error:', error.message)
-              }
-    
+      } else {
+        if (fechaRegistro.value === '') {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'Es requerido seleccionar una fecha de registro para poder descargar o consultar las asesorias';
+          modal.open = 'true'
+        } else {
+          const checkboxAsesor = document.getElementById('check-asesor')
+          const checkboxMunicipio = document.getElementById('check-municipio')
+          const checkboxZona = document.getElementById('check-zona')
+          const checkboxDefensor = document.getElementById('check-defensor')
+
+          const selectAsesor = document.getElementById('select-asesor')
+          const selectMunicipio = document.getElementById('select-municipio')
+          const selectZona = document.getElementById('select-zona')
+          const selectDefensor = document.getElementById('select-defensor')
+
+          const selectDistrito = document.getElementById('select-distrito')
+
+          if (selectBusqueda.value === '0') {
+
+            const filtros = {
+              fecha_inicio: fechaInicio.value,
+              fecha_final: fechaFinal.value,
+              id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
+              id_zona: selectZona.value !== '0' ? selectZona.value : null,
+              id_asesor: selectAsesor.value !== '0' ? selectAsesor.value : null,
+              id_defensor: selectDefensor.value !== '0' ? selectDefensor.value : null,
+              id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
+              fecha_registro: null
             }
-            else {
-              const filtros = {
-                fecha_inicio: null,
-                fecha_final: null,
-                id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
-                id_zona: selectZona.value !== '0' ? selectZona.value : null,
-                id_asesor: selectAsesor.value !== '0' ? selectAsesor.value : null,
-                id_defensor: selectDefensor.value !== '0' ? selectDefensor.value : null,
-                id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
-                fecha_registro: fechaRegistro.value
+            try {
+              //   console.log(filtros)
+              const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
+              const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
+              //   console.log(numeroAsesorias)
+              const total = document.getElementById('total')
+              total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
+
+
+
+              if (asesoriasResponse.length === 0) {
+                const deleteButton = document.getElementById('deleteButton');
+                deleteButton.style.display = 'none';
+
+                const modal = document.querySelector('modal-warning');
+
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    this.#pagina = 1
+                    this.getNumeroPaginas()
+                    this.limpiarFiltros()
+                    this.handleConsultarAsesorias()
+                  }
+                });
+
+                modal.message = 'No Existen Coincidencias En La Búsqueda';
+                modal.open = 'true'
+
               }
-              try {
-                console.log(filtros)
-                const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
-                const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
-                console.log(numeroAsesorias)
-                const total = document.getElementById('total')
-                total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
-    
-    
-    
-                if (asesoriasResponse.length === 0) {
-                  const deleteButton = document.getElementById('deleteButton');
-                  deleteButton.style.display = 'none';
-    
-                  const modal = document.querySelector('modal-warning');
-    
-                  modal.setOnCloseCallback(() => {
-                    if (modal.open === 'false') {
-                      this.#pagina = 1
-                      this.getNumeroPaginas()
-                      this.limpiarFiltros()
-                      this.handleConsultarAsesorias()
-                    }
-                  });
-    
-                  modal.message = 'No Existen Coincidencias En La Búsqueda';
-                  modal.open = 'true'
-    
-                }
-                else {
-                  const deleteButton = document.getElementById('deleteButton');
-                  deleteButton.style.display = 'block';
-                  this.#busquedaExitosa = true
-                  this.#pagina = 1
-                  this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
-                  this.handleConsultarAsesorias()
-                  this.bloquearFiltros()
-                }
-    
-    
-              } catch (error) {
-                console.error('Error:', error.message)
+              else {
+                this.bloquearFiltros()
+                const deleteButton = document.getElementById('deleteButton')
+
+                deleteButton.style.display = 'block';
+                this.#busquedaExitosa = true
+                this.#pagina = 1
+                this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
+                this.handleConsultarAsesorias()
               }
+
+
+            } catch (error) {
+              console.error('Error:', error.message)
+            }
+
+          }
+          else {
+            const filtros = {
+              fecha_inicio: null,
+              fecha_final: null,
+              id_municipio: checkboxMunicipio.checked ? selectMunicipio.value : null,
+              id_zona: selectZona.value !== '0' ? selectZona.value : null,
+              id_asesor: selectAsesor.value !== '0' ? selectAsesor.value : null,
+              id_defensor: selectDefensor.value !== '0' ? selectDefensor.value : null,
+              id_distrito: selectDistrito.value !== '0' ? selectDistrito.value : null,
+              fecha_registro: fechaRegistro.value
+            }
+            try {
+              //    console.log(filtros)
+              const asesoriasResponse = await this.model.getAsesoriasByFilters(filtros)
+              const numeroAsesorias = await this.model.getTotalAsesoriasfiltro(filtros)
+              //    console.log(numeroAsesorias)
+              const total = document.getElementById('total')
+              total.innerHTML = ' :' + numeroAsesorias.totalAsesoriasFiltro
+
+
+
+              if (asesoriasResponse.length === 0) {
+                const deleteButton = document.getElementById('deleteButton');
+                deleteButton.style.display = 'none';
+
+                const modal = document.querySelector('modal-warning');
+
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    this.#pagina = 1
+                    this.getNumeroPaginas()
+                    this.limpiarFiltros()
+                    this.handleConsultarAsesorias()
+                  }
+                });
+
+                modal.message = 'No Existen Coincidencias En La Búsqueda';
+                modal.open = 'true'
+
+              }
+              else {
+                const deleteButton = document.getElementById('deleteButton');
+                deleteButton.style.display = 'block';
+                this.#busquedaExitosa = true
+                this.#pagina = 1
+                this.#numeroPaginas = (numeroAsesorias.totalAsesoriasFiltro) / 10
+                this.handleConsultarAsesorias()
+                this.bloquearFiltros()
+              }
+
+
+            } catch (error) {
+              console.error('Error:', error.message)
             }
           }
+        }
       }
     }
   }
@@ -1300,7 +1314,10 @@ class ConsultaController {
   crearRow = asesoria => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
-    console.log(asesoria.datos_asesoria)
+    // console.log(asesoria.datos_asesoria)
+    if (asesoria.datos_asesoria.estatus_asesoria === 'TURNADA') {
+      console.log(asesoria)
+    }
     row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                 ${asesoria.datos_asesoria.id_asesoria}
             </td>
@@ -1320,13 +1337,19 @@ class ConsultaController {
             ${asesoria.datos_asesoria.fecha_registro}
         </td>
         <td class="px-6 py-4">
-        ${asesoria.defensor!=null?asesoria.defensor.nombre_defensor:asesoria.asesor.nombre_asesor}
+        ${asesoria.defensor != null ? asesoria.defensor.nombre_defensor : asesoria.asesor.nombre_asesor}
     </td>
     <td class="px-6 py-4">
     ${asesoria.distrito_judicial.nombre_distrito_judicial}
 </td>
 <td class="px-6 py-4">
 ${asesoria.municipio.nombre_municipio}
+</td>
+<td class="px-6 py-4">
+${asesoria.datos_asesoria.estatus_asesoria}
+</td>
+<td class="px-6 py-4">
+${asesoria.datos_asesoria.estatus_asesoria === 'TURNADA' ? asesoria.turno.defensor.nombre_defensor : ''}
 </td>
             <td class="px-6 py-4 text-right">
                 <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>

@@ -16,7 +16,7 @@ router.route('/:id')
     // Obtener un empleado por su ID
     .get(servicioEmpleado.obtenerEmpleado)
     // Eliminar un empleado por su ID
-    .delete(servicioEmpleado.eliminarEmpleado)
+   // .delete(servicioEmpleado.eliminarEmpleado)
     // Actualizar un empleado por su ID
     .put(servicioEmpleado.actualizarEmpleado);  
 

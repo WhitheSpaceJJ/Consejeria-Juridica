@@ -6,9 +6,9 @@ class EscolaridadDAO {
    * @param {object} descripcion - Objeto que contiene los datos de la escolaridad
    * @returns {object} Retorna el objeto de la escolaridad creada si la operación fue exitosa, de lo contrario lanza un error
    */
-  async crearEscolaridad({ descripcion }) {
+  async crearEscolaridad({ descripcion,estatus_general }) {
     try {
-      const escolaridad = await Escolaridad.create({ descripcion })
+      const escolaridad = await Escolaridad.create({ descripcion,estatus_general })
       return escolaridad
     } catch (err) {
       throw err
@@ -19,10 +19,15 @@ class EscolaridadDAO {
    * @abstract Método que permite obtener todas las escolaridades de la base de datos
    * @returns {array} Retorna un arreglo de objetos de escolaridades si la operación fue exitosa, de lo contrario lanza un error
    */
-  async obtenerEscolaridades() {
+  async obtenerEscolaridades(activo) {
     try {
-      const escolaridades = await Escolaridad.findAll()
-      return escolaridades
+      if (activo !== undefined && activo !== null && activo !== "") {
+        const escolaridades = await Escolaridad.findAll({ where: { estatus_general: "ACTIVO" } })
+        return escolaridades
+      } else{
+        const escolaridades = await Escolaridad.findAll()
+        return escolaridades
+      }
     } catch (err) {
       throw err
     }
@@ -48,10 +53,10 @@ class EscolaridadDAO {
    * @param {object} descripcion - Objeto que contiene los nuevos datos de la escolaridad
    * @returns {object} Retorna el objeto de la escolaridad actualizada si la operación fue exitosa, de lo contrario lanza un error
    */
-  async actualizarEscolaridad(id_escolaridad, { descripcion }) {
+  async actualizarEscolaridad(id_escolaridad, { descripcion,estatus_general }) {
     try {
-      const escolaridad = await Escolaridad.update({ descripcion }, { where: { id_escolaridad } })
-      return escolaridad
+      const escolaridad = await Escolaridad.update({ descripcion,estatus_general }, { where: { id_escolaridad } })
+      return escolaridad [0]==1
     } catch (err) {
       throw err
     }
@@ -64,9 +69,8 @@ class EscolaridadDAO {
    */
   async eliminarEscolaridad(id) {
     try {
-      const escolaridad = await Escolaridad.findByPk(id)
-      await escolaridad.destroy()
-      return 'Escolaridad eliminada con exito'
+      const escolaridad = await Escolaridad.destroy({ where: { id_escolaridad: id } })
+      return escolaridad === 1
     } catch (err) {
       throw err
     }

@@ -13,45 +13,35 @@ const participante = sequelize.define('participante', {
     primaryKey: true
   },
   nombre: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(50),
+    allowNull: false
+  },
+  apellido_paterno: {
+    type: DataTypes.STRING(50),
+    allowNull: false
+  }, apellido_materno: {
+    type: DataTypes.STRING(50),
     allowNull: false
   },
   edad: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: false
   },
-  id_escolaridad: {
-    type: DataTypes.INTEGER,
+  telefono: {
+    type: DataTypes.STRING,
     allowNull: true,
-    references: {
-      model: 'escolaridad',
-      key: 'id_escolaridad'
-    }
+    validate: {
+      len: [0, 15],
+    },
+    defaultValue: null,
   },
-  id_etnia: {
+  id_genero: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: 'etnia',
-      key: 'id_etnia'
-    }
+    allowNull: false
   },
-  id_ocupacion: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: 'ocupacion',
-      key: 'id_ocupacion'
-    }
-  },
-  id_persona: {
+  id_proceso_judicial: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: 'id_persona_UNIQUE'
-  }, 
-   id_proceso_judicial: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
     references: {
       model: 'proceso_judicial',
       key: 'id_proceso_judicial'
@@ -68,27 +58,6 @@ const participante = sequelize.define('participante', {
       using: 'BTREE',
       fields: [
         { name: 'id_participante' }
-      ]
-    },
-    {
-      name: 'id_escolaridad',
-      using: 'BTREE',
-      fields: [
-        { name: 'id_escolaridad' }
-      ]
-    },
-    {
-      name: 'id_etnia',
-      using: 'BTREE',
-      fields: [
-        { name: 'id_etnia' }
-      ]
-    },
-    {
-      name: 'id_ocupacion',
-      using: 'BTREE',
-      fields: [
-        { name: 'id_ocupacion' }
       ]
     },
     {

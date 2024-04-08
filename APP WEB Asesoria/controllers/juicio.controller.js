@@ -1,22 +1,24 @@
 import { ControllerUtils } from '../lib/controllerUtils';
 
 class JuicioController {
-  #IdSeleccion
+ // #IdSeleccion
   constructor(model) {
-    this.model = model;
-    this.utils = new ControllerUtils(model.user);
-    document.addEventListener("DOMContentLoaded", this.handleDOMContentLoaded);
+   this.model = model;
+   this.utils = new ControllerUtils(model.user);
+  //document.addEventListener("DOMContentLoaded", this.handleDOMContentLoaded);
   }
 
   handleDOMContentLoaded = () => {
     this.utils.validatePermissions({});
-    this.agregarEventosBotones();
-    this.mostrarTiposDeJuicio();
+  // this.agregarEventosBotones();
+  //  this.mostrarTiposDeJuicio();
   }
-
+/*
   agregarEventosBotones = () => {
     //Agregar boton
+
     const agregarTipoJuicioBtn = document.getElementById('agregar-tipo-juicio');
+    console.log(agregarTipoJuicioBtn)
     agregarTipoJuicioBtn.addEventListener('click', this.agregarTipoJuicio);
 
     //Editar boton
@@ -42,6 +44,9 @@ class JuicioController {
     // Agregar la función llamarActivarBotonSeleccionar al ámbito global para que se pueda llamar desde el atributo onclick de los botones "Seleccionar"
     window.llamarActivarBotonSeleccionar = llamarActivarBotonSeleccionar;
 }
+
+
+ 
 
   agregarTipoJuicio = async () => {
     const tipoJuicioInput = document.getElementById('tipo-juicio').value;
@@ -147,6 +152,8 @@ class JuicioController {
         console.error('Error al obtener el tipo de juicio por ID:', error);
     }
 }
+
+*/
 
 
 }

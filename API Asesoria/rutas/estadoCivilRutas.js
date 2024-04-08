@@ -15,7 +15,7 @@ router.route('/:id')
   // Obtener un estado civil por su ID
   .get(servicioEstados.obtenerEstadoCivilPorId)
   // Eliminar un estado civil por su ID
-  .delete(servicioEstados.eliminarEstadoCivil)
+ // .delete(servicioEstados.eliminarEstadoCivil)
   // Actualizar un estado civil por su ID
   .put(servicioEstados.actualizarEstadoCivil);
 

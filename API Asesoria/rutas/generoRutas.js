@@ -16,7 +16,7 @@ router.route('/:id')
   // Obtener un género por su ID
   .get(servicioGeneros.obtenerGeneroPorId)
   // Eliminar un género por su ID
-  .delete(servicioGeneros.eliminarGenero)
+ // .delete(servicioGeneros.eliminarGenero)
   // Actualizar un género por su ID
   .put(servicioGeneros.actualizarGenero);
 

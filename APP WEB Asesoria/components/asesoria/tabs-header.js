@@ -70,13 +70,20 @@ class AsesoriaTabs extends HTMLElement {
 
     const asesoradoTab = document.querySelector('asesorado-full-tab')
     const asesoriaTab = document.querySelector('asesoria-tab')
-
+   
+    if (
+      tabId === this.#tabs[1] &&
+      (!asesoradoTab.isComplete)
+    ) {
+      return 'No se puede cambiar de pestaña si no se han completado los datos'
+    }
     if (
       tabId === this.#tabs[2] &&
       (!asesoradoTab.isComplete || !asesoriaTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
+
   }
 
   dispatchEventTabChangeEvent(tabId) {
@@ -93,7 +100,7 @@ class AsesoriaTabs extends HTMLElement {
     })
     this.dispatchEvent(event)
   }
-
+  
   updateAriaAttributes(activeTab) {
     const tabs = ['btn-asesorado', 'btn-asesoria', 'btn-detalles']
     tabs.forEach(tab => {

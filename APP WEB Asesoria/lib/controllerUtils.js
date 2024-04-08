@@ -10,9 +10,11 @@ class ControllerUtils {
       window.location.replace('login.html')
       return false
     }
+
     if (permissions.length === 0) return true
 
     const userPermissions = this.user.role
+
     const valid = permissions.some(permission =>
       userPermissions?.includes(permission)
     )

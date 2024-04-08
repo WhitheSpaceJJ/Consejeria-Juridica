@@ -73,15 +73,12 @@ const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
 const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
   const filtros = req.query.filtros;
-  console.log('filtros excel');
-  console.log('filtros', JSON.stringify(filtros));
+
 
   let result = {};
   if (filtros === null || filtros === undefined || filtros === '') {
-    console.log('No hay filtros');
     try {
       const resultA = await controlAsesorias.obtenerAsesorias();
-      console.log('resultA', resultA.length);
       if (resultA.length === 0) {
         result = null;
       } else {
@@ -93,10 +90,9 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     }
 
   } else {
-    console.log('Hay filtros');
+
     try {
       const resultB = await controlAsesorias.obtenerAsesoriasFiltro(JSON.parse(req.query.filtros));
-      console.log('resultB', resultB.length);
       if (resultB.length === 0) {
         result = null;
       }
@@ -108,7 +104,6 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
       result = null;
     }
   }
-  console.log('result', result.length);
   if (result === null) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
@@ -116,11 +111,9 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
   const verificadorCampos = req.query.campos;
 
-  console.log('verificadorCampos', verificadorCampos);
   if (verificadorCampos === null || verificadorCampos === undefined || verificadorCampos === '' || verificadorCampos === 'null') {
-    console.log('No hay campos');
 
-    console.log('filtros pero no hay error');
+
     const campos = ['nombre-asesorado', 'nombre-usuario', 'nombre-empleado', 'genero', 'colonia', 'trabaja', 'ingreso_mensual', 'motivo', 'estado_civil', 'telefono', 'numero_hijos', 'fecha_registro', 'tipo_juicio', 'conclusion', 'documentos-recibidos', 'resumen'];
 
     const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
@@ -163,11 +156,23 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     sheet.addRow(encabezados);
     // Agregar datos al libro de Excel
     asesoriasFiltradas.forEach((asesoria) => {
-      const persona = asesoria.persona;
       const asesorado = asesoria.asesorado;
-      const datosAsesoria = asesoria.datos_asesoria;
-      // const turno = asesoria.datos_asesoria;
+      const turno = asesoria.turno;
+      const tipos_juicio = asesoria.tipos_juicio;
       const recibidos = asesoria.recibidos;
+
+
+      const asesor = asesoria.hasOwnProperty('asesor') ? asesoria.asesor : null;
+      const defensor = asesoria.hasOwnProperty('defensor') ? asesoria.defensor : null;
+
+
+
+      const persona = asesoria.persona;
+      const distrito_judicial = asesoria.distrito_judicial;
+      const municipio = asesoria.municipio;
+      const datosAsesoria = asesoria.datos_asesoria;
+
+
       const filaDatos = [];
 
       // Mapear los datos según los campos solicitados
@@ -183,19 +188,19 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
             const key = 'defensor';
 
             if (key in asesoria && asesoria[key] !== null) {
-              filaDatos.push(asesoria[key].nombre_defensor);
+              filaDatos.push(defensor.nombre_defensor);
             } else {
               // Puedes manejar el caso cuando la clave no existe o es nula según tus necesidades
-              filaDatos.push(asesoria.asesor.nombre_asesor);
+              filaDatos.push(asesor.nombre_asesor);
             }
             /*
-            if (asesoria.defensor !== null) {
-              filaDatos.push(asesoria.defensor.nombre_defensor);
-            }
-            else if (asesoria.asesor !== null) {
-              filaDatos.push(asesoria.asesor.nombre_asesor);
-            }
-            */
+                 if (asesoria.defensor !== null) {
+                   filaDatos.push(defensor.nombre_defensor);
+                 }
+                 else if (asesoria.asesor !== null) {
+                   filaDatos.push(asesor.nombre_asesor);
+                 }
+                   */
             break;
           case 'genero':
             filaDatos.push(persona.genero.descripcion_genero);
@@ -244,7 +249,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
             filaDatos.push(datosAsesoria.fecha_registro);
             break;
           case 'tipo_juicio':
-            filaDatos.push(asesoria.tipos_juicio.tipo_juicio);
+            filaDatos.push(tipos_juicio.tipo_juicio);
             break;
           case 'conclusion':
             filaDatos.push(datosAsesoria.conclusion_asesoria);
@@ -309,10 +314,8 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
   } else {
 
-    console.log('Hay campos');
 
     const campos = JSON.parse(verificadorCampos);
-    console.log('campos', campos);
     const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Asesorías');
@@ -353,11 +356,23 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     sheet.addRow(encabezados);
     // Agregar datos al libro de Excel
     asesoriasFiltradas.forEach((asesoria) => {
-      const persona = asesoria.persona;
       const asesorado = asesoria.asesorado;
-      const datosAsesoria = asesoria.datos_asesoria;
-      // const turno = asesoria.datos_asesoria;
+      const turno = asesoria.turno;
+      const tipos_juicio = asesoria.tipos_juicio;
       const recibidos = asesoria.recibidos;
+
+
+      const asesor = asesoria.hasOwnProperty('asesor') ? asesoria.asesor : null;
+      const defensor = asesoria.hasOwnProperty('defensor') ? asesoria.defensor : null;
+
+
+
+      const persona = asesoria.persona;
+      const distrito_judicial = asesoria.distrito_judicial;
+      const municipio = asesoria.municipio;
+      const datosAsesoria = asesoria.datos_asesoria;
+
+
       const filaDatos = [];
 
       // Mapear los datos según los campos solicitados
@@ -370,22 +385,22 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
             filaDatos.push(datosAsesoria.usuario ? datosAsesoria.usuario : '');
             break;
           case 'nombre-empleado':
-            const key = 'defensor';
+            /*  const key = 'defensor';
 
-            if (key in asesoria && asesoria[key] !== null) {
-              filaDatos.push(asesoria[key].nombre_defensor);
-            } else {
-              // Puedes manejar el caso cuando la clave no existe o es nula según tus necesidades
-              filaDatos.push(asesoria.asesor.nombre_asesor);
-            }
-            /*
-            if (asesoria.defensor !== null) {
-              filaDatos.push(asesoria.defensor.nombre_defensor);
+          if (key in asesoria && asesoria[key] !== null) {
+            filaDatos.push(asesoria[key].nombre_defensor);
+          } else {
+            // Puedes manejar el caso cuando la clave no existe o es nula según tus necesidades
+            filaDatos.push(asesoria.asesor.nombre_asesor);
+          }
+       */
+            if (defensor !== null) {
+              filaDatos.push(defensor.nombre_defensor);
             }
             else if (asesoria.asesor !== null) {
-              filaDatos.push(asesoria.asesor.nombre_asesor);
+              filaDatos.push(asesor.nombre_asesor);
             }
-            */
+
             break;
           case 'genero':
             filaDatos.push(persona.genero.descripcion_genero);
@@ -434,7 +449,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
             filaDatos.push(datosAsesoria.fecha_registro);
             break;
           case 'tipo_juicio':
-            filaDatos.push(asesoria.tipos_juicio.tipo_juicio);
+            filaDatos.push(tipos_juicio.tipo_juicio);
             break;
           case 'conclusion':
             filaDatos.push(datosAsesoria.conclusion_asesoria);
@@ -618,23 +633,18 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
     return next(error);
   }
   else {
-    const result2 = await controlPersonas.obtenerPersonasNombre(nombre, apellido_paterno, apellido_materno);
-    if (result2 === null) {
-      const error = new CustomeError('Error al obtener las personas', 404);
+
+    const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener las asesorías', 404);
       return next(error);
     } else {
-      const result = await controlAsesorias.obtenerAsesoriaPorIdAsesorados(result2);
-      if (result === null || result === undefined) {
-        const error = new CustomeError('Error al obtener las asesorías', 404);
-        return next(error);
-      } else {
 
-        res.status(200).json({
-          asesoria: result
-        });
-      }
-
+      res.status(200).json({
+        asesorias: result
+      });
     }
+
   }
 });
 

@@ -10,7 +10,7 @@ router.route('/')
     // Obtener todos los municipios
     .get(servicioMunicipiosDistro.obtenerMunicipios)
     // Agregar un nuevo municipio
-    .post(servicioMunicipiosDistro.agregarMunicipio);
+//    .post(servicioMunicipiosDistro.agregarMunicipio);
 
 
     router.route('/distrito/:id')
@@ -21,9 +21,9 @@ router.route('/:id')
     // Obtener un municipio por su ID
     .get(servicioMunicipiosDistro.obtenerMunicipioPorId)
     // Eliminar un municipio por su ID
-    .delete(servicioMunicipiosDistro.eliminarMunicipio)
+   // .delete(servicioMunicipiosDistro.eliminarMunicipio)
     // Actualizar un municipio por su ID
-    .put(servicioMunicipiosDistro.actualizarMunicipio); 
+   // .put(servicioMunicipiosDistro.actualizarMunicipio); 
 
 
 // Exportamos el router

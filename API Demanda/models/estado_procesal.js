@@ -14,15 +14,15 @@ const estadoProcesal = sequelize.define('estado_procesal', {
   },
   descripcion_estado_procesal: {
     type: DataTypes.STRING(200),
-    allowNull: true
+    allowNull: false
   },
   fecha_estado_procesal: {
     type: DataTypes.DATEONLY,
-    allowNull: true
+    allowNull: false
   },
   id_proceso_judicial: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
     references: {
       model: 'proceso_judicial',
       key: 'id_proceso_judicial'

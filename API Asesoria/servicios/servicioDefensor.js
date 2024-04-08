@@ -28,15 +28,32 @@ const agregarDefensor = asyncError(async (req, res, next) => {
  * @param {Object} next Next
  * */
 const obtenerDefensores = asyncError(async (req, res, next) => {
-    const result = await controlDefensores.obtenerDefensores();
-    if (result === null || result === undefined) {
-        const error = new CustomeError('No se encontraron defensores', 404);
-        return next(error);
-    } else {
-        res.status(200).json({
-            defensores: result
-        });
-    } 
+    const activo = req.query.activo;
+    if (activo !== undefined && activo !== null && activo !== "") {
+        const result = await controlDefensores.obtenerDefensores(activo);
+        if (result === null || result === undefined) {
+            const error = new CustomeError('No se encontraron defensores', 404);
+            return next(error);
+        } else {
+            res.status(200).json({
+                defensores: result
+            });
+        } 
+  
+    }else {
+        const result = await controlDefensores.obtenerDefensores();
+        if (result === null || result === undefined) {
+            const error = new CustomeError('No se encontraron defensores', 404);
+            return next(error);
+        } else {
+            res.status(200).json({
+                defensores: result
+            });
+        } 
+      
+    }
+
+  
 } );
 
 /**

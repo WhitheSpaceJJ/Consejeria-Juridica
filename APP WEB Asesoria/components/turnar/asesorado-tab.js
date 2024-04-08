@@ -15,6 +15,8 @@ export class AsesoradoTab extends HTMLElement {
   #apellidoMaterno
   #edad
   #sexo
+  #ediatableCbx
+
 
   static get observedAttributes() {
     return ['id', 'data']
@@ -29,7 +31,7 @@ export class AsesoradoTab extends HTMLElement {
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
 
     this.#api = new APIModel()
-    this.#api.getGeneros().then(data => {
+    this.#api.getGeneros2().then(data => {
       this.#generos = data.generos
 
       this.manageFormFields()
@@ -43,6 +45,138 @@ export class AsesoradoTab extends HTMLElement {
     this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
     this.#edad = this.shadowRoot.getElementById('edad')
     this.#sexo = this.shadowRoot.getElementById('sexo')
+    this.#ediatableCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')
+
+
+    var nombreInput = this.#nombre;
+    var apellidoPaternoInput = this.#apellidoPaterno;
+    var apellidoMaternoInput = this.#apellidoMaterno;
+    var editableCbx = this.#ediatableCbx;
+    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
+
+    nombreInput.addEventListener('input', function () {
+      //console.log(editableCbx.value) 
+
+      if ( editableCbx.checked) {
+
+        var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+
+      if (nombreInput.value === '') {
+        // Si el campo está vacío, lanzar una excepción
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+        if (!nombrePattern.test(nombreInput.value)) {
+          // Si el campo contiene caracteres no válidos, lanzar una excepción
+
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
+          modal.title = 'Error de validación'
+          modal.open = true
+
+        } else if (nombreInput.value.length > 50) {
+          // Si el campo tiene más de 50 caracteres, lanzar una excepción
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+
+      }
+    });
+
+    apellidoPaternoInput.addEventListener('input', function () {
+     
+      if ( editableCbx.checked) {
+
+     
+
+      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+
+      if (apellidoPaternoInput.value === '') {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (apellidoPaternoInput.value.length > 50) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+
+    }
+
+    });
+
+    apellidoMaternoInput.addEventListener('input', function () {
+
+      if ( editableCbx.checked) {
+
+
+
+      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
+
+      if (apellidoMaternoInput.value === '') {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      } else if (apellidoMaternoInput.value.length > 50) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+
+    }
+    });
+
+    var edadInput = this.#edad;
+
+    edadInput.addEventListener('input', function () {
+   
+      if ( editableCbx.checked) {
+
+
+      var edadPattern = /^\d+$/;
+      if (!edadPattern.test(edadInput.value)) {
+        if (edadInput.value === '') {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'La edad no puede estar vacía, por favor ingresela.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'La edad solo permite números, verifique su respuesta.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
+      } else if (edadInput.value > 200) {
+        const modal = document.querySelector('modal-warning');
+        modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
+        modal.title = 'Error de validación';
+        modal.open = true;
+      }
+
+    }
+
+    });
   }
 
   fillInputs() {

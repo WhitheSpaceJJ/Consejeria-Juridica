@@ -7,18 +7,35 @@ const controlEmpleado = require('./controlEmpleados.js');
  * @returns  defensores
  * */
 
-const obtenerDefensores = async () => {
+const obtenerDefensores = async (activo) => {
     try {
-        return await modeloDefensor.Defensor.findAll({
-            raw: false,
-            nest: true,
-            include: [{
-              model: modeloDefensor.Empleado
-            }
-            ]
-        });
+        if (activo !== undefined && activo !== null && activo !== "") {
+            const whereClause = {};
+            whereClause['$empleado.estatus_general$'] = "ACTIVO";
+            return await modeloDefensor.Defensor.findAll({
+                raw: false,
+                nest: true,
+                include: [{
+                    model: modeloDefensor.Empleado
+                }
+                ],
+                where: whereClause
+            });
+        } else {
+            return await modeloDefensor.Defensor.findAll({
+                raw: false,
+                nest: true,
+                include: [{
+                    model: modeloDefensor.Empleado
+                }
+                ]
+            });
+        }
+
+
+
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return null;
     }
 };
@@ -34,12 +51,12 @@ const obtenerDefensorPorId = async (id) => {
             raw: false,
             nest: true,
             include: [{
-              model: modeloDefensor.Empleado
+                model: modeloDefensor.Empleado
             }
             ]
         });
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return null;
     }
 };
@@ -53,7 +70,7 @@ const agregarDefensor = async (defensor) => {
     try {
         return (await modeloDefensor.Defensor.create(defensor, { raw: true, nest: true })).dataValues;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return false;
     }
 };
@@ -66,10 +83,10 @@ const agregarDefensor = async (defensor) => {
 
 const eliminarDefensor = async (id) => {
     try {
-        const result =await modeloDefensor.Defensor.destroy({ where: { id_defensor: id } });
+        const result = await modeloDefensor.Defensor.destroy({ where: { id_defensor: id } });
         return result === 1;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return false;
     }
 };
@@ -82,10 +99,10 @@ const eliminarDefensor = async (id) => {
  * */
 const actualizarDefensor = async (id, defensor) => {
     try {
-       const result= await modeloDefensor.Defensor.update(defensor, { where: { id_defensor: id } });
+        const result = await modeloDefensor.Defensor.update(defensor, { where: { id_defensor: id } });
         return result[0] === 1;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return false;
     }
 };
@@ -95,16 +112,16 @@ const obtenerDefensoresZona = async (id) => {
         const defensores = await controlEmpleado.obtenerEmpleadosDefensoresPorZona(id);
         if (defensores) {
             const defensoresReturn = [];
-             for (let i = 0; i < defensores.length; i++) {
+            for (let i = 0; i < defensores.length; i++) {
                 defensores[i] = defensores[i];
                 const defensor = await obtenerDefensorPorId(defensores[i].id_empleado);
                 defensoresReturn.push(defensor);
-             }
-             return defensoresReturn;
+            }
+            return defensoresReturn;
         }
         return null;
     } catch (error) {
-        console.log("Error:", error.message);
+        console.log("Error defensor:", error.message);
         return null;
     }
 };

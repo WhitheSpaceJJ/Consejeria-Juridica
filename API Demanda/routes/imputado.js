@@ -6,7 +6,7 @@ const {
     obtenerImputados,
     obtenerImputado,
     crearImputado,
-    actualizarImputado,
+   actualizarImputado,
     eliminarImputado
 } = require('../controllers/imputado')
 
@@ -26,7 +26,7 @@ router.post('/', crearImputado)
 router.put('/:id', actualizarImputado)
 
 // Definimos la ruta para eliminar un imputado por su id
-router.delete('/:id', eliminarImputado)
+//router.delete('/:id', eliminarImputado)
 
 // Exportamos el router
 module.exports = router

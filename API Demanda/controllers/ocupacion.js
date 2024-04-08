@@ -6,11 +6,20 @@ const ocupacionDAO = require('../data-access/ocupacionDAO')
  */
 const obtenerOcupaciones = async (req, res) => {
   try {
+    const activo = req.query.activo;
+    if (activo !== undefined && activo !== null && activo !== "") {
+    const ocupaciones = await ocupacionDAO.obtenerOcupaciones(activo)
+    if (ocupaciones.length === 0) {
+      return res.status(204).json(ocupaciones)
+    }
+    res.json(ocupaciones)
+  }else{
     const ocupaciones = await ocupacionDAO.obtenerOcupaciones()
     if (ocupaciones.length === 0) {
       return res.status(204).json(ocupaciones)
     }
     res.json(ocupaciones)
+  }
   } catch (error) {
     res.status(500).json({
       message: 'Error al realizar la consulta con bd'
@@ -42,9 +51,9 @@ const obtenerOcupacion = async (req, res) => {
  */
 const crearOcupacion = async (req, res) => {
   try {
-    const { descripcion_ocupacion } = req.body
+    const { descripcion_ocupacion, estatus_general } = req.body
 
-    const ocupacion = await ocupacionDAO.crearOcupacion({ descripcion_ocupacion })
+    const ocupacion = await ocupacionDAO.crearOcupacion({ descripcion_ocupacion, estatus_general })
 
     res.json(ocupacion)
   } catch (error) {
@@ -63,11 +72,20 @@ const actualizarOcupacion = async (req, res) => {
   try {
     const { id } = req.params
     const { descripcion_ocupacion } = req.body
-    await ocupacionDAO.actualizarOcupacion(Number(id), {
-      descripcion_ocupacion
+    const { estatus_general } = req.body
+    const result = await ocupacionDAO.actualizarOcupacion(Number(id), {
+      descripcion_ocupacion,
+      estatus_general
     })
-    const ocupacion = await ocupacionDAO.obtenerOcupacion(Number(id))
-    res.json(ocupacion)
+    if (!result) {
+      return res.status(404).json({
+        message: 'No se encontró la ocupación a actualizar'
+      })
+    }
+    else {
+      const ocupacion = await ocupacionDAO.obtenerOcupacion(Number(id))
+      res.status(200).json(ocupacion)
+    }
   } catch (error) {
     res.status(500).json({
       message: 'Error al realizar la consulta con bd'
@@ -84,7 +102,17 @@ const eliminarOcupacion = async (req, res) => {
   try {
     const { id } = req.params
     const ocupacion = await ocupacionDAO.eliminarOcupacion(Number(id))
-    res.json(ocupacion)
+     if(ocupacion){
+      res.status(200).json({
+        message: 'Ocupación eliminada con éxito'
+      })
+    }
+    else{
+      res.status(404).json({
+        message: 'No se encontró la ocupación a eliminar'
+      })
+    }
+
   } catch (error) {
     if (error.message.includes('foreign key constraint fails')) {
       return res.status(400).json({

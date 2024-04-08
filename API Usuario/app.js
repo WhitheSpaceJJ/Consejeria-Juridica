@@ -2,7 +2,8 @@
 
 // Importamos los módulos necesarios
 const express = require('express');
-const port = 3002;
+const {PORT,HOSTTOKENGRPCPORT} = require("./configuracion/default.js");
+
 const usuariosRutas = require("./rutas/usuarioRutas");
 const CustomeError = require("./utilidades/customeError");
 const errorController = require("./utilidades/errrorController")
@@ -47,7 +48,7 @@ const jwtMiddleware = async (req, res, next) => {
 app.use('/usuarios', usuariosRutas);
 //Eliminar
 //app.use('/zonas', jwtMiddleware, zonasRutas);
-app.use('/tipos', jwtMiddleware, tipoRutas);
+//app.use('/tipos', jwtMiddleware, tipoRutas);
 
 // Si ninguna ruta coincide, creamos un error personalizado y lo pasamos al siguiente middleware
 app.all("*", (req, res, next) => {
@@ -59,8 +60,8 @@ app.all("*", (req, res, next) => {
 app.use(errorController);
 
 // Hacemos que la aplicación escuche en el puerto especificado
-app.listen(port, () => {
-  console.log(`Aplicación corriendo en el puerto ${port}`);
+app.listen(PORT, () => {
+  console.log(`Aplicación corriendo en el puerto ${PORT}`);
 });
 
 
@@ -96,17 +97,17 @@ function getServer() {
   return server;
 }
 
-//Inicializamos el servidor GRPC en el puerto 3007
+//Inicializamos el servidor GRPC en el puerto 161
 var server = getServer();
 server.bindAsync(
-  `localhost:${161}`,
+  `localhost:${HOSTTOKENGRPCPORT}`,
   grpc.ServerCredentials.createInsecure(),
   (err, port) => {
     if (err != null) {
       return console.error(err);
     }
     console.log("")
-    console.log(`gRPC listening on ${port}`)
+    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`)
     server.start();
   }
 );

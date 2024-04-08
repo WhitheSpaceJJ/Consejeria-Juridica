@@ -16,7 +16,7 @@ const obtenerPersonas = async () => {
       include: [modeloPersona.Domicilio, modeloPersona.Genero]
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return null;
   }
 };
@@ -29,7 +29,7 @@ const obtenerPersonas = async () => {
 const obtenerPersonaPorId = async (id) => {
   try {
     return await modeloPersona.Persona.findByPk(id, {
-      raw: true,
+      raw: false,
       nest: true
       , attributes: {
         exclude: ['id_domicilio', 'id_genero']
@@ -37,7 +37,7 @@ const obtenerPersonaPorId = async (id) => {
       include: [modeloPersona.Domicilio, modeloPersona.Genero]
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return null;
   }
 };
@@ -52,7 +52,7 @@ const agregarPersona = async (persona) => {
 
     return (await modeloPersona.Persona.create(persona, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return false;
   }
 };
@@ -67,7 +67,7 @@ const eliminarPersona = async (id) => {
     const result= await modeloPersona.Persona.destroy({ where: { id_persona: id } });
     return  result === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return false;
   }
 };
@@ -82,7 +82,7 @@ const actualizarPersona = async (persona) => {
     const result = await modeloPersona.Persona.update(persona, { where: { id_persona: persona.id_persona } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return false;
   }
 };
@@ -126,7 +126,7 @@ const obtenerPersonasNombre = async (nombre, apellido_paterno, apellido_materno)
       return personas;
     }
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error personas:", error.message);
     return null;
   }
 };

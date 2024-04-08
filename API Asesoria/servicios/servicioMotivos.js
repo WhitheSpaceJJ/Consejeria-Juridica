@@ -34,16 +34,36 @@ const agregarMotivo = asyncError(async (req, res, next) => {
  */
 
 const obtenerMotivos = asyncError(async (req, res, next) => {
-  const result = await controlMotivos.obtenerMotivos();
-  if (result === null || result === undefined) {
-    const error = new CustomeError('No se encontraron motivos', 404);
-    return next(error);
-  } else {
 
-    res.status(200).json({
-        motivos: result
-    });
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
+    const result = await controlMotivos.obtenerMotivos(activo);
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron motivos', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          motivos: result
+      });
+    }
+
+  }else {
+
+    const result = await controlMotivos.obtenerMotivos();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('No se encontraron motivos', 404);
+      return next(error);
+    } else {
+  
+      res.status(200).json({
+          motivos: result
+      });
+    }
   }
+
+
+
 });
 
 /**

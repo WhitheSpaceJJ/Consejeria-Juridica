@@ -5,18 +5,38 @@ const controlEmpleado = require('./controlEmpleados.js');
  * @abstract Función que permite obtener todos los asesores
  * @returns  asesores
  * */
-const obtenerAsesores = async () => {
+const obtenerAsesores = async (activo) => {
   try {
-    return await modeloAsesor.Asesor.findAll({
-      raw: false,
-      nest: true,
-      include: [{
-        model: modeloAsesor.Empleado
-      }
-      ]
-    });
+    if (activo !== undefined && activo !== null && activo !== "") {
+      const whereClause = {};
+      whereClause['$empleado.estatus_general$'] = "ACTIVO";
+      return await modeloAsesor.Asesor.findAll({
+        raw: false,
+        nest: true,
+        include: [{
+          model: modeloAsesor.Empleado
+        }
+        ]
+        ,
+        where: whereClause
+      });
+  
+    }else {
+      return await modeloAsesor.Asesor.findAll({
+        raw: false,
+        nest: true,
+        include: [{
+          model: modeloAsesor.Empleado
+        }
+        ]
+      });
+      
+    }
+
+
+  
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return null;
   }
 };
@@ -39,7 +59,7 @@ const obtenerAsesorPorId = async (id) => {
       ]
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return null;
   }
 };
@@ -53,7 +73,7 @@ const agregarAsesor = async (asesor) => {
   try {
     return (await modeloAsesor.Asesor.create(asesor, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return false;
   }
 };
@@ -68,7 +88,7 @@ const eliminarAsesor = async (id) => {
     const result= await modeloAsesor.Asesor.destroy({ where: { id_asesor: id } });
     return result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return false;
   }
 };
@@ -83,7 +103,7 @@ const actualizarAsesor = async (asesor) => {
     const result = await modeloAsesor.Asesor.update(asesor, { where: { id_asesor: asesor.id_asesor } });
     return result[0] === 1; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return false;
   }
 };
@@ -101,7 +121,7 @@ const obtenerAsesoresZona = async (id) => {
     }
     return null;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error de asesores:", error.message);
     return null;
   }
 }

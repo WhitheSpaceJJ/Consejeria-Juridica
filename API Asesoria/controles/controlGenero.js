@@ -6,14 +6,23 @@ const modeloGenero = require('../modelos/modeloGenero');
  *  @abstract Función que permite obtener todos los generos
  * @returns generos
  */
-const obtenerGeneros = async () => {
+const obtenerGeneros = async (activo) => {
   try {
+    if (activo !== undefined && activo !== null && activo !== "") {
+      return await modeloGenero.Genero.findAll({
+        raw: true,
+        nest: true,
+        where: { estatus_general: "ACTIVO" }
+      });
+    }else {
     return await modeloGenero.Genero.findAll({
       raw: true,
       nest: true,
     });
+
+    }
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error generos:", error.message);
     return null;
   }
 };
@@ -32,7 +41,7 @@ const obtenerGeneroPorId = async (id) => {
       nest: true,
     });
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error generos:", error.message);
     return null;
   }
 };
@@ -46,7 +55,7 @@ const agregarGenero = async (genero) => {
   try {
     return (await modeloGenero.Genero.create(genero, { raw: true, nest: true })).dataValues; 
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error generos:", error.message);
     return false;
   }
 };
@@ -62,7 +71,7 @@ const eliminarGenero = async (id) => {
     const result  =await modeloGenero.Genero.destroy({ where: { id_genero: id } });
     return  result === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error generos:", error.message);
     return false;
   }
 };
@@ -78,7 +87,7 @@ const actualizarGenero = async (genero) => {
     const result = await modeloGenero.Genero.update(genero, { where: { id_genero: genero.id_genero } });
     return result[0] === 1;
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("Error generos:", error.message);
     return false;
   }
 };

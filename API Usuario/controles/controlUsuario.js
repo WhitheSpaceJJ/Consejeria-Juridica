@@ -9,9 +9,12 @@ const obtenerUsuarios = async () => {
   try {
     return await modelUsuario.Usuario.findAll({
       attributes: {
-        exclude: ['id_tipouser', 'id_zona'],
+        exclude: ['id_tipouser',
+        // 'id_zona'
+      'password'
+        ],
       },
-      raw: true,
+      raw: false,
       nest: true,
       include: [
         {model:modelUsuario.TipoUser},
@@ -33,7 +36,10 @@ const obtenerUsuarioPorId = async (id) => {
   try {
     return await modelUsuario.Usuario.findByPk(id, {
       attributes: {
-        exclude: ['id_tipouser', 'id_zona'],
+        exclude: ['id_tipouser', 
+        //'id_zona'
+        'password'
+      ],
       },
       raw: true,
       nest: true,
