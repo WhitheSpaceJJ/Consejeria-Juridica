@@ -129,55 +129,55 @@ export class Resolucion extends HTMLElement {
       } else {
 
 
- 
+
         const fechaActual = new Date();
         fechaActual.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
+
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
 
-    //    if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
-   //       const modal = document.querySelector('modal-warning')
-    //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
-     //     modal.title = 'Error de validación'
-     //     modal.open = true
-      //  }
-      /* else if (fechaIngresada === null) {
+
+        //    if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
+        //       const modal = document.querySelector('modal-warning')
+        //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
+        //     modal.title = 'Error de validación'
+        //     modal.open = true
+        //  }
+        /* else if (fechaIngresada === null) {
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'El campo de fecha de resolución es obligatorio.'
+            modal.title = 'Error de validación'
+            modal.open = true
+          } */
+
+
+        //       else {
+        /*
+        if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
           const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de fecha de resolución es obligatorio.'
+          modal.message = 'La fecha de resolución no puede ser menor al año actual.'
           modal.title = 'Error de validación'
           modal.open = true
-        } */
+        }
+  
+        if (fechaIngresada.getFullYear() < 1900) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+  */
+        const resolucionData = {
+          resolucion: resolucion,
+          fecha_resolucion: fechaResolucion
 
-
- //       else {
-          /*
-          if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de resolución no puede ser menor al año actual.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-    
-          if (fechaIngresada.getFullYear() < 1900) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-    */
-          const resolucionData = {
-            resolucion: resolucion,
-            fecha_resolucion: fechaResolucion
-
-          }
-          this.#resoluciones.push(resolucionData)
-          this.mostrarResoluciones()
-          this.#resolucion.value = ''
-          this.#fechaResolucion.value = ''
-      //  }
+        }
+        this.#resoluciones.push(resolucionData)
+        this.mostrarResoluciones()
+        this.#resolucion.value = ''
+        this.#fechaResolucion.value = ''
+        //  }
       }
     }
     else {
@@ -228,43 +228,46 @@ export class Resolucion extends HTMLElement {
 
         const fechaActual = new Date();
         fechaActual.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
+
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-   //     if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
-   //       const modal = document.querySelector('modal-warning')
-    //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
-    //      modal.title = 'Error de validación'
-    //      modal.open = true
-    //    } else {
-          /*
-          if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de resolución no puede ser menor al año actual.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-    
-          if (fechaIngresada.getFullYear() < 1900) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-    */
-          const resolucionData = {
-            resolucion: resolucion,
-            fecha_resolucion: fechaResolucion
+        //     if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
+        //       const modal = document.querySelector('modal-warning')
+        //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
+        //      modal.title = 'Error de validación'
+        //      modal.open = true
+        //    } else {
+        /*
+        if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'La fecha de resolución no puede ser menor al año actual.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+  
+        if (fechaIngresada.getFullYear() < 1900) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+  */
+        const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
+        const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
+        const resolucionData = {
+          id_resolucion: id_resolucion_si_tiene,
+          resolucion: resolucion,
+          fecha_resolucion: fechaResolucion,
+          id_proceso_judicial: id_proceso_judicial_si_tiene
+        }
 
-          }
-
-          this.#resoluciones[resolucionID - 1] = resolucionData
-          this.mostrarResoluciones()
-          this.#idResolucion = null
-          this.#resolucion.value = ''
-          this.#fechaResolucion.value = ''
-       // }
+        this.#resoluciones[resolucionID - 1] = resolucionData
+        this.mostrarResoluciones()
+        this.#idResolucion = null
+        this.#resolucion.value = ''
+        this.#fechaResolucion.value = ''
+        // }
       }
 
     }
@@ -340,11 +343,13 @@ export class Resolucion extends HTMLElement {
   }
 
   get data() {
- const resoluciones = this.#resoluciones
-    return {  resoluciones : resoluciones }
+    const resoluciones = this.#resoluciones
+    return { resoluciones: resoluciones }
   }
 
   set data(value) {
+    this.#resoluciones = value
+    this.mostrarResoluciones()
     this.setAttribute('data', value)
   }
 }

@@ -43,8 +43,8 @@ export class PromoventeTab extends HTMLElement {
 
   #turno
 
-  #promovente
-  #promventeDomicilio
+  #promovente = null
+  #promventeDomicilio = null
   #tipoJuicio
 
   #busquedaCp
@@ -74,112 +74,22 @@ export class PromoventeTab extends HTMLElement {
     this.#generos = generos
 
     this.manageFormFields()
+
     this.fillInputs()
 
 
-    var nombreInput = this.#nombre;
-    var apellidoPaternoInput = this.#apellidoPaterno;
-    var apellidoMaternoInput = this.#apellidoMaterno;
-    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
-    nombreInput.addEventListener('input', function () {
-      var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (nombreInput.value === '') {
-        // Si el campo está vacío, lanzar una excepción
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      } else
-        if (!nombrePattern.test(nombreInput.value)) {
-          // Si el campo contiene caracteres no válidos, lanzar una excepción
-
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-          modal.title = 'Error de validación'
-          modal.open = true
-
-        } else if (nombreInput.value.length > 50) {
-          // Si el campo tiene más de 50 caracteres, lanzar una excepción
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-    });
-
-    apellidoPaternoInput.addEventListener('input', function () {
-      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoPaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (apellidoPaternoInput.value.length > 50) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      }
-    });
-
-    apellidoMaternoInput.addEventListener('input', function () {
-      var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoMaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (apellidoMaternoInput.value.length > 50) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      }
-    });
-
-    var edadInput = this.#edad;
-
-    edadInput.addEventListener('input', function () {
-      var edadPattern = /^\d+$/;
-      if (!edadPattern.test(edadInput.value)) {
-        if (edadInput.value === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'La edad no puede estar vacía, por favor ingresela.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'La edad solo permite números, verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        }
-      } else if (edadInput.value > 200) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      }
-    });
-
-
   }
+  #editablePromovente
+
+  #botonBuscarCP
   manageFormFields() {
 
 
 
+
+    this.#editablePromovente = this.shadowRoot.getElementById('cbx-editable-promovente')
+
+    this.#botonBuscarCP = this.shadowRoot.getElementById('buscar-cp')
     this.#nombre = this.shadowRoot.getElementById('nombre')
     this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
     this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
@@ -204,16 +114,53 @@ export class PromoventeTab extends HTMLElement {
 
     const yes = this.#españolRadioYes
     yes.checked = true
-    /*
-    this.#españolRadioNo.addEventListener('click', () => {
-      this.#etnia.value = '0'
-      this.#etnia.disabled = true
-    })
 
-    this.#españolRadioYes.addEventListener('click', () => {
-      this.#etnia.disabled = false
+    const yesPromovente = this.#editablePromovente
+    yesPromovente.checked = false
+
+    this.#editablePromovente.checked = false
+
+    this.#editablePromovente.addEventListener('change', () => {
+      if (this.#editablePromovente.checked) {
+        this.#nombre.disabled = false
+        this.#botonBuscarCP.disabled = false
+        this.#apellidoPaterno.disabled = false
+        this.#apellidoMaterno.disabled = false
+        this.#edad.disabled = false
+        this.#telefono.disabled = false
+        this.#españolRadioYes.disabled = false
+        this.#españolRadioNo.disabled = false
+        this.#etnia.disabled = false
+        this.#escolaridad.disabled = false
+        this.#ocupacion.disabled = false
+        this.#calle.disabled = false
+        this.#numeroExt.disabled = false
+        this.#numeroInt.disabled = false
+        this.#colonia.disabled = false
+        this.#cp.disabled = false
+      } else {
+        this.#botonBuscarCP.disabled = true
+        this.#nombre.disabled = true
+        this.#apellidoPaterno.disabled = true
+        this.#apellidoMaterno.disabled = true
+        this.#edad.disabled = true
+        this.#sexo.disabled = true
+        this.#telefono.disabled = true
+        this.#españolRadioYes.disabled = true
+        this.#españolRadioNo.disabled = true
+        this.#etnia.disabled = true
+        this.#escolaridad.disabled = true
+        this.#ocupacion.disabled = true
+        this.#calle.disabled = true
+        this.#numeroExt.disabled = true
+        this.#numeroInt.disabled = true
+        this.#colonia.disabled = true
+        this.#cp.disabled = true
+        this.#municipio.disabled = true
+        this.#estado.disabled = true
+        this.#ciudad.disabled = true
+      }
     })
-*/
 
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
@@ -221,6 +168,7 @@ export class PromoventeTab extends HTMLElement {
     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     nombreInput.addEventListener('input', function () {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+
 
       if (nombreInput.value === '') {
         // Si el campo está vacío, lanzar una excepción
@@ -294,6 +242,7 @@ export class PromoventeTab extends HTMLElement {
 
     edadInput.addEventListener('input', function () {
       var edadPattern = /^\d+$/;
+
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
@@ -318,6 +267,7 @@ export class PromoventeTab extends HTMLElement {
 
     telefonoInput.addEventListener('input', function () {
       var telefonoPattern = /^\d+$/;
+
       if (!telefonoPattern.test(telefonoInput.value)) {
         if (telefonoInput.value === '') {
           const modal = document.querySelector('modal-warning');
@@ -340,13 +290,33 @@ export class PromoventeTab extends HTMLElement {
 
   }
 
+  #rellenoInputs = false
   fillInputs() {
+    this.#promovente = this.registroTab.data.promovente
+    this.#promventeDomicilio = this.#promovente.domicilio
+
+
+    this.#etnia.innerHTML = '' 
+
+     const option = document.createElement('option')
+     option.value = 0
+     option.text = 'Seleccione una etnia'
+     this.#etnia.appendChild(option)    
+
     this.#etnias.forEach(etnia => {
       const option = document.createElement('option')
       option.value = etnia.id_etnia
       option.text = etnia.nombre
       this.#etnia.appendChild(option)
     })
+
+    this.#generos.innerHTML = ''
+    
+    const optionGenero = document.createElement('option')
+    optionGenero.value = 0
+    optionGenero.text = 'Seleccione un género'
+    this.#sexo.appendChild(optionGenero)
+
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
@@ -354,12 +324,27 @@ export class PromoventeTab extends HTMLElement {
       this.#sexo.appendChild(option)
     })
 
+
+    this.#escolaridad.innerHTML = ''
+
+    const optionEscolaridad = document.createElement('option')
+    optionEscolaridad.value = 0
+    optionEscolaridad.text = 'Seleccione una escolaridad'
+    this.#escolaridad.appendChild(optionEscolaridad)
+ 
     this.#escolaridades.forEach(escolaridad => {
       const option = document.createElement('option')
       option.value = escolaridad.id_escolaridad
       option.text = escolaridad.descripcion
       this.#escolaridad.appendChild(option)
     })
+    
+    this.#ocupacion.innerHTML = ''
+    
+    const optionOcupacion = document.createElement('option')
+    optionOcupacion.value = 0
+    optionOcupacion.text = 'Seleccione una ocupación'
+    this.#ocupacion.appendChild(optionOcupacion)
 
     this.#ocupaciones.forEach(ocupacion => {
       const option = document.createElement('option')
@@ -367,8 +352,8 @@ export class PromoventeTab extends HTMLElement {
       option.text = ocupacion.descripcion_ocupacion
       this.#ocupacion.appendChild(option)
     })
-    this.#promovente = this.registroTab.data.promovente
-    this.#promventeDomicilio = this.#promovente.domicilio
+
+
 
     this.#nombre.value = this.#promovente.nombre
     this.#apellidoPaterno.value = this.#promovente.apellido_paterno
@@ -400,6 +385,12 @@ export class PromoventeTab extends HTMLElement {
           .then(data2 => {
             const { colonias } = data2
             this.#colonia.innerHTML = ''
+            const option = document.createElement('option')
+            option.value = 0
+            option.text = 'Seleccione una colonia'
+            this.#colonia.appendChild(option)
+
+
             colonias.colonias.forEach(colonia => {
               const option = document.createElement('option')
               option.value = colonia.id_colonia
@@ -415,17 +406,20 @@ export class PromoventeTab extends HTMLElement {
       .catch(error => {
         console.error('Error al obtener datos de la API:', error);
       });
+
+
   }
 
 
   validateInputs() {
     try {
-/*
+   /*
       if (this.registroTab.data.proceso === undefined) {
         this.#showModal('No se ha seleccionado un proceso, por favor seleccione uno.', 'Error de validación')
         return false
       }
-    */
+      */
+
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -591,6 +585,13 @@ export class PromoventeTab extends HTMLElement {
       this.#ciudad.innerHTML = '';
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
+     
+      const option = document.createElement('option')
+      option.value = 0
+      option.text = 'Seleccione una colonia'
+      this.#colonia.appendChild(option)
+
+
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -615,7 +616,8 @@ export class PromoventeTab extends HTMLElement {
       })
       this.dispatchEvent(event)
     })
-    document.addEventListener('tab-change', event => {
+    /**
+       document.addEventListener('tab-change', event => {
       const tabId = event.detail.tabId
       if (tabId !== 'promovente') {
         return
@@ -623,8 +625,29 @@ export class PromoventeTab extends HTMLElement {
 
       this.init()
     })
+    .
+     */
+    document.addEventListener('tab-change', event => {
+      const tabId = event.detail.tabId
 
+      if (this.#procesoSelecionado === null) {
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
+      }
+      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
+      }
+
+
+    })
   }
+
+
+
+  #procesoSelecionado = null
+
+
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -644,10 +667,8 @@ export class PromoventeTab extends HTMLElement {
   get isComplete() {
     return this.validateInputs()
   }
-
   get data() {
     const promovente = {
-      id_promovente: this.#promovente.promovente.id_participante,
       nombre: this.#nombre.value,
       apellido_paterno: this.#apellidoPaterno.value,
       apellido_materno: this.#apellidoMaterno.value,
@@ -664,6 +685,7 @@ export class PromoventeTab extends HTMLElement {
       ocupacion: this.#ocupacion.options[this.#ocupacion.selectedIndex].text,
       domicilio: {
         calle_domicilio: this.#calle.value,
+        id_domicilio: this.#promventeDomicilio.id_domicilio,
         numero_exterior_domicilio: this.#numeroExt.value,
         numero_interior_domicilio: this.#numeroInt.value,
         id_colonia: this.#colonia.value,

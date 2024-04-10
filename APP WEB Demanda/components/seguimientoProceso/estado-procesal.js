@@ -23,7 +23,7 @@ export class EstadoProcesal extends HTMLElement {
   static get observedAttributes() {
     return ['id', 'data']
   }
-
+  #registroTab
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -36,6 +36,9 @@ export class EstadoProcesal extends HTMLElement {
     this.fillInputs()
 
   }
+
+
+
 
   manageFormFields() {
 
@@ -224,9 +227,13 @@ export class EstadoProcesal extends HTMLElement {
           /**
             De alguna manera con respecto al id del estado procesal seleccionado se debe de modificar el arreglo de estados procesales  
            */
+           const id_estado_procesal_si_tiene = this.#estadosProcesales[estadoProcesalID - 1].id_estado_procesal 
+           const id_proceso_judicial_si_tiene = this.#estadosProcesales[estadoProcesalID - 1].id_proceso_judicial
           const estadoProcesalData = {
+            id_estado_procesal: id_estado_procesal_si_tiene,
             descripcion_estado_procesal: estadoProcesal,
-            fecha_estado_procesal: fechaEstadoProcesal
+            fecha_estado_procesal: fechaEstadoProcesal,
+            id_proceso_judicial: id_proceso_judicial_si_tiene
 
           }
           this.#estadosProcesales[estadoProcesalID - 1] = estadoProcesalData
@@ -276,7 +283,7 @@ export class EstadoProcesal extends HTMLElement {
       const estadoProcesal = this.#estadosProcesales[estadoProcesalId - 1]
       if (estadoProcesal) {
         this.#idEstadoProcesal = estadoProcesalId
-        this.#estadoProcesal.value = estadoProcesal.estado_procesal
+        this.#estadoProcesal.value = estadoProcesal.descripcion_estado_procesal
         this.#fechaEstadoProcesal.value = estadoProcesal.fecha_estado_procesal
       } else {
         console.error('El estado procesal con el ID proporcionado no existe.')
@@ -314,6 +321,8 @@ export class EstadoProcesal extends HTMLElement {
   }
 
   set data(value) {
+    this.#estadosProcesales = value
+    this.mostrarEstadosProcesales()
     this.setAttribute('data', value)
   }
 }

@@ -203,6 +203,13 @@ export class ProcesoTab extends HTMLElement {
 
 
   fillInputs() {
+    this.#juzgado.innerHTML = ''
+
+    const option = document.createElement('option')
+    option.value = '0'
+    option.text = 'Seleccione un juzgado'
+    this.#juzgado.appendChild(option)
+
 
     this.#juzgados.forEach(juzgado => {
       const option = document.createElement('option')
@@ -210,12 +217,27 @@ export class ProcesoTab extends HTMLElement {
       option.text = juzgado.nombre_juzgado
       this.#juzgado.appendChild(option)
     })
+
+    this.#distritoJudicial.innerHTML = ''
+
+    const optionDistrito = document.createElement('option')
+    optionDistrito.value = '0'
+    optionDistrito.text = 'Seleccione un distrito judicial'
+    this.#distritoJudicial.appendChild(optionDistrito)
+
     this.#distritosJudiciales.forEach(distrito => {
       const option = document.createElement('option')
       option.value = distrito.id_distrito_judicial
       option.textContent = distrito.nombre_distrito_judicial
       this.#distritoJudicial.appendChild(option)
     })
+
+    this.#municipio.innerHTML = ''
+
+    const optionMunicipio = document.createElement('option')
+    optionMunicipio.value = '0'
+    optionMunicipio.text = 'Seleccione un municipio'
+    this.#municipio.appendChild(optionMunicipio)
 
     this.#municipios.forEach(municipio => {
       const option = document.createElement('option')
@@ -224,6 +246,13 @@ export class ProcesoTab extends HTMLElement {
       this.#municipio.appendChild(option)
     })
 
+    this.#tipoJuicio.innerHTML = ''
+
+    const optionTipoJuicio = document.createElement('option')
+    optionTipoJuicio.value = '0'
+    optionTipoJuicio.text = 'Seleccione un tipo de juicio'
+    this.#tipoJuicio.appendChild(optionTipoJuicio)
+
     this.#tiposDeJuicio.forEach(tipoJuicio => {
       const option = document.createElement('option')
       option.value = tipoJuicio.id_tipo_juicio
@@ -231,7 +260,7 @@ export class ProcesoTab extends HTMLElement {
       this.#tipoJuicio.appendChild(option)
     })
 
-    
+
     this.#tipoJuicio.value = this.#idTipoJuicio
     this.#municipio.value = this.#idMunicipio
     this.#distritoJudicial.value = this.#idDistritoJudicial
@@ -241,21 +270,20 @@ export class ProcesoTab extends HTMLElement {
 
   validateInputs() {
     try {
-      if(this.registroTab.data.turno === undefined){
+      if (this.registroTab.isComplete === false) {
         this.#showModal('No se ha seleccionado un turno, por favor seleccione uno.', 'Error de validación')
         return false
       }
-      
-      if(this.promoventeTab.data === undefined){
+
+      if (this.promoventeTab.isComplete === false) {
         this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
         return false
       }
 
-      if(this.imputadoTab.data === undefined){
+      if (this.imputadoTab.isComplete === false) {
         this.#showModal('No se han ingresado los datos del imputado, por favor ingreselos.', 'Error de validación')
         return false
       }
-
 
       const fechaInicio = this.#fechaInicio.value
       const estatusProceso = this.#estatusProceso.value
@@ -306,7 +334,7 @@ export class ProcesoTab extends HTMLElement {
       }
       else if (controlInterno.length > 20) {
         throw new ValidationError('El número de control interno no debe ser mayor a 20 caracteres')
-      } 
+      }
       /*else if (controlInterno.length < 10) {
         throw new ValidationError('El número de control interno no debe ser menor a 10 caracteres')
       }
@@ -322,7 +350,6 @@ export class ProcesoTab extends HTMLElement {
       if (tiposJuicio === '0') {
         throw new ValidationError('El tipo de juicio es requerido')
       }
-
 
 
       return true
@@ -372,11 +399,58 @@ export class ProcesoTab extends HTMLElement {
       if (tabId !== 'proceso') {
         return
       }
+      if (this.registroTab.isComplete === true) {
 
-      this.init()
+        if (this.#turnoSeleccionado === null) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.init()
+        }
+        if (this.#turnoSeleccionado !== null && this.#turnoSeleccionado.id_turno !== this.registroTab.turno.id_turno) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.init()
+          this.restetCampos()
+        }
+      }
     })
 
   }
+  restetCampos() {
+    this.#fechaInicio.value = new Date().toISOString().split('T')[0]
+    this.#juzgado.value = '0'
+    this.#numeroExpediente.value = ''
+    this.#controlInterno.value = ''
+    this.#distritoJudicial.value = '0'
+    this.#municipio.value = '0'
+    this.#tipoJuicio.value = '0'
+
+
+    const data = []
+    const estadoProcesalWC = this.#estadosProcesalesWC
+    estadoProcesalWC.data = data;
+
+    const familiarWC = this.#familiaresWC
+    familiarWC.data = data;
+
+    const observacionWC = this.#observacionesWC
+    observacionWC.data = data;
+
+    const pruebaWC = this.#pruebasWC
+    pruebaWC.data = data;
+
+    const resolucionWC = this.#resolucionesWC
+    resolucionWC.data = data;
+
+
+
+
+
+
+
+  }
+
+
+  #turnoSeleccionado = null
+
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -398,7 +472,7 @@ export class ProcesoTab extends HTMLElement {
   }
 
   get data() {
-    const proceso ={
+    const proceso = {
       fecha_inicio: this.#fechaInicio.value,
       fecha_estatus: null,
       estatus_proceso: this.#estatusProceso.value,
@@ -419,9 +493,10 @@ export class ProcesoTab extends HTMLElement {
       observaciones: this.#observacionesWC.data.observaciones,
       resoluciones: this.#resolucionesWC.data.resoluciones,
       estadosProcesales: this.#estadosProcesalesWC.data.estadosProcesales,
+
     }
-    return  {proceso : proceso}
-    
+    return { proceso: proceso }
+
   }
 
   set data(value) {

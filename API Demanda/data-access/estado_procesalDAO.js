@@ -10,7 +10,8 @@ class EstadoProcesalDAO {
     try {
       const result = await estado_procesal.create({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial })
       return result
-    } catch (error) {
+    } catch (error) {      console.log(err.message)
+
       throw error
     }
   }
@@ -25,7 +26,8 @@ class EstadoProcesalDAO {
     try {
       const result = await estado_procesal.update({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial }, { where: { id_estado_procesal } })
       return result[0] == 1
-    } catch (error) {
+    } catch (error) {      console.log(err.message)
+
       throw error
     }
   }

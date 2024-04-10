@@ -18,7 +18,7 @@ export class RegistroTab extends HTMLElement {
   #idAsesoria
   #turnos
   #turnosTable
-  #turno
+  #turno = null
 
   static get observedAttributes() {
     return ['id', 'data']
@@ -103,7 +103,7 @@ export class RegistroTab extends HTMLElement {
             <td class="px-6 py-4 whitespace-nowrap">${turno.asesoria.tipos_juicio.tipo_juicio}</td>
             <td class="px-6 py-4 whitespace-nowrap">${turno.estatus_general}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-turno" onclick="llamarActivarBotonSeleccionar(this.value)" value="${turno.id_turno}">
+            <button href="#" title="Al seleccionar de nuevo un turno, el progreso se perdera" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-turno" onclick="llamarActivarBotonSeleccionar(this.value)" value="${turno.id_turno}">
             Seleccionar
           </button>
         
@@ -161,12 +161,38 @@ export class RegistroTab extends HTMLElement {
   activarBotonSeleccionar = async turnoId => {
     try {
       const { turno } = await this.#api.getTurnoById(turnoId);
-      this.#turno = turno;
-      this.#idAsesoria.innerHTML = turno.asesoria.datos_asesoria.id_asesoria;
+      if ( this.#turno !== null) {
+         if(this.#turno.id_turno !== turno.id_turno){
+          const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                 this.#turno = turno;
+                this.#idAsesoria.innerHTML = turno.asesoria.datos_asesoria.id_asesoria;
+              } 
+            }
+          });
+          modal.message = 'Ya has seleccionado un turno. Si eliges otro, se perderá el progreso actual.';
+          modal.title = 'Advertencia';
+          modal.open = 'true'
+         }
+       
+      }
+      else
+
+        if (this.#turno  === null) {
+          this.#turno = turno;
+          this.#idAsesoria.innerHTML = turno.asesoria.datos_asesoria.id_asesoria;
+        }
+
+
     } catch (error) {
       console.error('Error al obtener el turno por ID:', error);
     }
   }
+
+
+
 
 
   validateInputs() {
@@ -229,6 +255,9 @@ export class RegistroTab extends HTMLElement {
     return this.validateInputs()
   }
 
+  get turno() {
+    return this.#turno
+  }
   get data() {
 
     const turno = this.#turno

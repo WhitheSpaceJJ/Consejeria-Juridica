@@ -64,6 +64,7 @@ export class Prueba extends HTMLElement {
 
     window.activarBotonSeleccionarPrueba = activarBotonSeleccionarPrueba
 
+
   }
 
   agregarPrueba = async () => {
@@ -78,22 +79,28 @@ export class Prueba extends HTMLElement {
         modal.message = 'El campo de prueba es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
-      }
+      } else
 
-      if (prueba.length > 200) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }else {
-
-      const pruebaData = {
-        descripcion_prueba: prueba
-      }
-      this.#pruebas.push(pruebaData)
-      this.mostrarPruebas()
-      this.#prueba.value = ''
-    }
+        if (prueba.length > 200) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        } else {
+          if (prueba !== '' && prueba.length <= 200) {
+            const pruebaData = {
+              descripcion_prueba: prueba
+            }
+            this.#pruebas.push(pruebaData)
+            this.mostrarPruebas()
+            this.#prueba.value = ''
+          } else {
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'El campo de prueba es obligatorio.'
+            modal.title = 'Error de validación'
+            modal.open = true
+          }
+        }
     }
     else {
       const modal = document.querySelector('modal-warning')
@@ -105,10 +112,7 @@ export class Prueba extends HTMLElement {
     }
   }
   editarPrueba = async () => {
-
-
     const idPrueba = this.#idPrueba
-
     if (idPrueba === null) {
       const modal = document.querySelector('modal-warning')
       modal.message = 'Debe seleccionar una prueba para poder editarla.'
@@ -123,23 +127,56 @@ export class Prueba extends HTMLElement {
         modal.message = 'El campo de prueba es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
-      }
+      } else
 
-      if (prueba.length > 200) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }else {
+        if (prueba.length > 200) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        } else {
+          /**
+           Mejora esto;      try {
+                const id_prueba_si_tiene = this.#pruebas[idPrueba - 1].id_prueba
+                const pruebaData = {
+                  id_prueba: id_prueba_si_tiene,
+                  descripcion_prueba: prueba
+                }
+                this.#pruebas[idPrueba - 1] = pruebaData
+                this.mostrarPruebas()
+                this.#idPrueba = null
+                this.#prueba.value = ''
+              } catch (error) {
+                console.error('Error al editar la prueba:', error)
+              }
+              const pruebaData = {
+                descripcion_prueba: prueba
+              }
+              this.#pruebas[idPrueba - 1] = pruebaData
+              this.mostrarPruebas()
+              this.#idPrueba = null
+              this.#prueba.value = ''
+           */
 
-      const pruebaData = {
-        descripcion_prueba: prueba
-      }
-      this.#pruebas[idPrueba - 1] = pruebaData
-      this.mostrarPruebas()
-      this.#idPrueba = null
-      this.#prueba.value = ''
-    }
+              if (prueba !== '' && prueba.length <= 200) {
+          const id_prueba_si_tiene = this.#pruebas[idPrueba - 1].id_prueba
+          const id_proceso_judicial_si_tiene = this.#pruebas[idPrueba - 1].id_proceso_judicial
+          const pruebaData = {
+            id_prueba: id_prueba_si_tiene,
+            descripcion_prueba: prueba,
+            id_proceso_judicial: id_proceso_judicial_si_tiene
+          }
+          this.#pruebas[idPrueba - 1] = pruebaData
+          this.mostrarPruebas()
+          this.#idPrueba = null
+          this.#prueba.value = ''
+        } else {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de prueba es obligatorio.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+        }
     }
   }
   mostrarPruebas = async () => {
@@ -177,7 +214,7 @@ export class Prueba extends HTMLElement {
       const prueba = this.#pruebas[pruebaId - 1]
       if (prueba) {
         this.#idPrueba = pruebaId
-        this.#prueba.value = prueba.prueba
+        this.#prueba.value = prueba.descripcion_prueba
       } else {
         console.error('La prueba con el ID proporcionado no existe.')
       }
@@ -207,7 +244,6 @@ export class Prueba extends HTMLElement {
       }
     })
 
-
   }
 
   connectedCallback() {
@@ -233,10 +269,12 @@ export class Prueba extends HTMLElement {
 
   get data() {
     const pruebas = this.#pruebas
-    return {pruebas: pruebas}
+    return { pruebas: pruebas }
   }
 
   set data(value) {
+    this.#pruebas = value
+    this.mostrarPruebas()
     this.setAttribute('data', value)
   }
 }

@@ -8,7 +8,8 @@ class DomicilioParticipanteDAO {
         try {
             const domicilioParticipante = await DomicilioParticipante.create({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante })
             return domicilioParticipante
-        } catch (err) {
+        } catch (err) {      console.log(err.message)
+
             throw err
         }
     }

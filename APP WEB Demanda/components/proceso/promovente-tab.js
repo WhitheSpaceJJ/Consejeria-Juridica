@@ -212,9 +212,9 @@ export class PromoventeTab extends HTMLElement {
     this.#españolRadioYes.addEventListener('click', () => {
       this.#etnia.disabled = false
     })
-*/ 
+*/
 
-   var nombreInput = this.#nombre;
+    var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
     var apellidoMaternoInput = this.#apellidoMaterno;
     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
@@ -340,18 +340,40 @@ export class PromoventeTab extends HTMLElement {
   }
 
   fillInputs() {
+    this.#etnia.innerHTML = ''
+
+    const option = document.createElement('option')
+    option.value = '0'
+    option.text = 'Seleccione una etnia'
+    this.#etnia.appendChild(option)
+
     this.#etnias.forEach(etnia => {
       const option = document.createElement('option')
       option.value = etnia.id_etnia
       option.text = etnia.nombre
       this.#etnia.appendChild(option)
     })
+
+    this.#sexo.innerHTML = ''
+
+    const option2 = document.createElement('option')
+    option2.value = '0'
+    option2.text = 'Seleccione un género'
+    this.#sexo.appendChild(option2)
+
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
       option.text = genero.descripcion_genero
       this.#sexo.appendChild(option)
     })
+
+    this.#escolaridad.innerHTML = ''
+
+    const option3 = document.createElement('option')
+    option3.value = '0'
+    option3.text = 'Seleccione una escolaridad'
+    this.#escolaridad.appendChild(option3)
 
     this.#escolaridades.forEach(escolaridad => {
       const option = document.createElement('option')
@@ -360,12 +382,20 @@ export class PromoventeTab extends HTMLElement {
       this.#escolaridad.appendChild(option)
     })
 
+    this.#ocupacion.innerHTML = ''
+    const option4 = document.createElement('option')
+    option4.value = '0'
+    option4.text = 'Seleccione una ocupación'
+    this.#ocupacion.appendChild(option4)
     this.#ocupaciones.forEach(ocupacion => {
       const option = document.createElement('option')
       option.value = ocupacion.id_ocupacion
       option.text = ocupacion.descripcion_ocupacion
       this.#ocupacion.appendChild(option)
     })
+
+
+
     this.#turno = this.registroTab.data
     const { turno } = this.#turno;
     this.#promovente = turno.asesoria.persona
@@ -383,7 +413,7 @@ export class PromoventeTab extends HTMLElement {
     this.#calle.value = this.#promventeDomicilio.calle_domicilio
     this.#numeroExt.value = this.#promventeDomicilio.numero_exterior_domicilio
     this.#numeroInt.value = this.#promventeDomicilio.numero_interior_domicilio
-  
+
     this.#api.getColoniaById(this.#promventeDomicilio.id_colonia)
       .then(data => {
         const { colonia } = data
@@ -415,12 +445,11 @@ export class PromoventeTab extends HTMLElement {
 
   validateInputs() {
     try {
-
-      if(this.registroTab.data.turno === undefined){
+      if (this.registroTab.isComplete === false) {
         this.#showModal('No se ha seleccionado un turno, por favor seleccione uno.', 'Error de validación')
         return false
       }
-      
+
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -490,12 +519,12 @@ export class PromoventeTab extends HTMLElement {
       if (espapñolRadioNo === false && espapñolRadioYes === false) {
         throw new ValidationError('Por favor seleccione si habla español o no.')
       }
-   
+
       if (etnia === '0') {
         throw new ValidationError('Por favor seleccione una etnia.')
       }
       if (escolaridad === '0') {
-        throw new ValidationError('Por favor seleccione una escolaridad.') 
+        throw new ValidationError('Por favor seleccione una escolaridad.')
       }
       if (ocupacion === '0') {
         throw new ValidationError('Por favor seleccione una ocupación.')
@@ -530,6 +559,7 @@ export class PromoventeTab extends HTMLElement {
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
+
 
       return true
     } catch (error) {
@@ -584,6 +614,12 @@ export class PromoventeTab extends HTMLElement {
       this.#ciudad.innerHTML = '';
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
+
+      const option = document.createElement('option')
+      option.value = '0'
+      option.text = 'Seleccione una colonia'
+      this.#colonia.appendChild(option)
+
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -613,11 +649,24 @@ export class PromoventeTab extends HTMLElement {
       if (tabId !== 'promovente') {
         return
       }
+      if (this.registroTab.isComplete === true) {
+        if (this.#turnoSeleccionado === null) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.init()
+        }
+        if (this.#turnoSeleccionado !== null && this.#turnoSeleccionado.id_turno !== this.registroTab.turno.id_turno) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.resetCampos()
+          this.init()
+        }
+      }
 
-      this.init()
     })
 
   }
+
+  #turnoSeleccionado = null
+
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -666,11 +715,37 @@ export class PromoventeTab extends HTMLElement {
         colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
       },
     }
-    return { 
+    return {
       promovente
     }
   }
+  resetCampos() {
+    this.#nombre.value = ''
+    this.#apellidoPaterno.value = ''
+    this.#apellidoMaterno.value = ''
+    this.#edad.value = ''
+    this.#telefono.value = ''
+    this.#sexo.value = ''
+    this.#etnia.value = ''
+    this.#escolaridad.value = ''
+    this.#ocupacion.value = ''
+    this.#calle.value = ''
+    this.#numeroExt.value = ''
+    this.#numeroInt.value = ''
+    this.#colonia.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = '0'
+    option.text = 'Seleccione una colonia'
+    this.#colonia.appendChild(option)
 
+
+    this.#cp.value = ''
+    this.#municipio.value = ''
+    this.#estado.value = ''
+    this.#ciudad.value = ''
+    this.#españolRadioYes.checked = true
+    this.#españolRadioNo.checked = false
+  }
   set data(value) {
     this.setAttribute('data', value)
   }

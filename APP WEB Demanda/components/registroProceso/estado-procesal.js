@@ -314,6 +314,8 @@ export class EstadoProcesal extends HTMLElement {
   }
 
   set data(value) {
+    this.#estadosProcesales = value
+    this.mostrarEstadosProcesales()
     this.setAttribute('data', value)
   }
 }

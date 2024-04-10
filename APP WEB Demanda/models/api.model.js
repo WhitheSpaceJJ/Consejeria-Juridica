@@ -74,6 +74,9 @@ class APIModel {
   }
 
   async putProcesoJudicial(id, data) {
+    console.log(data)
+    console.log("----------------------")
+    console.log(id)
     const url = `${this.DEMANDAS_API_URL}/proceso-judicial/${id}`
     const response = await fetch(url, {
       method: 'PUT',
@@ -109,6 +112,24 @@ class APIModel {
     }
 
   }
+  async getProcesosJudicialesEnTramite(estatus) {
+    const url = `${this.DEMANDAS_API_URL}/proceso-judicial/tramite?estatus_proceso=${estatus}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
   
 
   async getJuzgados2() {
@@ -458,7 +479,6 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-
 
 
   async getProcesosJudiciales() {

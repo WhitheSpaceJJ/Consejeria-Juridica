@@ -24,45 +24,7 @@ export class ProcesoTab extends HTMLElement {
   #pruebas
   #resoluciones
   #api
-  /*
-  #nombre
-  #apellidoPaterno
-  #apellidoMaterno
-  #edad
-  #sexo
-  #telefono
 
-  #españolRadioYes
-  #españolRadioNo
-
-  #etnia
-  #etnias
-
-  #escolaridad
-  #escolaridades
-
-  #ocupacion
-  #ocupaciones
-
-  #calle
-  #numeroExt
-  #numeroInt
-  #colonia
-  #cp
-  #municipio
-  #estado
-  #ciudad
-
-  #turno
-
-  #promovente
-  #promventeDomicilio
-  #tipoJuicio
-
-  #busquedaCp
-  #generos
-
-   */
 
   #fechaInicio
   #estatusProceso
@@ -105,50 +67,55 @@ export class ProcesoTab extends HTMLElement {
     this.#api = new APIModel()
 
 
-    const juzgados = await this.#api.getJuzgados2()
+    const juzgados = await this.#api.getJuzgados()
     this.#juzgados = juzgados
 
     const distritosJudiciales = await this.#api.getDistritos()
     this.#distritosJudiciales = distritosJudiciales
-/**
-     const proceso = {
-      id_proceso_judicial: this.#proceso.id_proceso_judicial,
-      fecha_inicio: this.#proceso.fecha_inicio,
-      fecha_estatus: this.#proceso.fecha_estatus,
-      control_interno: this.#proceso.control_interno,
-      numero_expediente: this.#proceso.numero_expediente,
-      id_turno: this.#proceso.id_turno,
-      id_distrito_judicial: this.#proceso.id_distrito_judicial,
-      id_municipio_distrito: this.#proceso.id_municipio_distrito,
-      id_tipo_juicio: this.#proceso.id_tipo_juicio,
-      id_defensor: this.#proceso.id_defensor,
-      estatus_proceso: this.#proceso.estatus_proceso,
-      id_juzgado: this.#proceso.id_juzgado,
-    }
- */
-    const id_distrito_judicial = this.registroTab.data.proceso.asesoria.id_distrito_judicial
+
+    const id_distrito_judicial = this.registroTab.data.proceso.id_distrito_judicial
     const id_municipio = this.registroTab.data.proceso.id_municipio_distrito
     this.#idDistritoJudicial = id_distrito_judicial
     this.#idMunicipio = id_municipio
     this.#idTipoJuicio = this.registroTab.data.proceso.id_tipo_juicio
     this.#id_defensor = this.registroTab.data.proceso.id_defensor
+    this.#idJuzgado = this.registroTab.data.proceso.id_juzgado
+    this.#controlInternoData = this.registroTab.data.proceso.control_interno
+    this.#numeroExpedienteData = this.registroTab.data.proceso.numero_expediente
 
-    const { tiposDeJuicio } = await this.#api.getTiposJuicio2()
+    const { tiposDeJuicio } = await this.#api.getTiposJuicio()
     this.#tiposDeJuicio = tiposDeJuicio
 
 
     const municipios = await this.#api.getMunicipiosByDistrito(id_distrito_judicial)
     this.#municipios = municipios
 
-
     this.manageFormFields()
     this.fillInputs()
 
-
-
-
   }
+  
+
+  #controlInternoData
+  #numeroExpedienteData
+  #idJuzgado
+
+  cambioEstatus() {
+    if (this.#estatusProceso.value === '1' || this.#estatusProceso.value === '2') {
+      const modal = document.querySelector('modal-warning')
+      modal.message = 'Al cambiar de estatus y actualizarlo, este no podra ser moodificado, al menos que un encargado  de distritito lo haga'
+      modal.title = 'Mensaje de Advertencia unico'
+      modal.open = true
+      this.#fecha_estatus.value = new Date().toISOString().split('T')[0]
+    }
+  }
+
+
+  #fecha_estatus
+
+
   manageFormFields() {
+    this.#fecha_estatus = this.shadowRoot.getElementById('fecha-estatus')
     this.#fechaInicio = this.shadowRoot.getElementById('fecha-inicio')
     this.#estatusProceso = this.shadowRoot.getElementById('estatus')
     this.#juzgado = this.shadowRoot.getElementById('juzgado')
@@ -157,6 +124,11 @@ export class ProcesoTab extends HTMLElement {
     this.#controlInterno = this.shadowRoot.getElementById('ci')
     this.#distritoJudicial = this.shadowRoot.getElementById('distrito')
     this.#municipio = this.shadowRoot.getElementById('municipio')
+
+    this.#estatusProceso.addEventListener('change', (e) => {
+      this.cambioEstatus()
+    })
+
 
     this.#estadosProcesales = this.shadowRoot.getElementById('estado-procesal')
     this.#familiares = this.shadowRoot.getElementById('familiar')
@@ -172,6 +144,62 @@ export class ProcesoTab extends HTMLElement {
     this.#estadosProcesalesWC = this.shadowRoot.querySelector('estado-procesal')
 
 
+    const estadoProcesalWC = this.#estadosProcesalesWC
+
+    // Verificar si el componente fue encontrado
+    if (estadoProcesalWC) {
+      const data = this.registroTab.data.proceso.estadosProcesales;
+      estadoProcesalWC.data = data;
+    } else {
+      console.error('No se encontró el componente web "estado-procesal" en el DOM.');
+    }
+
+    const familiarWC = this.#familiaresWC
+
+    // Verificar si el componente fue encontrado
+    if (familiarWC) {
+      const data = this.registroTab.data.promovente.promovente.familiares;
+      familiarWC.data = data;
+    } else {
+      console.error('No se encontró el componente web "familiar" en el DOM.');
+    }
+
+
+    const observacionWC = this.#observacionesWC
+
+    // Verificar si el componente fue encontrado
+    if (observacionWC) {
+      const data = this.registroTab.data.proceso.observaciones;
+      observacionWC.data = data;
+
+    } else {
+      console.error('No se encontró el componente web "observacion" en el DOM.');
+    }
+
+    const pruebaWC = this.#pruebasWC
+
+    // Verificar si el componente fue encontrado
+    if (pruebaWC) {
+      const data = this.registroTab.data.proceso.pruebas;
+      pruebaWC.data = data;
+    } else {
+      console.error('No se encontró el componente web "prueba" en el DOM.');
+    }
+
+    const resolucionWC = this.#resolucionesWC
+
+    // Verificar si el componente fue encontrado
+
+    if (resolucionWC) {
+      const data = this.registroTab.data.proceso.resoluciones;
+      resolucionWC.data = data;
+    } else {
+      console.error('No se encontró el componente web "resolucion" en el DOM.');
+    }
+    
+
+
+
     var numeroExpedienteInput = this.#numeroExpediente
     numeroExpedienteInput.addEventListener('input', function () {
       if (numeroExpedienteInput.value === '') {
@@ -185,13 +213,7 @@ export class ProcesoTab extends HTMLElement {
           modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
           modal.title = 'Error de validación'
           modal.open = true
-        } /*else if (this.value.length < 10) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El número de expediente no debe ser menor a 10 caracteres'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      */
+        }
     });
 
     var controlInternoInput = this.#controlInterno
@@ -207,31 +229,50 @@ export class ProcesoTab extends HTMLElement {
         modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true
-      } /*else if (this.value.length < 10) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El número de control interno no debe ser menor a 10 caracteres'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }*/
+      } 
     });
   }
 
 
   fillInputs() {
+    this.#juzgado.innerHTML = ''
+
+    const optionDefault = document.createElement('option')
+    optionDefault.value = '0'
+    optionDefault.text = 'Seleccione un juzgado'
+    this.#juzgado.appendChild(optionDefault)
 
     this.#juzgados.forEach(juzgado => {
       const option = document.createElement('option')
       option.value = juzgado.id_juzgado
       option.text = juzgado.nombre_juzgado
       this.#juzgado.appendChild(option)
-    })
+    }) 
+
+    
+    this.#distritoJudicial.innerHTML = ''
+    
+    const optionDefaultDistrito = document.createElement('option')
+    optionDefaultDistrito.value = '0'
+    optionDefaultDistrito.text = 'Seleccione un distrito judicial'
+    this.#distritoJudicial.appendChild(optionDefaultDistrito)
+
+    
     this.#distritosJudiciales.forEach(distrito => {
       const option = document.createElement('option')
       option.value = distrito.id_distrito_judicial
       option.textContent = distrito.nombre_distrito_judicial
       this.#distritoJudicial.appendChild(option)
     })
-
+    
+    
+    this.#municipio.innerHTML = ''
+    
+    const optionDefaultMunicipio = document.createElement('option')
+    optionDefaultMunicipio.value = '0'
+    optionDefaultMunicipio.text = 'Seleccione un municipio'
+    this.#municipio.appendChild(optionDefaultMunicipio)
+    
     this.#municipios.forEach(municipio => {
       const option = document.createElement('option')
       option.value = municipio.id_municipio_distrito
@@ -239,6 +280,15 @@ export class ProcesoTab extends HTMLElement {
       this.#municipio.appendChild(option)
     })
 
+
+    
+    this.#tipoJuicio.innerHTML = ''
+    
+    const optionDefaultTipoJuicio = document.createElement('option')
+    optionDefaultTipoJuicio.value = '0'
+    optionDefaultTipoJuicio.text = 'Seleccione un tipo de juicio'
+    this.#tipoJuicio.appendChild(optionDefaultTipoJuicio)
+    
     this.#tiposDeJuicio.forEach(tipoJuicio => {
       const option = document.createElement('option')
       option.value = tipoJuicio.id_tipo_juicio
@@ -246,40 +296,32 @@ export class ProcesoTab extends HTMLElement {
       this.#tipoJuicio.appendChild(option)
     })
     this.#proceso = this.registroTab.data.proceso
-    
+
     this.#tipoJuicio.value = this.#idTipoJuicio
     this.#municipio.value = this.#idMunicipio
     this.#distritoJudicial.value = this.#idDistritoJudicial
     this.#fechaInicio.value = this.#proceso.fecha_inicio
+    this.#juzgado.value = this.#idJuzgado
+    this.#controlInterno.value = this.#controlInternoData
+    this.#numeroExpediente.value = this.#numeroExpedienteData
   }
-   #proceso
-   #estadosProcesales2
-    #familiares2
-    #observaciones2
-    #pruebas2
-    #resoluciones2
+  #proceso
+  #estadosProcesales2
+  #familiares2
+  #observaciones2
+  #pruebas2
+  #resoluciones2
 
 
   validateInputs() {
     try {
       /*
-      if(this.registroTab.data.proceso === undefined){
+      if (this.registroTab.data.proceso === undefined) {
         this.#showModal('No se ha seleccionado un proceso, por favor seleccione uno.', 'Error de validación')
         return false
-      }
-      
-      if(this.promoventeTab.data === undefined){
-        this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
-        return false
-      }
-
-      if(this.imputadoTab.data === undefined){
-        this.#showModal('No se han ingresado los datos del imputado, por favor ingreselos.', 'Error de validación')
-        return false
-      }
+      }  
       */
-
-
+    
       const fechaInicio = this.#fechaInicio.value
       const estatusProceso = this.#estatusProceso.value
       const juzgado = this.#juzgado.value
@@ -300,12 +342,7 @@ export class ProcesoTab extends HTMLElement {
       if (!fechaInicio) {
         throw new ValidationError('La fecha de inicio es requerida')
       }
-      /*
-      else if (fechaIngresada.valueOf() > fechaActual.valueOf()) {
-        throw new ValidationError('La fecha de inicio no puede ser mayor a la fecha actual')
-      } else if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
-        throw new ValidationError('La fecha de inicio no puede ser menor a la fecha actual')
-      } */
+ 
 
       if (!estatusProceso) {
         throw new ValidationError('El estatus del proceso es requerido')
@@ -319,21 +356,14 @@ export class ProcesoTab extends HTMLElement {
         throw new ValidationError('El número de expediente es requerido')
       } else if (numeroExpediente.length > 20) {
         throw new ValidationError('El número de expediente no debe ser mayor a 20 caracteres')
-      }/* else if (numeroExpediente.length < 10) {
-        throw new ValidationError('El número de expediente no debe ser menor a 10 caracteres')
       }
-      */
-
       if (controlInterno === '') {
         throw new ValidationError('El número de control interno es requerido')
       }
       else if (controlInterno.length > 20) {
         throw new ValidationError('El número de control interno no debe ser mayor a 20 caracteres')
-      } 
-      /*else if (controlInterno.length < 10) {
-        throw new ValidationError('El número de control interno no debe ser menor a 10 caracteres')
       }
-*/
+  
       if (distritoJudicial === '0') {
         throw new ValidationError('El distrito judicial es requerido')
       }
@@ -392,13 +422,16 @@ export class ProcesoTab extends HTMLElement {
     })
     document.addEventListener('tab-change', event => {
       const tabId = event.detail.tabId
-      if (tabId !== 'proceso') {
-        return
+
+      if (this.#procesoSelecionado === null) {
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
       }
-
-      this.init()
+      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
+      }
     })
-
   }
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
@@ -407,6 +440,8 @@ export class ProcesoTab extends HTMLElement {
     modal.open = true
     modal.setOnCloseCallback(onCloseCallback)
   }
+
+  #procesoSelecionado = null
 
   get id() {
     return this.getAttribute('id')
@@ -421,16 +456,17 @@ export class ProcesoTab extends HTMLElement {
   }
 
   get data() {
-    const proceso ={
+    const estatusProceso = this.#estatusProceso.value  === '1' ? 'BAJA' : 'CONCLUIDO'
+    const proceso = {
       fecha_inicio: this.#fechaInicio.value,
-      fecha_estatus: null,
-      estatus_proceso: this.#estatusProceso.value,
+      fecha_estatus:this.#estatusProceso.value === '0' ? null : new Date().toISOString().split('T')[0],
       id_juzgado: this.#juzgado.value,
       juzgado: this.#juzgado.options[this.#juzgado.selectedIndex].text,
       numero_expediente: this.#numeroExpediente.value,
       control_interno: this.#controlInterno.value,
       id_defensor: this.#id_defensor,
-      defensor: this.registroTab.data.turno.defensor.nombre_defensor,
+       estatus_proceso: this.#estatusProceso.value === '0' ? 'EN_TRAMITE' : estatusProceso,
+      defensor: this.registroTab.data.defensor,
       id_distrito_judicial: this.#distritoJudicial.value,
       id_municipio_distrito: this.#municipio.value,
       id_tipo_juicio: this.#tipoJuicio.value,
@@ -443,10 +479,9 @@ export class ProcesoTab extends HTMLElement {
       resoluciones: this.#resolucionesWC.data.resoluciones,
       estadosProcesales: this.#estadosProcesalesWC.data.estadosProcesales,
     }
-    return  {proceso : proceso}
-    
-  }
+    return { proceso: proceso }
 
+  }
   set data(value) {
     this.setAttribute('data', value)
   }

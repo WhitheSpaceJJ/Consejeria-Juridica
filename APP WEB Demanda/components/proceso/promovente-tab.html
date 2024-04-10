@@ -48,14 +48,12 @@
       </select>
     </div>
     <div class="relative z-0 w-full mb-6 group">
-      <input type="text" name="telefono" id="telefono"
-        class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
-        placeholder=" " value="" required title="Solo se permiten numeros" />
+      <input type="number" name="telefono" id="telefono" disabled 
+      class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 
+      appearance-none text-md focus:outline-none focus:ring-0 peer"
+      placeholder="" value="" required oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)" />
       <label for="telefono"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 
-        top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100
-         peer-focus:-translate-y-6">Telefono
-        </label>
+        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Teléfono</label>
     </div>
   </div>
 

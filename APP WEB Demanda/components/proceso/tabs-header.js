@@ -101,6 +101,15 @@ class ProcesoTabs extends HTMLElement {
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
+    if (tabId === this.#tabs[3] || tabId === this.#tabs[2] || tabId === this.#tabs[1] || tabId === this.#tabs[0] ) {
+      this.btnDetalles.classList.add('hidden')
+    }
+
+    else if (tabId === this.#tabs[4]) {
+      this.btnDetalles.classList.remove('hidden')
+    }
+
+
     if (
       tabId === this.#tabs[4] &&
       (!procesoTab.isComplete || !promoventeTab.isComplete || !imputadoTab.isComplete || !registroTab.isComplete)

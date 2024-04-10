@@ -2,17 +2,17 @@ const template = document.createElement('template')
 
 class ProcesoTabs extends HTMLElement {
   #activeTab
-  #tabs = ['registro', 'promovente','imputado',  'proceso', 'detalles']
+  #tabs = ['registro', 'promovente', 'imputado', 'proceso', 'detalles']
 
   constructor() {
     super()
     this.attachShadow({ mode: 'open' }).appendChild(
       template.content.cloneNode(true)
     )
- 
+
     this.btnRegistro = this.shadowRoot.getElementById('btn-registro')
     this.btnPromovente = this.shadowRoot.getElementById('btn-promovente')
-   this.btnImputado = this.shadowRoot.getElementById('btn-imputado')
+    this.btnImputado = this.shadowRoot.getElementById('btn-imputado')
     this.btnProceso = this.shadowRoot.getElementById('btn-proceso')
     this.btnDetalles = this.shadowRoot.getElementById('btn-detalles')
 
@@ -32,13 +32,13 @@ class ProcesoTabs extends HTMLElement {
     this.btnRegistro.addEventListener('click', () =>
       this.handleTabClick('registro')
     )
-   
-    this.btnPromovente.addEventListener('click', () =>  
+
+    this.btnPromovente.addEventListener('click', () =>
       this.handleTabClick('promovente')
     )
     this.btnImputado.addEventListener('click', () =>
-    this.handleTabClick('imputado')
-  )
+      this.handleTabClick('imputado')
+    )
     this.btnProceso.addEventListener('click', () =>
       this.handleTabClick('proceso')
     )
@@ -52,7 +52,7 @@ class ProcesoTabs extends HTMLElement {
       this.dispatchEventTabChangeEvent(tabId)
       this.showTabSection(tabId)
       this.updateAriaAttributes(tabId)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   showTabSection(tabId) {
@@ -72,38 +72,67 @@ class ProcesoTabs extends HTMLElement {
     this.#activeTab = tabId
   }
 
+  #procesoActual
+
+
+  
   verifyChange = tabId => {
-   if (tabId === this.#activeTab) {
+    if (tabId === this.#activeTab) {
       return 'No se puede cambiar a la misma pestaña'
     }
     if (!this.#tabs.includes(tabId)) return 'La pestaña no existe'
-    
+
     const registroTab = document.querySelector('registro-full-tab')
     const promoventeTab = document.querySelector('promovente-full-tab')
     const imputadoTab = document.querySelector('imputado-full-tab')
     const procesoTab = document.querySelector('proceso-full-tab')
-       
+    const detallesTab = document.querySelector('detalles-full-tab')
+    /*
+        if (this.#unicocambio === false) {
+          if (registroTab.isComplete) {
+            this.#unicocambio = true
+            promoventeTab.data = registroTab.data.promovente.id_participante
+            imputadoTab.data = registroTab.data.imputado.id_participante
+           }
+    
+        } 
+        */
+
+
+
     if (
       tabId === this.#tabs[1] &&
       (!registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
+
     if (
       tabId === this.#tabs[2] &&
-      (!promoventeTab.isComplete || !registroTab.isComplete)
+      (!registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
     if (
       tabId === this.#tabs[3] &&
-      (!promoventeTab.isComplete || !imputadoTab.isComplete || !registroTab.isComplete)
+      (!registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
+
+    if (tabId === this.#tabs[3] || tabId === this.#tabs[2] || tabId === this.#tabs[1] || tabId === this.#tabs[0]) {
+      this.btnDetalles.classList.add('hidden')
+    }
+
+    else if (tabId === this.#tabs[4]) {
+      this.btnDetalles.classList.remove('hidden')
+    }
+
+
+
     if (
       tabId === this.#tabs[4] &&
-      (!procesoTab.isComplete || !promoventeTab.isComplete || !imputadoTab.isComplete || !registroTab.isComplete)
+      (!registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
@@ -125,7 +154,7 @@ class ProcesoTabs extends HTMLElement {
   }
 
   updateAriaAttributes(activeTab) {
-    const tabs = ['btn-registro',  'btn-promovente' ,'btn-imputado', 'btn-proceso', 'btn-detalles']
+    const tabs = ['btn-registro', 'btn-promovente', 'btn-imputado', 'btn-proceso', 'btn-detalles']
     tabs.forEach(tab => {
       const isSelected = tab === `btn-${activeTab}`
       this.shadowRoot
@@ -135,7 +164,7 @@ class ProcesoTabs extends HTMLElement {
   }
 }
 
-const html = await (await fetch('./components/seguimiento/tabs.html')).text()
+const html = await(await fetch('./components/seguimiento/tabs.html')).text()
 template.innerHTML = html
 
 customElements.define('proceso-tabs', ProcesoTabs)

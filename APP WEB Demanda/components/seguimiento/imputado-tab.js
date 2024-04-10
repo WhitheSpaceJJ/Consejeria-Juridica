@@ -60,22 +60,70 @@ export class ImputadoTab extends HTMLElement {
   async init() {
     this.#api = new APIModel()
 
-/*
-    const etnias = await this.#api.getEtnias2()
-    this.#etnias = etnias
-
-    const escolaridades = await this.#api.getEscolaridades2()
-    this.#escolaridades = escolaridades
-
-    const ocupaciones = await this.#api.getOcupaciones2()
-    this.#ocupaciones = ocupaciones
-*/
     const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
 
     this.manageFormFields()
+
     this.fillInputs()
 
+    
+
+  }
+
+  #editableImputadoCheckbox
+  #botonBuscarCP
+  manageFormFields() {
+
+    this.#editableImputadoCheckbox = this.shadowRoot.getElementById('cbx-editable-imputado')
+    this.#botonBuscarCP = this.shadowRoot.getElementById('buscar-cp')
+
+    this.#nombre = this.shadowRoot.getElementById('nombre')
+    this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
+    this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
+    this.#edad = this.shadowRoot.getElementById('edad')
+    this.#sexo = this.shadowRoot.getElementById('sexo')
+    this.#telefono = this.shadowRoot.getElementById('telefono')
+
+    this.#calle = this.shadowRoot.getElementById('calle')
+    this.#numeroExt = this.shadowRoot.getElementById('numero-ext')
+    this.#numeroInt = this.shadowRoot.getElementById('numero-int')
+    this.#colonia = this.shadowRoot.getElementById('colonia')
+    this.#cp = this.shadowRoot.getElementById('codigo-postal')
+    this.#municipio = this.shadowRoot.getElementById('municipio')
+    this.#estado = this.shadowRoot.getElementById('estado')
+    this.#ciudad = this.shadowRoot.getElementById('ciudad')
+
+    this.#editableImputadoCheckbox.checked = false
+    this.#editableImputadoCheckbox.addEventListener('change', () => {
+      if (this.#editableImputadoCheckbox.checked) {
+        this.#nombre.disabled = false
+        this.#apellidoPaterno.disabled = false
+        this.#apellidoMaterno.disabled = false
+        this.#edad.disabled = false
+        this.#telefono.disabled = false
+        this.#calle.disabled = false
+        this.#numeroExt.disabled = false
+        this.#numeroInt.disabled = false
+        this.#colonia.disabled = false
+        this.#cp.disabled = false
+      } else {
+        this.#nombre.disabled = true
+        this.#apellidoPaterno.disabled = true
+        this.#apellidoMaterno.disabled = true
+        this.#edad.disabled = true
+        this.#sexo.disabled = true
+        this.#telefono.disabled = true
+        this.#calle.disabled = true
+        this.#numeroExt.disabled = true
+        this.#numeroInt.disabled = true
+        this.#colonia.disabled = true
+        this.#cp.disabled = true
+        this.#municipio.disabled = true
+        this.#estado.disabled = true
+        this.#ciudad.disabled = true
+      }
+    })
 
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
@@ -176,58 +224,16 @@ export class ImputadoTab extends HTMLElement {
 
 
   }
-  manageFormFields() {
-
-
-
-    this.#nombre = this.shadowRoot.getElementById('nombre')
-    this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
-    this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
-    this.#edad = this.shadowRoot.getElementById('edad')
-    this.#sexo = this.shadowRoot.getElementById('sexo')
-    this.#telefono = this.shadowRoot.getElementById('telefono')
-  //  this.#españolRadioYes = this.shadowRoot.getElementById('español-radio-yes')
-  //  this.#españolRadioNo = this.shadowRoot.getElementById('español-radio-no')
-  //  this.#etnia = this.shadowRoot.getElementById('etnia')
-  //  this.#escolaridad = this.shadowRoot.getElementById('escolaridad')
-  //  this.#ocupacion = this.shadowRoot.getElementById('ocupacion')
-    this.#calle = this.shadowRoot.getElementById('calle')
-    this.#numeroExt = this.shadowRoot.getElementById('numero-ext')
-    this.#numeroInt = this.shadowRoot.getElementById('numero-int')
-    this.#colonia = this.shadowRoot.getElementById('colonia')
-    this.#cp = this.shadowRoot.getElementById('codigo-postal')
-    this.#municipio = this.shadowRoot.getElementById('municipio')
-    this.#estado = this.shadowRoot.getElementById('estado')
-    this.#ciudad = this.shadowRoot.getElementById('ciudad')
-    /*
-  
-    this.#españolRadioYes = this.shadowRoot.getElementById('español-radio-yes')
-    this.#españolRadioNo = this.shadowRoot.getElementById('español-radio-no')
-
-    const yes = this.#españolRadioYes
-    yes.checked = true
-    this.#españolRadioNo.addEventListener('click', () => {
-      this.#etnia.value = '0'
-      this.#etnia.disabled = true
-    })
-
-    this.#españolRadioYes.addEventListener('click', () => {
-      this.#etnia.disabled = false
-    })
-*/
-
-
-  }
 
   fillInputs() {
-    /*
-    this.#etnias.forEach(etnia => {
-      const option = document.createElement('option')
-      option.value = etnia.id_etnia
-      option.text = etnia.nombre
-      this.#etnia.appendChild(option)
-    })
-    */
+    this.#generos.innerHTML = ''
+
+    const optionGenero = document.createElement('option')
+    optionGenero.value = '0'
+    optionGenero.text = 'Seleccione un género'
+    this.#sexo.appendChild(optionGenero)
+
+
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
@@ -235,63 +241,54 @@ export class ImputadoTab extends HTMLElement {
       this.#sexo.appendChild(option)
     })
 
-    /*
-    this.#escolaridades.forEach(escolaridad => {
-      const option = document.createElement('option')
-      option.value = escolaridad.id_escolaridad
-      option.text = escolaridad.descripcion
-      this.#escolaridad.appendChild(option)
-    })
+    this.#imputado = this.registroTab.data.imputado
+    this.#imputadoDomicilio = this.#imputado.domicilio
 
-    this.#ocupaciones.forEach(ocupacion => {
-      const option = document.createElement('option')
-      option.value = ocupacion.id_ocupacion
-      option.text = ocupacion.descripcion_ocupacion
-      this.#ocupacion.appendChild(option)
-    })
-*/
-this.#imputado = this.registroTab.data.imputado
-this.#imputadoDomicilio = this.#imputado.domicilio
-
-this.#nombre.value = this.#imputado.nombre
-this.#apellidoPaterno.value = this.#imputado.apellido_paterno
-this.#apellidoMaterno.value = this.#imputado.apellido_materno
-this.#edad.value = this.#imputado.edad
-this.#telefono.value = this.#imputado.telefono
-this.#sexo.value = this.#imputado.id_genero
+    this.#nombre.value = this.#imputado.nombre
+    this.#apellidoPaterno.value = this.#imputado.apellido_paterno
+    this.#apellidoMaterno.value = this.#imputado.apellido_materno
+    this.#edad.value = this.#imputado.edad
+    this.#telefono.value = this.#imputado.telefono
+    this.#sexo.value = this.#imputado.id_genero
 
 
-this.#calle.value = this.#imputadoDomicilio.calle_domicilio
-this.#numeroExt.value = this.#imputadoDomicilio.numero_exterior_domicilio
-this.#numeroInt.value = this.#imputadoDomicilio.numero_interior_domicilio
+    this.#calle.value = this.#imputadoDomicilio.calle_domicilio
+    this.#numeroExt.value = this.#imputadoDomicilio.numero_exterior_domicilio
+    this.#numeroInt.value = this.#imputadoDomicilio.numero_interior_domicilio
 
-this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
-  .then(data => {
-    const { colonia } = data
-    this.#cp.value = colonia.codigo_postal.codigo_postal
-    this.#municipio.value = colonia.municipio.nombre_municipio
-    this.#estado.value = colonia.estado.nombre_estado
-    this.#ciudad.value = colonia.ciudad.nombre_ciudad
-    this.#api.getDomicilioByCP(colonia.codigo_postal.codigo_postal)
-      .then(data2 => {
-        const { colonias } = data2
-        this.#colonia.innerHTML = ''
-        colonias.colonias.forEach(colonia => {
-          const option = document.createElement('option')
-          option.value = colonia.id_colonia
-          option.text = colonia.nombre_colonia
-          this.#colonia.appendChild(option)
-        })
-        this.#colonia.value = this.#imputadoDomicilio.id_colonia
+    this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
+      .then(data => {
+        const { colonia } = data
+        this.#cp.value = colonia.codigo_postal.codigo_postal
+        this.#municipio.value = colonia.municipio.nombre_municipio
+        this.#estado.value = colonia.estado.nombre_estado
+        this.#ciudad.value = colonia.ciudad.nombre_ciudad
+        this.#api.getDomicilioByCP(colonia.codigo_postal.codigo_postal)
+          .then(data2 => {
+            const { colonias } = data2
+            this.#colonia.innerHTML = ''
+            const optionColonia = document.createElement('option')
+            optionColonia.value = '0'
+            optionColonia.text = 'Seleccione una colonia'
+            this.#colonia.appendChild(optionColonia)
+
+
+            colonias.colonias.forEach(colonia => {
+              const option = document.createElement('option')
+              option.value = colonia.id_colonia
+              option.text = colonia.nombre_colonia
+              this.#colonia.appendChild(option)
+            })
+            this.#colonia.value = this.#imputadoDomicilio.id_colonia
+          })
+          .catch(error => {
+            console.error('Error al obtener datos de la API:', error);
+          });
       })
       .catch(error => {
         console.error('Error al obtener datos de la API:', error);
       });
-  })
-  .catch(error => {
-    console.error('Error al obtener datos de la API:', error);
-  });
-     
+
   }
 
   #imputado
@@ -299,16 +296,18 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
 
   validateInputs() {
     try {
-    /*  if(this.registroTab.data.proceso === undefined){
+      /*  
+
+      if(this.registroTab.data.proceso === undefined){
         this.#showModal('No se ha seleccionado un proceso, por favor seleccione uno.', 'Error de validación')
         return false
       }
-      
-      if(this.promoventeTab.data.promovente === undefined){
-        this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
-        return false
-      } 
-   */
+        
+        if(this.promoventeTab.data.promovente === undefined){
+          this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
+          return false
+        } 
+     */
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -323,7 +322,7 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
       var edadPattern = /^\d+$/;
 
 
-      
+
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -369,35 +368,10 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
       else if (!edadPattern.test(telefono)) {
         throw new ValidationError('El teléfono solo permite números, verifique su respuesta.')
       }
-      
+
       if (sexo === '0') {
         throw new ValidationError('Por favor seleccione un género.')
-      }
-/*
-      var etnia = this.#etnia.value
-      var escolaridad = this.#escolaridad.value
-      var ocupacion = this.#ocupacion.value
-      var espapñolRadioYes = this.#españolRadioYes.checked
-      var espapñolRadioNo = this.#españolRadioNo.checked
-
-      
-    
-      if (espapñolRadioNo === false && espapñolRadioYes === false) {
-        throw new ValidationError('Por favor seleccione si habla español o no.')
-      }
-   
-      if (etnia === '0') {
-        throw new ValidationError('Por favor seleccione una etnia.')
-      }
-   
-   
-      if (escolaridad === '0') {
-        throw new ValidationError('Por favor seleccione una escolaridad.')
-      }
-      if (ocupacion === '0') {
-        throw new ValidationError('Por favor seleccione una ocupación.')
-      }
-*/
+            }
       if (calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingrésela.')
       }
@@ -427,16 +401,7 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
-/*
-     
-      if(this.registroTab.data === undefined){
-        throw new ValidationError('Por favor seleccione un turno para continuar.')
-      }
-      if(this.promoventeTab.data === undefined){
-        throw new ValidationError('Por favor ingrese los datos del promovente para continuar.')
-      }
-      */
-
+   
       return true
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -448,7 +413,7 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
           'Error'
         )
       }
-     return false
+      return false
     }
   }
 
@@ -493,6 +458,13 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
       this.#ciudad.innerHTML = '';
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
+
+     const optionColonia = document.createElement('option')
+      optionColonia.value = '0'
+      optionColonia.text = 'Seleccione una colonia'
+      this.#colonia.appendChild(optionColonia)
+
+
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -519,14 +491,21 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
     })
     document.addEventListener('tab-change', event => {
       const tabId = event.detail.tabId
-      if (tabId !== 'imputado') {
-        return
+    
+      if (this.#procesoSelecionado === null) {
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
+      }
+      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+        this.#procesoSelecionado = this.registroTab.proceso
+        this.init()
       }
 
-      this.init()
     })
-
   }
+
+  #procesoSelecionado = null
+
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -548,20 +527,16 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
   }
 
   get data() {
-    const imputado = { 
-      id_imputado: this.#imputado.imputado.id_imputado,
+    const imputado = {
       nombre: this.#nombre.value,
       apellido_paterno: this.#apellidoPaterno.value,
       apellido_materno: this.#apellidoMaterno.value,
       edad: this.#edad.value,
       telefono: this.#telefono.value,
       id_genero: this.#sexo.value,
-  //    id_etnia: this.#etnia.value,
-   //   id_escolaridad: this.#escolaridad.value,
-   //   id_ocupacion: this.#ocupacion.value,
-   //   español: this.#españolRadioYes.checked,
       sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
       domicilio: {
+        id_domicilio: this.#imputadoDomicilio.id_domicilio, 
         calle_domicilio: this.#calle.value,
         numero_exterior_domicilio: this.#numeroExt.value,
         numero_interior_domicilio: this.#numeroInt.value,
@@ -573,11 +548,10 @@ this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
         colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
       },
     }
-    return { 
+    return {
       imputado
     }
   }
-
   set data(value) {
     this.setAttribute('data', value)
   }

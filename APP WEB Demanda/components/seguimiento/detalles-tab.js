@@ -85,10 +85,10 @@ export class DetallesTab extends HTMLElement {
 
         this.manageFormFields()
         this.fillInputs()
-     
+
 
     }
- 
+
     manageFormFields() {
 
         this.#nombreDefensor = this.shadowRoot.getElementById('nombre-defensor')
@@ -124,10 +124,6 @@ export class DetallesTab extends HTMLElement {
         this.#edadImputado = this.shadowRoot.getElementById('edad-imputado')
         this.#sexoImputado = this.shadowRoot.getElementById('sexo-imputado')
         this.#telefonoImputado = this.shadowRoot.getElementById('telefono-imputado')
-   //     this.#etniaImputado = this.shadowRoot.getElementById('etnia-imputado')
-   //     this.#escolaridadImputado = this.shadowRoot.getElementById('escolaridad-imputado')
-   //     this.#ocupacionImputado = this.shadowRoot.getElementById('ocupacion-imputado')
-       // this.#españolImputado = this.shadowRoot.getElementById('español-imputado')
         this.#calleImputado = this.shadowRoot.getElementById('calle-imputado')
         this.#numeroExteriorImputado = this.shadowRoot.getElementById('numero-exterior-imputado')
         this.#numeroInteriorImputado = this.shadowRoot.getElementById('numero-interior-imputado')
@@ -141,13 +137,10 @@ export class DetallesTab extends HTMLElement {
     }
 
     fillInputs() {
-     
-        const { turno } = this.#registroTab.data
+
         const { promovente } = this.#promoventeTab.data
         const { imputado } = this.#imputadoTab.data
         const { proceso } = this.#procesoTab.data
-
-        this.#nombreDefensor.textContent = proceso.defensor
         this.#tipoJuicio.textContent = proceso.tipo_juicio
         this.#fechaInicio.textContent = proceso.fecha_inicio
         this.#numeroExpediente.textContent = proceso.numero_expediente
@@ -169,7 +162,7 @@ export class DetallesTab extends HTMLElement {
         this.#observaciones.textContent = proceso.observaciones.map((observacion, index) => `${index + 1}. Observacion: ${observacion.observacion}`).join(', ')
 
         this.#familiares.textContent = proceso.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} Nacionalidad: ${familiar.nacionalidad}
-    Parentesco: ${familiar.parentesco} Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT===true?'Si':'No'} Adulto Mayor: ${familiar.adultaMayor===true? 'Si': 'No'} Salud Precaria: ${familiar.saludPrecaria===true?'Si': 'No'} Pobreza Extrema: ${familiar.pobrezaExtrema ===true?'Si': 'No'}`).join(', ')
+    Parentesco: ${familiar.parentesco} Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT === true ? 'Si' : 'No'} Adulto Mayor: ${familiar.adultaMayor === true ? 'Si' : 'No'} Salud Precaria: ${familiar.saludPrecaria === true ? 'Si' : 'No'} Pobreza Extrema: ${familiar.pobrezaExtrema === true ? 'Si' : 'No'}`).join(', ')
 
 
 
@@ -190,14 +183,10 @@ export class DetallesTab extends HTMLElement {
         this.#ciudadPromovente.textContent = promovente.domicilio.ciudad
         this.#coloniaPromovente.textContent = promovente.domicilio.colonia
 
-        this.#nombreImputado.textContent = imputado.nombre  + ' ' + imputado.apellido_paterno + ' ' + imputado.apellido_materno
+        this.#nombreImputado.textContent = imputado.nombre + ' ' + imputado.apellido_paterno + ' ' + imputado.apellido_materno
         this.#edadImputado.textContent = imputado.edad
         this.#sexoImputado.textContent = imputado.sexo
         this.#telefonoImputado.textContent = imputado.telefono
-      //  this.#etniaImputado.textContent = imputado.id_etnia
-      //  this.#escolaridadImputado.textContent = imputado.id_escolaridad
-       // this.#ocupacionImputado.textContent = imputado.id_ocupacion
-        //this.#españolImputado.textContent = imputado.español
         this.#calleImputado.textContent = imputado.domicilio.calle_domicilio
         this.#numeroExteriorImputado.textContent = imputado.domicilio.numero_exterior_domicilio
         this.#numeroInteriorImputado.textContent = imputado.domicilio.numero_interior_domicilio
@@ -216,36 +205,38 @@ export class DetallesTab extends HTMLElement {
 
         this.btnCrearAsesoria.addEventListener('click', async () => {
             try {
-                const { turno } = this.#registroTab.data
                 const { promovente } = this.#promoventeTab.data
                 const { imputado } = this.#imputadoTab.data
                 const { proceso } = this.#procesoTab.data
-                const procesoJudicial = {
-                    turno,
+                const {id_proceso_judicial, id_promovente, id_imputado } = this.#registroTab.data
+                promovente.id_promovente = id_promovente
+                imputado.id_imputado = id_imputado
+                proceso.id_proceso_judicial = id_proceso_judicial
+                 const data = {
                     promovente,
                     imputado,
                     proceso
-                }
-
-                await this.#api.postProcesoJudicial(procesoJudicial)
-                  
-                //actualizar turno
-                 const turnoActualizado = {
-                    id_turno: turno.id_turno,
-                    fecha_turno: turno.fecha_turno,
-                    hora_turno: turno.hora_turno,
-                    id_asesoria: turno.asesoria.datos_asesoria.id_asesoria,
-                    id_defensor: turno.defensor.id_defensor,
-                    estatus_general: 'EN_SEGUIMIENTO'
                  }
-                    await this.#api.putTurno(turno.id_turno,turnoActualizado)
+                              //   await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
+    console.log(data)
+                /*
+                  async putProcesoJudicial(proceso.id_proceso_judicial, data) {
+
+                    this.#showModal(
+                        'El proceso judicial se ha creado correctamente',
+                        'Proceso Judicial creado',
+                        () => {
+                            location.href = '/'
+                        }
+                    )
+
                 this.#showModal(
-                    'El proceso judicial se ha creado correctamente',
-                    'Proceso Judicial creado',
+                    'El proceso judicial se ha actualizado correctamente',
+                    'Proceso Judicial actualizado',
                     () => {
                         location.href = '/'
                     }
-                )
+                )                    */
             } catch (error) {
                 console.error(error)
                 this.#showModal(
@@ -254,14 +245,40 @@ export class DetallesTab extends HTMLElement {
                 )
             }
         })
-
+       
         document.addEventListener('tab-change', event => {
             const tabId = event.detail.tabId
-            if (tabId !== 'detalles') {
+           if (tabId !== 'detalles') {
                 return
             }
-            this.init()
+            this.init() 
         })
+    }
+
+
+    static get observedAttributes() {
+        return ['id', 'data']
+    }
+
+    get id() {
+        return this.getAttribute('id')
+    }
+
+    set id(value) {
+        this.setAttribute('id', value)
+    }
+
+    get isComplete() {
+        return this.validateInputs()
+    }
+
+    get data() {
+        return {}
+    }
+
+    set data(value) {
+        this.init()
+        this.setAttribute('data', value)
     }
 
     #showModal(message, title, onCloseCallback) {

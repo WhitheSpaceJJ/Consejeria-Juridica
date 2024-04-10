@@ -8,7 +8,8 @@ class ResolucionDAO {
         try {
             const resolucionCreda = await Resolucion.create({ id_proceso_judicial, resolucion, fecha_resolucion })
             return resolucionCreda
-        } catch (err) {
+        } catch (err) {      console.log(err.message)
+
             throw err
         }
     }
@@ -44,7 +45,8 @@ class ResolucionDAO {
         try {
             const resolucionActualizado = await Resolucion.update({ resolucion, fecha_resolucion }, { where: { id_resolucion: id_resolucion } })
             return resolucionActualizado[0] === 1 
-        } catch (err) {
+        } catch (err) {      console.log(err.message)
+
             throw err
         }
     }

@@ -79,21 +79,27 @@ export class Prueba extends HTMLElement {
         modal.title = 'Error de validación'
         modal.open = true
       }
-
-      if (prueba.length > 200) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }else {
-
-      const pruebaData = {
-        descripcion_prueba: prueba
-      }
-      this.#pruebas.push(pruebaData)
-      this.mostrarPruebas()
-      this.#prueba.value = ''
-    }
+      else
+        if (prueba.length > 200) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        } else {
+          if (prueba !== '' && prueba.length <= 200) {
+            const pruebaData = {
+              descripcion_prueba: prueba
+            }
+            this.#pruebas.push(pruebaData)
+            this.mostrarPruebas()
+            this.#prueba.value = ''
+          } else {
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'El campo de prueba es obligatorio.'
+            modal.title = 'Error de validación'
+            modal.open = true
+          }
+        }
     }
     else {
       const modal = document.querySelector('modal-warning')
@@ -123,23 +129,29 @@ export class Prueba extends HTMLElement {
         modal.message = 'El campo de prueba es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
-      }
+      } else
 
-      if (prueba.length > 200) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }else {
-
-      const pruebaData = {
-        descripcion_prueba: prueba
-      }
-      this.#pruebas[idPrueba - 1] = pruebaData
-      this.mostrarPruebas()
-      this.#idPrueba = null
-      this.#prueba.value = ''
-    }
+        if (prueba.length > 200) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        } else {
+          if (prueba !== '' && prueba.length <= 200) {
+            const pruebaData = {
+              descripcion_prueba: prueba
+            }
+            this.#pruebas[idPrueba - 1] = pruebaData
+            this.mostrarPruebas()
+            this.#idPrueba = null
+            this.#prueba.value = ''
+          } else {
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'El campo de prueba es obligatorio.'
+            modal.title = 'Error de validación'
+            modal.open = true
+          }
+        }
     }
   }
   mostrarPruebas = async () => {
@@ -233,10 +245,12 @@ export class Prueba extends HTMLElement {
 
   get data() {
     const pruebas = this.#pruebas
-    return {pruebas: pruebas}
+    return { pruebas: pruebas }
   }
 
   set data(value) {
+    this.#pruebas = value
+    this.mostrarPruebas()
     this.setAttribute('data', value)
   }
 }

@@ -459,7 +459,16 @@ export class FamiliarPromovente extends HTMLElement {
     }
   }
 
+
   set data(value) {
+    /**
+         this.#estadosProcesales = value
+    this.mostrarEstadosProcesales()
+    this.setAttribute('data', value)
+     */
+     
+    this.#familiares = value
+    this.mostrarFamiliares()
     this.setAttribute('data', value)
   }
 }

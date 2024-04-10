@@ -20,28 +20,42 @@
       -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Fecha Inicio
       </label>
     </div>
+ 
+  
+
+  </div>
+  <div class="grid md:grid-cols-2 md:gap-6">
     <div class="relative z-0 w-full mb-6 group">
-      <select name="estatus" id="estatus"
-        class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
-        required disabled>
+      <label for="estatus"
+        class="font-medium absolute text-md 
+      text-black duration-300 transform 
+      -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Estatus</label>
+
+      <select id="estatus" name="estatus" class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 
+      rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
         <option selected value="0">En Tramite</option>
         <option value="1">En baja</option>
         <option value="2">Concluido</option>
       </select>
-      <label for="estatus"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Estatus</label>
     </div>
 
     <div class="relative z-0 w-full mb-6 group">
-      <label for="juzgado" class="font-medium absolute text-md text-black duration-300 transform 
-        -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100
-         peer-focus:-translate-y-6">
-        Juzgado</label>
-      <select id="juzgado" name="juzgado" class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 
-        rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
-        <option selected disabled value="0">Selecciona un juzgado</option>
-      </select>
+      <input type="date" name="fecha-estatus" id="fecha-estatus" class="block w-full px-0 pt-4 text-black bg-transparent border-0 
+      border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer" placeholder=" " value=""
+        required title="Solo se permiten numeros" disabled />
+      <label for="fecha-estatus" class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 
+      -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Fecha Estatus
+      </label>
     </div>
+ 
+  
+
+  </div>
+
+
+
+  <div class="grid md:grid-cols-2 md:gap-6">
+
     <div class="relative z-0 w-full mb-6 group">
       <input type="text" name="expediente" id="expediente"
         class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
@@ -54,15 +68,7 @@
 
 
 
-    <div class="relative z-0 w-full mt-3 group">
-      <label for="juicio"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Tipo
-        de juicio</label>
-      <select id="juicio" name="juicio" disabled
-        class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
-        <option selected disabled value="0">Selecciona un tipo de juicio</option>
-      </select>
-    </div>
+ 
 
 
     <div class="relative z-0 w-full mb-6 group">
@@ -73,7 +79,35 @@
        transform -translate-y-6 top-3 -z-10 origin-[0] 
        peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">C.I</label>
     </div>
+
+
+
   </div>
+
+
+  <div class="grid md:grid-cols-2 md:gap-6">
+    <div class="relative z-0 w-full mt-3 group">
+      <label for="juicio"
+        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Tipo
+        de juicio</label>
+      <select id="juicio" name="juicio" disabled
+        class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
+        <option selected disabled value="0">Selecciona un tipo de juicio</option>
+      </select>
+    </div>
+    <div class="relative z-0 w-full mb-6 group">
+      <label for="juzgado" class="font-medium absolute text-md text-black duration-300 transform 
+        -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100
+         peer-focus:-translate-y-6">
+        Juzgado</label>
+      <select id="juzgado" name="juzgado" class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 
+        rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500" disabled>
+        <option selected disabled value="0">Selecciona un juzgado</option>
+      </select>
+    </div>
+  </div>
+  
+
 
   <div class="grid md:grid-cols-2 md:gap-6">
     <div class="relative z-0 w-full mt-3 group">
@@ -96,6 +130,10 @@
       </select>
     </div>
   </div>
+
+
+
+
 
   <estado-procesal></estado-procesal>
 

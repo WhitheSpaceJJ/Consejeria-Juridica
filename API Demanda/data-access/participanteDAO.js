@@ -12,7 +12,8 @@ class ParticipanteDAO {
     try {
       const participante = await Participante.create({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
       return participante
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }
@@ -83,7 +84,8 @@ class ParticipanteDAO {
     try {
       const participante = await Participante.update({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial }, { where: { id_participante } })
       return participante[0] === 1 
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }

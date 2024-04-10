@@ -40,28 +40,29 @@ export class ObservacionPromovente extends HTMLElement {
     this.#botonAgregarObservacion = this.shadowRoot.getElementById('agregar-observacion')
     this.#botonEditarObservacion = this.shadowRoot.getElementById('editar-observacion')
 
+
     var observacionInput = this.#observacion
 
     observacionInput.addEventListener('input', function () {
-        if(observacionInput.value===""){
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de observación es obligatorio.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-        else if (observacionInput.value.length > 200) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
+      if (observacionInput.value === "") {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación es obligatorio.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+      else if (observacionInput.value.length > 200) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
     })
-}
- fillInputs() {
+  }
+  fillInputs() {
     this.agregarEventosBotones()
- }
+  }
   agregarEventosBotones = () => {
- 
+
 
 
     this.#botonAgregarObservacion.addEventListener('click', this.agregarObservacion)
@@ -83,9 +84,9 @@ export class ObservacionPromovente extends HTMLElement {
     }
 
     window.activarBotonSeleccionarObservacion = activarBotonSeleccionarObservacion
- }
- mostrarObservaciones = async () => {
- 
+  }
+  mostrarObservaciones = async () => {
+
     try {
       const observaciones = this.#observaciones
       const tableBody = this.#tableObservaciones
@@ -111,83 +112,98 @@ export class ObservacionPromovente extends HTMLElement {
     } catch (error) {
       console.error('Error al obtener las observaciones:', error)
     }
- }
+  }
   editarObservacion = async () => {
-   
-  const observacionId = this.#idObservacion 
 
-  if (observacionId==null) {
-    const modal = document.querySelector('modal-warning')
-    modal.message = 'Seleccione una observación para editar.'
-    modal.title = 'Error de validación'
-    modal.open = true
-  }
-  else {
-    const observacion = this.#observacion.value
-
-    if (observacion === '') {
+    const observacionId = this.#idObservacion
+    if (observacionId == null) {
       const modal = document.querySelector('modal-warning')
-      modal.message = 'El campo de observación es obligatorio.'
+      modal.message = 'Seleccione una observación para editar.'
       modal.title = 'Error de validación'
       modal.open = true
     }
+    else {
+      const observacion = this.#observacion.value
 
-    if (observacion.length > 200) {
+      if (observacion === '') {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación es obligatorio.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+
+        if (observacion.length > 200) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        } else {
+          if (observacion !== '' && observacion.length <= 200) {
+            const id_observacion_si_tiene = this.#observaciones[observacionId - 1].id_observacion
+            const id_proceso_judicial_si_tiene = this.#observaciones[observacionId - 1].id_proceso_judicial
+            const observacionData = {
+              id_observacion: id_observacion_si_tiene,
+              observacion: observacion,
+              id_proceso_judicial: id_proceso_judicial_si_tiene
+            }
+            this.#observaciones[observacionId - 1] = observacionData
+            this.mostrarObservaciones()
+            this.#idObservacion = null
+            this.#observacion.value = ''
+          } else {
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'El campo de observación es obligatorio.'
+            modal.title = 'Error de validación'
+            modal.open = true
+          }
+        }
+    }
+
+  }
+  agregarObservacion = async () => {
+    const idObservacion = this.#idObservacion
+
+    if (idObservacion === null) {
+      const observacion = this.#observacion.value
+
+      if (observacion === '') {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación es obligatorio.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+
+      if (observacion.length > 200) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else {
+       if (observacion !== '' && observacion.length <= 200) {
+        const observacionData = {
+          observacion: observacion
+        }
+        this.#observaciones.push(observacionData)
+        this.mostrarObservaciones()
+        this.#observacion.value = ''
+      } else {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El campo de observación es obligatorio.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+      }
+    }
+    else {
       const modal = document.querySelector('modal-warning')
-      modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
+      modal.message = 'No se puede agregar una observación si ha selecionado previamente una de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
-    }else {
+      this.#idObservacion = null
+      this.#observacion.value = ''
 
-    const observacionData = {
-      observacion: observacion
     }
-    this.#observaciones[observacionId - 1] = observacionData
-    this.mostrarObservaciones()
-    this.#idObservacion = null
-    this.#observacion.value = ''
   }
-  }
-
- }
- agregarObservacion = async () => {
-  const idObservacion = this.#idObservacion
-
-  if (idObservacion === null) {
-    const observacion = this.#observacion.value
-
-    if (observacion === '') {
-      const modal = document.querySelector('modal-warning')
-      modal.message = 'El campo de observación es obligatorio.'
-      modal.title = 'Error de validación'
-      modal.open = true
-    }
-
-    if (observacion.length > 200) {
-      const modal = document.querySelector('modal-warning')
-      modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
-      modal.title = 'Error de validación'
-      modal.open = true
-    }else{
-
-    const observacionData = {
-      observacion: observacion
-    }
-    this.#observaciones.push(observacionData)
-    this.mostrarObservaciones()
-    this.#observacion.value = ''
-  }
-  }
-  else {
-    const modal = document.querySelector('modal-warning')
-    modal.message = 'No se puede agregar una observación si ha selecionado previamente una de la tabla, se eliminaran los campos.'
-    modal.title = 'Error de validación'
-    modal.open = true
-   this.#idObservacion = null
-    this.#observacion.value = ''
-
-  }
- }
 
   activarBotonSeleccionarObservacion = async observacionId => {
     try {
@@ -224,13 +240,15 @@ export class ObservacionPromovente extends HTMLElement {
   }
 
   get data() {
- const observaciones = this.#observaciones  
+    const observaciones = this.#observaciones
     return {
       observaciones: observaciones
     }
   }
 
   set data(value) {
+    this.#observaciones = value
+    this.mostrarObservaciones()
     this.setAttribute('data', value)
   }
 }

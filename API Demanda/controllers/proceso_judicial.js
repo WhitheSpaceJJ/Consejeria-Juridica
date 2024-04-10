@@ -61,7 +61,7 @@ const obtenerProcesosJudicialesPorDefensor = async (req, res) => {
         res.status(200).json(procesosJudiciales)
       }
     } else {
-      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensor(id_defensor, estatus_proceso)
+      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensorEstatus(id_defensor, estatus_proceso)
       if (procesosJudiciales === null || procesosJudiciales.length === 0) {
         res.status(404).json({
           message: "No hay procesos judiciales registrados"
@@ -110,36 +110,13 @@ const obtenerProcesoJudicial = async (req, res) => {
  */
 const actualizarProcesoJudicial = async (req, res) => {
   try {
-    const { id } = req.params
-    const { fecha_inicio, fecha_estatus,
-      control_interno,
-      numero_expediente,
-      id_turno,
-      id_distrito_judicial,
-      id_municipio_distrito,
-      id_tipo_juicio,
-      estatus_proceso,
-      id_juzgado } = req.body
-    const result = await procesoJudicialDAO.actualizarProcesoJudicial(Number(id), {
-      fecha_estatus,
-      fecha_inicio, control_interno,
-      numero_expediente,
-      id_turno,
-      id_distrito_judicial,
-      id_municipio_distrito,
-      id_tipo_juicio,
-      estatus_proceso,
-      id_juzgado
+  
+    const {id} = req.params
+    const { promovente, imputado, proceso } = req.body
+    const procesoJudicial = await procesoJudicialDAO.actualizarProcesoJudicialOficial(Number(id), {
+      promovente, imputado, proceso
     })
-    if (result) {
-      const actualizado = await procesoJudicialDAO.obtenerProcesoJudicial(Number(id))
-      res.status(200).json(actualizado)
-    }
-    else {
-      res.status(404).json({
-        message: "Proceso judicial no actualizado, datos iguales"
-      })
-    }
+    res.json(procesoJudicial)
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -172,6 +149,26 @@ const eliminarProcesoJudicial = async (req, res) => {
   }
 }
 
+const obtenerProcesosJudicialesPorTramite = async (req, res) => {
+  try {
+    const estatus_proceso = req.query.estatus_proceso
+    const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorTramite(estatus_proceso)
+    if (procesosJudiciales === null || procesosJudiciales === undefined) {
+      res.status(404).json({
+        message: "No hay proceso judiciales en estatus de tramite"
+      })
+    }
+    else {
+      res.status(200).json(procesosJudiciales)
+    }
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
 module.exports = {
   crearProcesoJudicial,
   obtenerProcesosJudiciales,
@@ -179,4 +176,6 @@ module.exports = {
   actualizarProcesoJudicial,
   eliminarProcesoJudicial,
   obtenerProcesosJudicialesPorDefensor
+  ,
+  obtenerProcesosJudicialesPorTramite
 }

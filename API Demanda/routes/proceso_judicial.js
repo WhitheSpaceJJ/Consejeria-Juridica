@@ -8,7 +8,9 @@ const {
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
   eliminarProcesoJudicial,
-  obtenerProcesosJudicialesPorDefensor
+  obtenerProcesosJudicialesPorDefensor,
+  obtenerProcesosJudicialesPorTramite
+  ,
 } = require('../controllers/proceso_judicial')
 /*
 // Importamos los middlewares de los procesos judiciales
@@ -19,6 +21,9 @@ const {
 */
 // Creamos una nueva instancia de Router
 const router = Router()
+router.get('/tramite/', 
+obtenerProcesosJudicialesPorTramite
+)
 
 // Definimos la ruta para crear un nuevo proceso judicial
 router.post('/', //[existeJuzgado],
@@ -34,6 +39,7 @@ router.get('/defensor/', obtenerProcesosJudicialesPorDefensor)
 // Definimos la ruta para obtener un proceso judicial por su id
 router.get('/:id',// [existeProcesoJudicial],
  obtenerProcesoJudicial)
+
 
 // Definimos la ruta para actualizar un proceso judicial por su id
 router.put('/:id',// [existeProcesoJudicial],

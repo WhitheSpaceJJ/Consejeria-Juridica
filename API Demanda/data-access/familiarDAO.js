@@ -13,10 +13,21 @@ class FamiliarDAO {
         perteneceComunidadLGBT, adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente })
       return familiar
     } catch (err) {
+      console.log(err.message)
       throw err
     }
   }
-
+  async actualizarFamiliar(id_familiar, { nombre, nacionalidad, parentesco, perteneceComunidadLGBT, 
+    adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente }) {
+    try {
+      const familiar = await Familiar.update({  nombre, nacionalidad, parentesco, perteneceComunidadLGBT,
+         adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente }, { where: { id_familiar: id_familiar } })
+      return familiar[0] === 1
+    } catch (err) {
+      console.log(err.message)
+      throw err
+    }
+  }
   async obtenerFamiliars() {
     try {
       const familiars = await Familiar.findAll()
@@ -47,16 +58,7 @@ class FamiliarDAO {
   }
 
 
-  async actualizarFamiliar(id_familiar, { nombre, nacionalidad, parentesco, perteneceComunidadLGBT, 
-    adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente }) {
-    try {
-      const familiar = await Familiar.update({  nombre, nacionalidad, parentesco, perteneceComunidadLGBT,
-         adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente }, { where: { id_familiar: id_familiar } })
-      return familiar[0] === 1
-    } catch (err) {
-      throw err
-    }
-  }
+ 
 
 
   async eliminarFamiliar(id_familiar) {

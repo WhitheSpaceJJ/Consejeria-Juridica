@@ -345,6 +345,8 @@ export class Resolucion extends HTMLElement {
   }
 
   set data(value) {
+    this.#resoluciones = value
+    this.mostrarResoluciones()
     this.setAttribute('data', value)
   }
 }

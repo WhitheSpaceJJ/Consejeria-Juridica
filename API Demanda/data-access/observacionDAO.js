@@ -8,7 +8,8 @@ class ObservacionDAO {
       try {
          const observacionEncontrada = await Observacion.create({ id_proceso_judicial, observacion })
          return observacionEncontrada
-      } catch (err) {
+      } catch (err) {      console.log(err.message)
+
          throw err
       }
    }
@@ -44,7 +45,8 @@ class ObservacionDAO {
       try {
          const observacionActualizado = await Observacion.update({ observacion,  id_proceso_judicial }, { where: { id_observacion: id_observacion } })
          return observacionActualizado[0] === 1
-      } catch (err) {
+      } catch (err) {      console.log(err.message)
+
          throw err
       }
    }

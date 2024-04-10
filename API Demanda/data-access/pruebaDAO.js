@@ -8,7 +8,8 @@ class PruebaDAO {
     try {
       const prueba = await Prueba.create({ descripcion_prueba, id_proceso_judicial })
       return prueba
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }
@@ -44,7 +45,8 @@ class PruebaDAO {
     try {
       const pruebaActualizado = await Prueba.update({ descripcion_prueba, id_proceso_judicial }, { where: { id_prueba: id_prueba } })
       return pruebaActualizado[0] === 1
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }

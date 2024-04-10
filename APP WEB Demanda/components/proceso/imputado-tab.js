@@ -60,16 +60,16 @@ export class ImputadoTab extends HTMLElement {
   async init() {
     this.#api = new APIModel()
 
-/*
-    const etnias = await this.#api.getEtnias2()
-    this.#etnias = etnias
-
-    const escolaridades = await this.#api.getEscolaridades2()
-    this.#escolaridades = escolaridades
-
-    const ocupaciones = await this.#api.getOcupaciones2()
-    this.#ocupaciones = ocupaciones
-*/
+    /*
+        const etnias = await this.#api.getEtnias2()
+        this.#etnias = etnias
+    
+        const escolaridades = await this.#api.getEscolaridades2()
+        this.#escolaridades = escolaridades
+    
+        const ocupaciones = await this.#api.getOcupaciones2()
+        this.#ocupaciones = ocupaciones
+    */
     const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
 
@@ -186,11 +186,11 @@ export class ImputadoTab extends HTMLElement {
     this.#edad = this.shadowRoot.getElementById('edad')
     this.#sexo = this.shadowRoot.getElementById('sexo')
     this.#telefono = this.shadowRoot.getElementById('telefono')
-  //  this.#españolRadioYes = this.shadowRoot.getElementById('español-radio-yes')
-  //  this.#españolRadioNo = this.shadowRoot.getElementById('español-radio-no')
-  //  this.#etnia = this.shadowRoot.getElementById('etnia')
-  //  this.#escolaridad = this.shadowRoot.getElementById('escolaridad')
-  //  this.#ocupacion = this.shadowRoot.getElementById('ocupacion')
+    //  this.#españolRadioYes = this.shadowRoot.getElementById('español-radio-yes')
+    //  this.#españolRadioNo = this.shadowRoot.getElementById('español-radio-no')
+    //  this.#etnia = this.shadowRoot.getElementById('etnia')
+    //  this.#escolaridad = this.shadowRoot.getElementById('escolaridad')
+    //  this.#ocupacion = this.shadowRoot.getElementById('ocupacion')
     this.#calle = this.shadowRoot.getElementById('calle')
     this.#numeroExt = this.shadowRoot.getElementById('numero-ext')
     this.#numeroInt = this.shadowRoot.getElementById('numero-int')
@@ -228,6 +228,13 @@ export class ImputadoTab extends HTMLElement {
       this.#etnia.appendChild(option)
     })
     */
+    this.#sexo.innerHTML = ''
+
+    const option = document.createElement('option')
+    option.value = '0'
+    option.text = 'Seleccione un género'
+    this.#sexo.appendChild(option)
+
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
@@ -255,15 +262,24 @@ export class ImputadoTab extends HTMLElement {
 
   validateInputs() {
     try {
-      if(this.registroTab.data.turno === undefined){
+
+      /*
+     if(this.promoventeTab.data === undefined){
+       this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
+       return false
+     }
+*/
+
+      if (this.registroTab.isComplete === false) {
         this.#showModal('No se ha seleccionado un turno, por favor seleccione uno.', 'Error de validación')
         return false
       }
-      
-      if(this.promoventeTab.data === undefined){
+
+      if (this.promoventeTab.isComplete === false) {
         this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
         return false
       }
+
 
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
@@ -279,7 +295,7 @@ export class ImputadoTab extends HTMLElement {
       var edadPattern = /^\d+$/;
 
 
-      
+
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -325,35 +341,35 @@ export class ImputadoTab extends HTMLElement {
       else if (!edadPattern.test(telefono)) {
         throw new ValidationError('El teléfono solo permite números, verifique su respuesta.')
       }
-      
+
       if (sexo === '0') {
         throw new ValidationError('Por favor seleccione un género.')
       }
-/*
-      var etnia = this.#etnia.value
-      var escolaridad = this.#escolaridad.value
-      var ocupacion = this.#ocupacion.value
-      var espapñolRadioYes = this.#españolRadioYes.checked
-      var espapñolRadioNo = this.#españolRadioNo.checked
-
+      /*
+            var etnia = this.#etnia.value
+            var escolaridad = this.#escolaridad.value
+            var ocupacion = this.#ocupacion.value
+            var espapñolRadioYes = this.#españolRadioYes.checked
+            var espapñolRadioNo = this.#españolRadioNo.checked
       
-    
-      if (espapñolRadioNo === false && espapñolRadioYes === false) {
-        throw new ValidationError('Por favor seleccione si habla español o no.')
-      }
-   
-      if (etnia === '0') {
-        throw new ValidationError('Por favor seleccione una etnia.')
-      }
-   
-   
-      if (escolaridad === '0') {
-        throw new ValidationError('Por favor seleccione una escolaridad.')
-      }
-      if (ocupacion === '0') {
-        throw new ValidationError('Por favor seleccione una ocupación.')
-      }
-*/
+            
+          
+            if (espapñolRadioNo === false && espapñolRadioYes === false) {
+              throw new ValidationError('Por favor seleccione si habla español o no.')
+            }
+         
+            if (etnia === '0') {
+              throw new ValidationError('Por favor seleccione una etnia.')
+            }
+         
+         
+            if (escolaridad === '0') {
+              throw new ValidationError('Por favor seleccione una escolaridad.')
+            }
+            if (ocupacion === '0') {
+              throw new ValidationError('Por favor seleccione una ocupación.')
+            }
+      */
       if (calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingrésela.')
       }
@@ -383,15 +399,17 @@ export class ImputadoTab extends HTMLElement {
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
-/*
-     
-      if(this.registroTab.data === undefined){
-        throw new ValidationError('Por favor seleccione un turno para continuar.')
-      }
-      if(this.promoventeTab.data === undefined){
-        throw new ValidationError('Por favor ingrese los datos del promovente para continuar.')
-      }
-      */
+      /*
+           
+            if(this.registroTab.data === undefined){
+              throw new ValidationError('Por favor seleccione un turno para continuar.')
+            }
+            if(this.promoventeTab.data === undefined){
+              throw new ValidationError('Por favor ingrese los datos del promovente para continuar.')
+            }
+            */
+
+
 
       return true
     } catch (error) {
@@ -404,7 +422,7 @@ export class ImputadoTab extends HTMLElement {
           'Error'
         )
       }
-     return false
+      return false
     }
   }
 
@@ -449,6 +467,12 @@ export class ImputadoTab extends HTMLElement {
       this.#ciudad.innerHTML = '';
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
+
+      const option = document.createElement('option')
+      option.value = '0'
+      option.textContent = 'Seleccione una colonia'
+      this.#colonia.appendChild(option)
+
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -478,11 +502,47 @@ export class ImputadoTab extends HTMLElement {
       if (tabId !== 'imputado') {
         return
       }
+      if (this.registroTab.isComplete === true) {
 
-      this.init()
+        if (this.#turnoSeleccionado === null) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.init()
+        }
+        if (this.#turnoSeleccionado !== null && this.#turnoSeleccionado.id_turno !== this.registroTab.turno.id_turno) {
+          this.#turnoSeleccionado = this.registroTab.turno
+          this.resetCampos()
+          this.init()
+        }
+      }
     })
 
   }
+  resetCampos() {
+    this.#nombre.value = ''
+    this.#apellidoPaterno.value = ''
+    this.#apellidoMaterno.value = ''
+    this.#edad.value = ''
+    this.#telefono.value = ''
+    this.#sexo.value = '0'
+    this.#calle.value = ''
+    this.#numeroExt.value = ''
+    this.#numeroInt.value = ''
+    this.#cp.value = ''
+    this.#estado.value = ''
+    this.#municipio.value = ''
+    this.#ciudad.value = ''
+    this.#colonia.innerHTML = ''
+
+    const option = document.createElement('option')
+    option.value = '0'
+    option.textContent = 'Seleccione una colonia'
+    this.#colonia.appendChild(option)
+
+
+  }
+
+  #turnoSeleccionado = null
+
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -511,10 +571,10 @@ export class ImputadoTab extends HTMLElement {
       edad: this.#edad.value,
       telefono: this.#telefono.value,
       id_genero: this.#sexo.value,
-  //    id_etnia: this.#etnia.value,
-   //   id_escolaridad: this.#escolaridad.value,
-   //   id_ocupacion: this.#ocupacion.value,
-   //   español: this.#españolRadioYes.checked,
+      //    id_etnia: this.#etnia.value,
+      //   id_escolaridad: this.#escolaridad.value,
+      //   id_ocupacion: this.#ocupacion.value,
+      //   español: this.#españolRadioYes.checked,
       sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
       domicilio: {
         calle_domicilio: this.#calle.value,
@@ -528,7 +588,7 @@ export class ImputadoTab extends HTMLElement {
         colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
       },
     }
-    return { 
+    return {
       imputado
     }
   }

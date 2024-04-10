@@ -10,7 +10,8 @@ class ImputadoDAO {
     try {
       const imputado = await Imputado.create({ id_imputado })
       return imputado
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }
@@ -53,7 +54,8 @@ class ImputadoDAO {
     try {
       const imputado = await Imputado.update({ id_imputado }, { where: { id_imputado: id_imputado_ } })
       return imputado[0] === 1
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }

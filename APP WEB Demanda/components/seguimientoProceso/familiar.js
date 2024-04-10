@@ -236,8 +236,11 @@ export class FamiliarPromovente extends HTMLElement {
          */
         if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false)) {
 
-
+         const id_familiar_si_tiene = this.#familiares[idFamiliar - 1].id_familiar
+         const id_proceso_judicial_si_tiene = this.#familiares[idFamiliar - 1].id_proceso_judicial
           const familiarData = {
+            id_familiar: id_familiar_si_tiene,
+            id_proceso_judicial: id_proceso_judicial_si_tiene,
             nombre: nombre,
             nacionalidad: nacionalidad,
             parentesco: parentesco,
@@ -460,6 +463,8 @@ export class FamiliarPromovente extends HTMLElement {
   }
 
   set data(value) {
+    this.#familiares = value
+    this.mostrarFamiliares()
     this.setAttribute('data', value)
   }
 }

@@ -96,11 +96,12 @@ class PromoventeDAO {
  * @param {object} promovente - Objeto que contiene los nuevos datos del promovente
  * @returns {object} Retorna el objeto del promovente actualizado si la operación fue exitosa, de lo contrario lanza un error
  */
-  async actualizarPromovente(id_promovente_actualizar, { id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion }) {
+  async actualizarPromovente(id_promovente_actualizar, { espanol, id_escolaridad, id_etnia, id_ocupacion }) {
     try {
-      const promoventeActualizado = await Promovente.update({ id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion }, { where: { id_promovente: id_promovente_actualizar }  })
+      const promoventeActualizado = await Promovente.update({  espanol, id_escolaridad, id_etnia, id_ocupacion }, { where: { id_promovente: id_promovente_actualizar }  })
       return promoventeActualizado[0] ==1
-    } catch (err) {
+    } catch (err) {      console.log(err.message)
+
       throw err
     }
   }
