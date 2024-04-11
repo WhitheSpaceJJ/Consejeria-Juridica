@@ -1,5 +1,9 @@
 import { ControllerUtils } from '../lib/controllerUtils'
-import { DataDemanda } from '../components/consultaProceso/data-proceso'
+import { DataAsesoria } from '../components/consultaProceso/data-asesoria'
+import { DataPrueba } from '../components/consultaProceso/data-prueba'
+import { DataImputado } from '../components/consultaProceso/data-imputado'
+import { DataPromovente } from '../components/consultaProceso/data-promovente'
+import { DataEstadosProcesales } from '../components/consultaProceso/data-estados-procesales'
 
 class ConsultaProcesoController {
   #pagina = 1
@@ -183,7 +187,7 @@ class ConsultaProcesoController {
        const asesoria = await this.model.getAsesoriaById(idAsesoria.turno.id_asesoria)
  
        const modal = document.querySelector('modal-asesoria')
-       const dataDemanda = new DataDemanda(asesoria)
+       const dataDemanda = new DataProceso(asesoria)
  
        const handleModalClose = () => {
          const modalContent = modal.shadowRoot.getElementById('modal-content')
@@ -203,6 +207,8 @@ class ConsultaProcesoController {
      }
    }
  */
+
+
   consultarProcesos = async () => {
     try {
       const procesosResponse = await this.model.getProcesosJudiciales()
@@ -225,6 +231,196 @@ class ConsultaProcesoController {
       modal.message = 'No hay procesos judiciales para mostrar';
       modal.title = 'Error'
       modal.open = true
+    }
+  }
+
+  handleConsultarAsesoriaById = async id => {
+    try {
+      const button = document.querySelector('.consulta-button')
+      button.disabled = true
+      const proceso = await this.model.getProcesoJudicialById(id)
+      const idTurno = proceso.id_turno
+      const turno = await this.model.getTurno(idTurno)
+      const asesoria = await this.model.getAsesoriaById(turno.turno.asesoria.datos_asesoria.id_asesoria)
+
+      const modal = document.querySelector('modal-asesoria')
+      const dataAsesoria = new DataAsesoria(asesoria)
+
+      const handleModalClose = () => {
+        const modalContent = modal.shadowRoot.getElementById('modal-content')
+        modalContent.innerHTML = ''
+        button.disabled = false
+      }
+
+      modal.addEventListener('onClose', handleModalClose)
+
+      const modalContent = modal.shadowRoot.getElementById('modal-content')
+      modalContent.appendChild(dataAsesoria)
+
+      modal.title = 'Datos Asesoría'
+      modal.open = true
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  handleConsultarImputado = async id => {
+    try {
+      const button = document.querySelector('.consulta2-button')
+      button.disabled = true
+      const proceso = await this.model.getProcesoJudicialById(id)
+      console.log(proceso.participantes[1])
+      for (var i = 0; i <= ((proceso.participantes).length)-1; i++) {
+        if(proceso.participantes[i].imputado!=null) {
+          this.modalImputado(proceso.participantes[i])
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  modalImputado = async imputado =>{
+    try {
+      const button = document.querySelector('.consulta2-button')
+      button.disabled = true
+      const modal = document.querySelector('modal-imputado')
+      const dataImputado = new DataImputado(imputado)
+
+      const handleModalClose = () => {
+        const modalContent = modal.shadowRoot.getElementById('modal-content')
+        modalContent.innerHTML = ''
+        button.disabled = false
+      }
+
+      modal.addEventListener('onClose', handleModalClose)
+
+      const modalContent = modal.shadowRoot.getElementById('modal-content')
+      modalContent.appendChild(dataImputado)
+
+      modal.title = 'Datos Imputado'
+      modal.open = true
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  handleConsultarPromovente = async id => {
+    try {
+      const button = document.querySelector('.consulta3-button')
+      button.disabled = true
+      const proceso = await this.model.getProcesoJudicialById(id)
+      console.log((proceso.participantes).length)
+      console.log(proceso.participantes[0].promovente)
+      for (var i = 0; i <= ((proceso.participantes).length)-1; i++) {
+        if(proceso.participantes[i].promovente!=null) {
+          this.modalPromovente(proceso.participantes[i])
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  modalPromovente = async promovente =>{
+    try {
+      const button = document.querySelector('.consulta3-button')
+      button.disabled = true
+      console.log(promovente)
+      const modal = document.querySelector('modal-promovente')
+      const dataPromovente = new DataPromovente(promovente)
+
+      const handleModalClose = () => {
+        const modalContent = modal.shadowRoot.getElementById('modal-content')
+        modalContent.innerHTML = ''
+        button.disabled = false
+      }
+
+      modal.addEventListener('onClose', handleModalClose)
+
+      const modalContent = modal.shadowRoot.getElementById('modal-content')
+      modalContent.appendChild(dataPromovente)
+
+      modal.title = 'Datos Promovente'
+      modal.open = true
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  handleConsultarPrueba = async id => {
+    try {
+      const button = document.querySelector('.consulta4-button')
+      button.disabled = true
+      const proceso = await this.model.getProcesoJudicialById(id)
+      console.log(proceso)
+      this.modalPrueba(proceso)
+      
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  modalPrueba = async proceso =>{
+    try {
+      const button = document.querySelector('.consulta4-button')
+      const modal = document.querySelector('modal-prueba')
+      const dataProceso = new DataPrueba(proceso)
+
+      const handleModalClose = () => {
+        const modalContent = modal.shadowRoot.getElementById('modal-content')
+        modalContent.innerHTML = ''
+        button.disabled = false
+      }
+
+      modal.addEventListener('onClose', handleModalClose)
+
+      const modalContent = modal.shadowRoot.getElementById('modal-content')
+      modalContent.appendChild(dataProceso)
+
+      modal.title = 'Datos'
+      modal.open = true
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+  
+  handleConsultarEstadosProcesales = async id => {
+    try {
+      const button = document.querySelector('.consulta5-button')
+      button.disabled = true
+      const proceso = await this.model.getProcesoJudicialById(id)
+      console.log(proceso)
+      this.modalEstadosProcesales(proceso)
+      
+    } catch (error) {
+      console.error('Error:', error.message)
+    }
+  }
+
+  modalEstadosProcesales = async proceso =>{
+    try {
+      const button = document.querySelector('.consulta5-button')
+      const modal = document.querySelector('modal-estados-procesales')
+      const dataProceso = new DataEstadosProcesales(proceso)
+
+      const handleModalClose = () => {
+        const modalContent = modal.shadowRoot.getElementById('modal-content')
+        modalContent.innerHTML = ''
+        button.disabled = false
+      }
+
+      modal.addEventListener('onClose', handleModalClose)
+
+      const modalContent = modal.shadowRoot.getElementById('modal-content')
+      modalContent.appendChild(dataProceso)
+
+      modal.title = 'Estados Procesales'
+      modal.open = true
+    } catch (error) {
+      console.error('Error:', error.message)
     }
   }
 
@@ -380,19 +576,57 @@ class ConsultaProcesoController {
 
           
             <td class="px-6 py-4 text-right">
-                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" data-id="" title="Se realizara de manera similar, al sistema de asesorias">Consultar</button>
+                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" data-id="${proceso.id_proceso_judicial}" >Consultar</button>
             </td>
             <td class="px-6 py-4 text-right">
-                <button href="#" class="consulta2-button font-medium text-[#db2424] hover:underline" value="" title="Se realizara de manera similar, al sistema de asesorias">Consultar</button>
-            </td>`
-    /*
-        const consultarButtons = row.querySelectorAll('.consulta-button');
-        consultarButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            this.handleConsultarDemandaById(button.getAttribute('data-id'));
-          });
-        });
-        */
+                <button href="#" class="consulta2-button font-medium text-[#db2424] hover:underline" data-id="${proceso.id_proceso_judicial}">Consultar</button>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <button href="#" class="consulta3-button font-medium text-[#db2424] hover:underline" data-id="${proceso.id_proceso_judicial}" >Consultar</button>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <button href="#" class="consulta4-button font-medium text-[#db2424] hover:underline" data-id="${proceso.id_proceso_judicial}" >Consultar</button>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <button href="#" class="consulta5-button font-medium text-[#db2424] hover:underline" data-id="${proceso.id_proceso_judicial}" >Consultar</button>
+            </td>
+            `
+
+    const consultarButton1 = row.querySelectorAll('.consulta-button');
+    consultarButton1.forEach(button => {
+      button.addEventListener('click', () => {
+        this.handleConsultarAsesoriaById(button.getAttribute('data-id'));
+      });
+    });
+
+    const consultarButton2 = row.querySelectorAll('.consulta2-button');
+    consultarButton2.forEach(button => {
+      button.addEventListener('click', () => {
+        this.handleConsultarImputado(button.getAttribute('data-id'));
+      });
+    });
+
+    const consultarButton3 = row.querySelectorAll('.consulta3-button');
+    consultarButton3.forEach(button => {
+      button.addEventListener('click', () => {
+        this.handleConsultarPromovente(button.getAttribute('data-id'));
+      });
+    });
+
+    const consultarButton4 = row.querySelectorAll('.consulta4-button');
+    consultarButton4.forEach(button => {
+      button.addEventListener('click', () => {
+        this.handleConsultarPrueba(button.getAttribute('data-id'));
+      });
+    });
+
+    const consultarButton5 = row.querySelectorAll('.consulta5-button');
+    consultarButton5.forEach(button => {
+      button.addEventListener('click', () => {
+        this.handleConsultarEstadosProcesales(button.getAttribute('data-id'));
+      });
+    });
+
     return row
   }
 
