@@ -133,6 +133,9 @@ export class EstadoProcesal extends HTMLElement {
      //   else {
 
           //Verififcar json
+          if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
+
+
           const estadoProcesalData = {
             descripcion_estado_procesal: estadoProcesal,
             fecha_estado_procesal: fechaEstadoProcesal
@@ -142,6 +145,7 @@ export class EstadoProcesal extends HTMLElement {
           this.mostrarEstadosProcesales()
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
+        }
       //  }
       }
     }
@@ -224,6 +228,8 @@ export class EstadoProcesal extends HTMLElement {
           /**
             De alguna manera con respecto al id del estado procesal seleccionado se debe de modificar el arreglo de estados procesales  
            */
+            if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
+
           const estadoProcesalData = {
             descripcion_estado_procesal: estadoProcesal,
             fecha_estado_procesal: fechaEstadoProcesal
@@ -234,6 +240,7 @@ export class EstadoProcesal extends HTMLElement {
           this.#idEstadoProcesal = null
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
+        }
       //  }
       }
     }
@@ -276,7 +283,7 @@ export class EstadoProcesal extends HTMLElement {
       const estadoProcesal = this.#estadosProcesales[estadoProcesalId - 1]
       if (estadoProcesal) {
         this.#idEstadoProcesal = estadoProcesalId
-        this.#estadoProcesal.value = estadoProcesal.estado_procesal
+        this.#estadoProcesal.value = estadoProcesal.descripcion_estado_procesal
         this.#fechaEstadoProcesal.value = estadoProcesal.fecha_estado_procesal
       } else {
         console.error('El estado procesal con el ID proporcionado no existe.')

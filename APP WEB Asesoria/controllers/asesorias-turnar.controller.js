@@ -18,8 +18,8 @@ class AsesoriasTurnarController {
     const table = document.getElementById('table-body')
     const asesorias = JSON.parse(sessionStorage.getItem('asesorias'))
 
-    if (asesorias.length <=1) {
-      const asesoriaEnviar = asesorias[0]; 
+    if (asesorias.length <= 1) {
+      const asesoriaEnviar = asesorias[0];
       const dataColonia = await this.model.getColoniaById(
         asesoriaEnviar.persona.domicilio.id_colonia
       )
@@ -87,6 +87,9 @@ class AsesoriasTurnarController {
   crearRow = asesoria => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
+   
+
+
 
     row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                 ${asesoria.datos_asesoria.id_asesoria}
@@ -106,6 +109,7 @@ class AsesoriasTurnarController {
             <td class="px-6 py-4">
             ${asesoria.datos_asesoria.estatus_asesoria}
         </td>
+     
             <td class="px-6 py-4 text-right">
                 <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
             </td>

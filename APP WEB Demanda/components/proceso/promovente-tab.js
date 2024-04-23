@@ -56,6 +56,9 @@ export class PromoventeTab extends HTMLElement {
   }
 
 
+
+
+
   async init() {
     this.#api = new APIModel()
 
@@ -71,6 +74,12 @@ export class PromoventeTab extends HTMLElement {
 
     const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
+
+    //   this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero).then(data => {
+    //     this.#generoActual = data.genero
+    //   })
+
+
 
     this.manageFormFields()
     this.fillInputs()
@@ -173,8 +182,147 @@ export class PromoventeTab extends HTMLElement {
       }
     });
 
+    const { genero } = await this.#api.getGeneroByID(this.#promovente.genero.id_genero)
+    this.#generoActual = genero
 
+     /**
+    const option = document.createElement('option')
+    option.value = this.#generoActual.id_genero
+    option.text = this.#generoActual.descripcion_genero
+    this.#sexo.appendChild(option) 
+
+    this.#sexo.value = this.#generoActual.id_genero
+
+    antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
+      */
+       
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      const optiones = this.#sexo.options
+      let existe = false
+      
+      for (let i = 0; i < optiones.length; i++) {
+        if (optiones[i].value === option.value) {
+          existe = true
+          break
+        }
+      }
+
+      if (existe) {
+        this.#sexo.appendChild(option)
+      }
+
+      this.#sexo.value = this.#generoActual.id_genero
   }
+
+  #generoActual
+
+  fillInputs() {
+    this.#etnia.innerHTML = ''
+
+    const option = document.createElement('option')
+    option.value = '0'
+    option.text = 'Seleccione una etnia'
+    this.#etnia.appendChild(option)
+
+    this.#etnias.forEach(etnia => {
+      const option = document.createElement('option')
+      option.value = etnia.id_etnia
+      option.text = etnia.nombre
+      this.#etnia.appendChild(option)
+    })
+
+    this.#sexo.innerHTML = ''
+
+    const option2 = document.createElement('option')
+    option2.value = '0'
+    option2.text = 'Seleccione un género'
+    this.#sexo.appendChild(option2)
+
+    this.#generos.forEach(genero => {
+      const option = document.createElement('option')
+      option.value = genero.id_genero
+      option.text = genero.descripcion_genero
+      this.#sexo.appendChild(option)
+    })
+
+    this.#escolaridad.innerHTML = ''
+
+    const option3 = document.createElement('option')
+    option3.value = '0'
+    option3.text = 'Seleccione una escolaridad'
+    this.#escolaridad.appendChild(option3)
+
+    this.#escolaridades.forEach(escolaridad => {
+      const option = document.createElement('option')
+      option.value = escolaridad.id_escolaridad
+      option.text = escolaridad.descripcion
+      this.#escolaridad.appendChild(option)
+    })
+
+    this.#ocupacion.innerHTML = ''
+    const option4 = document.createElement('option')
+    option4.value = '0'
+    option4.text = 'Seleccione una ocupación'
+    this.#ocupacion.appendChild(option4)
+    this.#ocupaciones.forEach(ocupacion => {
+      const option = document.createElement('option')
+      option.value = ocupacion.id_ocupacion
+      option.text = ocupacion.descripcion_ocupacion
+      this.#ocupacion.appendChild(option)
+    })
+
+
+
+    this.#turno = this.registroTab.data
+    const { turno } = this.#turno;
+    this.#promovente = turno.asesoria.persona
+    this.#promventeDomicilio = turno.asesoria.persona.domicilio
+    this.#tipoJuicio = turno.asesoria.tipos_juicio
+
+    this.#nombre.value = this.#promovente.nombre
+    this.#apellidoPaterno.value = this.#promovente.apellido_paterno
+    this.#apellidoMaterno.value = this.#promovente.apellido_materno
+    this.#edad.value = this.#promovente.edad
+    this.#telefono.value = this.#promovente.telefono
+    this.#sexo.value = this.#promovente.genero.id_genero
+
+
+    this.#calle.value = this.#promventeDomicilio.calle_domicilio
+    this.#numeroExt.value = this.#promventeDomicilio.numero_exterior_domicilio
+    this.#numeroInt.value = this.#promventeDomicilio.numero_interior_domicilio
+
+    this.#api.getColoniaById(this.#promventeDomicilio.id_colonia)
+      .then(data => {
+        const { colonia } = data
+        this.#cp.value = colonia.codigo_postal.codigo_postal
+        this.#municipio.value = colonia.municipio.nombre_municipio
+        this.#estado.value = colonia.estado.nombre_estado
+        this.#ciudad.value = colonia.ciudad.nombre_ciudad
+        this.#api.getDomicilioByCP(colonia.codigo_postal.codigo_postal)
+          .then(data2 => {
+            const { colonias } = data2
+            this.#colonia.innerHTML = ''
+            colonias.colonias.forEach(colonia => {
+              const option = document.createElement('option')
+              option.value = colonia.id_colonia
+              option.text = colonia.nombre_colonia
+              this.#colonia.appendChild(option)
+            })
+            this.#colonia.value = this.#promventeDomicilio.id_colonia
+          })
+          .catch(error => {
+            console.error('Error al obtener datos de la API:', error);
+          });
+      })
+      .catch(error => {
+        console.error('Error al obtener datos de la API:', error);
+      });
+  }
+
+
+
   manageFormFields() {
 
 
@@ -339,108 +487,6 @@ export class PromoventeTab extends HTMLElement {
 
   }
 
-  fillInputs() {
-    this.#etnia.innerHTML = ''
-
-    const option = document.createElement('option')
-    option.value = '0'
-    option.text = 'Seleccione una etnia'
-    this.#etnia.appendChild(option)
-
-    this.#etnias.forEach(etnia => {
-      const option = document.createElement('option')
-      option.value = etnia.id_etnia
-      option.text = etnia.nombre
-      this.#etnia.appendChild(option)
-    })
-
-    this.#sexo.innerHTML = ''
-
-    const option2 = document.createElement('option')
-    option2.value = '0'
-    option2.text = 'Seleccione un género'
-    this.#sexo.appendChild(option2)
-
-    this.#generos.forEach(genero => {
-      const option = document.createElement('option')
-      option.value = genero.id_genero
-      option.text = genero.descripcion_genero
-      this.#sexo.appendChild(option)
-    })
-
-    this.#escolaridad.innerHTML = ''
-
-    const option3 = document.createElement('option')
-    option3.value = '0'
-    option3.text = 'Seleccione una escolaridad'
-    this.#escolaridad.appendChild(option3)
-
-    this.#escolaridades.forEach(escolaridad => {
-      const option = document.createElement('option')
-      option.value = escolaridad.id_escolaridad
-      option.text = escolaridad.descripcion
-      this.#escolaridad.appendChild(option)
-    })
-
-    this.#ocupacion.innerHTML = ''
-    const option4 = document.createElement('option')
-    option4.value = '0'
-    option4.text = 'Seleccione una ocupación'
-    this.#ocupacion.appendChild(option4)
-    this.#ocupaciones.forEach(ocupacion => {
-      const option = document.createElement('option')
-      option.value = ocupacion.id_ocupacion
-      option.text = ocupacion.descripcion_ocupacion
-      this.#ocupacion.appendChild(option)
-    })
-
-
-
-    this.#turno = this.registroTab.data
-    const { turno } = this.#turno;
-    this.#promovente = turno.asesoria.persona
-    this.#promventeDomicilio = turno.asesoria.persona.domicilio
-    this.#tipoJuicio = turno.asesoria.tipos_juicio
-
-    this.#nombre.value = this.#promovente.nombre
-    this.#apellidoPaterno.value = this.#promovente.apellido_paterno
-    this.#apellidoMaterno.value = this.#promovente.apellido_materno
-    this.#edad.value = this.#promovente.edad
-    this.#telefono.value = this.#promovente.telefono
-    this.#sexo.value = this.#promovente.genero.id_genero
-
-
-    this.#calle.value = this.#promventeDomicilio.calle_domicilio
-    this.#numeroExt.value = this.#promventeDomicilio.numero_exterior_domicilio
-    this.#numeroInt.value = this.#promventeDomicilio.numero_interior_domicilio
-
-    this.#api.getColoniaById(this.#promventeDomicilio.id_colonia)
-      .then(data => {
-        const { colonia } = data
-        this.#cp.value = colonia.codigo_postal.codigo_postal
-        this.#municipio.value = colonia.municipio.nombre_municipio
-        this.#estado.value = colonia.estado.nombre_estado
-        this.#ciudad.value = colonia.ciudad.nombre_ciudad
-        this.#api.getDomicilioByCP(colonia.codigo_postal.codigo_postal)
-          .then(data2 => {
-            const { colonias } = data2
-            this.#colonia.innerHTML = ''
-            colonias.colonias.forEach(colonia => {
-              const option = document.createElement('option')
-              option.value = colonia.id_colonia
-              option.text = colonia.nombre_colonia
-              this.#colonia.appendChild(option)
-            })
-            this.#colonia.value = this.#promventeDomicilio.id_colonia
-          })
-          .catch(error => {
-            console.error('Error al obtener datos de la API:', error);
-          });
-      })
-      .catch(error => {
-        console.error('Error al obtener datos de la API:', error);
-      });
-  }
 
 
   validateInputs() {

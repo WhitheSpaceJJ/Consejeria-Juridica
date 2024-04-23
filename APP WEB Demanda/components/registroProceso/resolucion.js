@@ -168,6 +168,7 @@ export class Resolucion extends HTMLElement {
             modal.open = true
           }
     */
+       if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
           const resolucionData = {
             resolucion: resolucion,
             fecha_resolucion: fechaResolucion
@@ -177,6 +178,7 @@ export class Resolucion extends HTMLElement {
           this.mostrarResoluciones()
           this.#resolucion.value = ''
           this.#fechaResolucion.value = ''
+        }
       //  }
       }
     }
@@ -252,7 +254,8 @@ export class Resolucion extends HTMLElement {
             modal.title = 'Error de validación'
             modal.open = true
           }
-    */
+    */       if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
+
           const resolucionData = {
             resolucion: resolucion,
             fecha_resolucion: fechaResolucion
@@ -264,6 +267,7 @@ export class Resolucion extends HTMLElement {
           this.#idResolucion = null
           this.#resolucion.value = ''
           this.#fechaResolucion.value = ''
+        }
        // }
       }
 

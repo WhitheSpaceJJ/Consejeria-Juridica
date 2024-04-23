@@ -136,6 +136,8 @@ export class EstadoProcesal extends HTMLElement {
      //   else {
 
           //Verififcar json
+          if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
+
           const estadoProcesalData = {
             descripcion_estado_procesal: estadoProcesal,
             fecha_estado_procesal: fechaEstadoProcesal
@@ -145,6 +147,7 @@ export class EstadoProcesal extends HTMLElement {
           this.mostrarEstadosProcesales()
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
+        }
       //  }
       }
     }
@@ -227,6 +230,8 @@ export class EstadoProcesal extends HTMLElement {
           /**
             De alguna manera con respecto al id del estado procesal seleccionado se debe de modificar el arreglo de estados procesales  
            */
+            if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
+
            const id_estado_procesal_si_tiene = this.#estadosProcesales[estadoProcesalID - 1].id_estado_procesal 
            const id_proceso_judicial_si_tiene = this.#estadosProcesales[estadoProcesalID - 1].id_proceso_judicial
           const estadoProcesalData = {
@@ -241,6 +246,7 @@ export class EstadoProcesal extends HTMLElement {
           this.#idEstadoProcesal = null
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
+        }
       //  }
       }
     }

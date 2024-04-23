@@ -189,7 +189,7 @@ export class Prueba extends HTMLElement {
       const prueba = this.#pruebas[pruebaId - 1]
       if (prueba) {
         this.#idPrueba = pruebaId
-        this.#prueba.value = prueba.prueba
+        this.#prueba.value = prueba.descripcion_prueba
       } else {
         console.error('La prueba con el ID proporcionado no existe.')
       }

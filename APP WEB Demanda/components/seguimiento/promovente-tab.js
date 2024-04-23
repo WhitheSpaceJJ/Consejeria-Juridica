@@ -60,28 +60,149 @@ export class PromoventeTab extends HTMLElement {
   async init() {
     this.#api = new APIModel()
 
-
+    try {
     const etnias = await this.#api.getEtnias2()
     this.#etnias = etnias
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
 
-    const escolaridades = await this.#api.getEscolaridades2()
-    this.#escolaridades = escolaridades
 
+    try {
+      const escolaridades = await this.#api.getEscolaridades2()
+      this.#escolaridades = escolaridades
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+   
+    try {
     const ocupaciones = await this.#api.getOcupaciones2()
     this.#ocupaciones = ocupaciones
-
+  } catch (error) {
+    console.error('Error al obtener datos de la API:', error)
+  }
     const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
+   //Añadir mecanismo para que cuando se edite los campos de generos, ocupaciones etnicas ,escolaridades se presente el actual sin embargo, 
+
 
     this.manageFormFields()
 
     this.fillInputs()
 
+    const { genero } = await this.#api.getGeneroByID(this.#promovente.id_genero)
+    this.#generoActual = genero
+
+     /**
+    const option = document.createElement('option')
+    option.value = this.#generoActual.id_genero
+    option.text = this.#generoActual.descripcion_genero
+    this.#sexo.appendChild(option) 
+
+    this.#sexo.value = this.#generoActual.id_genero
+
+    antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
+      */
+       
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      const optiones = this.#sexo.options
+      let existe = false
+      
+      for (let i = 0; i < optiones.length; i++) {
+        if (optiones[i].value === option.value) {
+          existe = true
+          break
+        }
+      }
+
+      if (existe) {
+        this.#sexo.appendChild(option)
+      }
+
+      this.#sexo.value = this.#generoActual.id_genero
+  
+    const etnia =  await this.#api.getEtniaByID(this.#promovente.promovente.etnia.id_etnia)
+    this.#etniaActual = etnia
+
+    const escolaridad= await this.#api.getEscolaridadByID(this.#promovente.promovente.escolaridad.id_escolaridad)
+    this.#escolaridadActual =  escolaridad
+
+
+    const ocupacion = await this.#api.getOcupacionByID(this.#promovente.promovente.ocupacion.id_ocupacion)
+    this.#ocupacionActual =  ocupacion
+
+     const opcionesEtnia = this.#etnia.options
+      let existeEtnia = false
+      for (let i = 0; i < opcionesEtnia.length; i++) {
+        if (opcionesEtnia[i].value === this.#etniaActual.id_etnia) {
+          existeEtnia = true
+          break
+        }
+      }
+
+      if (existeEtnia) {
+        const option = document.createElement('option')
+        option.value = this.#etniaActual.id_etnia
+        option.text = this.#etniaActual.nombre
+        this.#etnia.appendChild(option)
+      }
+
+      this.#etnia.value = this.#etniaActual.id_etnia
+
+      const opcionesEscolaridad = this.#escolaridad.options
+      let existeEscolaridad = false
+      for (let i = 0; i < opcionesEscolaridad.length; i++) {
+        if (opcionesEscolaridad[i].value === this.#escolaridadActual.id_escolaridad) {
+          existeEscolaridad = true
+          break
+        }
+      }
+
+      if (existeEscolaridad) {
+        const option = document.createElement('option')
+        option.value = this.#escolaridadActual.id_escolaridad
+        option.text = this.#escolaridadActual.descripcion
+        this.#escolaridad.appendChild(option)
+      }
+
+
+      this.#escolaridad.value = this.#escolaridadActual.id_escolaridad
+
+      const opcionesOcupacion = this.#ocupacion.options
+      let existeOcupacion = false
+
+
+      for (let i = 0; i < opcionesOcupacion.length; i++) {
+
+        if (opcionesOcupacion[i].value === this.#ocupacionActual.id_ocupacion) {
+          existeOcupacion = true
+          break
+        }
+      }
+
+      if (existeOcupacion) {
+
+        const option = document.createElement('option')
+        option.value = this.#ocupacionActual.id_ocupacion
+        option.text = this.#ocupacionActual.descripcion_ocupacion
+        this.#ocupacion.appendChild(option)
+      }
+
+      this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
 
   }
-  #editablePromovente
+#etniaActual
+  #escolaridadActual
+  #ocupacionActual
+  
 
+  #generoActual
+  #editablePromovente
   #botonBuscarCP
+
+
   manageFormFields() {
 
 
@@ -294,14 +415,18 @@ export class PromoventeTab extends HTMLElement {
   fillInputs() {
     this.#promovente = this.registroTab.data.promovente
     this.#promventeDomicilio = this.#promovente.domicilio
-
-
+     
+    
+     
     this.#etnia.innerHTML = '' 
 
      const option = document.createElement('option')
      option.value = 0
      option.text = 'Seleccione una etnia'
      this.#etnia.appendChild(option)    
+
+
+     try{
 
     this.#etnias.forEach(etnia => {
       const option = document.createElement('option')
@@ -310,6 +435,10 @@ export class PromoventeTab extends HTMLElement {
       this.#etnia.appendChild(option)
     })
 
+
+  } catch (error) {
+    console.error('Error al obtener datos de la API:', error)
+  }
     this.#generos.innerHTML = ''
     
     const optionGenero = document.createElement('option')
@@ -317,13 +446,16 @@ export class PromoventeTab extends HTMLElement {
     optionGenero.text = 'Seleccione un género'
     this.#sexo.appendChild(optionGenero)
 
+    try {
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
       option.text = genero.descripcion_genero
       this.#sexo.appendChild(option)
     })
-
+  } catch (error) {
+    console.error('Error al obtener datos de la API:', error)
+  }
 
     this.#escolaridad.innerHTML = ''
 
@@ -332,13 +464,16 @@ export class PromoventeTab extends HTMLElement {
     optionEscolaridad.text = 'Seleccione una escolaridad'
     this.#escolaridad.appendChild(optionEscolaridad)
  
+    try {
     this.#escolaridades.forEach(escolaridad => {
       const option = document.createElement('option')
       option.value = escolaridad.id_escolaridad
       option.text = escolaridad.descripcion
       this.#escolaridad.appendChild(option)
     })
-    
+  } catch (error) {
+    console.error('Error al obtener datos de la API:', error)
+  }
     this.#ocupacion.innerHTML = ''
     
     const optionOcupacion = document.createElement('option')
@@ -346,13 +481,16 @@ export class PromoventeTab extends HTMLElement {
     optionOcupacion.text = 'Seleccione una ocupación'
     this.#ocupacion.appendChild(optionOcupacion)
 
+    try {
     this.#ocupaciones.forEach(ocupacion => {
       const option = document.createElement('option')
       option.value = ocupacion.id_ocupacion
       option.text = ocupacion.descripcion_ocupacion
       this.#ocupacion.appendChild(option)
     })
-
+  } catch (error) {
+    console.error('Error al obtener datos de la API:', error)
+  }
 
 
     this.#nombre.value = this.#promovente.nombre
@@ -361,9 +499,14 @@ export class PromoventeTab extends HTMLElement {
     this.#edad.value = this.#promovente.edad
     this.#telefono.value = this.#promovente.telefono
     this.#sexo.value = this.#promovente.id_genero
-    this.#etnia.value = this.#promovente.promovente.etnia.id_etnia
-    this.#escolaridad.value = this.#promovente.promovente.escolaridad.id_escolaridad
-    this.#ocupacion.value = this.#promovente.promovente.ocupacion.id_ocupacion
+    
+    
+   // this.#etnia.value = this.#promovente.promovente.etnia.id_etnia
+   // this.#escolaridad.value = this.#promovente.promovente.escolaridad.id_escolaridad
+   // this.#ocupacion.value = this.#promovente.promovente.ocupacion.id_ocupacion
+
+
+
     if (this.#promovente.promovente.español === true) {
       this.#españolRadioYes.checked = true
     } else {

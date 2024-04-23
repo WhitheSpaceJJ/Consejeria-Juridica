@@ -26,7 +26,7 @@ export class DetallesTab extends HTMLElement {
 
   async init() {
     this.#api = new APIModel()
-    const $section = this.shadowRoot.getElementById('detalles')
+    const $section = this.shadowRoot.getElementById('data')
 
     this.#asesoria = {
       ...this.asesoradoTab.data,
@@ -40,6 +40,7 @@ export class DetallesTab extends HTMLElement {
       { asesoria: this.#asesoria },
       domicilio
     )
+    $section.innerHTML = ''
     $section.appendChild(dataAsesoria)
 
     this.#asesoria.datos_asesoria = {

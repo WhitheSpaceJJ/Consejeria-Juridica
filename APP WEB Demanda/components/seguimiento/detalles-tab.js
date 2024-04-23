@@ -217,26 +217,14 @@ export class DetallesTab extends HTMLElement {
                     imputado,
                     proceso
                  }
-                              //   await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
-    console.log(data)
-                /*
-                  async putProcesoJudicial(proceso.id_proceso_judicial, data) {
-
-                    this.#showModal(
-                        'El proceso judicial se ha creado correctamente',
-                        'Proceso Judicial creado',
-                        () => {
-                            location.href = '/'
-                        }
-                    )
-
+                 await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
                 this.#showModal(
                     'El proceso judicial se ha actualizado correctamente',
                     'Proceso Judicial actualizado',
                     () => {
                         location.href = '/'
                     }
-                )                    */
+                )                  
             } catch (error) {
                 console.error(error)
                 this.#showModal(

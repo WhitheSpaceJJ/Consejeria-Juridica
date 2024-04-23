@@ -31,11 +31,13 @@ class BusquedaTurnarController {
         apellidoPaterno,
         apellidoMaterno,
       })
+      //temporizador de 1 minuto para analizar el json
       if (asesorias.length === 0) {
         throw new ValidationError(
           'No se encontraron resultados con los datos proporcionados'
         )
       } else {
+
         sessionStorage.setItem('asesorias', JSON.stringify(asesorias))
         location.href = 'asesorias-turnar.html'
       }

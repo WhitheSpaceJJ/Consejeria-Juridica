@@ -67,10 +67,42 @@ export class ImputadoTab extends HTMLElement {
 
     this.fillInputs()
 
-    
+    const { genero } = await this.#api.getGeneroByID(this.#imputado.id_genero)
+    this.#generoActual = genero
+
+     /**
+    const option = document.createElement('option')
+    option.value = this.#generoActual.id_genero
+    option.text = this.#generoActual.descripcion_genero
+    this.#sexo.appendChild(option) 
+
+    this.#sexo.value = this.#generoActual.id_genero
+
+    antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
+      */
+       
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      const optiones = this.#sexo.options
+      let existe = false
+      
+      for (let i = 0; i < optiones.length; i++) {
+        if (optiones[i].value === option.value) {
+          existe = true
+          break
+        }
+      }
+
+      if (existe) {
+        this.#sexo.appendChild(option)
+      }
+
+      this.#sexo.value = this.#generoActual.id_genero
 
   }
 
+  #generoActual
   #editableImputadoCheckbox
   #botonBuscarCP
   manageFormFields() {

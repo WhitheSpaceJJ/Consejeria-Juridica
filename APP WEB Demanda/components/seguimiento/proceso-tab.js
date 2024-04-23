@@ -103,7 +103,7 @@ export class ProcesoTab extends HTMLElement {
   cambioEstatus() {
     if (this.#estatusProceso.value === '1' || this.#estatusProceso.value === '2') {
       const modal = document.querySelector('modal-warning')
-      modal.message = 'Al cambiar de estatus y actualizarlo, este no podra ser moodificado, al menos que un encargado  de distritito lo haga'
+      modal.message = 'Al cambiar de estatus y actualizarlo, este no podra ser modificado, al menos que un encargado  de distrito lo haga'
       modal.title = 'Mensaje de Advertencia unico'
       modal.open = true
       this.#fecha_estatus.value = new Date().toISOString().split('T')[0]

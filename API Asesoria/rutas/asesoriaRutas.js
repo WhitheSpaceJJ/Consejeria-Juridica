@@ -4,6 +4,8 @@ const servicioAsesorias = require('../servicios/servicioAsesorias');
 
 const router = express.Router();
 router.route('/paginacion')
+
+
 .get(servicioAsesorias.obtenerAsesoriasPagina);
 
 router.route('/paginacion-filtro')
