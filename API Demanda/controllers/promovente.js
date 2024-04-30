@@ -15,9 +15,9 @@ const crearPromovente = async (req, res) => {
         "id_etnia": 1,
         "id_ocupacion": 1
      */
-    const { id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion } = req.body
+    const { id_promovente, español, id_escolaridad, id_etnia, id_ocupacion } = req.body
     const promovente = await promoventeDAO.crearPromovente({
-      id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion
+      id_promovente, español, id_escolaridad, id_etnia, id_ocupacion
     })
  
     res.status(201).json(promovente)

@@ -63,7 +63,7 @@ const actualizarResolucion = async (req, res) => {
             fecha_resolucion
         })
         if (result) {
-            const actualizado = await ResolucionDAO.obtenerResolucionPorProcesoJudicial(Number(id))
+            const actualizado = await ResolucionDAO.obtenerResolucion(Number(id))
             res.status(201).json(actualizado)
         } else {
             res.status(500).json({
