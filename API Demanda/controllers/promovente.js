@@ -75,9 +75,9 @@ const actualizarPromovente = async (req, res) => {
   try {
     const { id } = req.params
 
-    const { id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion } = req.body
+    const { id_promovente, español, id_escolaridad, id_etnia, id_ocupacion } = req.body
     const result=  await promoventeDAO.actualizarPromovente(Number(id), {
-      id_promovente, espanol, id_escolaridad, id_etnia, id_ocupacion
+      id_promovente, español, id_escolaridad, id_etnia, id_ocupacion
     })
     if(result){
       const actualizado = await promoventeDAO.obtenerPromovente(Number(id))
