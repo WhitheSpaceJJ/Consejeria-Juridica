@@ -1,11 +1,16 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/navbar.html')).text()
-template.innerHTML = html
 
 export class Navbar extends HTMLElement {
   constructor() {
     super()
+    this.init()
+  }
+
+  async init() {
+    const template = document.createElement('template')
+    const response = await fetch('../assets/navbar.html')
+    const html = await response.text()
+    template.innerHTML = html
+
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
   }

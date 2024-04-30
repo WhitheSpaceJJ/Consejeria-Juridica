@@ -1,28 +1,37 @@
 import { APIModel } from '../../models/api.model'
 import { DataAsesoria } from './data-asesoria'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/asesoria/detalles-tab.html')
-).text()
-template.innerHTML = html
 
 export class DetallesTab extends HTMLElement {
   #api
   #asesoria
 
+
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
+    this.initHTML()
+    
     this.id = 'detalles'
     this.style.display = 'none'
 
     this.asesoradoTab = document.querySelector('asesorado-full-tab')
     this.asesoriaTab = document.querySelector('asesoria-tab')
   }
+
+  async initHTML() {
+    const template = document.createElement('template')
+    const response = await fetch('./components/asesoria/detalles-tab.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+ 
+
+
+
+
 
   async init() {
     this.#api = new APIModel()

@@ -4,6 +4,9 @@ class AsesoriaTabs extends HTMLElement {
   #activeTab
   #tabs = ['asesorado', 'asesoria', 'detalles']
 
+
+
+
   constructor() {
     super()
     this.attachShadow({ mode: 'open' }).appendChild(

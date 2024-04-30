@@ -1,17 +1,28 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/data-asesoria.html')).text()
-template.innerHTML = html
 
 export class DataAsesoria extends HTMLElement {
+
   constructor(asesoria, domicilio) {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init()
     this.asesoria = asesoria
     this.domicilio = domicilio
     this.fillData(this.asesoria, this.domicilio)
   }
+
+  async init() {
+    const template = document.createElement('template')
+    const response = await fetch('../assets/data-asesoria.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+
+
+
+
+
 
   connectedCallback() {
   }

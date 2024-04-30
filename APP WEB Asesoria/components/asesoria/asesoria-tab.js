@@ -2,12 +2,6 @@ import { ValidationError } from '../../lib/errors'
 import { getDate, validateNonEmptyFields } from '../../lib/utils'
 import { APIModel } from '../../models/api.model'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/asesoria/asesoria-tab.html')
-).text()
-template.innerHTML = html
 
 export class AsesoriaTab extends HTMLElement {
   #api
@@ -38,16 +32,27 @@ export class AsesoriaTab extends HTMLElement {
     return ['id', 'data']
   }
 
+ 
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
+    this.initHTML()
     this.id = 'asesoria'
     this.style.display = 'none'
-
     this.init()
   }
+
+  async initHTML() {
+    const template = document.createElement('template')
+    const response = await fetch('./components/asesoria/asesoria-tab.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+
+
+
 
   async init() {
     this.#api = new APIModel()

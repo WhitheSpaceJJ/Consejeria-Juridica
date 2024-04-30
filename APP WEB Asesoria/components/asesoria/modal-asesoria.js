@@ -1,7 +1,3 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/modal-asesoria.html')).text()
-template.innerHTML = html
 
 export class ModalAsesoria extends HTMLElement {
   static get observedAttributes() {
@@ -10,8 +6,7 @@ export class ModalAsesoria extends HTMLElement {
 
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.initHTML()
     this.onClose = () => {
       const modal = this.shadowRoot.getElementById('modal')
       modal.style.display = 'none'
@@ -25,6 +20,22 @@ export class ModalAsesoria extends HTMLElement {
       }
     }
   }
+
+  async initHTML() {
+    const template = document.createElement('template')
+    const response = await fetch('../assets/modal-asesoria.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+
+
+
+
+
+
 
   connectedCallback() {
     this.btnClose = this.shadowRoot.getElementById('btn-close')

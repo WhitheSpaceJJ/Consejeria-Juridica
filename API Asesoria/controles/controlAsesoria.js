@@ -190,14 +190,9 @@ const obtenerAsesorias = async () => {
 
 const formarAseoria = async (asesoria_pre) => {
 
-
   try {
-
-
     const asesoria_obj = JSON.parse(JSON.stringify(asesoria_pre));
-
     delete asesoria_obj.id_empleado;
-
     if (asesoria_obj.detalle_asesorias_catalogos.length > 0) {
       const recibidos = [];
       for (const detalle of asesoria_obj.detalle_asesorias_catalogos) {
@@ -216,7 +211,6 @@ const formarAseoria = async (asesoria_pre) => {
       delete asesoria_obj.turno.id_asesoria;
     //  console.log("Paso turno");
     }
-
     // Add other data processing steps similar to obtenerAsesoriaPorIdAsesorado here
     const tipo_empleado = asesoria_obj.empleado.tipo_empleado;
     if (tipo_empleado === "asesor") {
@@ -232,8 +226,6 @@ const formarAseoria = async (asesoria_pre) => {
       delete asesoria_obj.empleado;
     //  console.log("Paso defensor");
     }
-
-
     const persona = await controlPersonas.obtenerPersonaPorId(asesoria_obj.asesorado.id_asesorado);
     asesoria_obj.persona = persona;
 
@@ -243,7 +235,6 @@ const formarAseoria = async (asesoria_pre) => {
       asesoria_obj.asesorado.motivo = motivo;
      // console.log("Paso motivo");
     }
-
     const estado_civil = await controlEstadoCivil.obtenerEstadoCivilPorId(asesoria_obj.asesorado.id_estado_civil);
     delete asesoria_obj.asesorado.id_estado_civil;
     asesoria_obj.asesorado.estado_civil = estado_civil;
@@ -267,7 +258,6 @@ const formarAseoria = async (asesoria_pre) => {
   //  console.log("Paso municipio");
     asesoria_obj.datos_asesoria = datos_asesoria;
 
-
     delete asesoria_obj.id_asesoria;
     delete asesoria_obj.resumen_asesoria;
     delete asesoria_obj.conclusion_asesoria;
@@ -279,10 +269,6 @@ const formarAseoria = async (asesoria_pre) => {
     delete asesoria_obj.id_distrito_judicial;
     delete asesoria_obj.id_municipio_distrito;
     delete asesoria_obj.estatus_asesoria;
-
-
-
-
 
    // console.log("Paso final");
 

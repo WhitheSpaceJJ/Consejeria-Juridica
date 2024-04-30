@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "flowbite": "^1.8.1",
-    "jStat": "^1.8.6"
+    "fs": "^0.0.1-security",
+    "jStat": "^1.8.6",
+    "path": "^0.12.7"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",

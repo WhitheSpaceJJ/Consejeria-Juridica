@@ -3,12 +3,6 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model'
 import '../codigo-postal/codigo-postal.js'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/asesoria/asesorado-tab.html')
-).text()
-template.innerHTML = html
 
 export class AsesoradoTab extends HTMLElement {
   #api
@@ -33,15 +27,32 @@ export class AsesoradoTab extends HTMLElement {
     return ['id', 'data']
   }
 
+
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.initHTML()
     this.id = 'asesorado'
-
     this.init()
   }
-  
+
+  async initHTML() {
+    const template = document.createElement('template')
+    const response = await fetch('./components/asesoria/asesorado-tab.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+
+
+
+
+
+
+
+
+
   async init() {
     this.#api = new APIModel()
 

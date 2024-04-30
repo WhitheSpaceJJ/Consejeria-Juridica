@@ -1,18 +1,13 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/modal-warning.html')).text()
-template.innerHTML = html
 
 export class Modal extends HTMLElement {
   static get observedAttributes() {
     return ['open', 'message', 'title', 'onClose']
   }
 
+
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
+    this.init()
     this._onCloseCallback = null
 
     this.onClose = () => {
@@ -26,6 +21,21 @@ export class Modal extends HTMLElement {
       }
     }
   }
+
+  async init() {
+    const template = document.createElement('template')
+    const response = await fetch('../assets/modal-warning.html')
+    const html = await response.text()
+    template.innerHTML = html
+
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+  }
+
+
+
+
+
 
   connectedCallback() {
     this.btnCloseAlerta = this.shadowRoot.getElementById('btn-close-alerta')
