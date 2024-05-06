@@ -4,6 +4,13 @@
 
 const observacionDAO = require('../data-access/observacionDAO')
 
+/**
+ * Función que permite crear una observacion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la observacion creada
+ * */
+
 
 const crearObservacion = async (req, res) => {
     try {
@@ -19,6 +26,13 @@ const crearObservacion = async (req, res) => {
         })
     }
 }
+
+/**
+ * Función que permite obtener todas las observaciones
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Array} Array con todas las observaciones registradas
+ * */
 
 
 const obtenerObservaciones = async (req, res) => {
@@ -40,6 +54,13 @@ const obtenerObservaciones = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite obtener una observacion por su id
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la observacion encontrada
+ * */
+
 
 const obtenerObservacion = async (req, res) => {
     try {
@@ -60,6 +81,13 @@ const obtenerObservacion = async (req, res) => {
         })
     }
 }
+
+/**
+ * Función que permite actualizar una observacion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la observacion actualizada
+ * */
 
 
 
@@ -88,6 +116,12 @@ const actualizarObservacion = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite eliminar una observacion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la observacion eliminada
+ * */
 
 
 
@@ -114,6 +148,8 @@ const eliminarObservacion = async (req, res) => {
 }
 
 
+
+// Exportación de funciones
 
 
 

@@ -80,6 +80,7 @@ const getCiudad = async (id) => {
     }
 };
 
+//  Exportamos las funciones
 module.exports = {
     getCiudades,
     getCiudad

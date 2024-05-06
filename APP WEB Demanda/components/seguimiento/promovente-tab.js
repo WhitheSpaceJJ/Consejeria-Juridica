@@ -11,7 +11,7 @@ const html = await (
 template.innerHTML = html
 
 export class PromoventeTab extends HTMLElement {
-
+   //Variables de 
   #api
   #nombre
   #apellidoPaterno
@@ -50,16 +50,109 @@ export class PromoventeTab extends HTMLElement {
   #busquedaCp
   #generos
 
+  #etniaActual
+  #escolaridadActual
+  #ocupacionActual
+  
 
+  #generoActual
+  #editablePromovente
+  #botonBuscarCP
+  #rellenoInputs = false
 
+  #procesoSelecionado = null
+
+  //Metodo encargado de observar los cambios en los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
 
+  //Metodo que obtiene el valor del atributo
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que establece el valor del atributo
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que verifica si el promovente esta completo
+  get isComplete() {
+    return this.validateInputs()
+  }
+
+  //Metodo que obtiene los datos del promovente
+  get data() {
+    const promovente = {
+      nombre: this.#nombre.value,
+      apellido_paterno: this.#apellidoPaterno.value,
+      apellido_materno: this.#apellidoMaterno.value,
+      edad: this.#edad.value,
+      telefono: this.#telefono.value,
+      id_genero: this.#sexo.value,
+      id_etnia: this.#etnia.value,
+      id_escolaridad: this.#escolaridad.value,
+      id_ocupacion: this.#ocupacion.value,
+      español: this.#españolRadioYes.checked,
+      sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
+      etnia: this.#etnia.options[this.#etnia.selectedIndex].text,
+      escolaridad: this.#escolaridad.options[this.#escolaridad.selectedIndex].text,
+      ocupacion: this.#ocupacion.options[this.#ocupacion.selectedIndex].text,
+      domicilio: {
+        calle_domicilio: this.#calle.value,
+        id_domicilio: this.#promventeDomicilio.id_domicilio,
+        numero_exterior_domicilio: this.#numeroExt.value,
+        numero_interior_domicilio: this.#numeroInt.value,
+        id_colonia: this.#colonia.value,
+        cp: this.#cp.value,
+        estado: this.#estado.value,
+        municipio: this.#municipio.value,
+        ciudad: this.#ciudad.value,
+        colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
+      },
+    }
+    return {
+      promovente
+    }
+  }
+//Metodo que establece los datos del promovente
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
+  constructor() {
+    super()
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+    //ID del promovente que nos ayuda con los tabs
+    this.id = 'promovente'
+    this.style.display = 'none'
+    //Componente de registro tab
+    this.registroTab = document.querySelector('registro-full-tab')
+    //Obtencion del formulario de codigo postal
+    this.formCP = this.shadowRoot.getElementById('buscar-cp')
+    //Asignacion de la funcion de busqueda de codigo postal
+    this.formCP.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (
+        !this.#cp.value ||
+        this.#cp.value.length !== 5 ||
+        isNaN(this.#cp.value)
+      ) {
+        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+        return
+      }
+      this.searchCP()
+    })
+  }
+
+  //Metodo que inicializa los datos del promovente, select ,etc
   async init() {
+    //inicio de la api
     this.#api = new APIModel()
-
+   //Obtencion de las etnias
     try {
     const etnias = await this.#api.getEtnias2()
     this.#etnias = etnias
@@ -67,29 +160,34 @@ export class PromoventeTab extends HTMLElement {
       console.error('Error al obtener datos de la API:', error)
     }
 
-
+   //Obtencion de las escolaridades
     try {
       const escolaridades = await this.#api.getEscolaridades2()
       this.#escolaridades = escolaridades
     } catch (error) {
       console.error('Error al obtener datos de la API:', error)
     }
-   
+
+     //Obtencion de las ocupaciones
     try {
     const ocupaciones = await this.#api.getOcupaciones2()
     this.#ocupaciones = ocupaciones
   } catch (error) {
     console.error('Error al obtener datos de la API:', error)
   }
+  //Obtencion de los generos
     const { generos } = await this.#api.getGeneros2()
     this.#generos = generos
+
    //Añadir mecanismo para que cuando se edite los campos de generos, ocupaciones etnicas ,escolaridades se presente el actual sin embargo, 
 
-
+   //Llamada al metodo que maneja los campos del formulario
     this.manageFormFields()
 
+    //Llamada al metodo que llena los inputs
     this.fillInputs()
 
+     //Obtencion del genero actual
     const { genero } = await this.#api.getGeneroByID(this.#promovente.id_genero)
     this.#generoActual = genero
 
@@ -103,7 +201,8 @@ export class PromoventeTab extends HTMLElement {
 
     antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
       */
-       
+        
+    //Se añaade el genero actual al select y asu de igual manera todo lo relacionado se hace con los demas campos
       const option = document.createElement('option')
       option.value = this.#generoActual.id_genero
       option.text = this.#generoActual.descripcion_genero
@@ -193,23 +292,12 @@ export class PromoventeTab extends HTMLElement {
       this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
 
   }
-#etniaActual
-  #escolaridadActual
-  #ocupacionActual
-  
-
-  #generoActual
-  #editablePromovente
-  #botonBuscarCP
 
 
+
+  //Metodo que maneja los campos del formulario
   manageFormFields() {
-
-
-
-
     this.#editablePromovente = this.shadowRoot.getElementById('cbx-editable-promovente')
-
     this.#botonBuscarCP = this.shadowRoot.getElementById('buscar-cp')
     this.#nombre = this.shadowRoot.getElementById('nombre')
     this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
@@ -291,13 +379,6 @@ export class PromoventeTab extends HTMLElement {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
 
-      if (nombreInput.value === '') {
-        // Si el campo está vacío, lanzar una excepción
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      } else
         if (!nombrePattern.test(nombreInput.value)) {
           // Si el campo contiene caracteres no válidos, lanzar una excepción
 
@@ -317,13 +398,7 @@ export class PromoventeTab extends HTMLElement {
 
     apellidoPaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoPaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+ if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -339,13 +414,7 @@ export class PromoventeTab extends HTMLElement {
 
     apellidoMaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoMaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -411,21 +480,21 @@ export class PromoventeTab extends HTMLElement {
 
   }
 
-  #rellenoInputs = false
+  //Metodo que se encarga de llenar los inputs
   fillInputs() {
+    //Obtencion de los datos del promovente
     this.#promovente = this.registroTab.data.promovente
     this.#promventeDomicilio = this.#promovente.domicilio
-     
-    
-     
     this.#etnia.innerHTML = '' 
 
+     //Creacion de un option para el select
      const option = document.createElement('option')
      option.value = 0
      option.text = 'Seleccione una etnia'
      this.#etnia.appendChild(option)    
 
 
+     //Recorrido de las etnias para llenar el select
      try{
 
     this.#etnias.forEach(etnia => {
@@ -439,13 +508,17 @@ export class PromoventeTab extends HTMLElement {
   } catch (error) {
     console.error('Error al obtener datos de la API:', error)
   }
+
+  //Limpiar el select de generos
     this.#generos.innerHTML = ''
     
+    //Creacion de un option para el select
     const optionGenero = document.createElement('option')
     optionGenero.value = 0
     optionGenero.text = 'Seleccione un género'
     this.#sexo.appendChild(optionGenero)
 
+    //Recorrido de los generos para llenar el select
     try {
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
@@ -457,13 +530,17 @@ export class PromoventeTab extends HTMLElement {
     console.error('Error al obtener datos de la API:', error)
   }
 
+    
+  //Limpiar el select de escolaridades
     this.#escolaridad.innerHTML = ''
 
+    //Creacion de un option para el select
     const optionEscolaridad = document.createElement('option')
     optionEscolaridad.value = 0
     optionEscolaridad.text = 'Seleccione una escolaridad'
     this.#escolaridad.appendChild(optionEscolaridad)
  
+    //Recorrido de las escolaridades para llenar el select
     try {
     this.#escolaridades.forEach(escolaridad => {
       const option = document.createElement('option')
@@ -474,13 +551,19 @@ export class PromoventeTab extends HTMLElement {
   } catch (error) {
     console.error('Error al obtener datos de la API:', error)
   }
+
+    //Limpiar el select de ocupaciones
     this.#ocupacion.innerHTML = ''
     
+
+    //Creacion de un option para el select
     const optionOcupacion = document.createElement('option')
     optionOcupacion.value = 0
     optionOcupacion.text = 'Seleccione una ocupación'
     this.#ocupacion.appendChild(optionOcupacion)
 
+
+    //Recorrido de las ocupaciones para llenar el select
     try {
     this.#ocupaciones.forEach(ocupacion => {
       const option = document.createElement('option')
@@ -492,7 +575,7 @@ export class PromoventeTab extends HTMLElement {
     console.error('Error al obtener datos de la API:', error)
   }
 
-
+    //Obtencion de los datos del promovente y llenado de los inputs
     this.#nombre.value = this.#promovente.nombre
     this.#apellidoPaterno.value = this.#promovente.apellido_paterno
     this.#apellidoMaterno.value = this.#promovente.apellido_materno
@@ -506,7 +589,7 @@ export class PromoventeTab extends HTMLElement {
    // this.#ocupacion.value = this.#promovente.promovente.ocupacion.id_ocupacion
 
 
-
+     //
     if (this.#promovente.promovente.español === true) {
       this.#españolRadioYes.checked = true
     } else {
@@ -517,6 +600,7 @@ export class PromoventeTab extends HTMLElement {
     this.#numeroExt.value = this.#promventeDomicilio.numero_exterior_domicilio
     this.#numeroInt.value = this.#promventeDomicilio.numero_interior_domicilio
 
+    //Obtencion de la colonia por id
     this.#api.getColoniaById(this.#promventeDomicilio.id_colonia)
       .then(data => {
         const { colonia } = data
@@ -554,15 +638,11 @@ export class PromoventeTab extends HTMLElement {
   }
 
 
+  //Metodo encargado de validar los inputs
   validateInputs() {
     try {
-   /*
-      if (this.registroTab.data.proceso === undefined) {
-        this.#showModal('No se ha seleccionado un proceso, por favor seleccione uno.', 'Error de validación')
-        return false
-      }
-      */
 
+      //Obtencion de los valores de los inputs
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -577,6 +657,7 @@ export class PromoventeTab extends HTMLElement {
       var edadPattern = /^\d+$/;
 
 
+      //Verificacion de que si el nombre esta vacio, si es mayor a 50 caracteres y si solo contiene letras
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -585,6 +666,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('El nombre solo permite letras, verifique su respuesta.')
       }
 
+      //Verificacion de que si el apellido paterno esta vacio, si es mayor a 50 caracteres y si solo contiene letras
       if (apellidoPaterno === '') {
         throw new ValidationError('El apellido paterno no puede estar vacío, por favor ingréselo.')
       }
@@ -594,6 +676,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('El apellido paterno solo permite letras, verifique su respuesta.')
       }
 
+      //Verificacion de que si el apellido materno esta vacio, si es mayor a 50 caracteres y si solo contiene letras
       if (apellidoMaterno === '') {
         throw new ValidationError('El apellido materno no puede estar vacío, por favor ingréselo.')
 
@@ -604,6 +687,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('El apellido materno solo permite letras, verifique su respuesta.')
       }
 
+      //Verificacion de que si la edad esta vacia, si es mayor a 200 años y si solo contiene numeros
       if (edad === '') {
         throw new ValidationError('La edad no puede estar vacía, por favor ingresela.')
       }
@@ -613,6 +697,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.')
       }
 
+      // Verificacion de que si el telefono esta vacio, si es mayor a 10 caracteres y si solo contiene numeros
       if (telefono === '') {
         throw new ValidationError('El teléfono no puede estar vacío, por favor ingréselo.')
       }
@@ -623,26 +708,35 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('El teléfono solo permite números, verifique su respuesta.')
       }
 
+      //Obtencion de los valores de los selects
       var etnia = this.#etnia.value
       var escolaridad = this.#escolaridad.value
       var ocupacion = this.#ocupacion.value
       var espapñolRadioYes = this.#españolRadioYes.checked
       var espapñolRadioNo = this.#españolRadioNo.checked
 
+      //Verificacion de que si el select de español esta vacio
       if (espapñolRadioNo === false && espapñolRadioYes === false) {
         throw new ValidationError('Por favor seleccione si habla español o no.')
       }
+ 
 
+      //Verificacion de que si el select de etnia esta vacio
       if (etnia === '0') {
         throw new ValidationError('Por favor seleccione una etnia.')
       }
+
+      //Verificacion de que si el select de escolaridad esta vacio
       if (escolaridad === '0') {
         throw new ValidationError('Por favor seleccione una escolaridad.')
       }
+
+      //Verificacion de que si el select de ocupacion esta vacio
       if (ocupacion === '0') {
         throw new ValidationError('Por favor seleccione una ocupación.')
       }
 
+      //Verificacion de que si la calle esta vacia, si es mayor a 100 caracteres
       if (calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingrésela.')
       }
@@ -650,6 +744,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('La calle no puede tener más de 100 caracteres, por favor ingrésela correctamente.')
       }
 
+      //Verificacion de que si el numero exterior esta vacio, si es mayor a 10 caracteres y si solo contiene numeros
       if (numeroExt === '') {
         throw new ValidationError('El número exterior no puede estar vacío, por favor ingréselo.')
       }
@@ -660,6 +755,7 @@ export class PromoventeTab extends HTMLElement {
         throw new ValidationError('El número exterior solo permite números, verifique su respuesta.')
       }
 
+      //En caso de que el numero interior no este vacio, si es mayor a 10 caracteres y si solo contiene numeros
       if (numeroInt !== '') {
         if (numeroInt.length > 10) {
           throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingréselo correctamente.')
@@ -669,12 +765,14 @@ export class PromoventeTab extends HTMLElement {
         }
       }
 
+      //Verificacion de que si la colonia esta vacia
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
 
       return true
     } catch (error) {
+      //Manejo de errores
       if (error instanceof ValidationError) {
         this.#showModal(error.message, 'Error de validación')
       } else {
@@ -687,40 +785,20 @@ export class PromoventeTab extends HTMLElement {
       return false
     }
   }
-
-  constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-    this.id = 'promovente'
-    this.style.display = 'none'
-    this.registroTab = document.querySelector('registro-full-tab')
-    this.formCP = this.shadowRoot.getElementById('buscar-cp')
-
-
-
-    this.formCP.addEventListener('click', (event) => {
-      event.preventDefault();
-      if (
-        !this.#cp.value ||
-        this.#cp.value.length !== 5 ||
-        isNaN(this.#cp.value)
-      ) {
-        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-        return
-      }
-      this.searchCP()
-    })
-  }
+  
+  //Busqueda de codigo postal
   async searchCP() {
     try {
+      //Obtencion de los datos de la api
       const { colonias: data } = await this.#api.getDomicilioByCP(
         this.#cp.value
       )
+      //En caso de que no se encuentre el codigo postal
       if (!data || typeof data === 'string') {
         this.#showModal('No se encontró el código postal', 'Advertencia')
         return
       }
+      //Obtencion de los datos de la colonia y llenado de los inputs
       this.#estado.innerHTML = '';
       this.#estado.value = data.estado.nombre_estado
       this.#municipio.innerHTML = '';
@@ -729,12 +807,13 @@ export class PromoventeTab extends HTMLElement {
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
      
+      //Creacion de un option para el select
       const option = document.createElement('option')
       option.value = 0
       option.text = 'Seleccione una colonia'
       this.#colonia.appendChild(option)
 
-
+      //Recorrido de las colonias para llenar el select
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -747,9 +826,12 @@ export class PromoventeTab extends HTMLElement {
     }
   }
 
+  //Metodo que se encarga de observar los cambios en los atributos
   connectedCallback() {
+    //Obtencion del boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-promovente-next')
 
+    //Añadir un evento al boton de siguiente
     this.btnNext.addEventListener('click', () => {
       if (!this.validateInputs()) return
       const event = new CustomEvent('next', {
@@ -759,20 +841,12 @@ export class PromoventeTab extends HTMLElement {
       })
       this.dispatchEvent(event)
     })
-    /**
-       document.addEventListener('tab-change', event => {
-      const tabId = event.detail.tabId
-      if (tabId !== 'promovente') {
-        return
-      }
-
-      this.init()
-    })
-    .
-     */
+ 
+    //Añadir un evento al boton de atras 
     document.addEventListener('tab-change', event => {
       const tabId = event.detail.tabId
-
+      //Verifacion que es realizada con el fin de saber si se ha selecionado ya algun proceso, en caso de que no se haya seleccionado se muestra un mensaje
+      //y en caso de haya seleccionado uno diferente al que se tenia se actualiza el proceso
       if (this.#procesoSelecionado === null) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
@@ -786,66 +860,13 @@ export class PromoventeTab extends HTMLElement {
     })
   }
 
-
-
-  #procesoSelecionado = null
-
-
+  //Muestra un modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
     modal.title = title
     modal.open = true
     modal.setOnCloseCallback(onCloseCallback)
-  }
-
-  get id() {
-    return this.getAttribute('id')
-  }
-
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get isComplete() {
-    return this.validateInputs()
-  }
-  get data() {
-    const promovente = {
-      nombre: this.#nombre.value,
-      apellido_paterno: this.#apellidoPaterno.value,
-      apellido_materno: this.#apellidoMaterno.value,
-      edad: this.#edad.value,
-      telefono: this.#telefono.value,
-      id_genero: this.#sexo.value,
-      id_etnia: this.#etnia.value,
-      id_escolaridad: this.#escolaridad.value,
-      id_ocupacion: this.#ocupacion.value,
-      español: this.#españolRadioYes.checked,
-      sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
-      etnia: this.#etnia.options[this.#etnia.selectedIndex].text,
-      escolaridad: this.#escolaridad.options[this.#escolaridad.selectedIndex].text,
-      ocupacion: this.#ocupacion.options[this.#ocupacion.selectedIndex].text,
-      domicilio: {
-        calle_domicilio: this.#calle.value,
-        id_domicilio: this.#promventeDomicilio.id_domicilio,
-        numero_exterior_domicilio: this.#numeroExt.value,
-        numero_interior_domicilio: this.#numeroInt.value,
-        id_colonia: this.#colonia.value,
-        cp: this.#cp.value,
-        estado: this.#estado.value,
-        municipio: this.#municipio.value,
-        ciudad: this.#ciudad.value,
-        colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
-      },
-    }
-    return {
-      promovente
-    }
-  }
-
-  set data(value) {
-    this.setAttribute('data', value)
   }
 }
 

@@ -11,14 +11,13 @@ const html = await (
 template.innerHTML = html
 
 export class DetallesTab extends HTMLElement {
-    #api
 
+    //Variable de la clase
+    #api
     #registroTab
     #promoventeTab
     #procesoTab
     #imputadoTab
-
-
     #nombreDefensor
     #tipoJuicio
     #fechaInicio
@@ -64,31 +63,61 @@ export class DetallesTab extends HTMLElement {
     #ciudadImputado
     #coloniaImputado
 
+    //Metodo que obtiene los atributos que se observan
+    static get observedAttributes() {
+        return ['id', 'data']
+    }
+
+    //Metodo que obtiene el id del componente
+    get id() {
+        return this.getAttribute('id')
+    }
+
+    //Metodo que setea el id del componente
+    set id(value) {
+        this.setAttribute('id', value)
+    }
+
+    //Metodo que valida si el componente esta   completo
+    get isComplete() {
+        return this.validateInputs()
+    }
+
+    //Metodo que obtiene los datos del componente
+    get data() {
+        return {}
+    }
+
+    //Metodo que setea los datos del componente
+    set data(value) {
+        this.init()
+        this.setAttribute('data', value)
+    }
 
 
-
-
+    //Constructor de la clase
     constructor() {
         super()
         const shadow = this.attachShadow({ mode: 'open' })
         shadow.appendChild(template.content.cloneNode(true))
+        //ID que nos ayuda para el cambio de tabs
         this.id = 'detalles'
         this.style.display = 'none'
+        //Inicializamos las variables de los componentes
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
         this.#imputadoTab = document.querySelector('imputado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
     }
+
+    //Metodo que inicializa las variables de la clase, maneja los campos del formulario y llena los inputs
     async init() {
         this.#api = new APIModel()
-
-
         this.manageFormFields()
         this.fillInputs()
-
-
     }
 
+    //Metodo que maneja los campos del formulario
     manageFormFields() {
 
         this.#nombreDefensor = this.shadowRoot.getElementById('nombre-defensor')
@@ -136,11 +165,17 @@ export class DetallesTab extends HTMLElement {
 
     }
 
+    //Metodo que llena los inputs del formulario , etc
     fillInputs() {
+
+        //Obtencion de los datos de los tabs, para llenar los inputs
+        //en este caso se obtienen los datos de los tabs de promovente, imputado y proceso
+        //y se rellenan los datos al html correspondiente
 
         const { promovente } = this.#promoventeTab.data
         const { imputado } = this.#imputadoTab.data
         const { proceso } = this.#procesoTab.data
+        
         this.#tipoJuicio.textContent = proceso.tipo_juicio
         this.#fechaInicio.textContent = proceso.fecha_inicio
         this.#numeroExpediente.textContent = proceso.numero_expediente
@@ -200,32 +235,40 @@ export class DetallesTab extends HTMLElement {
 
     }
 
+    //Conector del componente que inicializa el componente
     connectedCallback() {
+        //Obtencion del boton de crear asesoria
         this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-proceso')
 
+        //Evento que se dispara al dar click en el boton de crear asesoria
         this.btnCrearAsesoria.addEventListener('click', async () => {
             try {
+                //Onjeto que contiene los datos de los tabs
                 const { promovente } = this.#promoventeTab.data
                 const { imputado } = this.#imputadoTab.data
                 const { proceso } = this.#procesoTab.data
-                const {id_proceso_judicial, id_promovente, id_imputado } = this.#registroTab.data
+                const { id_proceso_judicial, id_promovente, id_imputado } = this.#registroTab.data
                 promovente.id_promovente = id_promovente
                 imputado.id_imputado = id_imputado
                 proceso.id_proceso_judicial = id_proceso_judicial
-                 const data = {
+                //Creacion del objeto que contiene los datos de los tabs
+                const data = {
                     promovente,
                     imputado,
                     proceso
-                 }
-                 await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
+                }
+                //LLamada a la API para crear un proceso judicial
+                await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
+                //Mensaje de exito
                 this.#showModal(
                     'El proceso judicial se ha actualizado correctamente',
                     'Proceso Judicial actualizado',
                     () => {
                         location.href = '/'
                     }
-                )                  
+                )
             } catch (error) {
+                //Mensaje de error
                 console.error(error)
                 this.#showModal(
                     'Ocurrió un error al registrar el proceso judicial',
@@ -233,42 +276,19 @@ export class DetallesTab extends HTMLElement {
                 )
             }
         })
-       
+   //Metodo que maneja los cambios de tabs
         document.addEventListener('tab-change', event => {
             const tabId = event.detail.tabId
-           if (tabId !== 'detalles') {
+            if (tabId !== 'detalles') {
                 return
             }
-            this.init() 
+            this.init()
         })
     }
 
 
-    static get observedAttributes() {
-        return ['id', 'data']
-    }
-
-    get id() {
-        return this.getAttribute('id')
-    }
-
-    set id(value) {
-        this.setAttribute('id', value)
-    }
-
-    get isComplete() {
-        return this.validateInputs()
-    }
-
-    get data() {
-        return {}
-    }
-
-    set data(value) {
-        this.init()
-        this.setAttribute('data', value)
-    }
-
+   
+    //Metodo que muestra el mensaje de modal
     #showModal(message, title, onCloseCallback) {
         const modal = document.querySelector('modal-warning')
         modal.message = message

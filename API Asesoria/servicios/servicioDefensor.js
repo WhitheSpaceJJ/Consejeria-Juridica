@@ -31,7 +31,7 @@ const obtenerDefensores = asyncError(async (req, res, next) => {
     const activo = req.query.activo;
     if (activo !== undefined && activo !== null && activo !== "") {
         const result = await controlDefensores.obtenerDefensores(activo);
-        if (result === null || result === undefined) {
+        if (result === null || result === undefined || result.length === 0) {
             const error = new CustomeError('No se encontraron defensores', 404);
             return next(error);
         } else {
@@ -42,7 +42,7 @@ const obtenerDefensores = asyncError(async (req, res, next) => {
   
     }else {
         const result = await controlDefensores.obtenerDefensores();
-        if (result === null || result === undefined) {
+        if (result === null || result === undefined || result.length === 0) {
             const error = new CustomeError('No se encontraron defensores', 404);
             return next(error);
         } else {
@@ -117,7 +117,7 @@ const actualizarDefensor = asyncError(async (req, res, next) => {
 
 const obtenerDefensoresZona  = asyncError(async (req, res, next) => {
     const result = await controlDefensores.obtenerDefensoresZona(req.params.id);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('Error al obtener el defensor', 404);
         return next(error);
     } else {

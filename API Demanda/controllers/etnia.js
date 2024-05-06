@@ -10,13 +10,17 @@ const obtenerEtnias = async (req, res) => {
     if (activo !== undefined && activo !== null && activo !== "") {
       const etnias = await etniaDAO.obtenerEtnias(activo)
       if (etnias.length === 0) {
-        return res.status(204).json(etnias)
+        return res.status(404).json({
+          message: 'No se encontraron etnias'
+        });
       }
       res.json(etnias)
     } else {
       const etnias = await etniaDAO.obtenerEtnias()
       if (etnias.length === 0) {
-        return res.status(204).json(etnias)
+         return res.status(404).json({
+          message: 'No se encontraron etnias'
+        });
       }
       res.json(etnias)
     }
@@ -36,6 +40,11 @@ const obtenerEtnia = async (req, res) => {
   try {
     const { id } = req.params
     const etnia = await etniaDAO.obtenerEtnia(Number(id))
+    if (etnia === null || etnia === undefined) {
+      return res.status(404).json({
+        message: 'Etnia no encontrada'
+      });
+    }
     res.json(etnia)
   } catch (error) {
     res.status(500).json({

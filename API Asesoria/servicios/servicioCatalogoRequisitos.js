@@ -34,7 +34,7 @@ const obtenerCatalogoRequisitos = asyncError(async (req, res, next) => {
   const activo = req.query.activo;
   if (activo !== undefined && activo !== null && activo !== "") { 
     const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitos(activo);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron requisitos del catálogo', 404);
       return next(error);
     } else {
@@ -45,7 +45,7 @@ const obtenerCatalogoRequisitos = asyncError(async (req, res, next) => {
     }
   }else {
     const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitos(null);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron requisitos del catálogo', 404);
       return next(error);
     } else {

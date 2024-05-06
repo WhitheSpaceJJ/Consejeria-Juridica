@@ -3,13 +3,21 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model'
 import '../codigo-postal/codigo-postal.js'
 
+// Esto es con el fin  de crear un template, donde se almacena el html del componente
 
+const template = document.createElement('template')
+const html = await (
+  await fetch('./components/asesoria/asesorado-tab.html')
+).text()
+template.innerHTML = html
+
+// Se crea la clase AsesoradoTab que extiende de HTMLElement
 export class AsesoradoTab extends HTMLElement {
+  // Se crean las variables privadas
   #api
   #generos
   #motivos
   #estadosCiviles
-
   #nombre
   #apellidoPaterno
   #apellidoMaterno
@@ -23,50 +31,198 @@ export class AsesoradoTab extends HTMLElement {
   #numeroHijos
   #domicilio
 
+  // Se crea el método estático observedAttributes que retorna un array con los atributos que se desean observar
   static get observedAttributes() {
     return ['id', 'data']
   }
 
+  // Metodo que obtiene el valor del atributo id
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  // Metodo que asigna un valor al atributo id
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que verifica si el formulario esta completo
+  get isComplete() {
+    return this.validateInputs()
+  }
+
+  //Metodo que obtiene los valores de todo el formulario
+  get data() {
+    const asesorado = {
+      estatus_trabajo: this.#estatusTrabajo === 'yes',
+      numero_hijos: Number(this.#numeroHijos.value),
+      ingreso_mensual: Number(this.#ingreso) || null,
+      motivo: {
+        id_motivo: Number(this.#motivo.value),
+      },
+      estado_civil: {
+        id_estado_civil: Number(this.#estadoCivil.value),
+        estado_civil:
+          this.#estadoCivil.options[this.#estadoCivil.selectedIndex].text,
+      },
+    }
+    const persona = {
+      nombre: this.#nombre.value,
+      apellido_paterno: this.#apellidoPaterno.value,
+      apellido_materno: this.#apellidoMaterno.value,
+      edad: Number(this.#edad.value),
+      telefono: this.#telefono.value,
+      domicilio: {
+        calle_domicilio: this.#domicilio.data.calle,
+        numero_exterior_domicilio: this.#domicilio.data.numeroExt,
+        numero_interior_domicilio: this.#domicilio.data.numeroInt,
+        id_colonia: this.#domicilio.data.colonia,
+      },
+      genero: {
+        id_genero: Number(this.#sexo.value),
+        descripcion_genero: this.#sexo.options[this.#sexo.selectedIndex].text,
+      },
+    }
+
+    return {
+      asesorado,
+      persona,
+    }
+  }
+
+  //Metodo que asigna un valor al atributo data
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
-    this.initHTML()
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+    //Este id es con respecto al manejo de las tabs y los eventos relacionaos al archivo de tabs-header.js
     this.id = 'asesorado'
+
+    // Llamado al metodo init
     this.init()
   }
 
-  async initHTML() {
-    const template = document.createElement('template')
-    const response = await fetch('./components/asesoria/asesorado-tab.html')
-    const html = await response.text()
-    template.innerHTML = html
-
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+  //Metodo que se encarga de inicializar el componente
+  async init() {
+    // Se crea una instancia de la clase APIModel
+    this.#api = new APIModel()
+    // Metodo que se encarga de establecer las variables con respecto a los campos del formulario
+    this.manageFormFields()
+    //v Metodo que rellena los campos select del formulario
+    await this.busquedaDatosSelects()
+    //Metodo que se encarga de rellenar los campos select del formulario
+    this.fillInputs()
+    //Metodo que se encarga de validar los campos del formulario en tiempo real con respecto a metodos input
+    this.validacionesEntrada()
   }
 
+  //Metodo que se encarga de buscar los datos de los selects
+  async busquedaDatosSelects() {
+    // Se obtienen los datos del select de generos, getGeneros2 es un metodo de la clase APIModel el cual obtiene los generos con estatus de activo
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      // Se asignan los generos a la variable generos
+      this.#generos = generos
+    }
+    catch (error) {
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al cargar los datos de generos, por favor intenta de nuevo habilitarlos o ingresar nuevos datos.'
+      modal.title = 'Error'
+      modal.open = true
+    }
+    try {
+      // Se obtienen los datos del select de motivos, getMotivos2 es un metodo de la clase APIModel el cual obtiene los motivos con estatus de activo
 
+      const { motivos } = await this.#api.getMotivos2()
+      // Se asignan los motivos a la variable motivos
+      this.#motivos = motivos
+    } catch (error) {
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al cargar los datos de motivos, por favor intenta de nuevo habilitarlos o ingresar nuevos datos.'
+      modal.title = 'Error'
+      modal.open = true
+    }
+    try {
+      // Se obtienen los datos del select de estados civiles, getEstadosCiviles2 es un metodo de la clase APIModel el cual obtiene los estados civiles con estatus de activo
+      const { estadosCiviles } = await this.#api.getEstadosCiviles2()
+      // Se asignan los estados civiles a la variable estadosCiviles
+      this.#estadosCiviles = estadosCiviles
+    }
+    catch (error) {
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al cargar los datos de estados civiles, por favor intenta de nuevo habilitarlos o ingresar nuevos datos.'
+      modal.title = 'Error'
+      modal.open = true
+    }
+  }
 
+  //Metodo que se encarga de asignar los campos del formulario a las variables privadas
+  manageFormFields() {
+    // Inicializacion de variables privadas con respecto a elementos del formulario
+    this.#nombre = this.shadowRoot.getElementById('nombre')
+    this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
+    this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
+    this.#edad = this.shadowRoot.getElementById('edad')
+    this.#sexo = this.shadowRoot.getElementById('sexo')
+    this.#telefono = this.shadowRoot.getElementById('telefono')
+    this.#motivo = this.shadowRoot.getElementById('motivo')
+    this.#estadoCivil = this.shadowRoot.getElementById('estado-civil')
+    this.#numeroHijos = this.shadowRoot.getElementById('numero-hijos')
+    this.#domicilio = this.shadowRoot.querySelector('cp-comp')
+  }
+  // Metodo que se encarga de rellenar los campos select del formulario
+  fillInputs() {
+    // Se recorren los generos y se añaden al select de generos
 
+    this.#generos.forEach(genero => {
+      const option = document.createElement('option')
+      option.value = genero.id_genero
+      option.text = genero.descripcion_genero
+      this.#sexo.appendChild(option)
+    })
 
+    // Se recorren los motivos y se añaden al select de motivos
+    this.#motivos.forEach(motivo => {
+      const option = document.createElement('option')
+      option.value = motivo.id_motivo
+      option.text = motivo.descripcion_motivo
+      this.#motivo.appendChild(option)
+    })
 
+    // Se recorren los estados civiles y se añaden al select de estados civiles
+    this.#estadosCiviles.forEach(estadoCivil => {
+      const option = document.createElement('option')
+      option.value = estadoCivil.id_estado_civil
+      option.text = estadoCivil.estado_civil
+      this.#estadoCivil.appendChild(option)
+    })
 
+  }
 
-
-  async init() {
-    this.#api = new APIModel()
-
-    const { generos } = await this.#api.getGeneros2()
-    this.#generos = generos
-
-    const { motivos } = await this.#api.getMotivos2()
-    this.#motivos = motivos
-
-    const { estadosCiviles } = await this.#api.getEstadosCiviles2()
-    this.#estadosCiviles = estadosCiviles
-
-    this.manageFormFields()
-    this.fillInputs()
+  /**
+   * Método que se encarga de validar los campos de entrada del formulario
+   */
+  validacionesEntrada() {
     // Obtener una referencia al campo de entrada
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
@@ -74,40 +230,27 @@ export class AsesoradoTab extends HTMLElement {
     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     nombreInput.addEventListener('input', function () {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
+      if (!nombrePattern.test(nombreInput.value)) {
+        // Si el campo contiene caracteres no válidos, lanzar una excepción
 
-      if (nombreInput.value === '') {
-        // Si el campo está vacío, lanzar una excepción
         const modal = document.querySelector('modal-warning')
-        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
+        modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
-      } else
-        if (!nombrePattern.test(nombreInput.value)) {
-          // Si el campo contiene caracteres no válidos, lanzar una excepción
 
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-          modal.title = 'Error de validación'
-          modal.open = true
-
-        } else if (nombreInput.value.length > 50) {
-          // Si el campo tiene más de 50 caracteres, lanzar una excepción
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
+      } else if (nombreInput.value.length > 50) {
+        // Si el campo tiene más de 50 caracteres, lanzar una excepción
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
     });
 
     apellidoPaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
-      if (apellidoPaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+      if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -122,13 +265,7 @@ export class AsesoradoTab extends HTMLElement {
 
     apellidoMaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoMaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+      if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -210,111 +347,22 @@ export class AsesoradoTab extends HTMLElement {
             modal.title = 'Error de validación';
             modal.open = true;
           }
-        /*else if (telefonoInput.value.length < 10) {
-          const modal = document.querySelector('modal-warning');
-          modal.message ='El teléfono no debe ser menor a 10 dígitos, por favor ingreselo correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        }
-        */
       }
 
     });
-
-    /*
-    
-    
-      var numeroExteriorInput = this.#domicilio.data.numeroExt;
-      var numeroInteriorInput =this.#domicilio.data.numeroInt;
-    
-      var nombrePattern = /^[A-Za-z]+$/;
-    
-      numeroExteriorInput.addEventListener('input', function () {
-        if (numeroExteriorInput === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior no puede estar vacío, por favor ingreselo.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (nombrePattern.test(numeroExteriorInput)) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior solo permite números, verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (numeroExteriorInput.length > 10) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        }
-      });
-      numeroInteriorInput.addEventListener('input', function () {
-      
-        if (numeroInteriorInput !== '') {
-          if (nombrePattern.test(numeroInteriorInput)) {
-            const modal = document.querySelector('modal-warning');
-            modal.message = 'El número interior solo permite números, verifique su respuesta.';
-            modal.title = 'Error de validación';
-            modal.open = true;
-          } else
-            if (numeroInteriorInput.length > 10) {
-              const modal = document.querySelector('modal-warning');
-              modal.message = 'El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.';
-              modal.title = 'Error de validación';
-              modal.open = true;
-            }
-        }
-      });
-     
-    
-     */
-
   }
 
-  manageFormFields() {
-    this.#nombre = this.shadowRoot.getElementById('nombre')
-    this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
-    this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
-    this.#edad = this.shadowRoot.getElementById('edad')
-    this.#sexo = this.shadowRoot.getElementById('sexo')
-    this.#telefono = this.shadowRoot.getElementById('telefono')
-    this.#motivo = this.shadowRoot.getElementById('motivo')
-    this.#estadoCivil = this.shadowRoot.getElementById('estado-civil')
-    this.#numeroHijos = this.shadowRoot.getElementById('numero-hijos')
-    this.#domicilio = this.shadowRoot.querySelector('cp-comp')
-
-
-  }
-
-  fillInputs() {
-    this.#generos.forEach(genero => {
-      const option = document.createElement('option')
-      option.value = genero.id_genero
-      option.text = genero.descripcion_genero
-      this.#sexo.appendChild(option)
-    })
-
-    this.#motivos.forEach(motivo => {
-      const option = document.createElement('option')
-      option.value = motivo.id_motivo
-      option.text = motivo.descripcion_motivo
-      this.#motivo.appendChild(option)
-    })
-
-    this.#estadosCiviles.forEach(estadoCivil => {
-      const option = document.createElement('option')
-      option.value = estadoCivil.id_estado_civil
-      option.text = estadoCivil.estado_civil
-      this.#estadoCivil.appendChild(option)
-    })
-  }
-
+  //Metodo que se encarga de validar los campos del formulario
   validateInputs() {
+    // Se asignan los valores de los campos del formulario a las variables privadas
     this.#estatusTrabajo = this.shadowRoot.querySelector(
       'input[name="rb-trabajo"]:checked'
     )?.value
+    // Se asigna el valor del campo ingreso a la variable privada ingreso
     this.#ingreso = this.shadowRoot.querySelector(
       'input[name="rb-ingreso"]:checked'
     )?.value
+    //Se realiza un arreglo con los valores de los campos del formulario
     const inputs = [
       this.#nombre.value,
       this.#apellidoPaterno.value,
@@ -329,25 +377,31 @@ export class AsesoradoTab extends HTMLElement {
       this.#domicilio.data.numeroExt,
       this.#domicilio.data.colonia,
     ]
+    // Se crea un try catch para manejar los errores
     try {
-    //  var nombrePattern2 = /^[A-Za-z\s]+$/; // Se añade \s para permitir espacios en blanco
+      // Expresión regular para validar que solo se ingresen letras y espacios en blanco
       var nombrePattern2 = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-   //   var nombrePattern = /^[A-Za-z]+$/;
+      // Expresión regular para validar que solo se ingresen letras
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
+      // Expresión regular para validar que solo se ingresen números enteros
       var enterosPattern = /^\d+$/;
 
+
+      // Se valida que el campo nombre no este vacio     
       if (this.#nombre.value === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingreselo.')
       }
+      // Se valida que el campo nombre solo contenga letras
       else if (!nombrePattern2.test(this.#nombre.value)) {
         throw new ValidationError('El nombre solo permite letras, verifique su respuesta.')
-      } else if (this.#nombre.value.length > 50) {
+      }
+      // Se valida que el campo nombre no tenga mas de 50 caracteres
+      else if (this.#nombre.value.length > 50) {
         throw new ValidationError('El nombre no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
       }
 
 
-
+      //Se valida que el campo apellido paterno no este vacio, solo contenga letras y no tenga mas de 50 caracteres
       if (this.#apellidoPaterno.value === '') {
         throw new ValidationError('El apellido paterno no puede estar vacío, por favor ingreselo.')
       }
@@ -357,6 +411,7 @@ export class AsesoradoTab extends HTMLElement {
         throw new ValidationError('El apellido paterno no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
       }
 
+      //Se valida que el campo apellido materno no este vacio, solo contenga letras y no tenga mas de 50 caracteres
       if (this.#apellidoMaterno.value === '') {
         throw new ValidationError('El apellido materno no puede estar vacío, por favor ingreselo.')
       }
@@ -367,7 +422,7 @@ export class AsesoradoTab extends HTMLElement {
       }
 
 
-
+      //Se valida que el campo edad si no este vacio, solo contenga numeros y no sea mayor a 200
       if (!enterosPattern.test(this.#edad.value)) {
         if (this.#edad.value === '') {
           throw new ValidationError('La edad no puede estar vacía, por favor ingresela.')
@@ -379,16 +434,12 @@ export class AsesoradoTab extends HTMLElement {
         throw new ValidationError('La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.')
       }
 
-
+      //Se valida que el campo sexo no este vacio
       if (this.#sexo.value === '') {
         throw new ValidationError('El sexo es obligatorio, por favor seleccione uno.')
       }
-      /*
-      if(this.#telefono.value ===''){
-        throw new ValidationError('El teléfono no puede estar vacío, por favor ingreselo.')
-      }
-      else 
-      */
+
+      //Se valida que el campo telefono solo contenga numeros, no tenga mas de 10 caracteres cuando no este vacio
       if (this.#telefono.value !== '') {
         if (!enterosPattern.test(this.#telefono.value)) {
           throw new ValidationError('El teléfono solo debe de  dígitos, por favor ingreselo correctamente.')
@@ -400,7 +451,7 @@ export class AsesoradoTab extends HTMLElement {
         }
       }
 
-
+      //Se valida que el campo estatusTrabajo no este vacio, si es yes se valida que el campo ingreso no este vacio, si es no se valida que el campo motivo no este vacio
       if (this.#estatusTrabajo === '' || this.#estatusTrabajo === undefined) {
         throw new ValidationError('Seleccione una opción para el ingreso o el motivo de no trabajar.')
       } else if (this.#estatusTrabajo === 'yes' && this.#ingreso === undefined) {
@@ -408,20 +459,13 @@ export class AsesoradoTab extends HTMLElement {
       } else if (this.#estatusTrabajo === 'no' && this.#motivo.value === '') {
         throw new ValidationError('Seleccione una opción para el motivo de no trabajar.')
       }
-      /*
-            if (
-              (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
-              (this.#estatusTrabajo === 'no' && !this.#motivo)
-            ) {
-              throw new ValidationError(
-                'Seleccione una opción para el ingreso o el motivo de no trabajar.'
-              )
-            }
-      */
+
+      //Se valida que el campo estadoCivil no este vacio
       if (this.#estadoCivil.value === '') {
         throw new ValidationError('El estado civil es obligatorio, por favor seleccione uno.')
       }
 
+      // Se valida que el campo numeroHijos no este vacio, solo contenga numeros y no sea mayor a 200
       if (!enterosPattern.test(this.#numeroHijos.value)) {
         if (this.#numeroHijos.value === '') {
           throw new ValidationError('El número de hijos no puede estar vacío, por favor ingreselo.')
@@ -433,13 +477,14 @@ export class AsesoradoTab extends HTMLElement {
         throw new ValidationError('El número de hijos no puede ser mayor a 200, por favor ingreselo correctamente.')
       }
 
-
+      //Se valida que el campo calle no este vacio, no tenga mas de 75 caracteres
       if (this.#domicilio.data.calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingresela.')
       } else if (this.#domicilio.data.calle.length > 75) {
         throw new ValidationError('La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.')
       }
 
+      //Se valida que el campo numeroExt no este vacio, solo contenga numeros, no tenga mas de 10 caracteres
       if (this.#domicilio.data.numeroExt === '') {
         throw new ValidationError('El número exterior no puede estar vacío, por favor ingreselo.')
       } else if (!enterosPattern.test(this.#domicilio.data.numeroExt)) {
@@ -447,6 +492,8 @@ export class AsesoradoTab extends HTMLElement {
       } else if (this.#domicilio.data.numeroExt.length > 10) {
         throw new ValidationError('El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.')
       }
+
+      //Se valida que el campo numeroInt solo contenga numeros, no tenga mas de 10 caracteres
       if (this.#domicilio.data.numeroInt !== '') {
         if (!enterosPattern.test(this.#domicilio.data.numeroInt)) {
           throw new ValidationError('El número interior solo permite números, verifique su respuesta.')
@@ -459,22 +506,6 @@ export class AsesoradoTab extends HTMLElement {
       if (this.#domicilio.data.colonia === '') {
         throw new ValidationError('La colonia es obligatoria, por favor busque una con el codigo postal.')
       }
-
-      /*
-           if (!validateNonEmptyFields(inputs)) {
-             throw new ValidationError(
-               'Campos obligatorios en blanco, por favor revise.'
-             )
-           }
-           if (
-             (this.#estatusTrabajo === 'yes' && !this.#ingreso) ||
-             (this.#estatusTrabajo === 'no' && !this.#motivo)
-           ) {
-             throw new ValidationError(
-               'Campos obligatorios en blanco, por favor revise.'
-             )
-           } 
-           */
 
       return true
     } catch (error) {
@@ -492,14 +523,17 @@ export class AsesoradoTab extends HTMLElement {
     }
   }
 
+  //Metodo que se encarga de manejar los eventos de los elementos del formulario
   connectedCallback() {
     this.btnNext = this.shadowRoot.getElementById('btn-asesorado-next')
     const radioButtons = this.shadowRoot.querySelectorAll(
       'input[name="rb-trabajo"]'
     )
+
     const ingresoContainer = this.shadowRoot.getElementById('ingreso-container')
     const motivoContainer = this.shadowRoot.getElementById('motivo-container')
 
+    // Se añade un evento change a los radioButtons para mostrar u ocultar los campos de ingreso o motivo
     radioButtons.forEach(radioButton => {
       radioButton.addEventListener('change', event => {
         if (event.target.value === 'yes') {
@@ -515,7 +549,7 @@ export class AsesoradoTab extends HTMLElement {
       })
     })
 
-
+    // Metodo que se encarga de añadir un evento click al boton de siguiente, y asi poder pasar al siguiente tab
     this.btnNext.addEventListener('click', () => {
       if (!this.validateInputs()) return
       const event = new CustomEvent('next', {
@@ -527,6 +561,7 @@ export class AsesoradoTab extends HTMLElement {
     })
   }
 
+  //Metodo que muestra un modal de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -535,59 +570,7 @@ export class AsesoradoTab extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
 
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get isComplete() {
-    return this.validateInputs()
-  }
-
-  get data() {
-    const asesorado = {
-      estatus_trabajo: this.#estatusTrabajo === 'yes',
-      numero_hijos: Number(this.#numeroHijos.value),
-      ingreso_mensual: Number(this.#ingreso) || null,
-      motivo: {
-        id_motivo: Number(this.#motivo.value),
-      },
-      estado_civil: {
-        id_estado_civil: Number(this.#estadoCivil.value),
-        estado_civil:
-          this.#estadoCivil.options[this.#estadoCivil.selectedIndex].text,
-      },
-    }
-    const persona = {
-      nombre: this.#nombre.value,
-      apellido_paterno: this.#apellidoPaterno.value,
-      apellido_materno: this.#apellidoMaterno.value,
-      edad: Number(this.#edad.value),
-      telefono: this.#telefono.value,
-      domicilio: {
-        calle_domicilio: this.#domicilio.data.calle,
-        numero_exterior_domicilio: this.#domicilio.data.numeroExt,
-        numero_interior_domicilio: this.#domicilio.data.numeroInt,
-        id_colonia: this.#domicilio.data.colonia,
-      },
-      genero: {
-        id_genero: Number(this.#sexo.value),
-        descripcion_genero: this.#sexo.options[this.#sexo.selectedIndex].text,
-      },
-    }
-
-    return {
-      asesorado,
-      persona,
-    }
-  }
-
-  set data(value) {
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('asesorado-full-tab', AsesoradoTab)

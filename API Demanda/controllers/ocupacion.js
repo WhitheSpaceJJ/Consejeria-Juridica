@@ -10,7 +10,9 @@ const obtenerOcupaciones = async (req, res) => {
     if (activo !== undefined && activo !== null && activo !== "") {
     const ocupaciones = await ocupacionDAO.obtenerOcupaciones(activo)
     if (ocupaciones.length === 0) {
-      return res.status(204).json(ocupaciones)
+      return res.status(404).json({
+        message: 'No se encontraron ocupaciones'
+      });
     }
     res.json(ocupaciones)
   }else{
@@ -36,6 +38,11 @@ const obtenerOcupacion = async (req, res) => {
   try {
     const { id } = req.params
     const ocupacion = await ocupacionDAO.obtenerOcupacion(Number(id))
+    if (ocupacion === null || ocupacion === undefined) {
+      return res.status(404).json({
+        message: 'Ocupación no encontrada'
+      });
+    }
     res.json(ocupacion)
   } catch (error) {
     res.status(500).json({

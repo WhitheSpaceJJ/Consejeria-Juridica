@@ -37,7 +37,7 @@ const obtenerEstadosCiviles = asyncError(async (req, res, next) => {
   const activo = req.query.activo;
   if (activo !== undefined && activo !== null && activo !== "") {
     const result = await controlEstados.obtenerEstadosCiviles(activo);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron estados civiles', 404);
       return next(error);
     } else {
@@ -49,7 +49,7 @@ const obtenerEstadosCiviles = asyncError(async (req, res, next) => {
 
   }else {
     const result = await controlEstados.obtenerEstadosCiviles();
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined   || result.length === 0) {
       const error = new CustomeError('No se encontraron estados civiles', 404);
       return next(error);
     } else {

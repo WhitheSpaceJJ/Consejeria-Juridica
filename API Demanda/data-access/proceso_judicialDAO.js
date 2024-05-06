@@ -43,6 +43,13 @@ class ProcesoJudicialDAO {
       throw err
     }
   }
+   
+  /** 
+   * Método que permite registrar un imputado en la base de datos
+   * @param {object} imputado - Objeto que contiene los datos del imputado
+   * @param {number} id_proceso_judicial - ID del proceso judicial al que pertenece el imputado
+   * @returns {object} Retorna el objeto del imputado creado si la operación fue exitosa, de lo contrario lanza un error
+   * */
 
   async registrarImputado(imputado, id_proceso_judicial) {
 
@@ -62,6 +69,15 @@ class ProcesoJudicialDAO {
     return imputado_object
 
   }
+
+  /**
+   * Método que permite registrar un promovente en la base de datos
+   * @param {object} promovente - Objeto que contiene los datos del promovente
+   * @param {array} familiares - Arreglo de objetos que contienen los datos de los familiares del promovente
+   * @param {number} id_proceso_judicial - ID del proceso judicial al que pertenece el promovente
+   * @returns {object} Retorna el objeto del promovente creado si la operación fue exitosa, de lo contrario lanza un error
+   * */
+
   async registrarPromovente(promovente, familiares, id_proceso_judicial) {
 
 
@@ -92,6 +108,15 @@ class ProcesoJudicialDAO {
 
     return participante_object
   }
+
+/** 
+ * 
+ * Método que permite registrar un proceso judicial en la base de datos
+ * @param {object} proceso - Objeto que contiene los datos del proceso judicial
+ * @param {object} turno - Objeto que contiene los datos del turno
+ * @returns {object} Retorna el objeto del proceso judicial creado si la operación fue exitosa, de lo contrario lanza un error
+ * */
+
 
   async registrarProceso(proceso, turno) {
 
@@ -140,6 +165,15 @@ class ProcesoJudicialDAO {
     return proceso_judicial_object
 
   }
+
+/** 
+ * Método que permite actualizar un proceso judicial en la base de datos
+ * @param {object} proceso_judicial_ob - Objeto que contiene los datos del proceso judicial
+ * @param {object} promovente - Objeto que contiene los datos del promovente
+ * @returns {object} Retorna el objeto del proceso judicial actualizado si la operación fue exitosa, de lo contrario lanza un error
+ * */
+
+
   async actualizarProcesoJudicial(proceso_judicial_ob, promovente) {
  
     const proceso_object = JSON.parse(JSON.stringify(proceso_judicial_ob))
@@ -241,6 +275,12 @@ class ProcesoJudicialDAO {
     proceso_judicial_object_pre.estados_procesales = estadosProcesales_actualizados
     return proceso_judicial_object_pre
   }
+  /**  
+   * Metodo que permite actualizar un imputado en la base de datos
+   * @param {object} imputado - Objeto que contiene los datos del imputado
+   * @returns {object} Retorna el objeto del imputado actualizado si la operación fue exitosa, de lo contrario lanza un error
+   * */
+
 
   async actualizarImputado(imputado) {
   
@@ -252,6 +292,14 @@ class ProcesoJudicialDAO {
     const domicilioParticipante = await domicilioDAO.actualizarDomicilioParticipante(domicilio.id_domicilio, { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
     return imputado_object
   }
+
+  /**
+   * Método que permite actualizar un promovente en la base de datos
+   * @param {object} promovente - Objeto que contiene los datos del promovente
+   *  
+   * @returns {object} Retorna el objeto del promovente actualizado si la operación fue exitosa, de lo contrario lanza un error
+   * */
+  
 
   async actualizarPromovente(promovente) {
 
@@ -265,6 +313,13 @@ class ProcesoJudicialDAO {
     return promovente_object
     
   }
+
+  /** 
+   *  Método que permite obtener un proceso judicial de la base de datos por su id
+   * @param {number} id - ID del proceso judicial a obtener
+   * @returns {object} Retorna el objeto del proceso judicial si la operación fue exitosa, de lo contrario lanza un error
+   * */
+
   async obtenerProcesoJudicialNormal(id) {
     try {
       const procesoJudicial = await proceso_judicial.findByPk(id)
@@ -294,6 +349,13 @@ class ProcesoJudicialDAO {
       throw err
     }
   }
+  /** 
+   * Método que permite obtener todos los procesos judiciales de un defensor de la base de datos
+   * @param {number} id_defensor - ID del defensor a obtener sus procesos judiciales
+   * @returns {array} Retorna un arreglo de objetos de procesos judiciales si la operación fue exitosa, de lo contrario lanza un error
+   * */
+
+
   async obtenerProcesosJudicialesPorDefensor(id_defensor) {
     try {
       const procesosJudiciales = await proceso_judicial.findAll({ where: { id_defensor: id_defensor } })
@@ -311,6 +373,12 @@ class ProcesoJudicialDAO {
       throw err
     }
   }
+/** 
+ *  Método que permite obtener todos los procesos judiciales de un defensor de la base de datos
+ * @param {number} id_defensor - ID del defensor a obtener sus procesos judiciales
+ * @param {string} estatus_proceso - Estatus del proceso judicial a obtener
+ * @returns {array} Retorna un arreglo de objetos de procesos judiciales si la operación fue exitosa, de lo contrario lanza un error
+ * */
 
   async obtenerProcesosJudicialesPorDefensorEstatus(id_defensor, estatus_proceso) {
     try {
@@ -389,6 +457,12 @@ class ProcesoJudicialDAO {
       throw err
     }
   }
+ /**
+  * Método que permite obtener todos los procesos judiciales de un juzgado de la base de datos por su estatus
+  * @param {string} estatus_proceso - Estatus del proceso judicial a obtener
+  * @returns {array} Retorna un arreglo de objetos de procesos judiciales si la operación fue exitosa, de lo contrario lanza un error
+  * */
+
   async obtenerProcesosJudicialesPorTramite(estatus_proceso){
     try {
       const procesosJudiciales = await proceso_judicial.findAll({ where: {estatus_proceso: estatus_proceso } })

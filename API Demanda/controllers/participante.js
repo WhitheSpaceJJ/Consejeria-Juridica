@@ -8,15 +8,7 @@ const participanteDAO = require('../data-access/participanteDAO')
  */
 const crearParticipante = async (req, res) => {
   try {
-    /**
-             "nombre": "Judith",
-            "apellido_paterno": "Orozco",
-            "apellido_materno": "Hernandez",
-            "edad": 34,
-            "telefono": "2323233434",
-            "id_genero": 2,
-            "id_proceso_judicial": 1
-     */
+ 
     const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial } = req.body
     const participante = await participanteDAO.crearParticipante({
       nombre,

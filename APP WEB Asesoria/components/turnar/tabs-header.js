@@ -1,23 +1,24 @@
 const template = document.createElement('template')
 
 class TurnarTabs extends HTMLElement {
- // #tabs = ['asesorado', 'asesoria', 'detalles']
-  //#activeTab
 
+  //Constructor de la clase
   constructor() {
     super()
     this.attachShadow({ mode: 'open' }).appendChild(
       template.content.cloneNode(true)
     )
 
+    //Botones de los tabs
     this.btnAsesorado = this.shadowRoot.getElementById('btn-asesorado')
     this.btnDomicilio = this.shadowRoot.getElementById('btn-domicilio')
     this.btnTurno = this.shadowRoot.getElementById('btn-turno')
- //   this.#activeTab = 'asesorado'
 
+    //Se añaden los eventos de click
     this.addClickEventListeners()
   }
 
+  //MEtodo encargado de dar de alta el evento de cambio de tab
   connectedCallback() {
     document.addEventListener('next', event => {
       const tabId = event.detail.tabId
@@ -25,7 +26,9 @@ class TurnarTabs extends HTMLElement {
     })
   }
 
+  //Metodo encargado de añadir los eventos de click a los botones
   addClickEventListeners() {
+    //Se añaden los eventos de click a los botones
     this.btnAsesorado.addEventListener('click', () =>
       this.handleTabClick('asesorado')
     )
@@ -35,58 +38,35 @@ class TurnarTabs extends HTMLElement {
     this.btnTurno.addEventListener('click', () => this.handleTabClick('turno'))
   }
 
+  //Metodo encargado de manejar el click en los tabs
   handleTabClick(tabId) {
     this.showTabSection(tabId)
     this.dispatchEventTabChangeEvent(tabId)
     this.updateAriaAttributes(tabId)
   }
 
+  //Metodo encargado de mostrar la sección del tab seleccionado
   showTabSection(tabId) {
    // this.#activeTab = tabId
     const tabSections = document.querySelectorAll(
       'asesorado-tab, domicilio-tab, turno-tab'
     )
+    //Se ocultan todas las secciones
     tabSections.forEach(section => {
       section.style.display = 'none'
     })
 
     let tabToDisplay
+    //Se busca la sección a mostrar y se le cambia el display
     tabSections.forEach(section => {
       return section.id === tabId && (tabToDisplay = section)
     })
     tabToDisplay.style.display = 'block'
   }
-  /*
-  verifyChange = tabId => {
-  if (tabId === this.#activeTab) {
-      return 'No se puede cambiar a la misma pestaña'
-    }
-    if (!this.#tabs.includes(tabId)) return 'La pestaña no existe'
-
-    const asesoradoTab = document.querySelector('asesorado-full-tab')
-    const asesoriaTab = document.querySelector('asesoria-tab')
-   
-    if (
-      tabId === this.#tabs[1] &&
-      (!asesoradoTab.isComplete)
-    ) {
-      return 'No se puede cambiar de pestaña si no se han completado los datos'
-    }
-    if (
-      tabId === this.#tabs[2] &&
-      (!asesoradoTab.isComplete || !asesoriaTab.isComplete)
-    ) {
-      return 'No se puede cambiar de pestaña si no se han completado los datos'
-    }
-
-  }
-    */
 
 
+  //Metodo encargado de despachar el evento de cambio de tab
   dispatchEventTabChangeEvent(tabId) {
-  //  const msg = this.verifyChange(tabId)
-  //  if (msg) throw new Error(msg)
-
     const event = new CustomEvent('tab-change', {
       bubbles: true,
       composed: true,
@@ -95,6 +75,7 @@ class TurnarTabs extends HTMLElement {
     this.dispatchEvent(event)
   }
 
+  //Metodo encargado de actualizar los atributos aria
   updateAriaAttributes(activeTab) {
     const tabs = ['btn-asesorado', 'btn-domicilio', 'btn-turno']
     tabs.forEach(tab => {

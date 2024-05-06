@@ -14,11 +14,12 @@ class BusquedaTurnarController {
     this.utils.validatePermissions({})
   }
 
-  // Methods
+  // Metodo que nos ayuda a buscar todas las asesorias relacionadas con respecto a el nombre, apellido paterno y apellido materno
   handleSearch = async inputs => {
     const [nombre, apellidoPaterno, apellidoMaterno] = inputs
 
     try {
+      //Manejo de errores en caso de que los campos esten vacios
       if (nombre === '' && apellidoPaterno === '' && apellidoMaterno === '') {
         throw new ValidationError(
           'Es requerido escribir algun campo(Nombre,Apellido Paterno, Apellido Materno).'
@@ -26,22 +27,25 @@ class BusquedaTurnarController {
 
       }
 
+      //Busqueda de asesorias con respecto a los datos proporcionados
       const { asesorias } = await this.model.getAsesoriaByFullName({
         nombre,
         apellidoPaterno,
         apellidoMaterno,
       })
-      //temporizador de 1 minuto para analizar el json
+
+      //Si el resultado es cero se mostrara un modal con el mensaje de que no se encontraron resultados
       if (asesorias.length === 0) {
         throw new ValidationError(
           'No se encontraron resultados con los datos proporcionados'
         )
       } else {
-
+        //En caso de que se encuentren resultados se procedera a guardar en el sessionStorage y redirigir a la pagina de asesorias-turnar
         sessionStorage.setItem('asesorias', JSON.stringify(asesorias))
         location.href = 'asesorias-turnar.html'
       }
     } catch (error) {
+      //Muestra de modales en caso de errores
       if (error instanceof ValidationError) {
         const modal = document.querySelector('modal-warning')
         modal.message = error.message

@@ -8,6 +8,9 @@ const CustomeError = require('../utilities/customeError.js');
 // Funcion para obtener todos los estados de la base de datos y enviarlos como respuesta en formato JSON
 exports.getEstados = asyncError(async (req, res, next) => { 
     const estados = await controlEstados.getEstados();
+    if (!estados) {
+        return next(new CustomeError('No se encontraron estados', 404));
+    }
     res.status(200).json({
         estados: estados
     });

@@ -8,9 +8,8 @@ const html = await (
 template.innerHTML = html
 
 export class EstadoProcesal extends HTMLElement {
+  //Variables privadas de la clase
   #api
-
-
   #idEstadoProcesal
   #estadoProcesal
   #fechaEstadoProcesal
@@ -20,39 +19,66 @@ export class EstadoProcesal extends HTMLElement {
   #botonAgregarEstadoProcesal
   #botonEditarEstadoProcesal
 
+  //Metodo que obtiene los atributos que se le pasan al componente en este caso id y data
   static get observedAttributes() {
     return ['id', 'data']
   }
+  //Metodo que obtiene el id del componente
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que setea el id del componente
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que obtiene los datos del componente
+  get data() {
+    const estadosProcesales = this.#estadosProcesales
+    return { estadosProcesales: estadosProcesales }
+  }
+
+  //Metodo que setea los datos del componente esto es con el fin de que se pueda setear los datos desde fuera caso
+  //en el que selecciona un nuevo turno
+  set data(value) {
+    this.#estadosProcesales = value
+    this.mostrarEstadosProcesales()
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
 
+    //Se inicializa la variable de la API
     this.#api = new APIModel()
+    //Se inicializan las variables privadas de la clase
+    //En este caso el idEstadoProcesal es el id del estado procesal seleccionado y los estadosProcesales es un arreglo
     this.#idEstadoProcesal = null
     this.#estadosProcesales = []
+    //Llamado a la funcion que maneja los campos del formulario
     this.manageFormFields()
+    //Llamado a la funcion que llena los campos del formulario
     this.fillInputs()
 
   }
 
+  //Metodo que inicializa los campos del formulario
   manageFormFields() {
-
+    //Se asignan las variables a los campos del formulario y a los botones
     this.#estadoProcesal = this.shadowRoot.getElementById('estado')
     this.#fechaEstadoProcesal = this.shadowRoot.getElementById('fecha-estado')
     this.#tableEstadosProcesales = this.shadowRoot.getElementById('table-estado')
-
     this.#botonAgregarEstadoProcesal = this.shadowRoot.getElementById('agregar-estado')
     this.#botonEditarEstadoProcesal = this.shadowRoot.getElementById('editar-estado')
+
+    //Evento que valida que el campo de estado procesal no tenga más de 200 caracteres
     var estadoProcesalInput = this.#estadoProcesal
     estadoProcesalInput.addEventListener('input', function () {
-      if (estadoProcesalInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo estado procesal no puede estar vacío'
-        modal.title = 'Error'
-        modal.open = true
-      } else if (estadoProcesalInput.value.length > 200) {
+      if (estadoProcesalInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo estado procesal no puede tener más de 200 caracteres'
         modal.title = 'Error'
@@ -60,26 +86,36 @@ export class EstadoProcesal extends HTMLElement {
       }
     })
   }
+
+
+  //Metodo que manda a llamar al metodo de agregar eventos a los botones
   fillInputs() {
+    //Llamado al metodo que agrega los eventos a los botones
     this.agregarEventosBotones()
   }
-  agregarEventosBotones = () => {
 
+  //Metodo que agrega los eventos a los botones
+  agregarEventosBotones = () => {
+    //Asignacion de las variables a los botones
     this.#botonAgregarEstadoProcesal.addEventListener('click', this.agregarEstadoProcesal)
     this.#botonEditarEstadoProcesal.addEventListener('click', this.editarEstadoProcesal)
-
+    
+    //Se obtienen todos los botones de seleccionar estado
     const seleccionarBotones = this.shadowRoot.querySelectorAll('.seleccionar-estado')
 
+    //Se recorre cada boton y se le asigna un evento
     seleccionarBotones.forEach(boton => {
       boton.addEventListener('click', () => {
         const estadoProcesalId = boton.dataset.id
         this.#idEstadoProcesal = estadoProcesalId
+        //Se llama a la funcion que activa el boton de seleccionar estado
         this.llamarActivarBotonSeleccionarEstado(estadoProcesalId)
       })
     })
 
 
 
+    //Se crea una funcion que se le asigna a una variable global para poder ser llamada desde fuera del componente
     const llamarActivarBotonSeleccionarEstado = (estadoProcesalId) => {
       this.llamarActivarBotonSeleccionarEstado(estadoProcesalId)
     }
@@ -88,68 +124,58 @@ export class EstadoProcesal extends HTMLElement {
 
   }
 
+  //Metodo que agrega un estado procesal
   agregarEstadoProcesal = async () => {
-
+    //De igual manera que en codigos anteriores el idEstadoProcesal es el id del estado procesal seleccionado
     const estadoProcesalID = this.#idEstadoProcesal
+//Se valida que no se haya seleccionado un estado procesal previamente
     if (estadoProcesalID === null) {
+      //Se obtienen los valores de los campos del formulario
       const estadoProcesal = this.#estadoProcesal.value
       const fechaEstadoProcesal = this.#fechaEstadoProcesal.value
 
+      //Se valida que el campo de estado procesal no este vacio y que no tenga más de 200 caracteres
       if (estadoProcesal === '') {
         this.#showModal('El campo estado procesal no puede estar vacío', 'Error')
       } else if (estadoProcesal.length > 200) {
         this.#showModal('El campo estado procesal no puede tener más de 200 caracteres', 'Error')
       }
 
-
+       
       const fechaActual = new Date();
       fechaActual.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-      
+
       // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
       const fechaIngresada = new Date(fechaEstadoProcesal);
       fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-      
-   
-      /*
-            if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-              this.#showModal('La fecha de estado procesal no puede ser menor al año actual', 'Error')
-            }
-            */
+
+      //Se valida que el campo de fecha de estado procesal no este vacio 
       if (fechaEstadoProcesal === '') {
         this.#showModal('La fecha de estado procesal no puede estar vacia', 'Error')
       }
       else {
-        /*
-              if (fechaIngresada.getFullYear() < 1900) {
-                this.#showModal('La fecha de estado procesal no puede ser menor al año 1900', 'Error')
-                return
-              }
-        */
-   // if(fechaIngresada.valueOf() < fechaActual.valueOf()){
+         //Se valida que el estado procesal no este vacio, que la fecha de estado procesal no este vacia y que el estado procesal no tenga más de 100 caracteres
+        if (estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
 
-      //          this.#showModal('La fecha de estado procesal no puede ser menor a la fecha actual', 'Error')
-
-    //    }
-     //   else {
-
-          //Verififcar json
-          if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
-
-
+          //Se crea un objeto con los datos del estado procesal
           const estadoProcesalData = {
             descripcion_estado_procesal: estadoProcesal,
             fecha_estado_procesal: fechaEstadoProcesal
           }
 
+          //Se agrega el estado procesal al arreglo de estados procesales
           this.#estadosProcesales.push(estadoProcesalData)
+          //Se llama a la funcion que muestra los estados procesales
           this.mostrarEstadosProcesales()
+          //Se limpian los campos del formulario
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
         }
-      //  }
+        //  }
       }
     }
     else {
+      //Caso cuando un estado procesal ya ha sido seleccionado se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
       modal.message = 'No se puede agregar un estado procesal si ha selecionado previamente uno de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
@@ -161,20 +187,25 @@ export class EstadoProcesal extends HTMLElement {
 
 
   }
-
-
+  
+   //Metodo que se encarga de editar un estado procesal
   editarEstadoProcesal = async () => {
+    //Se obtiene el id del estado procesal seleccionado previamente con el fin de saber si se ha seleccionado alguno para poder editarlo o 
+    //caso contrario mostrar un mensaje de error al usuario
     const estadoProcesalID = this.#idEstadoProcesal
     if (estadoProcesalID === null) {
+      //Se muestra un mensaje de error al usuario ya que no ha seleccionado un estado procesal
       const modal = document.querySelector('modal-warning')
       modal.message = 'Debe seleccionar un estado procesal para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
     }
     else {
+      //Se obtienen los valores de los campos del formulario
       const estadoProcesal = this.#estadoProcesal.value
       const fechaEstadoProcesal = this.#fechaEstadoProcesal.value
 
+      //Se valida que el campo de estado procesal no este vacio y que no tenga más de 100 caracteres
       if (estadoProcesal === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de estado procesal es obligatorio.'
@@ -189,6 +220,7 @@ export class EstadoProcesal extends HTMLElement {
           modal.open = true
         }
 
+        //Se valida que el campo de fecha de estado procesal no este vacio
       if (fechaEstadoProcesal === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de fecha de estado procesal es obligatorio.'
@@ -196,61 +228,47 @@ export class EstadoProcesal extends HTMLElement {
         modal.open = true
       } else {
 
-      
+
         const fechaActual = new Date();
         fechaActual.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
+
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaEstadoProcesal);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
-     //   if(fechaIngresada.valueOf() < fechaActual.valueOf()){
-     //     const modal = document.querySelector('modal-warning')
-     //     modal.message = 'La fecha de estado procesal no puede ser menor a la fecha actual.'
-     //     modal.title = 'Error de validación'
-     //     modal.open = true
-      //  } else {
-          /*
-          if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de estado procesal no puede ser menor al año actual.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-    
-          if (fechaIngresada.getFullYear() < 1900) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'La fecha de estado procesal no puede ser menor al año 1900.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }*7
-    
-          /**
-            De alguna manera con respecto al id del estado procesal seleccionado se debe de modificar el arreglo de estados procesales  
-           */
-            if( estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
 
+        //Se valida que el estado procesal no este vacio, que la fecha de estado procesal no este vacia y que el estado procesal no tenga más de 100 caracteres
+        if (estadoProcesal !== '' && fechaEstadoProcesal !== '' && estadoProcesal.length <= 100) {
+          //Se crea un objeto con los datos del estado procesal
           const estadoProcesalData = {
             descripcion_estado_procesal: estadoProcesal,
             fecha_estado_procesal: fechaEstadoProcesal
 
           }
+          //Se actualiza el estado procesal en el arreglo de estados procesales 
           this.#estadosProcesales[estadoProcesalID - 1] = estadoProcesalData
+          //Se llama a la funcion que muestra los estados procesales
           this.mostrarEstadosProcesales()
+          //Se limpian los campos del formulario y del idSeleccionado
           this.#idEstadoProcesal = null
           this.#estadoProcesal.value = ''
           this.#fechaEstadoProcesal.value = ''
         }
-      //  }
+        //  }
       }
     }
   }
+
+  //Metodo que muestra los estados procesales en la tabla
   mostrarEstadosProcesales = async () => {
 
     try {
+      //Se obtienen los estados procesales
       const estadosProcesales = this.#estadosProcesales
+      //Se obtiene el cuerpo de la tabla
       const tableBody = this.#tableEstadosProcesales
+      //Se limpia el cuerpo de la tabla
       tableBody.innerHTML = ''
+      //Se recorre la lista de estados procesales
       const lista = estadosProcesales
       const funcion =
         lista.forEach((estadoProcesal, i) => {
@@ -277,11 +295,14 @@ export class EstadoProcesal extends HTMLElement {
 
   }
 
+  //Metodo que se encarga de activar el boton de seleccionar estado y que llena los campos del formulario
   llamarActivarBotonSeleccionarEstado = async estadoProcesalId => {
-
     try {
+      //Se obtiene el estado procesal por el id seleccionado
       const estadoProcesal = this.#estadosProcesales[estadoProcesalId - 1]
+      //Se valida que el estado procesal exista
       if (estadoProcesal) {
+        //Se llena los campos del formulario con los datos del estado procesal seleccionado
         this.#idEstadoProcesal = estadoProcesalId
         this.#estadoProcesal.value = estadoProcesal.descripcion_estado_procesal
         this.#fechaEstadoProcesal.value = estadoProcesal.fecha_estado_procesal
@@ -292,13 +313,8 @@ export class EstadoProcesal extends HTMLElement {
       console.error('Error al obtener el estado procesal por ID:', error)
     }
   }
-  /*
-  connectedCallback() {
-
-  }
-  */
-
-
+   
+   //Metodo que se encarga de mostrar el modal de error al usuario
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -307,24 +323,7 @@ export class EstadoProcesal extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
 
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    const estadosProcesales = this.#estadosProcesales
-    return { estadosProcesales: estadosProcesales }
-  }
-
-  set data(value) {
-    this.#estadosProcesales = value
-    this.mostrarEstadosProcesales()
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('estado-procesal', EstadoProcesal)

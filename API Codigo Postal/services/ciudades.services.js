@@ -8,6 +8,9 @@ const CustomeError = require('../utilities/customeError.js');
 //Funcion para obtener todas las ciudades de la base de datos y enviarlas como respuesta en formato JSON
 exports.getCiudades = asyncError(async (req, res, next) => {
     const ciudades = await controlCiudades.getCiudades();
+    if (!ciudades) {
+        return next(new CustomeError('No se encontraron ciudades', 404));
+    }
     res.status(200).json({
         ciudades: ciudades
     });

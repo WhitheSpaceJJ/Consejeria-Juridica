@@ -2,6 +2,13 @@
 
   const PruebaDAO = require('../data-access/pruebaDAO')
 
+  /** 
+   * Función que permite crear una prueba
+   * @param {Object} req Objeto de petición
+   *  @param {Object} res Objeto de respuesta
+   * @returns {Object} Objeto con la prueba creada
+   * */
+  
  
     const crearPrueba = async (req, res) => {
       try {
@@ -17,6 +24,13 @@
         })
       }
     }
+
+    /**
+     * Función que permite obtener todas las pruebas
+     * @param {Object} req Objeto de petición
+     * @param {Object} res Objeto de respuesta
+     * @returns {Array} Array con todas las pruebas registradas
+     * */
 
     const obtenerPruebas = async (req, res) => {
       try {
@@ -36,6 +50,14 @@
       }
     }
 
+    
+    /**
+     * Función que permite obtener una prueba por su id
+     * @param {Object} req Objeto de petición
+     * @param {Object} res Objeto de respuesta
+     * @returns {Object} Objeto con la prueba encontrada
+     * */
+
     const obtenerPrueba = async (req, res) => {
       try {
         const { id } = req.params
@@ -54,6 +76,13 @@
         })
       }
     }
+/**
+ * Función que permite actualizar una prueba
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la prueba actualizada
+ * */
+
 
     const actualizarPrueba = async (req, res) => {
       try {
@@ -77,6 +106,13 @@
       }
     }
 
+    /**
+     * Función que permite eliminar una prueba
+     * @param {Object} req Objeto de petición
+     * @param {Object} res Objeto de respuesta
+     * @returns {Object} Objeto con la prueba eliminada
+     * */
+
     const eliminarPrueba = async (req, res) => {
       try {
         const { id } = req.params
@@ -97,6 +133,7 @@
       }
     }
 
+    // Exportar todas las funciones
     module.exports = {
       crearPrueba,
       obtenerPruebas,

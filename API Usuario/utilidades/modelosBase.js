@@ -114,9 +114,61 @@ const Usuario = sequelize.define("usuarios", {
   }
 });
 
+
+
+
+const Permiso = sequelize.define("permisos", {
+  id_permiso
+    : {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    allowNull: false,
+    autoIncrement: true
+  },
+  nombre_permiso: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: [0, 50]
+    }
+  }
+}, {
+  timestamps: false,
+  tableName: "permisos"
+});
+
+
+
+const Detalle_Permiso_Usuario = sequelize.define("detalle_permiso_usuario", {
+  id_detalle_permisos
+    : {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    allowNull: false,
+    autoIncrement: true
+  },
+  id_usuario: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+  ,
+  id_permiso: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+  ,
+}, {
+  timestamps: false,
+  tableName: "detalle_permiso_usuario"
+});
+
+
 //Module exports
 module.exports = {
   TipoUser
   ,
+  Permiso,
   Usuario
+  ,
+  Detalle_Permiso_Usuario
 };

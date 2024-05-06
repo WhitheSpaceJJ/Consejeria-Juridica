@@ -8,11 +8,10 @@ template.innerHTML = html
 
 export class DomicilioTab extends HTMLElement {
 
+  //Variables de clase privadas 
   #API
-
   #asesoria
   #domicilio
-
   #calle
   #numeroExt
   #numeroInt
@@ -23,51 +22,86 @@ export class DomicilioTab extends HTMLElement {
   #colonia
   #botonbuscar
   #editCbx
+
+
+  //Metodo que se encarga de observar los cambios en los atributos del componente
   static get observedAttributes() {
     return ['id', 'data']
   }
+  //Metodo que se encarga de obtener los valores de los atributos del componente
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que se encarga de asignar valores a los atributos del componente
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que se encarga de obtener los valores de los atributos del componente
+  get data() {
+    return {
+      calle: this.#calle.value,
+      numeroExt: this.#numeroExt.value,
+      numeroInt: this.#numeroInt.value,
+      cp: this.#cp.value,
+      estado: this.#estado.value,
+      municipio: this.#municipio.value,
+      ciudad: this.#ciudad.value,
+      colonia: this.#colonia.value,
+    }
+  }
+
+  //Metodo que se encarga de asignar valores a los atributos del componente
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
+    //Esto es con respecto al manejo de pestanas
     this.id = 'domicilio'
     this.style.display = 'none'
 
+    //Se obtienen los datos de la asesoria y del domicilio con respecto a la sesion storage 
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
     this.#domicilio = JSON.parse(sessionStorage.getItem('colonia'))
+
+    //Se crea una instancia de la clase APIModel
     this.#API = new APIModel()
 
+    //Llamado al metodo que se encarga de manejar los campos del formulario
     this.manageFormFields()
+    //Llamado al metodo que se encarga de manejar los datos requeridos en el formulario
     this.fillInputs()
-    /*
 
-    const searchButton = document.getElementById('searchButton');
-    searchButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.handleFiltros();
-    });
-
-*/
-
+    // Asingacion de la variable con respecto al formulario de busqueda de codigo postal
     this.formCP = this.shadowRoot.getElementById('buscar-cp')
 
+    //Se agrega un evento al formulario de busqueda de codigo postal, y que se encarga de buscar el codigo postal y validar en caso de error
     this.formCP.addEventListener('click', (event) => {
+      //Se evita que se recargue la pagina
       event.preventDefault();
       if (
         !this.#cp.value ||
         this.#cp.value.length !== 5 ||
         isNaN(this.#cp.value)
       ) {
+        // Mensaje de error
         this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
         return
       }
+      //Busqueda del codigo Postal
       this.searchCP()
     })
 
 
   }
 
+  //Metodo que se encarga de manejar los elementos del formulario
   manageFormFields() {
     this.#calle = this.shadowRoot.getElementById('calle')
     this.#numeroExt = this.shadowRoot.getElementById('numero-ext')
@@ -79,18 +113,18 @@ export class DomicilioTab extends HTMLElement {
     this.#colonia = this.shadowRoot.getElementById('colonia')
     this.#botonbuscar = this.shadowRoot.getElementById('buscar-cp')
     this.#editCbx = this.shadowRoot.getElementById('cbx-editable-domicilio')
+    //LLamado al metodo que se encarga de manejar la entrada de texto en tiempo real
+    this.manejadorEntradaTexto();
+  }
 
+  //Metodo que se encarga de manejar la entrada de texto en tiempo real con eventos de entrada
+  manejadorEntradaTexto() {
     var editableCbx = this.#editCbx;
     var calleInput = this.#calle;
-
+    //Se valida que la calle no tenga mas de 75 caracteres
     calleInput.addEventListener('input', function () {
       if (editableCbx.checked) {
-        if (calleInput.value === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'La calle no puede estar vacía, por favor ingresela.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (calleInput.value.length > 75) {
+        if (calleInput.value.length > 75) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
           modal.title = 'Error de validación';
@@ -101,15 +135,12 @@ export class DomicilioTab extends HTMLElement {
     });
 
 
-
-
-
-
     var numeroExteriorInput = this.#numeroExt;
     var numeroInteriorInput = this.#numeroExt;
 
     var enterosPattern = /^\d+$/;
 
+    //Se valida que el numero exterior no tenga mas de 10 caracteres y solo sean numeros
 
     numeroExteriorInput.addEventListener('input', function () {
 
@@ -121,11 +152,6 @@ export class DomicilioTab extends HTMLElement {
           modal.message = 'El número exterior solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
           modal.open = true;
-        } if (numeroExteriorInput.value === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior no puede estar vacío, por favor ingreselo.';
-          modal.title = 'Error de validación';
-          modal.open = true;
         } else if (numeroExteriorInput.value.length > 10) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
@@ -134,6 +160,8 @@ export class DomicilioTab extends HTMLElement {
         }
       }
     });
+
+    //Se valida que el numero interior no tenga mas de 10 caracteres y solo sean numeros
     numeroInteriorInput.addEventListener('input', function () {
       if (editableCbx.checked) {
 
@@ -154,10 +182,9 @@ export class DomicilioTab extends HTMLElement {
       }
     });
 
-
-
   }
 
+  //Rellenar los campos del formulario con los datos de la asesoria
   fillInputs() {
     this.#calle.value = this.#asesoria.persona.domicilio.calle_domicilio
     this.#numeroExt.value =
@@ -169,10 +196,9 @@ export class DomicilioTab extends HTMLElement {
     this.#estado.value = this.#domicilio.estado.nombre_estado
     this.#ciudad.value = this.#domicilio.ciudad.nombre_ciudad
 
-
+    //Llamado al metodo que se encarga de llenar el select de colonias
     this.#API.getDomicilioByCP(this.#cp.value)
       .then(data => {
-        //console.log(data);
         const selectColonia = this.shadowRoot.getElementById('colonia'); // Aquí obtenemos la referencia al elemento <select>
         // Verificamos si selectColonia es válido
         if (selectColonia) {
@@ -197,16 +223,18 @@ export class DomicilioTab extends HTMLElement {
       .catch(error => {
         // console.error('Error al obtener datos de la API:', error);
       });
-
-
-
-
   }
 
+
+  //Conección con el callback de la clase y que se encarga de administrar los cambios en los atributos del componente
   connectedCallback() {
+    //Sboton de siguiente, y que se encarga de cambiar de pestaña
     this.btnNext = this.shadowRoot.getElementById('btn-domicilio-next')
+
+    //checkbox de edicion, y que se encarga de habilitar o deshabilitar los campos del formulario
     this.editCbx = this.shadowRoot.getElementById('cbx-editable-domicilio')
 
+    // Se agrega un evento al boton de siguiente, y que se encarga de cambiar de pestaña
     this.btnNext.addEventListener('click', () => {
       const event = new CustomEvent('next', {
         bubbles: true,
@@ -216,123 +244,28 @@ export class DomicilioTab extends HTMLElement {
       this.dispatchEvent(event)
     })
 
+    //Metodo que se encarga de habilitar o deshabilitar los campos del formulario
     this.editCbx.addEventListener('change', () => {
       this.#toggleInputDisabled()
     })
 
 
   }
-/*
+
+  //Metodo que se encarga de buscar el codigo postal y la iformacion relacionada como lo son el estado, municipio, ciudad y colonia etc para asi poder llenar los campos del formulario
   async searchCP() {
     try {
-
-   //   const selectColonia = this.shadowRoot.getElementById('colonia'); // Aquí obtenemos la referencia al elemento <select>
-   //   var coloniaobjeto=  selectColonia
-   //   var colonia_valor= coloniaobjeto.value
-
-     await  this.#API.getDomicilioByCP(this.#cp.value)
-        .then(data => {
-         console.log(data);
-         const selectColonia = this.shadowRoot.getElementById('colonia'); // Aquí obtenemos la referencia al elemento <select>
-          // Verificamos si selectColonia es válido
-
-
-            //    this.#calle.value =""
-            //    this.#numeroExt.value =""
-            //    this.#numeroInt.value =""
-            //    this.#cp.value = ""
-            this.#municipio.value = ""
-            this.#estado.value = ""
-            this.#ciudad.value = ""
-            while (selectColonia.firstChild) {
-              selectColonia.removeChild(selectColonia.firstChild);
-            }
-
-//            const coloniasArray = Array.from();
-
-            data.colonias.forEach(colonia => {
-              const option = document.createElement('option');
-              option.value = colonia.id_colonia;
-              option.textContent = colonia.nombre_colonia;
-              selectColonia.appendChild(option);
-            });
-
-
-            //    selectColonia.value = this.#domicilio.colonia.id_colonia;
-/*
-            // Verificar y establecer el valor seleccionado
-            const selectedColoniaId = this.#domicilio.colonia.id_colonia;
-            if (selectedColoniaId) {
-              const optionExists = Array.from(selectColonia.options).some(option => option.value === selectedColoniaId);
-              if (optionExists) {
-                selectColonia.value = selectedColoniaId;
-              }
-            }
-  */
-
-
-            //   this.#calle.value = data.colonias.domicilio.calle_domicilio
-            //      this.#numeroExt.value =data.colonias.domicilio.numero_exterior_domicilio
-            //    this.#numeroInt.value =data.colonias.domicilio.numero_interior_domicilio
-            //    this.#cp.value = data.colonias.codigo_postal.codigo_postal
-      /*      this.#municipio.value = data.colonias.municipio.nombre_municipio
-            this.#estado.value = data.colonias.estado.nombre_estado
-            this.#ciudad.value = data.colonias.ciudad.nombre_ciudad
-
-
-
-       
-        })
-        .catch(error => {
-          // console.error('Error al obtener datos de la API:', error);
-          console.error(error)
-          this.#showModal('Error al buscar el código postal', 'Error')
-        });
-
-
-*/
-
-      /*
+      //Llamado al metodo que se encarga de buscar el codigo postal
       const { colonias: data } = await this.#API.getDomicilioByCP(
         this.#cp.value
       )
+      //Validacion de la respuesta
       if (!data || typeof data === 'string') {
         this.#showModal('No se encontró el código postal', 'Advertencia')
         return
       }
-      this.#estado.innerHTML='';
-      this.#estado.value = data.estado.nombre_estado
-      this.#municipio.innerHTML = '';
-      this.#municipio.value = data.municipio.nombre_municipio
-      this.#ciudad.innerHTML = '';
-      this.#ciudad.value = data.ciudad.nombre_ciudad
-      this.#colonia.innerHTML = '';
-      data.colonias.forEach(colonia => {
-        const option = document.createElement('option')
-        option.value = colonia.id_colonia
-        option.textContent = colonia.nombre_colonia
-        this.#colonia.appendChild(option)
-      })
-      */
-  /*  } catch (error) {
-      console.error(error)
-      this.#showModal('Error al buscar el código postal', 'Error')
-    }
-  } 
-
-*/
-
-  
-  async searchCP() {
-    try {
-      const { colonias: data } = await this.#API.getDomicilioByCP(
-        this.#cp.value
-      )
-      if (!data || typeof data === 'string') {
-        this.#showModal('No se encontró el código postal', 'Advertencia')
-        return
-      }
-      this.#estado.innerHTML='';
+      //Llenado de los campos del formulario
+      this.#estado.innerHTML = '';
       this.#estado.value = data.estado.nombre_estado
       this.#municipio.innerHTML = '';
       this.#municipio.value = data.municipio.nombre_municipio
@@ -351,6 +284,7 @@ export class DomicilioTab extends HTMLElement {
     }
   }
 
+  //Metodo que se encarga de mostrar un modal con un mensaje y un titulo
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -358,9 +292,8 @@ export class DomicilioTab extends HTMLElement {
     modal.open = true
     modal.setOnCloseCallback(onCloseCallback)
   }
-
+  // Habilitar o deshabilitar inputs: calle, numeroExt, numeroInt
   #toggleInputDisabled() {
-    // Habilitar o deshabilitar inputs: calle, numeroExt, numeroInt
     this.#calle.disabled = !this.#calle.disabled
     this.#numeroExt.disabled = !this.#numeroExt.disabled
     this.#numeroInt.disabled = !this.#numeroInt.disabled
@@ -369,30 +302,6 @@ export class DomicilioTab extends HTMLElement {
     this.#colonia.disabled = !this.#colonia.disabled
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
-
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    return {
-      calle: this.#calle.value,
-      numeroExt: this.#numeroExt.value,
-      numeroInt: this.#numeroInt.value,
-      cp: this.#cp.value,
-      estado: this.#estado.value,
-      municipio: this.#municipio.value,
-      ciudad: this.#ciudad.value,
-      colonia: this.#colonia.value,
-    }
-  }
-
-  set data(value) {
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('domicilio-tab', DomicilioTab)

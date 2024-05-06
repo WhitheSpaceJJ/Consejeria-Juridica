@@ -1,7 +1,9 @@
 const sequelize = require('../config/db')
 const { DataTypes } = require('sequelize')
 
-
+ /**
+  * Modelo de la tabla resolucion
+  */
 const resolucion = sequelize.define('resolucion', {
   id_resolucion: {
     autoIncrement: true,

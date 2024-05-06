@@ -4,6 +4,13 @@ const Observacion = require('../models/observacion')
 
 class ObservacionDAO {
 
+ /** 
+  * Método que permite crear una observación en la base de datos
+  * @param {object} observacion - Objeto que contiene los datos de la observación
+  * @returns {object} Retorna el objeto de la observación creada si la operación fue exitosa, de lo contrario lanza un error
+  * */
+
+
    async crearObservacion({ id_proceso_judicial, observacion }) {
       try {
          const observacionEncontrada = await Observacion.create({ id_proceso_judicial, observacion })
@@ -14,6 +21,12 @@ class ObservacionDAO {
       }
    }
 
+   /**
+    * Método que permite obtener todas las observaciones de la base de datos
+    * @returns {array} Retorna un arreglo de objetos de observaciones si la operación fue exitosa, de lo contrario lanza un error
+    * */
+
+
    async obtenerObservaciones() {
       try {
          const observaciones = await Observacion.findAll()
@@ -22,6 +35,13 @@ class ObservacionDAO {
          throw err
       }
    }
+
+   /**
+    * Método que permite obtener una observación de la base de datos por su id
+    * @param {number} id_observacion - ID de la observación a obtener
+    * @returns {object} Retorna el objeto de la observación si la operación fue exitosa, de lo contrario lanza un error
+    * */
+
 
    async obtenerObservacion(id_observacion) {
       try {
@@ -32,6 +52,13 @@ class ObservacionDAO {
       }
    }
 
+   /**
+    * Método que permite obtener todas las observaciones de un proceso judicial
+    * @param {number} id_proceso_judicial - ID del proceso judicial a obtener sus observaciones
+    * @returns {array} Retorna un arreglo de objetos de observaciones si la operación fue exitosa, de lo contrario lanza un error
+    * */
+
+
    async obtenerObservacionesPorProcesoJudicial(id_proceso_judicial) {
       try {
          const observacion = await Observacion.findAll({ where: { id_proceso_judicial: id_proceso_judicial } })
@@ -40,6 +67,12 @@ class ObservacionDAO {
          throw err
       }
    }
+ /** 
+  * Método que permite actualizar una observación en la base de datos
+  * @param {number} id_observacion - ID de la observación a actualizar
+  * @param {object} observacion - Objeto que contiene los datos de la observación
+  * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
+  * */
 
    async actualizarObservacion(id_observacion, { observacion, id_proceso_judicial }) {
       try {
@@ -50,6 +83,12 @@ class ObservacionDAO {
          throw err
       }
    }
+   /** 
+    * Método que permite eliminar una observación de la base de datos
+    * @param {number} id_observacion - ID de la observación a eliminar
+    * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
+    * */
+   
 
    async eliminarObservacion( id_observacion) {
       try {

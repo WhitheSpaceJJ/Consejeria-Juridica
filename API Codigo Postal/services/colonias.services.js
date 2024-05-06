@@ -8,6 +8,9 @@ const CustomeError = require('../utilities/customeError.js');
 //Funcion para obtener todas las colonias de la base de datos y enviarlas como respuesta en formato JSON
 exports.getColonias = asyncError(async (req, res, next) => {
     const colonias = await controlColonias.getColonias();
+    if (!colonias) {
+        return next(new CustomeError('No se encontraron colonias', 404));
+    }
     res.status(200).json({
         colonias: colonias
     });

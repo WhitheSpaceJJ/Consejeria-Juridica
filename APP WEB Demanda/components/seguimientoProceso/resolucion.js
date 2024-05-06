@@ -8,65 +8,79 @@ const html = await (
 template.innerHTML = html
 
 export class Resolucion extends HTMLElement {
+
+  //Variables privadas
   #api
-
-
-
-
   #idResolucion
   #resolucion
   #fechaResolucion
   #resoluciones
   #tableResoluciones
-
   #botonAgregarResolucion
   #botonEditarResolucion
 
-
-
+  //Metodo que se encarga de observar los cambios de los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
+  //Metodo que retorna el valor del atributo id
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que asigna el valor del atributo id
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que retorna todos los datos de las resoluciones
+  get data() {
+    const resoluciones = this.#resoluciones
+    return { resoluciones: resoluciones }
+  }
+
+  //Metodo que asigna los datos de las resoluciones
+  set data(value) {
+    this.#resoluciones = value
+    this.mostrarResoluciones()
+    this.setAttribute('data', value)
+  }
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
 
+    //Inicialización de variables
     this.#api = new APIModel()
 
     this.#idResolucion = null
     this.#resoluciones = []
+    //Llamado al metodo que se encarga de gestionar los campos del formulario
     this.manageFormFields()
+    //Llamado al metodo que se encarga de llenar los campos del formulario
     this.fillInputs()
   }
+  //Metodo encargado de mandar a llamar al metodo que llena los eventos de los botones
   fillInputs() {
-
+    //Llamado al metodo que se encarga de llenar los eventos de los botones
     this.agregarEventosBotones()
   }
 
+  ////Metodo que se encarga de gestionar los campos del formulario
   manageFormFields() {
-
-
-
-
     this.#resolucion = this.shadowRoot.getElementById('condiciones')
     this.#fechaResolucion = this.shadowRoot.getElementById('fecha-resolucion')
     this.#tableResoluciones = this.shadowRoot.getElementById('table-resolucion')
-
     this.#botonAgregarResolucion = this.shadowRoot.getElementById('agregar-resolucion')
     this.#botonEditarResolucion = this.shadowRoot.getElementById('editar-resolucion')
+  }
 
+  //Metodo que se encarga de validar los campos del formulario de resolucion evento input
+  manejadoeDeEntradaDeTexto(){
     var resolucionInput = this.#resolucion
-
     resolucionInput.addEventListener('input', function () {
-      if (resolucionInput.value === "") {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de resolución es obligatorio.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else if (resolucionInput.value.length > 200) {
+    if (resolucionInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
@@ -74,39 +88,50 @@ export class Resolucion extends HTMLElement {
       }
 
     })
-
   }
 
+  //Metodo que se encarga de validar los campos del formulario de resolucion evento input
   agregarEventosBotones = () => {
 
+    //Se añade el evento click al boton de agregar resolucion
     this.#botonAgregarResolucion.addEventListener('click', this.agregarResolucion)
+    //Se añade el evento click al boton de editar resolucion
     this.#botonEditarResolucion.addEventListener('click', this.editarResolucion)
 
+    //Se obtienen todos los botones de seleccionar resolucion creados en la tabla  de resoluciones y se les añade el evento click
     const seleccionarBotones = this.shadowRoot.querySelectorAll('.seleccionar-resolucion')
 
+    //Se recorre cada boton de seleccionar resolucion y se le añade el evento click
     seleccionarBotones.forEach(boton => {
-
       boton.addEventListener('click', () => {
         const resolucionId = boton.value
         this.#idResolucion = resolucionId
+        //Se llama a la funcion que activa el boton de seleccionar resolucion
         this.activarBotonSeleccionarResolucion(resolucionId)
       })
     })
 
+    //Creacion de la funcion que se encarga de activar el boton de seleccionar resolucion
     const activarBotonSeleccionarResolucion = (resolucionId) => {
+      //Llamado a la funcion que activa el boton de seleccionar resolucion
       this.activarBotonSeleccionarResolucion(resolucionId)
     }
 
+    //Se añade la funcion activarBotonSeleccionarResolucion al objeto window
     window.activarBotonSeleccionarResolucion = activarBotonSeleccionarResolucion
   }
 
+  //Metodo que se encarga de agregar una resolucion
   agregarResolucion = async () => {
-
+    //Se obtiene el id de la resolucion y asi poder saber si es posible agregar una nueva resolucion
     const resolucionID = this.#idResolucion
+    //Se valida si es posible agregar una nueva resolucion
     if (resolucionID === null) {
+      // Se obtienen los valores de los campos de resolucion y fecha de resolucion
       const resolucion = this.#resolucion.value
       const fechaResolucion = this.#fechaResolucion.value
 
+      //Se valida si el campo de resolucion esta vacio
       if (resolucion === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución es obligatorio.'
@@ -114,6 +139,7 @@ export class Resolucion extends HTMLElement {
         modal.open = true
       }
 
+      //Se valida si el campo de resolucion tiene mas de 200 caracteres
       if (resolucion.length > 200) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
@@ -121,13 +147,14 @@ export class Resolucion extends HTMLElement {
         modal.open = true
       }
 
+      //Se valida si el campo de fecha de resolucion esta vacio
       if (fechaResolucion === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de fecha de resolución es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else {
-
+  
 
 
         const fechaActual = new Date();
@@ -136,53 +163,26 @@ export class Resolucion extends HTMLElement {
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-
-
-        //    if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
-        //       const modal = document.querySelector('modal-warning')
-        //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
-        //     modal.title = 'Error de validación'
-        //     modal.open = true
-        //  }
-        /* else if (fechaIngresada === null) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de fecha de resolución es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          } */
-
-
-        //       else {
-        /*
-        if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'La fecha de resolución no puede ser menor al año actual.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-  
-        if (fechaIngresada.getFullYear() < 1900) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-  */
+         
+        //En caso de que el campo de resolucion y fecha de resolucion no esten vacios se procede a agregar la resolucion
         if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
+          //Se crea un objeto con los datos de la resolucion
         const resolucionData = {
           resolucion: resolucion,
           fecha_resolucion: fechaResolucion
-
         }
+        //Se añade la resolucion al arreglo de resoluciones
         this.#resoluciones.push(resolucionData)
+        //Se llama a la funcion que se encarga de mostrar las resoluciones
         this.mostrarResoluciones()
+        //Se limpian los campos de resolucion y fecha de resolucion
         this.#resolucion.value = ''
         this.#fechaResolucion.value = ''
       }
-        //  }
       }
     }
     else {
+      //En caso de que se haya seleccionado una resolucion previamente se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
       modal.message = 'No se puede agregar una resolución si ha selecionado previamente una de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
@@ -193,18 +193,25 @@ export class Resolucion extends HTMLElement {
     }
   }
 
+  //Metodo que se encarga de editar una resolucion
   editarResolucion = async () => {
+    //Variable que almacena el id de la resolucioon el cual ha sido seleccionado, si no se ha seleccionado no se procedera a editar
+    //o si se ha seleccionado una resolucion previamente se mostrara un mensaje de error
     const resolucionID = this.#idResolucion
+    //Se valida si es posible editar una resolucion
     if (resolucionID === null) {
+      //En caso de que no se haya seleccionado una resolucion previamente se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
       modal.message = 'Debe seleccionar una resolución para poder editarla.'
       modal.title = 'Error de validación'
       modal.open = true
     }
     else {
+      //Se obtiene  el valor de los campos de resolucion y fecha de resolucion
       const resolucion = this.#resolucion.value
       const fechaResolucion = this.#fechaResolucion.value
 
+      //Se valida si el campo de resolucion esta vacio
       if (resolucion === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución es obligatorio.'
@@ -212,6 +219,7 @@ export class Resolucion extends HTMLElement {
         modal.open = true
       }
 
+      //Se valida si el campo de resolucion tiene mas de 200 caracteres
       if (resolucion.length > 200) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
@@ -219,6 +227,7 @@ export class Resolucion extends HTMLElement {
         modal.open = true
       }
 
+      //Se valida si el campo de fecha de resolucion esta vacio
       if (fechaResolucion === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de fecha de resolución es obligatorio.'
@@ -234,28 +243,10 @@ export class Resolucion extends HTMLElement {
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        //     if (fechaIngresada.valueOf() < fechaActual.valueOf()) {
-        //       const modal = document.querySelector('modal-warning')
-        //      modal.message = 'La fecha de resolución no puede ser mayor a la fecha actual.'
-        //      modal.title = 'Error de validación'
-        //      modal.open = true
-        //    } else {
-        /*
-        if (fechaIngresada.getFullYear() < fechaActual.getFullYear()) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'La fecha de resolución no puede ser menor al año actual.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-  
-        if (fechaIngresada.getFullYear() < 1900) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'La fecha de resolución no puede ser menor al año 1900.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-  */
+        
+        //En caso de que el campo de resolucion y fecha de resolucion no esten vacios se procede a editar la resolucion
         if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
+          //Se genera un objeto con los datos de la resolucion
         const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
         const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
         const resolucionData = {
@@ -264,9 +255,11 @@ export class Resolucion extends HTMLElement {
           fecha_resolucion: fechaResolucion,
           id_proceso_judicial: id_proceso_judicial_si_tiene
         }
-
+        //Se reemplaza la resolucion en el arreglo de resoluciones
         this.#resoluciones[resolucionID - 1] = resolucionData
+        //Se llama a la funcion que se encarga de mostrar las resoluciones
         this.mostrarResoluciones()
+        //Se limpian los campos de resolucion y fecha de resolucion
         this.#idResolucion = null
         this.#resolucion.value = ''
         this.#fechaResolucion.value = ''
@@ -277,11 +270,15 @@ export class Resolucion extends HTMLElement {
     }
   }
 
+  //Metodo que se encarga de activar el boton de seleccionar resolucion y que muestra los datos de la resolucion seleccionada
   activarBotonSeleccionarResolucion = (resolucionId) => {
 
     try {
+      //Se obtiene la resolucion seleccionada
       const resolucion = this.#resoluciones[resolucionId - 1]
+      //Se valida si la resolucion seleccionada existe
       if (resolucion) {
+        //Se muestra la resolucion seleccionada en los campos de resolucion y fecha de resolucion
         this.#idResolucion = resolucionId
         this.#resolucion.value = resolucion.resolucion
         this.#fechaResolucion.value = resolucion.fecha_resolucion
@@ -294,12 +291,16 @@ export class Resolucion extends HTMLElement {
     }
   }
 
+  //Metodo que muestra las resoluciones en la tabla de resoluciones
   mostrarResoluciones = async () => {
-
     try {
+      //Se obtienen las resoluciones
       const resoluciones = this.#resoluciones
+      //Se obtiene la tabla de resoluciones
       const tableBody = this.#tableResoluciones
+      //Se limpia la tabla de resoluciones
       tableBody.innerHTML = ''
+      //Se recorre cada resolucion y se muestra en la tabla de resoluciones
       const lista = resoluciones
       const funcion =
         lista.forEach((resolucion, i) => {
@@ -324,12 +325,7 @@ export class Resolucion extends HTMLElement {
       console.error('Error al obtener las resoluciones:', error)
     }
   }
-
-  connectedCallback() {
-
-  }
-
-
+ //Metodo que muestra un mensaje de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -338,24 +334,7 @@ export class Resolucion extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
 
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    const resoluciones = this.#resoluciones
-    return { resoluciones: resoluciones }
-  }
-
-  set data(value) {
-    this.#resoluciones = value
-    this.mostrarResoluciones()
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('resolucion-promovente', Resolucion)

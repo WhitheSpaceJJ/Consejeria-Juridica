@@ -8,9 +8,9 @@ const html = await (
 template.innerHTML = html
 
 export class FamiliarPromovente extends HTMLElement {
+
+  // Atributos privados
   #api
-
-
   #idFamiliar
   #nombreFamiliar
   #parentescoFamiliar
@@ -31,24 +31,53 @@ export class FamiliarPromovente extends HTMLElement {
   #botonEditarFamiliar
 
 
+  //Metodo que se encarga de obtener los atributos del componente
   static get observedAttributes() {
     return ['id', 'data']
   }
 
+  //Metodo que se encarga de obtener el valor del atributo id
+  get id() {
+    return this.getAttribute('id')
+  }
+
+  //Metodo que se encarga de asignar el valor del atributo id
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que se encarga de obtener el valor del atributo data
+  get data() {
+    const familiares = this.#familiares
+    return {
+      familiares: familiares
+    }
+  }
+
+  //Metodo que se encarga de asignar el valor del atributo data
+  set data(value) {
+    this.#familiares = value
+    this.mostrarFamiliares()
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
 
+    //Inicialización de atributos privados
     this.#api = new APIModel()
     this.#idFamiliar = null
     this.#familiares = []
+    //Llamada al metodo que se encarga de manejar los campos del formulario
     this.manageFormFields()
-
-
+    //Llamada al metodo que se encarga de llenar los campos del formulario
     this.fillInputs()
   }
 
+  //Metodo que se encarga de manejar los cambios en los atributos del componente
   manageFormFields() {
     this.#tableFamiliares = this.shadowRoot.getElementById('table-familiar')
 
@@ -66,20 +95,19 @@ export class FamiliarPromovente extends HTMLElement {
     this.#pobrezaExtremaRadioNo = this.shadowRoot.getElementById('pobreza_no')
     this.#botonAgregarFamiliar = this.shadowRoot.getElementById('agregar-familiar')
     this.#botonEditarFamiliar = this.shadowRoot.getElementById('editar-familiar')
+    //Llamada al metodo que se encarga de manejar la entrada de texto
+     this.manejadorEntradaTexto()
+  }
 
+  //Metodo que se encarga de manejar los campos de texto con eventos de entrada
+  manejadorEntradaTexto(){
+    //Obtención de los campos de texto
     var parentescoInput = this.#parentescoFamiliar
     var nacionalidadInput = this.#nacionalidadFamilar
     var nombreInput = this.#nombreFamiliar
-
-
+    //Evento que se encarga de verificar que el campo de parentesco no contenga más de 100 caracteres
     parentescoInput.addEventListener('input', function () {
-      if (parentescoInput.value === "") {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de parentesco es obligatorio.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else if (parentescoInput.value.length > 100) {
+       if (parentescoInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de parentesco no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
@@ -87,14 +115,10 @@ export class FamiliarPromovente extends HTMLElement {
       }
     })
 
+
+    //Evento que se encarga de verificar que el campo de nacionalidad no contenga más de 100 caracteres
     nacionalidadInput.addEventListener('input', function () {
-      if (nacionalidadInput.value === "") {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de nacionalidad es obligatorio.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else if (nacionalidadInput.value.length > 100) {
+      if (nacionalidadInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nacionalidad no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
@@ -102,14 +126,10 @@ export class FamiliarPromovente extends HTMLElement {
       }
     })
 
+
+    //Evento que se encarga de verificar que el campo de nombre no contenga más de 100 caracteres
     nombreInput.addEventListener('input', function () {
-      if (nombreInput.value === "") {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de nombre es obligatorio.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else if (nombreInput.value.length > 100) {
+      if (nombreInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
@@ -117,37 +137,55 @@ export class FamiliarPromovente extends HTMLElement {
       }
     })
   }
+
+
+  //Metodo que se encarga de mandar a llamar al metodo que agrega los eventos a los botones
   fillInputs() {
+    //Llamada al metodo que se encarga de agregar los eventos a los botones
     this.agregarEventosBotones()
   }
-  agregarEventosBotones = () => {
 
+  //Metodo que agrega los eventos  a los botones
+  agregarEventosBotones = () => {
+   //Se agrega el evento click al boton de agregar familiar
     this.#botonAgregarFamiliar.addEventListener('click', this.agregarFamiliar)
+    //Se agrega el evento click al boton de editar familiar
     this.#botonEditarFamiliar.addEventListener('click', this.editarFamiliar)
 
+    //Se obtienen todos los botones de seleccionar familiar, creados en el metodo de mostrarFamiliares 
     const seleccionarBotones = this.shadowRoot.querySelectorAll('.seleccionar-familiar')
 
+    //Se recorren todos los botones de seleccionar familiar y se les agrega el evento click
     seleccionarBotones.forEach(boton => {
       boton.addEventListener('click', () => {
         const familiarId = boton.value
         this.#idFamiliar = familiarId
+        //Se manda a llamar al metodo que activa el boton de seleccionar familiar
         this.activarBotonSeleccionarFamiliar(familiarId)
       })
     })
 
 
+    //Se agrega la funcion activarBotonSeleccionarFamiliar al objeto window
     const activarBotonSeleccionarFamiliar = (familiarId) => {
       this.activarBotonSeleccionarFamiliar(familiarId)
-    }
-
+     }
+     
+      //Se agrega la funcion activarBotonSeleccionarFamiliar al objeto window
     window.activarBotonSeleccionarFamiliar = activarBotonSeleccionarFamiliar
   }
+
+  //Metodo que se encarga de mostrar los familiares en la tabla
   mostrarFamiliares = async () => {
 
     try {
+      //Obtención de los familiares
       const familiares = this.#familiares
+      //Obtención de la tabla de familiares
       const tableBody = this.#tableFamiliares
+      //Se limpia la tabla
       tableBody.innerHTML = ''
+      //Se recorren los familiares y se agregan a la tabla
       const lista = familiares
       const funcion =
         lista.forEach((familiar, i) => {
@@ -176,17 +214,24 @@ export class FamiliarPromovente extends HTMLElement {
       console.error('Error al obtener los familiares:', error)
     }
   }
+
+  //Metodo que se encarga de editar un familiar
   editarFamiliar = async () => {
 
+    //Obtención del id del familiar selecionado variable que nos ayuda a determinar si se ha selecionado un id de familiar para asi
+    //poder editar el familiar o mostrar un mensaje de error
     const idFamiliar = this.#idFamiliar
 
+    //Validación de si se ha seleccionado un familiar
     if (idFamiliar === null) {
+      //Mensaje de error si no se ha seleccionado un familiar
       const modal = document.querySelector('modal-warning')
       modal.message = 'Debe seleccionar un familiar para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
     }
     else {
+      //Obtención de los campos del formulario
       const nombre = this.#nombreFamiliar.value
       const nacionalidad = this.#nacionalidadFamilar.value
       const parentesco = this.#parentescoFamiliar.value
@@ -195,6 +240,7 @@ export class FamiliarPromovente extends HTMLElement {
       const saludPrecaria = this.#saludPrecariaRadioYes.checked
       const pobrezaExtrema = this.#pobrezaExtremaRadioYes.checked
 
+      //Verificacion de que si el campo de nombre esta vacio, o si el campo de nombre tiene más de 100 caracteres se muestre un mensaje de error
       if (nombre === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nombre es obligatorio.'
@@ -207,6 +253,7 @@ export class FamiliarPromovente extends HTMLElement {
         modal.open = true
       }
 
+      //Verificacion de que si el campo de nacionalidad esta vacio, o si el campo de nacionalidad tiene más de 100 caracteres se muestre un mensaje de error
       if (nacionalidad === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nacionalidad es obligatorio.'
@@ -219,6 +266,8 @@ export class FamiliarPromovente extends HTMLElement {
         modal.open = true
       }
 
+
+      //Verificacion de que si el campo de parentesco esta vacio, o si el campo de parentesco tiene más de 100 caracteres se muestre un mensaje de error
       if (parentesco === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de parentesco es obligatorio.'
@@ -234,8 +283,10 @@ export class FamiliarPromovente extends HTMLElement {
         /**
          Verifica que los radios ya sea yex o no esten seleccionados 
          */
-        if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
 
+         //Verificacion de los campos de radio
+        if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
+         //Obtención del id del familiar si tiene
          const id_familiar_si_tiene = this.#familiares[idFamiliar - 1].id_familiar
          const id_proceso_judicial_si_tiene = this.#familiares[idFamiliar - 1].id_proceso_judicial
           const familiarData = {
@@ -249,8 +300,11 @@ export class FamiliarPromovente extends HTMLElement {
             saludPrecaria: saludPrecaria,
             pobrezaExtrema: pobrezaExtrema
           }
+          //Actualización del familiar
           this.#familiares[idFamiliar - 1] = familiarData
+          //Mostrar los familiares
           this.mostrarFamiliares()
+          //Limpiar los campos del formulario
           this.#idFamiliar = null
           this.#nombreFamiliar.value = ''
           this.#nacionalidadFamilar.value = ''
@@ -269,6 +323,7 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
         } else {
+          //Mensaje de error si no se han seleccionado los campos de radio
           const modal = document.querySelector('modal-warning')
           modal.message = 'Debe seleccionar una opción en los campos de radio.'
           modal.title = 'Error de validación'
@@ -278,11 +333,16 @@ export class FamiliarPromovente extends HTMLElement {
     }
 
   }
+
+  //Metodo que se encarga de agregar un familiar
   agregarFamiliar = async () => {
-
+    //Variable que nos ayuda a determinar si se ha selecionado un id de familiar para asi
+    //poder agregar el familiar o mostrar un mensaje de error
     const idFamiliar = this.#idFamiliar
-
+    
+    //Validación de si se ha seleccionado un familiar
     if (idFamiliar === null) {
+      //Obtención de los campos del formulario
       const nombre = this.#nombreFamiliar.value
       const nacionalidad = this.#nacionalidadFamilar.value
       const parentesco = this.#parentescoFamiliar.value
@@ -291,6 +351,7 @@ export class FamiliarPromovente extends HTMLElement {
       const saludPrecaria = this.#saludPrecariaRadioYes.checked
       const pobrezaExtrema = this.#pobrezaExtremaRadioYes.checked
 
+      //Verificacion de que si el campo de nombre esta vacio, o si el campo de nombre tiene más de 100 caracteres se muestre un mensaje de error
       if (nombre === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nombre es obligatorio.'
@@ -303,6 +364,7 @@ export class FamiliarPromovente extends HTMLElement {
         modal.open = true
       }
 
+      //Verificacion de que si el campo de nacionalidad esta vacio, o si el campo de nacionalidad tiene más de 100 caracteres se muestre un mensaje de error
       if (nacionalidad === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nacionalidad es obligatorio.'
@@ -316,6 +378,7 @@ export class FamiliarPromovente extends HTMLElement {
       }
 
 
+      //Verificacion de que si el campo de parentesco esta vacio, o si el campo de parentesco tiene más de 100 caracteres se muestre un mensaje de error
       if (parentesco === '') {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de parentesco es obligatorio.'
@@ -327,8 +390,17 @@ export class FamiliarPromovente extends HTMLElement {
         modal.title = 'Error de validación'
         modal.open = true
       } else {
+
+        /**
+         * Verifica que los radios ya sea yex o no esten seleccionados
+         *  
+         *  
+         * */
+
+        //Verificacion de los campos de radio 
         if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
 
+           //Obtención del id del familiar si tiene
           const familiarData = {
             nombre: nombre,
             nacionalidad: nacionalidad,
@@ -338,8 +410,11 @@ export class FamiliarPromovente extends HTMLElement {
             saludPrecaria: saludPrecaria,
             pobrezaExtrema: pobrezaExtrema
           }
+          //Agregación del familiar
           this.#familiares.push(familiarData)
-          this.mostrarFamiliares()
+          //Mostrar los familiares
+           this.mostrarFamiliares()
+          //Limpiar los campos del formulario
           this.#nombreFamiliar.value = ''
           this.#nacionalidadFamilar.value = ''
           this.#parentescoFamiliar.value = ''
@@ -357,6 +432,7 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
         } else {
+          //Mensaje de error si no se han seleccionado los campos de radio
           const modal = document.querySelector('modal-warning')
           modal.message = 'Debe seleccionar una opción en los campos de radio.'
           modal.title = 'Error de validación'
@@ -365,6 +441,7 @@ export class FamiliarPromovente extends HTMLElement {
       }
     }
     else {
+      //Mensaje de error si se ha seleccionado un familiar
       const modal = document.querySelector('modal-warning')
       modal.message = 'No se puede agregar un familiar si ha seleccionado previamente uno de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
@@ -388,17 +465,21 @@ export class FamiliarPromovente extends HTMLElement {
       this.#adultaMayorRadioYes.checked = true
     }
   }
+
+  //Metodo que se encarga de activar el boton de seleccionar familiar
   activarBotonSeleccionarFamiliar = async familiarId => {
 
     try {
+      //Obtención del familiar por ID
       const familiar = this.#familiares[familiarId - 1]
+      //Verificación de si el familiar existe
       if (familiar) {
-
-
+        //Asignación de los valores del familiar a los campos del formulario
         this.#idFamiliar = familiarId
         this.#nombreFamiliar.value = familiar.nombre
         this.#nacionalidadFamilar.value = familiar.nacionalidad
         this.#parentescoFamiliar.value = familiar.parentesco
+
         if (familiar.perteneceComunidadLGBT) {
           this.#pertenceComunidadLGBTRadioYes.checked = true
         }else
@@ -434,11 +515,7 @@ export class FamiliarPromovente extends HTMLElement {
   }
 
 
-  connectedCallback() {
-
-  }
-
-
+   //Metodo que se encarga de mostrar un modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -447,26 +524,7 @@ export class FamiliarPromovente extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
-
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    const familiares = this.#familiares
-    return {
-      familiares: familiares
-    }
-  }
-
-  set data(value) {
-    this.#familiares = value
-    this.mostrarFamiliares()
-    this.setAttribute('data', value)
-  }
+  
 }
 
 customElements.define('familiar-promovente', FamiliarPromovente)

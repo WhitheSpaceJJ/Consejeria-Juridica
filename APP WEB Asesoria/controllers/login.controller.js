@@ -6,7 +6,7 @@ class LoginController {
     this.model = model
   }
 
-  // Methods
+  // Metodo que se enc arga de manejar el login
   handleLogin = async () => {
     const correo = document.getElementById('correo').value
     const password = document.getElementById('password').value
@@ -16,11 +16,12 @@ class LoginController {
           'Campos obligatorios en blanco, por favor revise.'
         )
       }
-
+      //Aqui en este caso se procedera a cambiar el assets del navbar con respecto a los permisos del usuario
       const user = await this.model.login({ correo, password })
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')
     } catch (error) {
+      //Aqui se manejan los errores que se puedan presentar
       if (error instanceof ValidationError) {
         const modal = document.querySelector('modal-warning')
         modal.message = error.message

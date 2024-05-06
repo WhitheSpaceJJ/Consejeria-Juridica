@@ -30,7 +30,7 @@ const agregarEmpleado = asyncError(async (req, res, next) => {
  * */
 const obtenerEmpleados = asyncError(async (req, res, next) => {
     const result = await controlEmpleado.obtenerEmpleados();
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('No se encontraron empleados', 404);
         return next(error);
     } else {

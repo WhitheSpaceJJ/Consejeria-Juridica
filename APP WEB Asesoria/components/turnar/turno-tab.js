@@ -9,12 +9,13 @@ const html = await (await fetch('../assets/turnar/turno-tab.html')).text()
 template.innerHTML = html
 
 export class TurnoTab extends HTMLElement {
+
+  //Variables privadas de la clase
   #asesoria
   #asesores
   #defensores
   #usuario
   #api
-
   #resumen
   #nombreAsesor
   #nombreDefensor
@@ -23,25 +24,71 @@ export class TurnoTab extends HTMLElement {
   #minutoTurno
   #turnadoPorAsesor
 
+  //Metodo para observar los cambios en los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
 
+  //Metodo que se encarga de obtener el id
+  get id() {
+    return this.getAttribute('id')
+  }
+
+  //Metodo que se encarga de setear el id
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que se encarga de obtener los datos
+  get data() {
+    const idEmpelado = this.#asesoria.asesor
+      ? this.#asesores.find(
+        asesor => asesor.id_asesor === Number(this.#nombreAsesor.value)
+      )
+      : this.#defensores.find(
+        defensor =>
+          defensor.id_defensor === Number(this.#nombreDefensor.value)
+      )
+    return {
+      resumen: this.#resumen.value,
+      empleado: idEmpelado,
+      responsableTurno: this.#usuario.name,
+      horaTurno: this.#horaTurno.value,
+      minutoTurno: this.#minutoTurno.value,
+      turnadoPorAsesor: this.#turnadoPorAsesor.checked,
+    }
+  }
+
+  //Metodo que se encarga de setear los datos
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
+
+    //Este id es con respecto a la pestaña actual
     this.id = 'turno'
+    //Se esconde el tab
     this.style.display = 'none'
 
+    //Se obtiene la asesoria de la sesion esto es con respecto a la busqueda
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
     this.#usuario = JSON.parse(sessionStorage.getItem('user'))
 
+    //Se inicializan las variables en este caso API
     this.#api = new APIModel()
+    //Se inicializa la clase
     this.#initialize()
   }
 
+
+  //Metodo encargado de inicializar la clase
   async #initialize() {
+    //Se obtienen los asesores y defensores
     await this.#fetchEmpleados()
 
     this.#manageFormFields()
@@ -53,17 +100,34 @@ export class TurnoTab extends HTMLElement {
       const data = await this.#api.getAsesores2()
       this.#asesores = data.asesores
     } catch (error) {
-      throw new Error('No se pudieron obtener los asesores')
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'No se pudieron obtener los asesores, por favor intenta de nuevo o verifique la seccion administrativa de los datos'
+      modal.title = 'Error'
+      modal.open = true
     }
 
     try {
       const data = await this.#api.getDefensores2()
       this.#defensores = data.defensores
     } catch (error) {
-      throw new Error('No se pudieron obtener los defensores')
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'No se pudieron obtener los defensores, por favor intenta de nuevo o verifique la seccion administrativa de los datos'
+      modal.title = 'Error'
+      modal.open = true
     }
   }
 
+  //Metodo encargado de manejar la asignacion de los campos
   #manageFormFields() {
     this.#resumen = this.shadowRoot.getElementById('resumen')
     this.#nombreAsesor = this.shadowRoot.getElementById('nombre-asesor')
@@ -74,18 +138,19 @@ export class TurnoTab extends HTMLElement {
     this.#turnadoPorAsesor =
       this.shadowRoot.getElementById('cbx-turnado-asesor')
 
+    //Llamada al manejador de entrada de texto
+    this.manejadorEntradaTexto()
+  }
 
+  //Metodo encargado de manejar la entrada de texto
+  manejadorEntradaTexto() {
+
+    //Asignacion de los inputs
     var resumenInput = this.#resumen;
 
+    //Validar que el resumen no tenga más de 250 caracteres
     resumenInput.addEventListener('input', function () {
-      if (resumenInput.value === '') {
-
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El resumen no puede estar vacío, por favor ingreselo.'
-        modal.title = 'Error de validación'
-        modal.open = true
-
-      } else if (resumenInput.value.length > 250) {
+      if (resumenInput.value.length > 250) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El resumen no puede tener más de 250 caracteres, por favor revisa.'
         modal.title = 'Error de validación'
@@ -94,57 +159,43 @@ export class TurnoTab extends HTMLElement {
 
     });
 
+    //Asignacion de los inputs
     var horaTurnoInput = this.#horaTurno;
     var minutoTurnoInput = this.#minutoTurno;
 
 
+    // Validar la hora del turno y que cumpla con el formato de 24 horas
     horaTurnoInput.addEventListener('input', function () {
-      if (horaTurnoInput.value === '') {
+
+      // Expresión regular para validar horas en formato de 12 o 24 horas
+      var horaRegex = /^(0?[1-9]|1[0-2]|2[0-3])$/;
+      if (!horaRegex.test(horaTurnoInput.value)) {
         const modal = document.querySelector('modal-warning')
-        modal.message = 'La hora del turno no puede estar vacía, por favor ingrésela.'
+        modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
-      } else {
-        // Expresión regular para validar horas en formato de 12 o 24 horas
-        var horaRegex = /^(0?[1-9]|1[0-2]|2[0-3])$/;
-        if (!horaRegex.test(horaTurnoInput.value)) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
       }
 
     });
 
+    // Validar los minutos del turno y que cumpla con el formato de minutos (0 a 59)
     minutoTurnoInput.addEventListener('input', function () {
 
-      // Validar los minutos del turno
-      if (minutoTurnoInput.value === '') {
+
+      // Expresión regular para validar minutos (0 a 59)
+      var minutoRegex = /^([0-5]?[0-9])$/;
+      if (!minutoRegex.test(minutoTurnoInput.value)) {
         const modal = document.querySelector('modal-warning')
-        modal.message ='Los minutos del turno no pueden estar vacíos, por favor ingréselos.'
+        modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
-      } else {
-        // Expresión regular para validar minutos (0 a 59)
-        var minutoRegex = /^([0-5]?[0-9])$/;
-        if (!minutoRegex.test(minutoTurnoInput.value)) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
       }
     });
-
-
-    // Validar la hora del turno
-
-
-
-
   }
 
+
+
+  //Encargado de llenar los inputs y select
   #fillInputs() {
     this.#resumen.value = this.#asesoria.datos_asesoria.resumen_asesoria
 
@@ -161,21 +212,7 @@ export class TurnoTab extends HTMLElement {
       option.textContent = `${defensor.nombre_defensor}`
       this.#nombreDefensor.appendChild(option)
     })
-    /*
-    if (this.#asesoria.asesor) {
-      this.#nombreAsesor.value = this.#asesoria.asesor.id_asesor
 
-      this.shadowRoot
-        .getElementById('asesor-container')
-        .classList.remove('hidden')
-    } else {
-      this.#nombreDefensor.value = this.#asesoria.defensor.id_defensor
-      this.shadowRoot
-        .getElementById('defensor-container')
-        .classList.remove('hidden')
-    }
-
-    */
     this.#turnadoPorAsesor.checked = Boolean(this.#asesoria.turno)
     this.#responsableTurno.value = this.#usuario.name
 
@@ -185,36 +222,23 @@ export class TurnoTab extends HTMLElement {
   }
 
   connectedCallback() {
+    //Asignacion de las variables de los botones
     this.btnTurnar = this.shadowRoot.getElementById('btn-registrar-turno')
+    //Obtencion de los datos de los tabs
     this.domicilioTab = document.querySelector('domicilio-tab')
     this.asesoradoTab = document.querySelector('asesorado-tab')
 
+    //Manejo de los eventos de los botones
     this.btnTurnar.addEventListener('click', async () => {
 
-
-
-
+      //Obtencion de los datos de los tabs
       const turnoData = this.data
       const domicilioData = this.domicilioTab.data
       const asesoradoData = this.asesoradoTab.data
 
-      // console.log(turnoData)
-      //console.log(domicilioData)
-      //  console.log(asesoradoData)
-
-      /*
-            const { numeroInt, ...restDomicilioData } = domicilioData
-            const data = {
-              ...asesoradoData,
-              ...(numeroInt ? { ...domicilioData } : { ...restDomicilioData }),
-              ...turnoData,
-            }
-            */
-      // console.log(data)
-      // const inputs = Object.values(data)
-      // console.log(inputs.slice(0, -1))
 
       try {
+        // Obtencion de los datos del asesorado
         var nombre = asesoradoData.nombre;
         var apellidoPaterno = asesoradoData.apellido_paterno;
         var apellidoMaterno = asesoradoData.apellido_materno;
@@ -222,10 +246,13 @@ export class TurnoTab extends HTMLElement {
         var sexo = asesoradoData.genero;
 
 
+        // Expresión regular para validar nombres
         var nombrePattern2 = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
+        // Expresión regular para validar enteros
         var enterosPattern = /^\d+$/;
 
+        // Validar los campos del asesorado ,en este caso que no esten vacios , que solo sean letras y que no tengan más de 50 caracteres
         if (nombre === '') {
           throw new ValidationError('El nombre no puede estar vacío, por favor ingreselo.')
         }
@@ -237,6 +264,7 @@ export class TurnoTab extends HTMLElement {
 
 
 
+        //Validar los campos del asesorado ,en este caso que no esten vacios , que solo sean letras y que no tengan más de 50 caracteres
         if (apellidoPaterno === '') {
           throw new ValidationError('El apellido paterno no puede estar vacío, por favor ingreselo.')
         }
@@ -246,6 +274,8 @@ export class TurnoTab extends HTMLElement {
           throw new ValidationError('El apellido paterno no puede tener más de 50 caracteres, por favor ingreselo correctamente.')
         }
 
+
+        // validar los campos del asesorado ,en este caso que no esten vacios , que solo sean letras y que no tengan más de 50 caracteres
         if (apellidoMaterno === '') {
           throw new ValidationError('El apellido materno no puede estar vacío, por favor ingreselo.')
         }
@@ -257,6 +287,7 @@ export class TurnoTab extends HTMLElement {
 
 
 
+        //Validar la edad del asesorado ,en este caso que no este vacia , que solo sean numeros y que no tenga más de 200 años
         if (!enterosPattern.test(edad)) {
           if (edad === 0) {
             throw new ValidationError('La edad no puede estar vacía o ser cero, por favor ingresela.')
@@ -269,6 +300,8 @@ export class TurnoTab extends HTMLElement {
         }
 
 
+        //Obtencion de los datos del domicilio
+
         var calle = domicilioData.calle;
         var ciudad = domicilioData.ciudad;
         var colonia = domicilioData.colonia;
@@ -279,6 +312,8 @@ export class TurnoTab extends HTMLElement {
         var numeroInt = domicilioData.numeroInt;
 
 
+        // Validar los campos del domicilio ,en este caso que no esten vacios , que solo sean letras y que no tengan más de 75 caracteres
+
         if (calle === '') {
           throw new ValidationError('La calle no puede estar vacía, por favor ingresela.')
         } else if (calle.length > 75) {
@@ -286,6 +321,7 @@ export class TurnoTab extends HTMLElement {
         }
 
 
+        // Validar los campos del domicilio ,en este caso que no esten vacios , que solo sean letras y que no tengan más de 75 caracteres
         if (numeroExt === '') {
           throw new ValidationError('El número exterior no puede estar vacío, por favor ingreselo.')
         } else if (!enterosPattern.test(numeroExt)) {
@@ -293,6 +329,8 @@ export class TurnoTab extends HTMLElement {
         } else if (numeroExt.length > 10) {
           throw new ValidationError('El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.')
         }
+
+        // Validar los campos del domicilio ,en este caso que solo sean letras y que no tengan más de 10 caracteres
         if (numeroInt !== '') {
           if (!enterosPattern.test(numeroInt)) {
             throw new ValidationError('El número interior solo permite números, verifique su respuesta.')
@@ -302,22 +340,25 @@ export class TurnoTab extends HTMLElement {
             }
         }
 
+        //Validar que se haya seleccionado una colonia
         if (colonia === '') {
           throw new ValidationError('La colonia es obligatoria, por favor busque una con el codigo postal.')
         }
 
 
+        //Validar el resumen de la asesoria ,en este caso que no este vacio y que no tenga más de 250 caracteres
         if (this.#resumen.value === '') {
           throw new ValidationError('El resumen no puede estar vacío, por favor ingreselo.')
         } else if (this.#resumen.value.length > 250) {
           throw new ValidationError('El resumen no puede tener más de 250 caracteres, por favor revisa.')
         }
 
-        
-        if(this.#nombreDefensor.value === ''){
+
+        //Validar que se haya seleccionado un defensor
+        if (this.#nombreDefensor.value === '') {
           throw new ValidationError('Debe de seleccionar un defensor, por favor seleccione uno.')
-         }
- 
+        }
+
         // Validar la hora del turno
         if (turnoData.horaTurno === '') {
           throw new ValidationError('La hora del turno no puede estar vacía, por favor ingrésela.');
@@ -341,7 +382,7 @@ export class TurnoTab extends HTMLElement {
         }
 
 
-
+        //Preparacion de los datos para el registro del turno
         this.#asesoria.persona.nombre = nombre;
         this.#asesoria.persona.apellido_paterno = apellidoPaterno;
         this.#asesoria.persona.apellido_materno = apellidoMaterno;
@@ -359,75 +400,28 @@ export class TurnoTab extends HTMLElement {
         this.#asesoria.datos_asesoria.estatus_asesoria = 'TURNADA';
 
 
+        //Armado de los datos del turno
         this.#asesoria.turno = {
           fecha_turno: getDate(),
           hora_turno: `${turnoData.horaTurno}:${turnoData.minutoTurno}`,
           id_defensor: this.#nombreDefensor.value,
           id_asesoria: this.#asesoria.datos_asesoria.id_asesoria,
         }
-        /*
+
+        //Registro del turno
+        await this.#api.putAsesoria({
+          id: this.#asesoria.datos_asesoria.id_asesoria,
+          data: this.#asesoria,
+        })
 
 
-        console.log(this.#asesoria.persona)
-        console.log(this.#asesoria.datos_asesoria )
-        console.log(this.#asesoria.turno)
-
-
-
-        if (!validateNonEmptyFields(inputs.slice(0, -1))) {
-          throw new ValidationError(
-            'Campos obligatorios en blanco, por favor revise.'
-          )
-        }
-
-        */
-
-        /*
-        // replace asesorado and domicilio data
-        this.#asesoria.persona = {
-          ...this.#asesoria.persona,
-          ...asesoradoData,
-          domicilio: {
-            ...this.#asesoria.persona.domicilio,
-            calle_domicilio: data.calle,
-            numero_exterior_domicilio: data.numeroExt,
-            numero_interior_domicilio: data.numeroInt,
-          },
-        }
-        // replace turno data
-        this.#asesoria.datos_asesoria = {
-          ...this.#asesoria.datos_asesoria,
-          resumen_asesoria: data.resumen,
-          usuario: this.#usuario.name,
-        
-        }
-        this.#asesoria.empleado = {
-          id_empleado: turnoData.empleado.id_asesor || turnoData.empleado.id_defensor,
-        };
-
-        this.#asesoria.turno = {
-          fecha_turno: getDate(),
-          hora_turno: `${data.horaTurno}:${data.minutoTurno}`,
-        }
-        delete this.#asesoria.asesor
-        console.log(this.#asesoria)
-        console.log(JSON.stringify(this.#asesoria))
-
-        */
-              console.log(
-                await this.#api.putAsesoria({
-                  id: this.#asesoria.datos_asesoria.id_asesoria,
-                  data: this.#asesoria,
-                })
-              )
-      
-      
-      
-             this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
-                location.href = '/'
-              }) 
+        //Mensaje de exito
+        this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
+          location.href = '/'
+        })
 
       } catch (error) {
+        //mensaje de error
         if (error instanceof ValidationError) {
           this.#showModal(error.message, 'Error de validación')
         } else {
@@ -441,6 +435,7 @@ export class TurnoTab extends HTMLElement {
     })
   }
 
+  //Metodo encargado de mostrar el modal
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
@@ -449,36 +444,7 @@ export class TurnoTab extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
 
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    const idEmpelado = this.#asesoria.asesor
-      ? this.#asesores.find(
-        asesor => asesor.id_asesor === Number(this.#nombreAsesor.value)
-      )
-      : this.#defensores.find(
-        defensor =>
-          defensor.id_defensor === Number(this.#nombreDefensor.value)
-      )
-    return {
-      resumen: this.#resumen.value,
-      empleado: idEmpelado,
-      responsableTurno: this.#usuario.name,
-      horaTurno: this.#horaTurno.value,
-      minutoTurno: this.#minutoTurno.value,
-      turnadoPorAsesor: this.#turnadoPorAsesor.checked,
-    }
-  }
-
-  set data(value) {
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('turno-tab', TurnoTab)

@@ -90,7 +90,7 @@ const getEstado = async (id) => {
     return error.message;
   }
 }
-
+ // Exportamos las funciones
 module.exports = {
   getEstados,
   getEstado,

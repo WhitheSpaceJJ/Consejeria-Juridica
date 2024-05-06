@@ -46,6 +46,12 @@ const obtenerProcesosJudiciales = async (req, res) => {
     })
   }
 }
+/**
+ * @abstract Método que permite obtener todos los procesos judiciales por defensor
+ * @returns {array} Retorna un arreglo de objetos de procesos judiciales si la operación fue exitosa, de lo contrario lanza un error
+ */
+
+
 const obtenerProcesosJudicialesPorDefensor = async (req, res) => {
   try {
     const estatus_proceso = req.query.estatus_proceso

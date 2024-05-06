@@ -1,7 +1,9 @@
 
 const sequelize = require('../config/db')
 const { DataTypes } = require('sequelize')
-
+ /**
+  * Modelo de la tabla prueba
+  */
 
 const prueba = sequelize.define('prueba', {
   id_prueba: {

@@ -6,19 +6,19 @@ dotenv.config();
 
 
 
-// Obtenemos el valor de la variable de entorno DBHOST o usamos localhost por defecto
-const DBHOST = process.env.DBHOST ; 
-// Obtenemos el valor de la variable de entorno DBUSER o usamos root por defecto
+// Obtenemos el valor de la variable de entorno DBHOST
+const DBHOST = process.env.DBHOST ;
+// Obtenemos el valor de la variable de entorno DBUSER 
 const DBUSER = process.env.DBUSER ; 
-// Obtenemos el valor de la variable de entorno DBPASSWORD o usamos 1234 por defecto
+// Obtenemos el valor de la variable de entorno DBPASSWORD 
 const DBPASSWORD = process.env.DBPASSWORD ; 
-// Obtenemos el valor de la variable de entorno DATABASE o usamos consejeria por defecto
+// Obtenemos el valor de la variable de entorno DATABASE
 const DATABASE = process.env.DATABASE ; 
-// Obtenemos el valor de la variable de entorno PORT o usamos el puerto 3000 por defecto
+// Obtenemos el valor de la variable de entorno PORT 
 const PORT = process.env.PORT ; 
-// Obtenemos el valor de la variable de entorno DBPORT o usamos el puerto 3306 por defecto
+// Obtenemos el valor de la variable de entorno DBPORT
 const DBPORT = process.env.DBPORT ; 
- // Obtenemos el valor de la variable de entorno HOSTTOKEN o usamos el puerto 3306 por defecto
+ // Obtenemos el valor de la variable de entorno HOSTTOKEN
 const HOSTTOKEN = process.env.HOSTTOKEN ;
 // Obtenemos el valor de la variable de entorno HOSTTOKENGR
 const HOSTTOKENGRPCPORT = process.env.HOSTTOKENGRPCPORT ; 

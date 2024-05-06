@@ -34,7 +34,7 @@ const agregarDetalleAsesoriaCatalogo = asyncError(async (req, res, next) => {
 
 const obtenerDetallesAsesoriaCatalogo = asyncError(async (req, res, next) => {
   const result = await controlDetalleAsesoriaCatalogo.obtenerDetallesAsesoriaCatalogo();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0 ) {
     const error = new CustomeError('No se encontraron detalles de asesoría en el catálogo', 404);
     return next(error);
   } else {

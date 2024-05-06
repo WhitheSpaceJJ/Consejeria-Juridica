@@ -11,7 +11,7 @@ const html = await (
 template.innerHTML = html
 
 export class ImputadoTab extends HTMLElement {
-
+  //Variables de la clase
   #api
   #nombre
   #apellidoPaterno
@@ -19,19 +19,17 @@ export class ImputadoTab extends HTMLElement {
   #edad
   #sexo
   #telefono
-
+  #generoActual
+  #editableImputadoCheckbox
+  #botonBuscarCP
   #españolRadioYes
   #españolRadioNo
-
   #etnia
   #etnias
-
   #escolaridad
   #escolaridades
-
   #ocupacion
   #ocupaciones
-
   #calle
   #numeroExt
   #numeroInt
@@ -40,71 +38,144 @@ export class ImputadoTab extends HTMLElement {
   #municipio
   #estado
   #ciudad
-
   #turno
-
   #promovente
   #promventeDomicilio
   #tipoJuicio
-
   #busquedaCp
   #generos
+  #procesoSelecionado = null
 
+  #imputado
+  #imputadoDomicilio
 
-
+  //Metodo get que regresa los atributos que se observan
   static get observedAttributes() {
     return ['id', 'data']
   }
 
+  //Metodo que get que regresa el valor del atributo id
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que set que asigna el valor del atributo id
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que verifica si el componente esta completo
+  get isComplete() {
+    return this.validateInputs()
+  }
+
+  //Metodo que regresa los datos del imputado
+  get data() {
+    const imputado = {
+      nombre: this.#nombre.value,
+      apellido_paterno: this.#apellidoPaterno.value,
+      apellido_materno: this.#apellidoMaterno.value,
+      edad: this.#edad.value,
+      telefono: this.#telefono.value,
+      id_genero: this.#sexo.value,
+      sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
+      domicilio: {
+        id_domicilio: this.#imputadoDomicilio.id_domicilio,
+        calle_domicilio: this.#calle.value,
+        numero_exterior_domicilio: this.#numeroExt.value,
+        numero_interior_domicilio: this.#numeroInt.value,
+        id_colonia: this.#colonia.value,
+        cp: this.#cp.value,
+        estado: this.#estado.value,
+        municipio: this.#municipio.value,
+        ciudad: this.#ciudad.value,
+        colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
+      },
+    }
+    return {
+      imputado
+    }
+  }
+
+  //Metodo que asigna los datos del imputado
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+
+  //Constructor de la clase
+  constructor() {
+    super()
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(template.content.cloneNode(true))
+    //ID del componente con respecto a las tabs
+    this.id = 'imputado'
+    this.style.display = 'none'
+    //Componentes del registro y promovente
+    this.registroTab = document.querySelector('registro-full-tab')
+    this.promoventeTab = document.querySelector('promovente-full-tab')
+
+    //Obtencion del formulario de busqueda de codigo postal
+    this.formCP = this.shadowRoot.getElementById('buscar-cp')
+
+    //ASignacion de eventos a los elementos del formulario
+    this.formCP.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (
+        !this.#cp.value ||
+        this.#cp.value.length !== 5 ||
+        isNaN(this.#cp.value)
+      ) {
+        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+        return
+      }
+      this.searchCP()
+    })
+  }
+
+  //Metodo que inicializa los datos del imputads, vrianles,etc
   async init() {
     this.#api = new APIModel()
-
+    //Obtencion de los generos
     const { generos } = await this.#api.getGeneros2()
+    //Asignacion de los generos
     this.#generos = generos
 
     this.manageFormFields()
 
     this.fillInputs()
 
+    //Obtencion del genero actual
     const { genero } = await this.#api.getGeneroByID(this.#imputado.id_genero)
+    //Asignacion del genero actual
     this.#generoActual = genero
 
-     /**
+    //Creacion de un option para el genero actual
     const option = document.createElement('option')
     option.value = this.#generoActual.id_genero
     option.text = this.#generoActual.descripcion_genero
-    this.#sexo.appendChild(option) 
+    const optiones = this.#sexo.options
+    let existe = false
 
+    //Se recorren los generos para verificar si existe el genero actual
+    for (let i = 0; i < optiones.length; i++) {
+      if (optiones[i].value === option.value) {
+        existe = true
+        break
+      }
+    }
+
+    //Si existe el genero actual se agrega al select
+    if (existe) {
+      this.#sexo.appendChild(option)
+    }
+
+    //Se asigna el valor del genero actual al select
     this.#sexo.value = this.#generoActual.id_genero
-
-    antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
-      */
-       
-      const option = document.createElement('option')
-      option.value = this.#generoActual.id_genero
-      option.text = this.#generoActual.descripcion_genero
-      const optiones = this.#sexo.options
-      let existe = false
-      
-      for (let i = 0; i < optiones.length; i++) {
-        if (optiones[i].value === option.value) {
-          existe = true
-          break
-        }
-      }
-
-      if (existe) {
-        this.#sexo.appendChild(option)
-      }
-
-      this.#sexo.value = this.#generoActual.id_genero
 
   }
 
-  #generoActual
-  #editableImputadoCheckbox
-  #botonBuscarCP
+  //Metodo que maneja los campos del formulario
   manageFormFields() {
 
     this.#editableImputadoCheckbox = this.shadowRoot.getElementById('cbx-editable-imputado')
@@ -125,7 +196,15 @@ export class ImputadoTab extends HTMLElement {
     this.#municipio = this.shadowRoot.getElementById('municipio')
     this.#estado = this.shadowRoot.getElementById('estado')
     this.#ciudad = this.shadowRoot.getElementById('ciudad')
+    //Llamada al metodo que maneja lo relacionado con el checkbox de editable del imputado   
+    this.checboxEditableImputado()
+    //LLamada al metodo que maneja la entrada de texto en los campos
+    this.manejadorEntradaTexto()
+  }
 
+  //Metodo que maneja el checkbox de editable del imputado, esto con el fin de que si se desea editar los campos del imputado
+  //estos se habiliten , caso contrario se deshabiliten
+  checboxEditableImputado() {
     this.#editableImputadoCheckbox.checked = false
     this.#editableImputadoCheckbox.addEventListener('change', () => {
       if (this.#editableImputadoCheckbox.checked) {
@@ -157,6 +236,11 @@ export class ImputadoTab extends HTMLElement {
       }
     })
 
+  }
+
+  manejadorEntradaTexto() {
+    var edadInput = this.#edad;
+
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
     var apellidoMaternoInput = this.#apellidoMaterno;
@@ -164,39 +248,30 @@ export class ImputadoTab extends HTMLElement {
     nombreInput.addEventListener('input', function () {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
-      if (nombreInput.value === '') {
-        // Si el campo está vacío, lanzar una excepción
+      if (!nombrePattern.test(nombreInput.value)) {
+        // Si el campo contiene caracteres no válidos, lanzar una excepción
+
         const modal = document.querySelector('modal-warning')
-        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
+        modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
-      } else
-        if (!nombrePattern.test(nombreInput.value)) {
-          // Si el campo contiene caracteres no válidos, lanzar una excepción
 
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-          modal.title = 'Error de validación'
-          modal.open = true
-
-        } else if (nombreInput.value.length > 50) {
-          // Si el campo tiene más de 50 caracteres, lanzar una excepción
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
+      } else if (nombreInput.value.length > 50) {
+        // Si el campo tiene más de 50 caracteres, lanzar una excepción
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
     });
 
+    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     apellidoPaternoInput.addEventListener('input', function () {
+       
+      // Expresión regular para validar el apellido
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoPaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+      // Si el campo contiene caracteres no válidos, lanzar una excepción
+      if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -209,20 +284,17 @@ export class ImputadoTab extends HTMLElement {
       }
     });
 
+    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     apellidoMaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-      if (apellidoMaternoInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+      if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+        // Si el campo contiene caracteres no válidos, lanzar una excepción
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
+        // Si el campo tiene más de 50 caracteres, lanzar una excepción
         const modal = document.querySelector('modal-warning');
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -230,8 +302,7 @@ export class ImputadoTab extends HTMLElement {
       }
     });
 
-    var edadInput = this.#edad;
-
+     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     edadInput.addEventListener('input', function () {
       var edadPattern = /^\d+$/;
       if (!edadPattern.test(edadInput.value)) {
@@ -253,19 +324,20 @@ export class ImputadoTab extends HTMLElement {
         modal.open = true;
       }
     });
-
-
   }
 
+  //Metodo que senecarga de llenar los campos del formulario con los datos del imputado ,etc
   fillInputs() {
+    //Limpia del select de generos
     this.#generos.innerHTML = ''
 
+    //Creacion de un option para el select de generos
     const optionGenero = document.createElement('option')
     optionGenero.value = '0'
     optionGenero.text = 'Seleccione un género'
     this.#sexo.appendChild(optionGenero)
 
-
+    //Se recorren los generos para agregarlos al select
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
@@ -273,6 +345,7 @@ export class ImputadoTab extends HTMLElement {
       this.#sexo.appendChild(option)
     })
 
+    //Se obtiene los datos del imputado y su domicilio y se agregan a las variables de la clase
     this.#imputado = this.registroTab.data.imputado
     this.#imputadoDomicilio = this.#imputado.domicilio
 
@@ -288,6 +361,7 @@ export class ImputadoTab extends HTMLElement {
     this.#numeroExt.value = this.#imputadoDomicilio.numero_exterior_domicilio
     this.#numeroInt.value = this.#imputadoDomicilio.numero_interior_domicilio
 
+    //Esto es con el fin de consultar los datos de la colonia del imputado
     this.#api.getColoniaById(this.#imputadoDomicilio.id_colonia)
       .then(data => {
         const { colonia } = data
@@ -323,23 +397,10 @@ export class ImputadoTab extends HTMLElement {
 
   }
 
-  #imputado
-  #imputadoDomicilio
-
+//Metodo que se encarga de validar los campos del formulario
   validateInputs() {
-    try {
-      /*  
-
-      if(this.registroTab.data.proceso === undefined){
-        this.#showModal('No se ha seleccionado un proceso, por favor seleccione uno.', 'Error de validación')
-        return false
-      }
-        
-        if(this.promoventeTab.data.promovente === undefined){
-          this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
-          return false
-        } 
-     */
+    try { 
+   //Obtenemos los valores de los campos del formulario
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -350,11 +411,12 @@ export class ImputadoTab extends HTMLElement {
       const numeroExt = this.#numeroExt.value
       const numeroInt = this.#numeroInt.value
       const colonia = this.#colonia.value
+      //Expresiones regulares para validar los campos
       var nombresApellidos = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
       var edadPattern = /^\d+$/;
 
 
-
+    //Validacion del nombre si esta vacio, si tiene mas de 50 caracteres, si solo tiene letras
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -363,6 +425,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('El nombre solo permite letras, verifique su respuesta.')
       }
 
+      //Validacion del apellido paterno si esta vacio, si tiene mas de 50 caracteres, si solo tiene letras
       if (apellidoPaterno === '') {
         throw new ValidationError('El apellido paterno no puede estar vacío, por favor ingréselo.')
       }
@@ -372,6 +435,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('El apellido paterno solo permite letras, verifique su respuesta.')
       }
 
+      //Validacion del apellido materno si esta vacio, si tiene mas de 50 caracteres, si solo tiene letras
       if (apellidoMaterno === '') {
         throw new ValidationError('El apellido materno no puede estar vacío, por favor ingréselo.')
 
@@ -382,6 +446,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('El apellido materno solo permite letras, verifique su respuesta.')
       }
 
+      //Validacion de la edad si esta vacia, si solo tiene numeros, si es mayor a 200
       if (edad === '') {
         throw new ValidationError('La edad no puede estar vacía, por favor ingresela.')
       }
@@ -391,6 +456,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.')
       }
 
+      //Validacion del telefono si esta vacio, si tiene mas de 10 caracteres, si solo tiene numeros
       if (telefono === '') {
         throw new ValidationError('El teléfono no puede estar vacío, por favor ingréselo.')
       }
@@ -401,9 +467,10 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('El teléfono solo permite números, verifique su respuesta.')
       }
 
+      //Validacion del sexo si esta vacio
       if (sexo === '0') {
         throw new ValidationError('Por favor seleccione un género.')
-            }
+      }
       if (calle === '') {
         throw new ValidationError('La calle no puede estar vacía, por favor ingrésela.')
       }
@@ -411,6 +478,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('La calle no puede tener más de 100 caracteres, por favor ingrésela correctamente.')
       }
 
+      //Validacion del numero exterior si esta vacio, si tiene mas de 10 caracteres, si solo tiene numeros
       if (numeroExt === '') {
         throw new ValidationError('El número exterior no puede estar vacío, por favor ingréselo.')
       }
@@ -421,6 +489,7 @@ export class ImputadoTab extends HTMLElement {
         throw new ValidationError('El número exterior solo permite números, verifique su respuesta.')
       }
 
+      //En caso de que el numero interior no este vacio, si tiene mas de 10 caracteres, si solo tiene numeros
       if (numeroInt !== '') {
         if (numeroInt.length > 10) {
           throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingréselo correctamente.')
@@ -429,11 +498,11 @@ export class ImputadoTab extends HTMLElement {
           throw new ValidationError('El número interior solo permite números, verifique su respuesta.')
         }
       }
-
+//Validacion de la colonia si esta vacia
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
-   
+
       return true
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -449,40 +518,19 @@ export class ImputadoTab extends HTMLElement {
     }
   }
 
-  constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-    this.id = 'imputado'
-    this.style.display = 'none'
-    this.registroTab = document.querySelector('registro-full-tab')
-    this.promoventeTab = document.querySelector('promovente-full-tab')
-
-
-    this.formCP = this.shadowRoot.getElementById('buscar-cp')
-
-    this.formCP.addEventListener('click', (event) => {
-      event.preventDefault();
-      if (
-        !this.#cp.value ||
-        this.#cp.value.length !== 5 ||
-        isNaN(this.#cp.value)
-      ) {
-        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-        return
-      }
-      this.searchCP()
-    })
-  }
+//Metodo encargado de buscar el codigo postal y la informaicon relacionada a este
   async searchCP() {
     try {
+    //Se obtiene la informacion del codigo postal
       const { colonias: data } = await this.#api.getDomicilioByCP(
         this.#cp.value
       )
+      //En caso de que no se encuentre informacion del codigo postal
       if (!data || typeof data === 'string') {
         this.#showModal('No se encontró el código postal', 'Advertencia')
         return
       }
+      //Se limpian los campos del formulario y se asignan los valores obtenidos
       this.#estado.innerHTML = '';
       this.#estado.value = data.estado.nombre_estado
       this.#municipio.innerHTML = '';
@@ -491,12 +539,13 @@ export class ImputadoTab extends HTMLElement {
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
 
-     const optionColonia = document.createElement('option')
+      //Se crea un option para la colonia
+      const optionColonia = document.createElement('option')
       optionColonia.value = '0'
       optionColonia.text = 'Seleccione una colonia'
       this.#colonia.appendChild(optionColonia)
 
-
+      //Se recorren las colonias para agregarlas al select
       data.colonias.forEach(colonia => {
         const option = document.createElement('option')
         option.value = colonia.id_colonia
@@ -509,9 +558,12 @@ export class ImputadoTab extends HTMLElement {
     }
   }
 
+  //Metodo encargado de la conexion del componente con el DOM
   connectedCallback() {
+    //Obtencion del boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-imputado-next')
 
+    //Asignacion de eventos al boton de siguiente
     this.btnNext.addEventListener('click', () => {
       if (!this.validateInputs()) return
       const event = new CustomEvent('next', {
@@ -521,14 +573,17 @@ export class ImputadoTab extends HTMLElement {
       })
       this.dispatchEvent(event)
     })
+    //Metodo encargado de la gestion de los cambios del tabs
     document.addEventListener('tab-change', event => {
-      const tabId = event.detail.tabId
-    
+      const tabId = event.detail.tabId      
+        //Estas verificacion es de igual manera como en codigos pasados es con el fin de validar si se ha seleccionado 
+        //ahora en este caso un proceso judicial , esto con el fin de cargar los datos del imputado , caso contrario donde se seleccione 
+        //un nuevo proceso judicial se limpiaran los campos del formulario y se cargaran los datos del nuevo proceso
       if (this.#procesoSelecionado === null) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }
-      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+      if (this.#procesoSelecionado !== null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }
@@ -536,56 +591,13 @@ export class ImputadoTab extends HTMLElement {
     })
   }
 
-  #procesoSelecionado = null
-
+   //Metodo que se encarga de mostrar un modal
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
     modal.title = title
     modal.open = true
     modal.setOnCloseCallback(onCloseCallback)
-  }
-
-  get id() {
-    return this.getAttribute('id')
-  }
-
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get isComplete() {
-    return this.validateInputs()
-  }
-
-  get data() {
-    const imputado = {
-      nombre: this.#nombre.value,
-      apellido_paterno: this.#apellidoPaterno.value,
-      apellido_materno: this.#apellidoMaterno.value,
-      edad: this.#edad.value,
-      telefono: this.#telefono.value,
-      id_genero: this.#sexo.value,
-      sexo: this.#sexo.options[this.#sexo.selectedIndex].text,
-      domicilio: {
-        id_domicilio: this.#imputadoDomicilio.id_domicilio, 
-        calle_domicilio: this.#calle.value,
-        numero_exterior_domicilio: this.#numeroExt.value,
-        numero_interior_domicilio: this.#numeroInt.value,
-        id_colonia: this.#colonia.value,
-        cp: this.#cp.value,
-        estado: this.#estado.value,
-        municipio: this.#municipio.value,
-        ciudad: this.#ciudad.value,
-        colonia: this.#colonia.options[this.#colonia.selectedIndex].text,
-      },
-    }
-    return {
-      imputado
-    }
-  }
-  set data(value) {
-    this.setAttribute('data', value)
   }
 }
 

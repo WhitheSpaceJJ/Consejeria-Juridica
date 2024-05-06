@@ -1,6 +1,9 @@
 const sequelize = require('../config/db')
 const { DataTypes } = require('sequelize')
-
+ 
+/** 
+ *  Modelo de la tabla familiar
+ */
 const familiar = sequelize.define('familiar', {
     id_familiar: {
         autoIncrement: true,

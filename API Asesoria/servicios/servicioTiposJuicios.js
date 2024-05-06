@@ -39,7 +39,7 @@ const obtenerTiposDeJuicio = asyncError(async (req, res, next) => {
   const activo = req.query.activo;
   if (activo !== undefined && activo !== null && activo !== "") {
     const result = await controlTiposDeJuicio.obtenerTiposDeJuicio(activo);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron tipos de juicio', 404);
       return next(error);
     } else {
@@ -50,7 +50,7 @@ const obtenerTiposDeJuicio = asyncError(async (req, res, next) => {
     }
   } else {
     const result = await controlTiposDeJuicio.obtenerTiposDeJuicio(null);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron tipos de juicio', 404);
       return next(error);
     } else {

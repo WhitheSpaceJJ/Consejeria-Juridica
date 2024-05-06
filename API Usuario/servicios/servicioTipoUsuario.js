@@ -33,7 +33,7 @@ const agregarTipoUsuario = asyncError(async (req, res, next) => {
 
 const obtenerTiposUsuario = asyncError(async (req, res, next) => {
   const result = await controlTipos.obtenerTiposUsuario();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron tipos de usuario', 404);
     return next(error);
   } else {

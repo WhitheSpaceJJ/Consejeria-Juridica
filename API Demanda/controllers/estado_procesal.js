@@ -9,7 +9,9 @@ const obtenerEstadosProcesales = async (req, res) => {
   try {
     const estados_procesales = await estado_procesalDAO.obtenerEstadosProcesales()
     if (estados_procesales.length === 0) {
-      return res.status(204).json(estados_procesales)
+      return res.status(404).json({
+        message: 'No se encontraron estados procesales'
+      });
     }
     res.json(estados_procesales)
   } catch (error) {
@@ -28,6 +30,11 @@ const obtenerEstadoProcesal = async (req, res) => {
   try {
     const { id } = req.params
     const estado_procesal = await estado_procesalDAO.obtenerEstadoProcesal(Number(id))
+    if (estado_procesal === null || estado_procesal === undefined) {
+      return res.status(404).json({
+        message: 'Estado procesal no encontrado'
+      });
+    }
     res.json(estado_procesal)
   } catch (error) {
     console.log(error)

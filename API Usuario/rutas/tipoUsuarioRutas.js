@@ -16,7 +16,7 @@ router.route('/:id').
     // Obtener un tipo de usuario por su ID
     get(servicioTipos.obtenerTipoUsuarioPorId).
     // Eliminar un tipo de usuario por su ID
-    delete(servicioTipos.eliminarTipoUsuario).
+  //  delete(servicioTipos.eliminarTipoUsuario).
     // Actualizar un tipo de usuario por su ID
     put(servicioTipos.actualizarTipoUsuario);   
 

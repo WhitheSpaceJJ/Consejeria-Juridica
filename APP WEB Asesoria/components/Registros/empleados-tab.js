@@ -10,6 +10,7 @@ template.innerHTML = html
 
 class EmpleadosTab extends HTMLElement {
 
+  // Propiedades privadas de la clase EmpleadosTab 
   #nombre
   #apellidoPaterno
   #apellidoMaterno
@@ -17,30 +18,36 @@ class EmpleadosTab extends HTMLElement {
   #estatusUsuario
   #distritoJudicial
   #empleados
-
-
   #api
   #idSeleccion
-
   #distritos
 
-
+  // Constructor de la clase EmpleadosTab
   constructor() {
     super();
-
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
+    //Establece null como valor inicial para el id de la selección
     this.#idSeleccion = null;
-
+    // Inicializa datos de la clase
     this.init();
-
   }
-  async init() {
-    this.#api = new APIModel();
-    this.#distritos = await this.#api.getDistritos()
 
+  // Método para inicializar la clase EmpleadosTab
+  async init() {
+    // Crear una instancia de la clase APIModel
+    this.#api = new APIModel();
+    // Obtener los distritos judiciales
+    this.#distritos = await this.#api.getDistritos()
+    //Llamar a la función manageFormFields para manejar los campos del formulario
     this.manageFormFields();
+    //Llamar a la función fillInputs para rellenar los campos del formulario
     this.fillInputs();
+    //Llamada a la función manejadorEventosEntrada para manejar los eventos de entrada
+    this.manejadorEventosEntrada();
+  }
+  //Función para manejar los eventos de entrada
+  manejadorEventosEntrada() {
 
     var nombreInput = this.#nombre;
     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
@@ -72,8 +79,9 @@ class EmpleadosTab extends HTMLElement {
     });
 
 
-
   }
+
+  //Función para manejar los campos del formulario
   manageFormFields() {
     this.#nombre = this.shadowRoot.getElementById('nombre');
     this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno');
@@ -83,20 +91,17 @@ class EmpleadosTab extends HTMLElement {
     this.#distritoJudicial = this.shadowRoot.getElementById('distrito-judicial');
     this.#empleados = this.shadowRoot.getElementById('table-empleado');
 
-
-
-
   }
 
+  //Metodo que mandara a llamar a las funciones para agregar eventos a los botones, mostrar empleados y rellenar distritos judiciales
   fillInputs() {
     this.agregarEventosBotones();
     this.mostrarEmpleados();
-
     this.rellenarDistritosJudiciales();
   }
 
+  //Metodo para rellenar el select de los distritos judiciales
   rellenarDistritosJudiciales = async () => {
-
     this.#distritos.forEach(distrito => {
       const option = document.createElement('option')
       option.value = distrito.id_distrito_judicial
@@ -105,7 +110,7 @@ class EmpleadosTab extends HTMLElement {
     })
   }
 
-
+  //Metodo para agregar eventos a los botones
   agregarEventosBotones = () => {
     //Agregar boton
     const agregarEmpleadoBtn = this.shadowRoot.getElementById('agregar-empleado');
@@ -116,7 +121,7 @@ class EmpleadosTab extends HTMLElement {
     const editarEmpleadoBtn = this.shadowRoot.getElementById('editar-empleado');
     editarEmpleadoBtn.addEventListener('click', this.editarEmpleado);
 
-    //Seleccionar boton
+    //Seleccionar boton esto es con respecto al metodo mostrarEmpleados de la clase EmpleadosTab
     const seleccionarBotones = this.shadowRoot.querySelectorAll('.seleccionar-empleado');
 
     seleccionarBotones.forEach(boton => {
@@ -135,210 +140,26 @@ class EmpleadosTab extends HTMLElement {
     // Agregar la función llamarActivarBotonSeleccionar al ámbito global para que se pueda llamar desde el atributo onclick de los botones "Seleccionar"
     window.llamarActivarBotonSeleccionar = llamarActivarBotonSeleccionar;
   }
-  /*
-    agregarEmpleado = async () => {
-  
-      const idEmpleado = this.#idSeleccion;
-  
-      if (idEmpleado === null) {
-  
-  
-        const nombreInput = this.#nombre.value;
-        const tipoUsuarioInput = this.#tipoUsuario.value;
-        const estatusUsuarioInput = this.#estatusUsuario.value;
-        const distritoJudicialInput = this.#distritoJudicial.value;
-  
-        try {
-          var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-  
-          if (nombreInput === '') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de nombre es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (tipoUsuarioInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de tipo de usuario es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (estatusUsuarioInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de estatus de usuario es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (distritoJudicialInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de distrito judicial es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (nombreInput !== '' && tipoUsuarioInput !== '0' && estatusUsuarioInput !== '0' && distritoJudicialInput !== '0') {
-            if (nombreInput.length > 100) {
-              const modal = document.querySelector('modal-warning')
-              modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
-              modal.title = 'Error de validación'
-              modal.open = true
-            } else if (!nombrePattern.test(nombreInput)) {
-              const modal = document.querySelector('modal-warning')
-              modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-              modal.title = 'Error de validación'
-              modal.open = true
-  
-            }
-            else {
-              const nuevoEmpleado = {
-                nombre: this.#nombre.value,
-                tipo_empleado:  this.#tipoUsuario.value,
-                estatus_general: this.#estatusUsuario.value.toUpperCase(),
-                id_distrito_judicial: this.#distritoJudicial.value
-              };
-              console.log(nuevoEmpleado)
-  
-              const response = await this.#api.postEmpleado(nuevoEmpleado);
-  
-              if (response) {
-                this.#nombre.value = '';
-                this.#tipoUsuario.value = '0';
-                this.#estatusUsuario.value = '0';
-                this.#distritoJudicial.value = '0';
-                this.#idSeleccion = null;
-                this.mostrarEmpleados();
-              }
-            }
-  
-  
-  
-          }
-  
-  
-        } catch (error) {
-          console.error('Error al agregar un nuevo empleado:', error);
-        }
-      } else {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'No se puede agregar un empleado si se ha seleccionado uno para editar, se eliminará la selección.'
-        modal.title = 'Error de validación'
-        modal.open = true
-        this.#idSeleccion = null;
-        this.#nombre.value = '';
-        this.#tipoUsuario.value = '0';
-        this.#estatusUsuario.value = '0';
-        this.#distritoJudicial.value = '0';
-      }
-    }
-  
-    editarEmpleado = async () => {
-      const idEmpleado = this.#idSeleccion;
-  
-      if (idEmpleado === null) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'Por favor seleccione un empleado para editar.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else {
-        const nombreInput = this.#nombre.value;
-        const tipoUsuarioInput = this.#tipoUsuario.value;
-        const estatusUsuarioInput = this.#estatusUsuario.value;
-        const distritoJudicialInput = this.#distritoJudicial.value;
-  
-        try {
-          var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-  
-          if (nombreInput === '') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de nombre es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (tipoUsuarioInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de tipo de usuario es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-          if (estatusUsuarioInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de estatus de usuario es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-  
-          if (distritoJudicialInput === '0') {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de distrito judicial es obligatorio.'
-            modal.title = 'Error de validación'
-            modal.open = true
-          }
-  
-  
-          if (nombreInput !== '' && tipoUsuarioInput !== '0' && estatusUsuarioInput !== '0' && distritoJudicialInput !== '0') {
-            if (nombreInput.length > 100) {
-              const modal = document.querySelector('modal-warning')
-              modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
-              modal.title = 'Error de validación'
-              modal.open = true
-            } else if (!nombrePattern.test(nombreInput)) {
-              const modal = document.querySelector('modal-warning')
-              modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-              modal.title = 'Error de validación'
-              modal.open = true
-  
-            } else {
-              const empleado = {
-                nombre: this.#nombre.value,
-                tipo_empleado: this.#tipoUsuario.value ,
-                estatus_general: this.#estatusUsuario.value.toUpperCase(),
-                id_distrito_judicial: this.#distritoJudicial.value
-              };
-                     
-              console.log(empleado)
-              console.log(this.#idSeleccion)
-  
-              const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-  
-              if (response) {
-                this.#nombre.value = '';
-                this.#tipoUsuario.value = '0';
-                this.#estatusUsuario.value = '0';
-                this.#distritoJudicial.value = '0';
-                this.#idSeleccion = null;
-                this.mostrarEmpleados();
-              }
-  
-            }
-  
-          }
-        } catch (error) {
-          console.error('Error al editar el empleado:', error);
-        }
-      }
-    }
-  
-  */
-  agregarEmpleado = async () => {
-    const idEmpleado = this.#idSeleccion;
-    let modal;
 
+  //Metodo para agregar un empleado
+  agregarEmpleado = async () => {
+    //El id de seleccion nos ayude a saber si se selecciono un empleado para editar
+    const idEmpleado = this.#idSeleccion;
+    //Variable para mostrar un modal
+    let modal;
+    //Si no se selecciono un empleado para editar
     if (idEmpleado === null) {
+      //Obtener los valores de los campos del formulario
       const nombreInput = this.#nombre.value;
       const tipoUsuarioInput = this.#tipoUsuario.value;
       const estatusUsuarioInput = this.#estatusUsuario.value;
       const distritoJudicialInput = this.#distritoJudicial.value;
 
       try {
+        //Expresion regular para validar el nombre
         const nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
+        //Validar si el campo de nombre esta vacio
         if (nombreInput === '') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de nombre es obligatorio.';
@@ -346,6 +167,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de tipo de usuario esta vacio
         if (tipoUsuarioInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de tipo de usuario es obligatorio.';
@@ -353,6 +175,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de estatus de usuario esta vacio
         if (estatusUsuarioInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de estatus de usuario es obligatorio.';
@@ -360,6 +183,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de distrito judicial esta vacio
         if (distritoJudicialInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de distrito judicial es obligatorio.';
@@ -367,7 +191,9 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Si los campos no estan vacios se procede a validar el nombre
         if (nombreInput !== '' && tipoUsuarioInput !== '0' && estatusUsuarioInput !== '0' && distritoJudicialInput !== '0') {
+          //Validar si el nombre tiene mas de 100 caracteres, si es asi mostrar un modal de error
           if (nombreInput.length > 100) {
             modal = document.querySelector('modal-warning');
             modal.message = 'El campo de nombre no puede contener más de 100 caracteres.';
@@ -379,6 +205,7 @@ class EmpleadosTab extends HTMLElement {
             modal.title = 'Error de validación';
             modal.open = true;
           } else {
+            //Si el nombre es valido se procede a crear un nuevo empleado
             const nuevoEmpleado = {
               nombre: this.#nombre.value,
               tipo_empleado: this.#tipoUsuario.value,
@@ -386,16 +213,29 @@ class EmpleadosTab extends HTMLElement {
               id_distrito_judicial: this.#distritoJudicial.value
             };
             //    console.log(nuevoEmpleado);
+            try {
+              const response = await this.#api.postEmpleado(nuevoEmpleado);
 
-            const response = await this.#api.postEmpleado(nuevoEmpleado);
+              if (response) {
+                this.#nombre.value = '';
+                this.#tipoUsuario.value = '0';
+                this.#estatusUsuario.value = '0';
+                this.#distritoJudicial.value = '0';
+                this.#idSeleccion = null;
+                this.mostrarEmpleados();
+              }
+            } catch (error) {
+              console.error('Error al agregar un nuevo empleado:', error);
+              const modal = document.querySelector('modal-warning');
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  window.location = '/index.html'
+                }
+              });
+              modal.message = 'Error al agregar un nuevo empleado, por favor intente de nuevo, o verifique el status del servidor';
+              modal.title = 'Error al agregar empleado';
+              modal.open = true;
 
-            if (response) {
-              this.#nombre.value = '';
-              this.#tipoUsuario.value = '0';
-              this.#estatusUsuario.value = '0';
-              this.#distritoJudicial.value = '0';
-              this.#idSeleccion = null;
-              this.mostrarEmpleados();
             }
           }
         }
@@ -411,29 +251,35 @@ class EmpleadosTab extends HTMLElement {
       this.#nombre.value = '';
       this.#tipoUsuario.value = '0';
       this.#estatusUsuario.value = '0';
-      this.#distritoJudicial.value = '0'; 
+      this.#distritoJudicial.value = '0';
       this.liberarTipoEmpleado();
     }
   };
 
+  //Metodo para editar un empleado 
   editarEmpleado = async () => {
+    //El id de seleccion nos ayude a saber si se selecciono un empleado para editar
     const idEmpleado = this.#idSeleccion;
     let modal;
-
+    //Si no se selecciono un empleado para editar
     if (idEmpleado === null) {
+      //Mostrar un modal de error
       modal = document.querySelector('modal-warning');
       modal.message = 'Por favor seleccione un empleado para editar.';
       modal.title = 'Error de validación';
       modal.open = true;
     } else {
+      //Obtener los valores de los campos del formulario
       const nombreInput = this.#nombre.value;
       const tipoUsuarioInput = this.#tipoUsuario.value;
       const estatusUsuarioInput = this.#estatusUsuario.value;
       const distritoJudicialInput = this.#distritoJudicial.value;
 
       try {
+        //Expresion regular para validar el nombre
         const nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
+        //Validar si el campo de nombre esta vacio
         if (nombreInput === '') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de nombre es obligatorio.';
@@ -441,6 +287,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de tipo de usuario esta vacio
         if (tipoUsuarioInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de tipo de usuario es obligatorio.';
@@ -448,6 +295,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de estatus de usuario esta vacio
         if (estatusUsuarioInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de estatus de usuario es obligatorio.';
@@ -455,6 +303,7 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //Validar si el campo de distrito judicial esta vacio
         if (distritoJudicialInput === '0') {
           modal = document.querySelector('modal-warning');
           modal.message = 'El campo de distrito judicial es obligatorio.';
@@ -462,7 +311,9 @@ class EmpleadosTab extends HTMLElement {
           modal.open = true;
         }
 
+        //En caso de que los campos no esten vacios se procede a validar el nombre
         if (nombreInput !== '' && tipoUsuarioInput !== '0' && estatusUsuarioInput !== '0' && distritoJudicialInput !== '0') {
+          //Validar si el nombre tiene mas de 100 caracteres, si es asi mostrar un modal de error
           if (nombreInput.length > 100) {
             modal = document.querySelector('modal-warning');
             modal.message = 'El campo de nombre no puede contener más de 100 caracteres.';
@@ -474,6 +325,8 @@ class EmpleadosTab extends HTMLElement {
             modal.title = 'Error de validación';
             modal.open = true;
           } else {
+            //Si el nombre es valido se procede a editar el empleado
+            //Crear un objeto con los datos del empleado
             const empleado = {
               nombre: this.#nombre.value,
               tipo_empleado: this.#tipoUsuario.value,
@@ -481,9 +334,13 @@ class EmpleadosTab extends HTMLElement {
               id_distrito_judicial: parseInt(this.#distritoJudicial.value)
             };
 
+            //Validar si el tipo de empleado es asesor o defensor y proceder a editar el empleado
             if (empleado.tipo_empleado === 'asesor') {
+              //Obtener el asesor por id
+
               const { asesor } = await this.#api.getAsesorID(this.#idSeleccion);
 
+              //Validar si los datos del empleado son iguales a los actuales
               if (asesor.nombre_asesor === empleado.nombre && asesor.empleado.tipo_empleado === empleado.tipo_empleado && asesor.empleado.estatus_general === empleado.estatus_general && asesor.empleado.id_distrito_judicial === empleado.id_distrito_judicial) {
                 modal = document.querySelector('modal-warning');
                 modal.message = 'No se realizaron cambios en el empleado, ya que los datos son iguales a los actuales.';
@@ -496,27 +353,43 @@ class EmpleadosTab extends HTMLElement {
                 this.#idSeleccion = null;
                 this.liberarTipoEmpleado();
               }
-              else { 
-/*                if (asesor.empleado.tipo_empleado !== empleado.tipo_empleado) {
+              else {
+                //Validar si el tipo de empleado es diferente
+                if (asesor.empleado.tipo_empleado !== empleado.tipo_empleado) {
                   modal = document.querySelector('modal-warning');
                   modal.message = 'No se puede cambiar el tipo de empleado de un asesor.';
                   modal.title = 'Error de validación';
                   modal.open = true;
-                } else {  */
-                  const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-                  if (response) {
-                    this.#nombre.value = '';
-                    this.#tipoUsuario.value = '0';
-                    this.#estatusUsuario.value = '0';
-                    this.#distritoJudicial.value = '0';
-                    this.#idSeleccion = null;
-                    this.mostrarEmpleados();
-                    this.liberarTipoEmpleado();
+                } else {
+                  try {
+                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+                    if (response) {
+                      this.#nombre.value = '';
+                      this.#tipoUsuario.value = '0';
+                      this.#estatusUsuario.value = '0';
+                      this.#distritoJudicial.value = '0';
+                      this.#idSeleccion = null;
+                      this.mostrarEmpleados();
+                      this.liberarTipoEmpleado();
+                    }
+                  } catch (error) {
+                    console.error('Error al editar el empleado:', error);
+                    const modal = document.querySelector('modal-warning');
+                    modal.setOnCloseCallback(() => {
+                      if (modal.open === 'false') {
+                        window.location = '/index.html'
+                      }
+                    });
+                    modal.message = 'Error al editar el empleado, por favor intente de nuevo, o verifique el status del servidor';
+                    modal.title = 'Error al editar empleado';
+                    modal.open = true;
                   }
-               // }
+                }
               }
             } else {
+              //Obtener el defensor por id
               const { defensor } = await this.#api.getDefensorID(this.#idSeleccion);
+              //Validar si los datos del empleado son iguales a los actuales
               if (defensor.nombre_defensor === empleado.nombre && defensor.empleado.tipo_empleado === empleado.tipo_empleado && defensor.empleado.estatus_general === empleado.estatus_general && defensor.empleado.id_distrito_judicial === empleado.id_distrito_judicial) {
                 modal = document.querySelector('modal-warning');
                 modal.message = 'No se realizaron cambios en el empleado, ya que los datos son iguales a los actuales.';
@@ -530,27 +403,43 @@ class EmpleadosTab extends HTMLElement {
                 this.liberarTipoEmpleado();
               }
               else {
-              /*  if (defensor.empleado.tipo_empleado !== empleado.tipo_empleado) {
+                //Validar si el tipo de empleado es diferente
+                if (defensor.empleado.tipo_empleado !== empleado.tipo_empleado) {
                   modal = document.querySelector('modal-warning');
                   modal.message = 'No se puede cambiar el tipo de empleado de un defensor.';
                   modal.title = 'Error de validación';
                   modal.open = true;
                 }
                 else {
-                  */
-                  const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+                  //Si el tipo de empleado es igual se procede a editar el empleado
+                  try {
+                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
 
-                  if (response) {
-                    this.#nombre.value = '';
-                    this.#tipoUsuario.value = '0';
-                    this.#estatusUsuario.value = '0';
-                    this.#distritoJudicial.value = '0';
-                    this.#idSeleccion = null;
-                    this.mostrarEmpleados();
-                    this.liberarTipoEmpleado();
+                    if (response) {
+                      this.#nombre.value = '';
+                      this.#tipoUsuario.value = '0';
+                      this.#estatusUsuario.value = '0';
+                      this.#distritoJudicial.value = '0';
+                      this.#idSeleccion = null;
+                      this.mostrarEmpleados();
+                      this.liberarTipoEmpleado();
+                    }
+                  } catch (error) {
+                    //Mensaje de advertencia en caso de error
+                    console.error('Error al editar el empleado:', error);
+                    const modal = document.querySelector('modal-warning');
+                    modal.setOnCloseCallback(() => {
+                      if (modal.open === 'false') {
+                        window.location = '/index.html'
+                      }
+                    });
+                    modal.message = 'Error al editar el empleado, por favor intente de nuevo, o verifique el status del servidor';
+                    modal.title = 'Error al editar empleado';
+                    modal.open = true;
+
                   }
                 }
-              //}
+              }
 
             }
           }
@@ -561,14 +450,12 @@ class EmpleadosTab extends HTMLElement {
     }
   };
 
-
+  //Metodo para mostrar los empleados
   mostrarEmpleados = async () => {
-
+    let validar = 0;
     try {
       const asesores = await this.#api.getAsesores();
-      const defensores = await this.#api.getDefensores();
       const tableBody = this.#empleados;
-      // Limpiar el cuerpo de la tabla antes de agregar nuevas filas
       tableBody.innerHTML = '';
 
       const asesoresArray = Object.values(asesores.asesores);
@@ -597,6 +484,19 @@ class EmpleadosTab extends HTMLElement {
 
       });
 
+
+
+
+    } catch (error) {
+      console.error('Error al obtener los empleados:', error);
+
+      validar++;
+
+    }
+    try {
+
+      const defensores = await this.#api.getDefensores();
+
       const defensoresArray = Object.values(defensores.defensores);
 
       defensoresArray.forEach(defensor => {
@@ -623,26 +523,42 @@ class EmpleadosTab extends HTMLElement {
 
 
 
-
-
     } catch (error) {
       console.error('Error al obtener los empleados:', error);
+      validar++;
+    }
+
+    if (validar === 2) {
+      const modal = document.querySelector('modal-warning');
+     //  modal.setOnCloseCallback(() => {
+   //      if (modal.open === 'false') {
+     //      window.location = '/index.html'
+   //      }
+    //   }
+    //   );
+      modal.message = 'Error al obtener los empleados, por favor verifique el status del servidor.';
+      modal.title = 'Error al obtener empleados';
+      modal.open = true;
     }
 
   }
 
+  //Metodo para bloquear el campo de tipo de empleado esto con el fin de cuando se seleccione un empleado no se pueda cambiar el tipo de empleado
   bloquearTipoEmpleado = () => {
-   this.#tipoUsuario.disabled = true;
+    this.#tipoUsuario.disabled = true;
   }
-  
+
+  //Metodo para liberar el campo de tipo de empleado esto con el fin de cuando se seleccione un empleado se pueda cambiar el tipo de empleado
   liberarTipoEmpleado = () => {
     this.#tipoUsuario.disabled = false;
   }
 
+  //Metodo para activar el boton seleccionar
   activarBotonSeleccionar = async (empleado) => {
     try {
       const tipoEmpleado = JSON.parse(empleado).tipo;
 
+      //Si el tipo de empleado es asesor se obtiene el asesor por id y se rellenan los campos del formulario, caso contrario se obtiene el defensor por id y se rellenan los campos del formulario
       if (tipoEmpleado === 'asesor') {
         const asesorID = JSON.parse(empleado).id_asesor;
         const { asesor } = await this.#api.getAsesorID(asesorID);
@@ -664,36 +580,15 @@ class EmpleadosTab extends HTMLElement {
         this.#idSeleccion = defensor.id_defensor;
       }
 
-      /*
-            // Obtener el tipo de juicio por ID
-            const tipoJuicioID = await this.#api.getTiposJuicioByID(tipoJuicioId);
-            // Verificar si se encontró el tipo de juicio
-            if (tipoJuicioID) {
-              // Rellenar los campos de entrada con los valores de la fila seleccionada
-              this.#idSeleccion = tipoJuicioID.tipoDeJuicio.id_tipo_juicio;
-            //  this.#tipoJuicio.value = tipoJuicioID.tipoDeJuicio.tipo_juicio;
-            //  this.#estatusJuicio.value = tipoJuicioID.tipoDeJuicio.estatus_general;
-            } else {
-              console.error('El empleado con el ID proporcionado no existe.');
-            }
-            */
 
-            this.bloquearTipoEmpleado();
+      this.bloquearTipoEmpleado();
 
 
     } catch (error) {
       console.error('Error al obtener el empleado por ID:', error);
     }
   }
-  /*
-    async loadHTMLContent() {
-      const response = await fetch('.);
-      if (!response.ok) {
-        throw new Error(`Failed to load HTML content: ${response.statusText}`);
-      }
-      return await response.text();
-    }
-    */
+
 }
 
 customElements.define('empleados-tab', EmpleadosTab);

@@ -10,7 +10,6 @@ const obtenerUsuarios = async () => {
     return await modelUsuario.Usuario.findAll({
       attributes: {
         exclude: ['id_tipouser',
-        // 'id_zona'
       'password'
         ],
       },
@@ -37,7 +36,6 @@ const obtenerUsuarioPorId = async (id) => {
     return await modelUsuario.Usuario.findByPk(id, {
       attributes: {
         exclude: ['id_tipouser', 
-        //'id_zona'
         'password'
       ],
       },
@@ -64,7 +62,6 @@ const obtenerUsuarioCorreoPassword = async (correo, password) => {
   try {
     const usuario = await modelUsuario.Usuario.findOne({
       attributes: {
-  //      exclude: ['id_tipouser', 'id_zona'],
       },
       raw: true,
       nest: true,
@@ -101,7 +98,7 @@ const obtenerUsuarioCorreo = async (correo, password) => {
   try {
     const usuario = await modelUsuario.Usuario.findOne({
       attributes: {
-        exclude: ['id_tipouser', 'id_zona'],
+        exclude: ['id_tipouser'],
       },
       raw: true,
       nest: true,

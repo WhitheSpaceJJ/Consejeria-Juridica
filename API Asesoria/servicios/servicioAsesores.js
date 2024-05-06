@@ -35,7 +35,7 @@ const obtenerAsesores = asyncError(async (req, res, next) => {
   const activo = req.query.activo;
   if (activo !== undefined && activo !== null && activo !== "") {
     const result = await controlAsesores.obtenerAsesores(activo);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron asesores', 404);
       return next(error);
     } else {
@@ -46,7 +46,7 @@ const obtenerAsesores = asyncError(async (req, res, next) => {
     }
   }else {
     const result = await controlAsesores.obtenerAsesores();
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron asesores', 404);
       return next(error);
     } else {
@@ -125,7 +125,7 @@ const obtenerAsesorPorId = asyncError(async (req, res, next) => {
 
 const obtenerAsesoresZona = asyncError(async (req, res, next) => {
   const result = await controlAsesores.obtenerAsesoresZona(req.params.id);
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('Error al obtener el asesor', 404);
     return next(error);
   } else {

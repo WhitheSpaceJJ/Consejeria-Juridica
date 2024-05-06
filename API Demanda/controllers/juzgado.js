@@ -11,13 +11,17 @@ const obtenerJuzgados = async (req, res) => {
     if (activo !== undefined && activo !== null && activo !== "") {
       const juzgados = await juzgadoDAO.obtenerJuzgados(activo)
       if (juzgados.length === 0) {
-        return res.status(204).json(juzgados)
+        return res.status(404).json({
+          message: 'No se encontraron juzgados'
+        });
       }
       res.json(juzgados)
     } else {
       const juzgados = await juzgadoDAO.obtenerJuzgados()
       if (juzgados.length === 0) {
-        return res.status(204).json(juzgados)
+        return res.status(404).json({
+          message: 'No se encontraron juzgados'
+        });
       }
       res.json(juzgados)
     }
@@ -37,6 +41,11 @@ const obtenerJuzgado = async (req, res) => {
   try {
     const { id } = req.params
     const juzgado = await juzgadoDAO.obtenerJuzgado(Number(id))
+    if (juzgado === null || juzgado === undefined) {
+      return res.status(404).json({
+        message: 'Juzgado no encontrado'
+      });
+    }
     res.json(juzgado)
   } catch (error) {
     res.status(500).json({

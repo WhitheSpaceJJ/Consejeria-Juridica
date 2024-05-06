@@ -35,7 +35,7 @@ const obtenerGeneros = asyncError(async (req, res, next) => {
   if (activo !== undefined && activo !== null && activo !== "") {
 
     const result = await controlGeneros.obtenerGeneros(activo);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron géneros', 404);
       return next(error);
     } else {
@@ -46,7 +46,7 @@ const obtenerGeneros = asyncError(async (req, res, next) => {
     }
   }else {
     const result = await controlGeneros.obtenerGeneros();
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron géneros', 404);
       return next(error);
     } else {

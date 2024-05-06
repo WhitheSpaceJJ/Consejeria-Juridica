@@ -1,20 +1,17 @@
+const template = document.createElement('template')
+
+const html = await (await fetch('../assets/navbar.html')).text()
+template.innerHTML = html
 
 export class Navbar extends HTMLElement {
+  // Constructor de la clase
   constructor() {
     super()
-    this.init()
-  }
-
-  async init() {
-    const template = document.createElement('template')
-    const response = await fetch('../assets/navbar.html')
-    const html = await response.text()
-    template.innerHTML = html
-
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
   }
-
+   
+  // Función connectedCallback para conectar el componente
   connectedCallback() {
     // Obtener los elementos relevantes por su ID
     const dropdownServicioLink = this.shadowRoot.getElementById(
@@ -23,20 +20,21 @@ export class Navbar extends HTMLElement {
     const dropdownNavbarServicio = this.shadowRoot.getElementById(
       'dropdownNavbarServicio'
     )
-
-
     const dropdownConsultaLink = this.shadowRoot.getElementById(
       'dropdownConsultaLink'
     )
     const dropdownNavbarConsulta = this.shadowRoot.getElementById(
       'dropdownNavbarConsulta'
     )
-    const dropdownRegistrosLink = this.shadowRoot.getElementById('dropdownRegistrosLink') // Nuevo
-    const dropdownNavbarRegistros = this.shadowRoot.getElementById('dropdownNavbarRegistros') // Nuevo
+    const dropdownRegistrosLink = this.shadowRoot.getElementById(
+      'dropdownRegistrosLink'
+    ) 
+    const dropdownNavbarRegistros = this.shadowRoot.getElementById(
+      'dropdownNavbarRegistros'
+    ) 
+    //Lo anterior esta en el assets/navbar.html y se obtiene por medio de su id es el id de los elementos que se van a utilizar
 
-
-
-
+    // Obtener los elementos relevantes por su ID   
     const mobileMenuToggle =
       this.shadowRoot.getElementById('mobile-menu-toggle')
     const navbarDropdown = this.shadowRoot.getElementById('navbar-dropdown')
@@ -65,8 +63,6 @@ export class Navbar extends HTMLElement {
       dropdownNavbarRegistros.classList.add('hidden')
 
     })
-
-  
 
 
     // Agregar eventos de clic para mostrar/ocultar el menú desplegable de "Consulta"

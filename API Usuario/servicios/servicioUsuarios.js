@@ -33,7 +33,7 @@ const agregarUsuario = asyncError(async (req, res, next) => {
  * */
 const obtenerUsuarios = asyncError(async (req, res, next) => {
   const result = await controlUsuarios.obtenerUsuarios(); // Cambio de controlZonas a controlUsuarios
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron usuarios', 404); // Cambio de zonas a usuarios
     return next(error);
   } else {

@@ -11,14 +11,13 @@ const html = await (
 template.innerHTML = html
 
 export class DetallesTab extends HTMLElement {
-    #api
 
+    //Variables de la clase 
+    #api
     #registroTab
     #promoventeTab
     #procesoTab
     #imputadoTab
-
-
     #nombreDefensor
     #tipoJuicio
     #fechaInicio
@@ -29,7 +28,6 @@ export class DetallesTab extends HTMLElement {
     #resoluciones
     #observaciones
     #familiares
-
     #nombrePromovente
     #edadPromovente
     #sexoPromovente
@@ -46,7 +44,6 @@ export class DetallesTab extends HTMLElement {
     #municipioPromovente
     #ciudadPromovente
     #coloniaPromovente
-
     #nombreImputado
     #edadImputado
     #sexoImputado
@@ -67,30 +64,30 @@ export class DetallesTab extends HTMLElement {
 
 
 
-
+      //Constructor de la clase
     constructor() {
         super()
         const shadow = this.attachShadow({ mode: 'open' })
         shadow.appendChild(template.content.cloneNode(true))
         this.id = 'detalles'
         this.style.display = 'none'
+        //Aqui se obtienen los web components que se van a utilizar en el componente de los demas
+        //tabs en este caso se obtienen los datos de los tabs de registro, promovente, imputado y proceso
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
         this.#imputadoTab = document.querySelector('imputado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
     }
+
+    //Metodo que se encarga de inicializar el componente
     async init() {
         this.#api = new APIModel()
-
-
         this.manageFormFields()
         this.fillInputs()
-     
-
     }
- 
-    manageFormFields() {
 
+    //Metodo que se encarga de manejar los campos del formulario
+    manageFormFields() {
         this.#nombreDefensor = this.shadowRoot.getElementById('nombre-defensor')
         this.#tipoJuicio = this.shadowRoot.getElementById('tipo-juicio')
         this.#fechaInicio = this.shadowRoot.getElementById('fecha-inicio')
@@ -124,10 +121,6 @@ export class DetallesTab extends HTMLElement {
         this.#edadImputado = this.shadowRoot.getElementById('edad-imputado')
         this.#sexoImputado = this.shadowRoot.getElementById('sexo-imputado')
         this.#telefonoImputado = this.shadowRoot.getElementById('telefono-imputado')
-   //     this.#etniaImputado = this.shadowRoot.getElementById('etnia-imputado')
-   //     this.#escolaridadImputado = this.shadowRoot.getElementById('escolaridad-imputado')
-   //     this.#ocupacionImputado = this.shadowRoot.getElementById('ocupacion-imputado')
-       // this.#españolImputado = this.shadowRoot.getElementById('español-imputado')
         this.#calleImputado = this.shadowRoot.getElementById('calle-imputado')
         this.#numeroExteriorImputado = this.shadowRoot.getElementById('numero-exterior-imputado')
         this.#numeroInteriorImputado = this.shadowRoot.getElementById('numero-interior-imputado')
@@ -140,12 +133,16 @@ export class DetallesTab extends HTMLElement {
 
     }
 
+    //Metodo que se encarga de llenar los campos del formulario
     fillInputs() {
      
+        //Se obtienen los datos de los tabs de registro, promovente, imputado y proceso
         const { turno } = this.#registroTab.data
         const { promovente } = this.#promoventeTab.data
         const { imputado } = this.#imputadoTab.data
         const { proceso } = this.#procesoTab.data
+
+        //Se rellenan los campos del formulario con los datos obtenidos
 
         this.#nombreDefensor.textContent = proceso.defensor
         this.#tipoJuicio.textContent = proceso.tipo_juicio
@@ -154,25 +151,27 @@ export class DetallesTab extends HTMLElement {
         this.#ci.textContent = proceso.control_interno
 
 
+        //Se obtienen los datos de los arrays de estados procesales, pruebas, resoluciones, observaciones y familiares
 
+        //Se rellenan los estados procesales
         this.#estadosProcesales.textContent = proceso.estadosProcesales.map((estado, index) =>
             `${index + 1}. Estado Procesal: ${estado.descripcion_estado_procesal} Fecha: ${estado.fecha_estado_procesal}`).join(', ')
 
-
+        //Se rellenan las pruebas
         this.#pruebas.textContent = proceso.pruebas.map((prueba, index) => `${index + 1}. Prueba: ${prueba.descripcion_prueba}`).join(', ')
 
-
+        //Se rellenan las resoluciones
         this.#resoluciones.textContent = proceso.resoluciones.map((resolucion, index) => `${index + 1}. Resolucion: ${resolucion.resolucion}
         Fecha: ${resolucion.fecha_resolucion}`).join(', ')
 
-
+        //Se rellenan las observaciones
         this.#observaciones.textContent = proceso.observaciones.map((observacion, index) => `${index + 1}. Observacion: ${observacion.observacion}`).join(', ')
 
+        //Se rellenan los familiares 
         this.#familiares.textContent = proceso.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} Nacionalidad: ${familiar.nacionalidad}
     Parentesco: ${familiar.parentesco} Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT===true?'Si':'No'} Adulto Mayor: ${familiar.adultaMayor===true? 'Si': 'No'} Salud Precaria: ${familiar.saludPrecaria===true?'Si': 'No'} Pobreza Extrema: ${familiar.pobrezaExtrema ===true?'Si': 'No'}`).join(', ')
 
-
-
+        //Se rellenan los campos del promovente e imputado        
         this.#nombrePromovente.textContent = promovente.nombre + ' ' + promovente.apellido_paterno + ' ' + promovente.apellido_materno
         this.#edadPromovente.textContent = promovente.edad
         this.#sexoPromovente.textContent = promovente.sexo
@@ -194,10 +193,6 @@ export class DetallesTab extends HTMLElement {
         this.#edadImputado.textContent = imputado.edad
         this.#sexoImputado.textContent = imputado.sexo
         this.#telefonoImputado.textContent = imputado.telefono
-      //  this.#etniaImputado.textContent = imputado.id_etnia
-      //  this.#escolaridadImputado.textContent = imputado.id_escolaridad
-       // this.#ocupacionImputado.textContent = imputado.id_ocupacion
-        //this.#españolImputado.textContent = imputado.español
         this.#calleImputado.textContent = imputado.domicilio.calle_domicilio
         this.#numeroExteriorImputado.textContent = imputado.domicilio.numero_exterior_domicilio
         this.#numeroInteriorImputado.textContent = imputado.domicilio.numero_interior_domicilio
@@ -211,11 +206,16 @@ export class DetallesTab extends HTMLElement {
 
     }
 
+    //Callback que se ejecuta cuando el componente es agregado al DOM
     connectedCallback() {
+        //Asignacion de eventos a los botones
+
         this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-proceso')
 
+        //Evento que se ejecuta al hacer clic en el boton de crear asesoria
         this.btnCrearAsesoria.addEventListener('click', async () => {
             try {
+                //Obtencion de los datos de los tabs de registro, promovente, imputado y proceso
                 const { turno } = this.#registroTab.data
                 const { promovente } = this.#promoventeTab.data
                 const { imputado } = this.#imputadoTab.data
@@ -227,6 +227,7 @@ export class DetallesTab extends HTMLElement {
                     proceso
                 }
 
+                //Llamda a la API para crear el proceso judicial
                 await this.#api.postProcesoJudicial(procesoJudicial)
                   
                 //actualizar turno
@@ -238,6 +239,7 @@ export class DetallesTab extends HTMLElement {
                     id_defensor: turno.defensor.id_defensor,
                     estatus_general: 'EN_SEGUIMIENTO'
                  }
+                 //Llamada a la API para actualizar el turno ya que el turno tiene ciertos estados.
                     await this.#api.putTurno(turno.id_turno,turnoActualizado)
                 this.#showModal(
                     'El proceso judicial se ha creado correctamente',
@@ -255,6 +257,7 @@ export class DetallesTab extends HTMLElement {
             }
         })
 
+        //Evento que se ejecuta al cambio de tab
         document.addEventListener('tab-change', event => {
             const tabId = event.detail.tabId
             if (tabId !== 'detalles') {
@@ -264,6 +267,7 @@ export class DetallesTab extends HTMLElement {
         })
     }
 
+    //Metodo que se encarga de mostrar el modal de error
     #showModal(message, title, onCloseCallback) {
         const modal = document.querySelector('modal-warning')
         modal.message = message

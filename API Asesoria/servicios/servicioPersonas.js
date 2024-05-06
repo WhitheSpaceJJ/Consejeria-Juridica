@@ -33,7 +33,7 @@ const agregarPersona = asyncError(async (req, res, next) => {
 
 const obtenerPersonas = asyncError(async (req, res, next) => {
   const result = await controlPersonas.obtenerPersonas();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron personas', 404);
     return next(error);
   } else {
@@ -57,7 +57,7 @@ const obtenerPersonas = asyncError(async (req, res, next) => {
 
 const obtenerPersonaNombre = asyncError(async (req, res, next) => {
   const { nombre, apellido_materno,apellido_paterno } = req.query;
-  const result = await controlPersonas.obtenerPersonaNombre(nombre,apellido_paterno,apellido_materno);
+  const result = await controlPersonas.obtenerPersonasNombre(nombre,apellido_paterno,apellido_materno);
   if (result === null) {
     const error = new CustomeError('Error al obtener la persona', 404);
     return next(error);

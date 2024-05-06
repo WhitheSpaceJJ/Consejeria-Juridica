@@ -4,6 +4,16 @@ const Sequelize = require('sequelize');
 const sequelize = require('../config/db')
 const { DataTypes } = require('sequelize')
 
+/**
+ * Modelo de la tabla observacion
+ * @name observacion
+ * @type {object}
+ * @param {number} id_observacion - Llave primaria de la tabla. Número autogenerado
+ * @param {string} observacion - Campo obligatorio. Observación del proceso judicial
+ * @param {number} id_proceso_judicial - Llave foránea que referencia al proceso judicial
+ * @param {object} observacion - Objeto que define el modelo observacion
+ * @returns {object} Retorna el modelo observacion
+ * */
 const observacion =  sequelize.define('observacion', {
     id_observacion: {
       autoIncrement: true,

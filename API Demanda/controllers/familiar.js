@@ -2,6 +2,14 @@
 
 const FamiliarDAO = require('../data-access/familiarDAO')
 
+ 
+/**
+ * Función que permite crear un familiar
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con el familiar creado
+ * */
+
 
 const crearFamiliar = async (req, res) => {
     try {
@@ -24,6 +32,14 @@ const crearFamiliar = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite obtener todos los familiares
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Array} Array con todos los familiares registrados
+ * */
+
+
 const obtenerFamiliares = async (req, res) => {
     try {
         const familiars = await FamiliarDAO.obtenerFamiliars()
@@ -41,6 +57,14 @@ const obtenerFamiliares = async (req, res) => {
         })
     }
 }
+
+/**
+ * Función que permite obtener un familiar por su id
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con el familiar encontrado
+ * */
+
 
 const obtenerFamiliar = async (req, res) => {
     try {
@@ -61,18 +85,39 @@ const obtenerFamiliar = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite obtener un familiar por su promovente
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con el familiar encontrado
+ * */
+
 
 const obtenerFamiliarPorPromovente = async (req, res) => {
     try {
         const { id } = req.params
         const familiar = await FamiliarDAO.obtenerFamiliarPorPromovente(Number(id))
-        res.json(familiar)
+        if (familiar === null || familiar === undefined) {
+            res.status(404).json({
+                message: 'Familiar no encontrado'
+            })
+        }
+        else {
+            res.status(200).json(familiar)
+        }
     } catch (error) {
         res.status(500).json({
             message: error.message
         })
     }
 }
+ 
+/**
+ * Función que permite actualizar un familiar
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con el familiar actualizado
+ * */
 
 
 
@@ -107,7 +152,12 @@ const actualizarFamiliar = async (req, res) => {
         })
     }
 }
-
+/**
+ *  Función que permite eliminar un familiar
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con el familiar eliminado
+ * */
 
 const eliminarFamiliar = async (req, res) => {
     try {
@@ -130,6 +180,9 @@ const eliminarFamiliar = async (req, res) => {
     }
 }
 
+/**
+ * Exporta todos los módulos
+ * */
 
 
 module.exports = {

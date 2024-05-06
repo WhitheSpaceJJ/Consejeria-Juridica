@@ -2,6 +2,12 @@
 
 const ResolucionDAO = require('../data-access/resolucionDAO')
 
+/** 
+ * Función que permite crear una resolucion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la resolucion creada
+ * */
 
 const crearResolucion = async (req, res) => {
     try {
@@ -18,6 +24,13 @@ const crearResolucion = async (req, res) => {
         })
     }
 }
+
+/**
+ * Función que permite obtener todas las resoluciones
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Array} Array con todas las resoluciones registradas
+ * */
 
 const obtenerResoluciones = async (req, res) => {
     try {
@@ -36,6 +49,13 @@ const obtenerResoluciones = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite obtener una resolucion por su id
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la resolucion encontrada
+ * */
+
 const obtenerResolucion = async (req, res) => {
     try {
         const { id } = req.params
@@ -49,10 +69,17 @@ const obtenerResolucion = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            message:error.message
+            message: error.message
         })
     }
 }
+
+/**
+ * Función que permite actualizar una resolucion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la resolucion actualizada
+ * */
 
 const actualizarResolucion = async (req, res) => {
     try {
@@ -77,6 +104,13 @@ const actualizarResolucion = async (req, res) => {
     }
 }
 
+/**
+ * Función que permite eliminar una resolucion
+ * @param {Object} req Objeto de petición
+ * @param {Object} res Objeto de respuesta
+ * @returns {Object} Objeto con la resolucion eliminada
+ * */
+
 const eliminarResolucion = async (req, res) => {
     try {
         const { id } = req.params
@@ -97,7 +131,7 @@ const eliminarResolucion = async (req, res) => {
     }
 }
 
-
+// Exportar todas las funciones
 module.exports = {
     crearResolucion,
     obtenerResoluciones,

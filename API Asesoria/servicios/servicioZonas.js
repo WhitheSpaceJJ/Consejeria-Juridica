@@ -33,7 +33,7 @@ const agregarZona = asyncError(async (req, res, next) => {
 
 const obtenerZonas = asyncError(async (req, res, next) => {
   const result = await controlZonas.obtenerZonas();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron zonas', 404);
     return next(error);
   } else {

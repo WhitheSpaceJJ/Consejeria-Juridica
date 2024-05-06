@@ -10,7 +10,9 @@ const obtenerEscolaridades = async (req, res) => {
     if (activo !== undefined && activo !== null && activo !== "") {
       const escolaridades = await escolaridadDAO.obtenerEscolaridades(activo)
       if (escolaridades.length === 0) {
-        return res.status(204).json(escolaridades);
+        return  res.status(404).json({
+          message: 'No se encontraron escolaridades'
+        });
       }
       res.json(escolaridades)
     } else {

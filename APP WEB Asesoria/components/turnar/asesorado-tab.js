@@ -6,58 +6,95 @@ const html = await (await fetch('../assets/turnar/asesorado-tab.html')).text()
 template.innerHTML = html
 
 export class AsesoradoTab extends HTMLElement {
+
+  //Variables privadas  
   #asesoria
   #api
   #generos
-
   #nombre
   #apellidoPaterno
   #apellidoMaterno
   #edad
   #sexo
   #ediatableCbx
+  #generoActual
 
-
+  
+  //Metodo para observar los cambios en los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
 
-//Actualizar esto
+//Metodo que se encarga de observar los cambios en los atributos
+  get id() {
+    return this.getAttribute('id')
+  }
 
+  //Metodo que se encarga de setear los cambios en los atributos
+  set id(value) {
+    this.setAttribute('id', value)
+  }
+
+  //Metodo que se encarga de obtener los datos
+  get data() {
+    return {
+      nombre: this.#nombre.value,
+      apellido_paterno: this.#apellidoPaterno.value,
+      apellido_materno: this.#apellidoMaterno.value,
+      edad: Number(this.#edad.value),
+      genero: this.#generos.find(
+        genero => genero.id_genero === Number(this.#sexo.value)
+      ),
+    }
+  }
+  
+  //Metodo que se encarga de setear los datos
+  set data(value) {
+    this.setAttribute('data', value)
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
+    //Este id es con respecto a la pestaña actual
     this.id = 'asesorado'
 
+    //Se obtiene la asesoria de la sesion esto es con respecto a la busqueda
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
 
 
+     
+    // Se obtiene la informacion de la API
     this.#api = new APIModel()
      
+
+    //Se obtiene el genero de la persona 
     this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero).then(data => {
       this.#generoActual = data.genero
     })
 
+    //Se obtiene los generos existentes
     this.#api.getGeneros2().then(data => {
       this.#generos = data.generos
 
       this.manageFormFields()
       this.fillInputs()
     })
-
+   
 
   }
  
-  #generoActual
-
+  //Rellenar los inputs con los datos de la asesoria
   fillInputs() {
-    //muestra un  aolert con los datos de las asesoria el json y formateado; 
+    //Se obtienen los inputs
     this.#nombre.value = this.#asesoria.persona.nombre
     this.#apellidoPaterno.value = this.#asesoria.persona.apellido_paterno
     this.#apellidoMaterno.value = this.#asesoria.persona.apellido_materno
     this.#edad.value = this.#asesoria.persona.edad
 
+    //Se rellena el select con los generos
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
       option.value = genero.id_genero
@@ -74,8 +111,9 @@ export class AsesoradoTab extends HTMLElement {
   }
 
 
-
+   //Metodo que se encarga de manejar los campos del formulario
   manageFormFields() {
+    //Asignacion de los inputs
     this.#nombre = this.shadowRoot.getElementById('nombre')
     this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno')
     this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno')
@@ -83,7 +121,13 @@ export class AsesoradoTab extends HTMLElement {
     this.#sexo = this.shadowRoot.getElementById('sexo')
     this.#ediatableCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')
 
-   
+    //Llamada al manejador de entrada de texto
+     this.manejadorEntradaTexto()
+
+  }
+  
+  //Manejador de entrada de texto para validar los campos
+  manejadorEntradaTexto() {
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
     var apellidoMaternoInput = this.#apellidoMaterno;
@@ -98,13 +142,7 @@ export class AsesoradoTab extends HTMLElement {
         var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
 
-        if (nombreInput.value === '') {
-          // Si el campo está vacío, lanzar una excepción
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        } else
+      
           if (!nombrePattern.test(nombreInput.value)) {
             // Si el campo contiene caracteres no válidos, lanzar una excepción
 
@@ -124,6 +162,8 @@ export class AsesoradoTab extends HTMLElement {
       }
     });
 
+
+    //Encarga de validar el apellido paterno en tiempo real con respecto a la entrada de texto y validar si cumple con solo letras y no tiene mas de 50 caracteres
     apellidoPaternoInput.addEventListener('input', function () {
 
       if (editableCbx.checked) {
@@ -132,13 +172,7 @@ export class AsesoradoTab extends HTMLElement {
 
         var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
-
-        if (apellidoPaternoInput.value === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido paterno no puede estar vacío, por favor ingréselo.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+if (!apellidoPattern.test(apellidoPaternoInput.value)) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -154,6 +188,7 @@ export class AsesoradoTab extends HTMLElement {
 
     });
 
+    //Encarga de validar el apellido materno en tiempo real con respecto a la entrada de texto y validar si cumple con solo letras y no tiene mas de 50 caracteres
     apellidoMaternoInput.addEventListener('input', function () {
 
       if (editableCbx.checked) {
@@ -163,12 +198,7 @@ export class AsesoradoTab extends HTMLElement {
         var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
 
-        if (apellidoMaternoInput.value === '') {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido materno no puede estar vacío, por favor ingréselo.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+        if (!apellidoPattern.test(apellidoMaternoInput.value)) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -185,6 +215,7 @@ export class AsesoradoTab extends HTMLElement {
 
     var edadInput = this.#edad;
 
+    //Encarga de validar la edad en tiempo real con respecto a la entrada de texto y validar si cumple con solo numeros y no tiene mas de 200 años
     edadInput.addEventListener('input', function () {
 
       if (editableCbx.checked) {
@@ -214,14 +245,16 @@ export class AsesoradoTab extends HTMLElement {
 
     });
       
-
   }
-  
 
+   
+  //Metodo encargado de activar los eventos del boton y el checkbox
   connectedCallback() {
+    // Se obtienen los elementos del DOM
     this.btnNext = this.shadowRoot.getElementById('btn-asesorado-next')
     this.editCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')
 
+    //Activación del evento de click en el boton
     this.btnNext.addEventListener('click', () => {
       const event = new CustomEvent('next', {
         bubbles: true,
@@ -231,6 +264,7 @@ export class AsesoradoTab extends HTMLElement {
       this.dispatchEvent(event)
     })
 
+    //Activación del evento de cambio en el checkbox
     this.editCbx.addEventListener('change', () => {
       const inputs = this.shadowRoot.querySelectorAll('input, select')
       inputs.forEach(input => {
@@ -248,29 +282,6 @@ export class AsesoradoTab extends HTMLElement {
     })
   }
 
-  get id() {
-    return this.getAttribute('id')
-  }
-
-  set id(value) {
-    this.setAttribute('id', value)
-  }
-
-  get data() {
-    return {
-      nombre: this.#nombre.value,
-      apellido_paterno: this.#apellidoPaterno.value,
-      apellido_materno: this.#apellidoMaterno.value,
-      edad: Number(this.#edad.value),
-      genero: this.#generos.find(
-        genero => genero.id_genero === Number(this.#sexo.value)
-      ),
-    }
-  }
-
-  set data(value) {
-    this.setAttribute('data', value)
-  }
 }
 
 customElements.define('asesorado-tab', AsesoradoTab)

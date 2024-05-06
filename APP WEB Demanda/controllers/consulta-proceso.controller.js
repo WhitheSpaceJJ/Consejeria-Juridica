@@ -2,29 +2,40 @@ import { ControllerUtils } from '../lib/controllerUtils'
 import { DataDemanda } from '../components/consultaProceso/data-proceso'
 
 class ConsultaProcesoController {
+  //Variables de la clase
   #pagina = 1
   #numeroPaginas
   #busquedaExitosa = false
+  #defensores
+
+  //Constructor de la clase
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
     // this.buttonsEventListeners()
   }
-  #defensores
 
   // DOMContentLoaded
   handleDOMContentLoaded = () => {
     // add permissions
+    //Metodo que se encarga de validar los permisos del usuario
     this.utils.validatePermissions({})
     //this.getNumeroPaginas()
     // this.handleConsultarDemanda()
+
+    //Llamada a la funcion para consultar los procesos
     this.consultarProcesos()
+    //Metodo que se encarga de agregar los defensores
     this.agregarDefensores()
+
+    //Establecer los eventos de busqueda
     const searchButton = document.getElementById('searchButton');
     searchButton.addEventListener('click', (event) => {
       event.preventDefault();
       this.handleFiltros();
     });
+
+    //Establecer los eventos de eliminacion de busqueda
     const deleteButton = document.getElementById('deleteButton');
     deleteButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -40,9 +51,13 @@ class ConsultaProcesoController {
     });
   }
 
+  //Metodo que se encarga de agregar los defensores
   agregarDefensores = async () => {
+    //Obtenemos los defensores
     const { defensores } = await this.model.getDefensores()
     this.#defensores = defensores
+
+     //Obtenemos el select de defensores
     const defensor_select = document.getElementById('defensor')
     defensor_select.innerHTML = '';
 
@@ -54,6 +69,7 @@ class ConsultaProcesoController {
     firstOption.selected = true;
     defensor_select.appendChild(firstOption);
 
+    // Agregar los defensores al select
     this.#defensores.forEach(defensor => {
       const option = document.createElement('option');
       option.value = defensor.id_defensor;
@@ -63,163 +79,29 @@ class ConsultaProcesoController {
 
   }
 
-  /* 
-    buttonsEventListeners = () => {
-      const prev = document.getElementById('anterior')
-      const next = document.getElementById('siguiente')
-  
-      prev.addEventListener('click', this.handlePrevPage)
-      next.addEventListener('click', this.handleNextPage)
-    }
-  
-    handlePrevPage = async () => {
-      if (this.#pagina > 1) {
-        this.#pagina--
-        this.handleConsultarDemanda()
-      }
-    }
-  
-    handleNextPage = async () => {
-      if (this.#pagina < this.#numeroPaginas) {
-        this.#pagina++
-        this.handleConsultarDemanda()
-      }
-    }
-  */
-  /**  getNumeroPaginas = async () => {
-     const numeroDemanda = await this.model.getTotalDemanda()
-     const total = document.getElementById('total')
-     total.innerHTML = ' :' + numeroDemanda.totalDemanda
-     this.#numeroPaginas = (numeroDemanda.totalDemanda) / 10
-   }
-
-  limpiarFiltros = () => {
-    const fechaInicio = document.getElementById('fecha-inicio')
-    const fechaFinal = document.getElementById('fecha-final')
-    fechaInicio.value = ''
-    fechaFinal.value = ''
-  }
-
-  deleteFiltros = () => {
-    const deleteButton = document.getElementById('deleteButton');
-    deleteButton.style.display = 'none';
-    const table = document.getElementById('table-body')
-    table.innerHTML = ''
-    this.limpiarFiltros()
-    this.#pagina = 1
-    this.#busquedaExitosa = false
-    this.getNumeroPaginas()
-    this.handleConsultarDemanda()
-  }
- */
-  /*
-    handleConsultarDemanda = async () => {
-      try {
-        if (this.#busquedaExitosa === false) {
-          const deleteButton = document.getElementById('deleteButton');
-          deleteButton.style.display = 'none';
-  
-          const demandaResponse = await this.model.getTotalDemandas()
-  
-          const demanda = demandaResponse
-  
-          const table = document.getElementById('table-body')
-          const rowsTable = document.getElementById('table-body').rows.length
-          if (this.validateRows(rowsTable)) {
-            demanda.forEach(demanda => {
-              table.appendChild(this.crearRow(demanda))
-            })
-          }
-        } else {
-          const deleteButton = document.getElementById('deleteButton');
-          deleteButton.style.display = 'block';
-  
-          const fechaInicio = document.getElementById('fecha-inicio')
-          const fechaFinal = document.getElementById('fecha-final')
-  
-          const filtros = {
-            fecha_inicio: fechaInicio.value,
-            fecha_final: fechaFinal.value,
-          }
-          const demandaResponse = await this.model.getDemandaByFilters(filtros)
-          const demanda = demandaResponse
-          const table = document.getElementById('table-body')
-          const rowsTable = document.getElementById('table-body').rows.length
-          if (this.validateRows(rowsTable)) {
-            demanda.forEach(demanda => {
-              table.appendChild(this.crearRow(demanda))
-            })
-          }
-        }
-  
-      } catch (error) {
-        console.error('Error:', error.message)
-      }
-    }
-    */
-  /*
-   validateRows = rowsTable => {
-     if (rowsTable > 0) {
-       this.cleanTable(rowsTable);
-       return true
-     } else { return true }
-   }
- 
-   cleanTable = rowsTable => {
-     const table = document.getElementById('table-body')
-     for (let i = rowsTable - 1; i >= 0; i--) {
-       table.deleteRow(i)
-     }
-   }
-  */
-  /*
-   handleConsultarDemandaById = async id => {
-     try {
-       const button = document.querySelector('.consulta-button')
-       button.disabled = true
-       const demanda = await this.model.getDemandaById(id)
-       const turno = demanda.id_turno
-       const idAsesoria = await this.model.getTurno(turno)
-       const asesoria = await this.model.getAsesoriaById(idAsesoria.turno.id_asesoria)
- 
-       const modal = document.querySelector('modal-asesoria')
-       const dataDemanda = new DataDemanda(asesoria)
- 
-       const handleModalClose = () => {
-         const modalContent = modal.shadowRoot.getElementById('modal-content')
-         modalContent.innerHTML = ''
-         button.disabled = false
-       }
- 
-       modal.addEventListener('onClose', handleModalClose)
- 
-       const modalContent = modal.shadowRoot.getElementById('modal-content')
-       modalContent.appendChild(dataDemanda)
- 
-       modal.title = 'Datos Asesoría'
-       modal.open = true
-     } catch (error) {
-       console.error('Error:', error.message)
-     }
-   }
- */
+  //Metodo que se encarga de consultar los procesos
   consultarProcesos = async () => {
     try {
+      //Llamada a la funcion para obtener los procesos
       const procesosResponse = await this.model.getProcesosJudiciales()
+      //Validamos si hay procesos
       if (procesosResponse.length === 0 || procesosResponse === undefined) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'No hay procesos judiciales para mostrar';
         modal.title = 'Error'
         modal.open = true
       } else {
+        //Obtenemos la tabla
         const table = document.getElementById('table-body')
         table.innerHTML = ''
+        //Recorremos los procesos y los agregamos a la tabla
         procesosResponse.forEach(proceso => {
           table.appendChild(this.crearRow(proceso))
         })
       }
 
     } catch (error) {
+      //Mostramos un mensaje de error
       console.error('Error:', error.message)
       const modal = document.querySelector('modal-warning');
       modal.message = 'No hay procesos judiciales para mostrar';
@@ -229,100 +111,132 @@ class ConsultaProcesoController {
   }
 
   handleFiltros = async () => {
-
+     //Obtenemos los elementos
     const defensor = document.getElementById('defensor')
     const estatus_proceso = document.getElementById('estatus_proceso')
     const botonEliminar = document.getElementById('deleteButton')
 
-
+     //Validamos si el defensor esta deshabilitado
     if (defensor.disabled === false) {
 
-
+      //Validamos si el defensor es 0
       if (defensor.value === '0') {
+        //Mostramos un mensaje de error
         const modal = document.querySelector('modal-warning');
         modal.message = 'Selecciona un defensor';
         modal.title = 'Error'
         modal.open = true
       } else {
         try {
+          //Obtenemos la tabla 
           const table = document.getElementById('table-body')
+          //Validamos si el estatus del proceso es 0
           if (estatus_proceso.value === '0') {
+            //Llamada a la funcion para obtener los procesos por defensor
             await this.model.getProcesosJudicialesByDefensor(Number(defensor.value), null).then(procesosResponse => {
+              //Limpiamos la tabla
               table.innerHTML = ''
-
+           
+              //Recorremos los procesos y los agregamos a la tabla
               procesosResponse.forEach(proceso => {
                 table.appendChild(this.crearRow(proceso))
               })
+              //Deshabilitamos el defensor y el estatus del proceso
               defensor.disabled = true
               estatus_proceso.disabled = true
               botonEliminar.style.display = 'block'
 
 
             }).catch(error => {
+              //Mostramos un mensaje de error
               const modal = document.querySelector('modal-warning');
               modal.message = 'No hay procesos judiciales para el defensor seleccionado';
               modal.title = 'Error'
               modal.open = true
             })
 
-          } else if (estatus_proceso.value === '1') {
+          } else 
+          //Validamos si el estatus del proceso es 1
+            
+          if (estatus_proceso.value === '1') {
+            //Llamada a la funcion para obtener los procesos por defensor y estatus
             await this.model.getProcesosJudicialesByDefensor(Number(defensor.value), "EN_TRAMITE")
               .then(procesosResponse => {
+                //Limpiamos la tabla
                 table.innerHTML = ''
-
+                //Recorremos los procesos y los agregamos a la tabla
                 procesosResponse.forEach(proceso => {
                   table.appendChild(this.crearRow(proceso))
                 })
+                //Deshabilitamos el defensor y el estatus del proceso
                 defensor.disabled = true
                 estatus_proceso.disabled = true
                 botonEliminar.style.display = 'block'
               })
               .catch(error => {
+                //Mostramos un mensaje de error
                 const modal = document.querySelector('modal-warning');
                 modal.message = 'No hay procesos judiciales activos para el defensor seleccionado';
                 modal.title = 'Error'
                 modal.open = true
               })
 
-          } else if (estatus_proceso.value === '2') {
+          } else 
+          
+            //Validamos si el estatus del proceso es 2
+          if (estatus_proceso.value === '2') {
             try {
+              //Llamada a la funcion para obtener los procesos por defensor y estatus
               const procesosResponse = await this.model.getProcesosJudicialesByDefensor(Number(defensor.value), "BAJA")
+              //Validamos si hay procesos
               if (procesosResponse.length === 0) {
+                //Mostramos un mensaje de error
                 const modal = document.querySelector('modal-warning');
                 modal.message = 'No hay procesos judiciales en baja para el defensor seleccionado';
                 modal.title = 'Error'
                 modal.open = true
               } else {
+                //Limpiamos la tabla
                 table.innerHTML = ''
-
+                //Recorremos los procesos y los agregamos a la tabla
                 procesosResponse.forEach(proceso => {
                   table.appendChild(this.crearRow(proceso))
                 })
+                //Deshabilitamos el defensor y el estatus del proceso
                 defensor.disabled = true
                 estatus_proceso.disabled = true
                 botonEliminar.style.display = 'block'
               }
 
             } catch (error) {
+              //Mostramos un mensaje de error
               const modal = document.querySelector('modal-warning');
               modal.message = 'No hay procesos judiciales en baja para el defensor seleccionado';
               modal.title = 'Error'
               modal.open = true
             }
-          } else if (estatus_proceso.value === '3') {
+          } else
+           //Validamos si el estatus del proceso es 3
+          if (estatus_proceso.value === '3') {
             try {
+              //Llamada a la funcion para obtener los procesos por defensor y estatus
               const procesosResponse = await this.model.getProcesosJudicialesByDefensor(Number(defensor.value), "CONCLUIDO")
+              //Validamos si hay procesos
               if (procesosResponse.length === 0) {
+                //Mostramos un mensaje de error
                 const modal = document.querySelector('modal-warning');
                 modal.message = 'No hay procesos judiciales concluidos para el defensor seleccionado';
                 modal.title = 'Error'
                 modal.open = true
               } else {
+                //Limpiamos la tabla
                 table.innerHTML = ''
 
+                //Recorremos los procesos y los agregamos a la tabla
                 procesosResponse.forEach(proceso => {
                   table.appendChild(this.crearRow(proceso))
                 })
+                //Deshabilitamos el defensor y el estatus del proceso
                 defensor.disabled = true
                 estatus_proceso.disabled = true
                 botonEliminar.style.display = 'block'
@@ -344,6 +258,7 @@ class ConsultaProcesoController {
       }
     }
     else {
+      //Mostramos un mensaje de error
       const modal = document.querySelector('modal-warning');
       modal.message = 'Ya se realizo una busqueda, para realizar otra, elimina la anterior';
       modal.title = 'Error'
@@ -351,7 +266,8 @@ class ConsultaProcesoController {
     }
     //   }
   }
-
+  
+  //Metodo que se encarga de crear una fila en la tabla
   crearRow = proceso => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
@@ -385,14 +301,6 @@ class ConsultaProcesoController {
             <td class="px-6 py-4 text-right">
                 <button href="#" class="consulta2-button font-medium text-[#db2424] hover:underline" value="" title="Se realizara de manera similar, al sistema de asesorias">Consultar</button>
             </td>`
-    /*
-        const consultarButtons = row.querySelectorAll('.consulta-button');
-        consultarButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            this.handleConsultarDemandaById(button.getAttribute('data-id'));
-          });
-        });
-        */
     return row
   }
 

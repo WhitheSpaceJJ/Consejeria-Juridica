@@ -31,7 +31,7 @@ const agregarMunicipio = asyncError(async (req, res, next) => {
  * */
 const obtenerMunicipios = asyncError(async (req, res, next) => {
     const result = await controlMunicipioDistro.obtenerMunicipios();
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('No se encontraron municipios', 404);
         return next(error);
     } else {
@@ -84,7 +84,7 @@ const obtenerMunicipioPorId = asyncError(async (req, res, next) => {
 
 const obtenerMunicipiosDistrito = asyncError(async (req, res, next) => {
     const result = await controlMunicipioDistro.obtenerMunicipiosDistrito(req.params.id);
-    if (result === null || result === undefined) {
+    if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('No se encontraron municipios', 404);
         return next(error);
     } else {

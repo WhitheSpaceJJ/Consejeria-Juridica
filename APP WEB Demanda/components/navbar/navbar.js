@@ -4,12 +4,14 @@ const html = await (await fetch('../assets/navbar.html')).text()
 template.innerHTML = html
 
 export class Navbar extends HTMLElement {
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
     shadow.appendChild(template.content.cloneNode(true))
   }
 
+  //Callback que se ejecuta cuando el componente es agregado al DOM
   connectedCallback() {
     // Obtener los elementos relevantes por su ID
     const dropdownServicioLink = this.shadowRoot.getElementById(
@@ -25,7 +27,6 @@ export class Navbar extends HTMLElement {
       'dropdownNavbarConsulta'
     )
 
-
     // Obtener los elementos relevantes por su ID
     const dropdownServicioLink2 = this.shadowRoot.getElementById(
       'dropdownServicioLink2'
@@ -34,13 +35,12 @@ export class Navbar extends HTMLElement {
       'dropdownNavbarServicio2'
     )
 
-
-
     const dropdownRegistrosLink2 = this.shadowRoot.getElementById('dropdownRegistrosLink2') // Nuevo
     const dropdownNavbarRegistros2 = this.shadowRoot.getElementById('dropdownNavbarRegistros2') // Nuevo
 
 
 
+    //Aqui se obtiene el elemento que se encarga de mostrar el menu 
     const mobileMenuToggle =
       this.shadowRoot.getElementById('mobile-menu-toggle')
     const navbarDropdown = this.shadowRoot.getElementById('navbar-dropdown')

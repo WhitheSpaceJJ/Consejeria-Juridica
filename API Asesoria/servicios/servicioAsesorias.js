@@ -13,7 +13,7 @@ const ExcelJS = require('exceljs');
 const obtenerAsesoriaFiltro = asyncError(async (req, res, next) => {
   const filtros = JSON.parse(req.query.filtros);
   const result = await controlAsesorias.obtenerAsesoriasFiltro(filtros);
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
@@ -36,7 +36,7 @@ const obtenerAsesoriaFiltro = asyncError(async (req, res, next) => {
 const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
   const pagina = req.query.pagina;
   const result = await controlAsesorias.obtenerAsesoriasPorPagina(pagina);
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
@@ -51,7 +51,7 @@ const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
   const filtros = JSON.parse(req.query.filtros);
   const pagina = req.query.pagina;
   const result = await controlAsesorias.obtenerAsesoriasFiltroPagina(pagina, filtros);
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
@@ -541,7 +541,7 @@ const agregarAsesoria = asyncError(async (req, res, next) => {
 
 const obtenerAsesorias = asyncError(async (req, res, next) => {
   const result = await controlAsesorias.obtenerAsesorias();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {

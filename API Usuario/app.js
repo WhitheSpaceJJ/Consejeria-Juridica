@@ -7,8 +7,10 @@ const {PORT,HOSTTOKENGRPCPORT} = require("./configuracion/default.js");
 const usuariosRutas = require("./rutas/usuarioRutas");
 const CustomeError = require("./utilidades/customeError");
 const errorController = require("./utilidades/errrorController")
-//const zonasRutas = require("./rutas/zonaRutas");
-const tipoRutas = require("./rutas/tipoUsuarioRutas");
+const tipoUsuarios = require("./rutas/tipoUsuarioRutas");
+const permisoRutas = require("./rutas/permisoRutas");
+const detallePermisoRutas = require("./rutas/detallePermisoUsuarioRutas");
+
 
 const jwtController = require("./utilidades/jwtController");
 // Importamos el módulo cors para permitir solicitudes de origen cruzado
@@ -46,9 +48,21 @@ const jwtMiddleware = async (req, res, next) => {
 
 // Usamos el middleware de rutas de usuarios
 app.use('/usuarios', usuariosRutas);
-//Eliminar
-//app.use('/zonas', jwtMiddleware, zonasRutas);
-//app.use('/tipos', jwtMiddleware, tipoRutas);
+
+app.use('/tipos', 
+//jwtMiddleware,
+  tipoUsuarios);
+
+
+
+//app.use('/permisos', 
+//jwtMiddleware,
+//permisoRutas);
+
+
+//app.use('/detalles', 
+//jwtMiddleware,
+//detallePermisoRutas);
 
 // Si ninguna ruta coincide, creamos un error personalizado y lo pasamos al siguiente middleware
 app.all("*", (req, res, next) => {

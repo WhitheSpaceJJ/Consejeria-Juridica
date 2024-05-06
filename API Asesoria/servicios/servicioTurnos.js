@@ -34,7 +34,7 @@ const agregarTurno = asyncError(async (req, res, next) => {
 
 const obtenerTurnos = asyncError(async (req, res, next) => {
   const result = await controlTurnos.obtenerTurnos();
-  if (result === null || result === undefined) {
+  if (result === null || result === undefined || result.length === 0) {
     const error = new CustomeError('No se encontraron turnos', 404);
     return next(error);
   } else {
