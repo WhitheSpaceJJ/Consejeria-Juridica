@@ -443,7 +443,8 @@ const Persona = sequelize.define(
     },
     id_domicilio: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     id_genero: {
       type: DataTypes.INTEGER,
@@ -591,7 +592,8 @@ const Domicilio = sequelize.define(
     },
     id_colonia: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {
@@ -710,7 +712,7 @@ const Asesoria = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        len: [0, 250],
+        len: [0, 500],
       },
       defaultValue: null,
     },
@@ -736,13 +738,7 @@ const Asesoria = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     }
-    /*
-    ,
-    id_turno: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      defaultValue: null,
-    } */ //Se comenta para evitar la relacion
+  
     ,
     id_asesorado: {
       type: DataTypes.INTEGER,

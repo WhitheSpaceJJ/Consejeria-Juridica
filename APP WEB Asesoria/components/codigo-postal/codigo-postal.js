@@ -84,19 +84,12 @@ export class CodigoPostal extends HTMLElement {
     var calleInput = this.#calle;
     //Se crea la expresión regular para validar que solo se ingresen letras
     calleInput.addEventListener('input', function () {
-      if (calleInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'La calle no puede estar vacía, por favor ingresela.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (calleInput.value.length > 75) {
+     if (calleInput.value.length > 75) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
       }
-
-
     });
      
     //Expresione regulare para validar que solo se ingresen números en los campos de número exterior e interior y variables de los inputs
@@ -106,17 +99,13 @@ export class CodigoPostal extends HTMLElement {
 
     //Se crea la expresión regular para validar que solo se ingresen números
     numeroExteriorInput.addEventListener('input', function () {
-      if (!enterosPattern.test(numeroExteriorInput.value)) {
+     
+     if (numeroExteriorInput.value === 'e' || !enterosPattern.test(numeroExteriorInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El número exterior solo permite números, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
-      } if (numeroExteriorInput.value === '') {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El número exterior no puede estar vacío, por favor ingreselo.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      } else if (numeroExteriorInput.value.length > 10) {
+      }else  if (numeroExteriorInput.value.length > 10) {
         const modal = document.querySelector('modal-warning');
         modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
         modal.title = 'Error de validación';
@@ -128,7 +117,7 @@ export class CodigoPostal extends HTMLElement {
     numeroInteriorInput.addEventListener('input', function () {
 
       if (numeroInteriorInput.value !== '') {
-        if (!enterosPattern.test(numeroInteriorInput.value)) {
+        if ( numeroInteriorInput.value ==='e' && !enterosPattern.test(numeroInteriorInput.value)) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'El número interior solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';

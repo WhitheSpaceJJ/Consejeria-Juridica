@@ -9,9 +9,7 @@ template.innerHTML = html
 
 export class DetallesTab extends HTMLElement {
    //Variable privada que almacena la informacion de la asesoria
-   //Variable que almacena la instancia de la clase APIModel,en la cual se realizan las peticiones a la API
   #api
-  //Variable que almacena la informacion de la asesoria
   #asesoria
 
   // Se crea el constructor de la clase
@@ -39,9 +37,6 @@ export class DetallesTab extends HTMLElement {
     const $section = this.shadowRoot.getElementById('data')
 
     //Se obtiene la informacion de la asesoria
-
-    //La informacion que se obtiene de los tabs tiene un formato especifico  que la API del sistema 
-    //espera, por lo que cambios que se le hagan a la informacion o la data, se deben de realizar en la API
     this.#asesoria = {
       ...this.asesoradoTab.data,
       ...this.asesoriaTab.data,
@@ -64,6 +59,7 @@ export class DetallesTab extends HTMLElement {
     //Se agrega la informacion de la asesoria a la seccion de datos
     $section.appendChild(dataAsesoria)
 
+    //Se obtiene el boton de crear asesoria
     this.#asesoria.datos_asesoria = {
       ...this.#asesoria.datos_asesoria,
       id_empleado: this.#asesoria.empleado.id_empleado,
@@ -79,7 +75,7 @@ export class DetallesTab extends HTMLElement {
       try {
          //Creacion de la asesoria por medio de la API
         console.log(this.#asesoria)
-       /* await this.#api.postAsesoria(this.#asesoria)
+        await this.#api.postAsesoria(this.#asesoria)
         this.#showModal(
           'La asesoría se ha creado correctamente',
           'Asesoría creada',
@@ -87,7 +83,6 @@ export class DetallesTab extends HTMLElement {
             location.href = '/'
           }
         )
-        */
       } catch (error) {
         console.error(error)
         this.#showModal(

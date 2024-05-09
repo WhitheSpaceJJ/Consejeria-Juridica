@@ -498,7 +498,6 @@ export class AsesoradoTab extends HTMLElement {
             throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.')
           }
       }
-      
       /*
       if (this.#domicilio.data.colonia === '') {
         throw new ValidationError('La colonia es obligatoria, por favor busque una con el codigo postal.')

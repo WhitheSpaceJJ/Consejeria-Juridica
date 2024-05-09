@@ -47,7 +47,8 @@ const domicilio_participante = sequelize.define('domicilio_participante', {
     },
     id_colonia: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
     },
     id_participante: {
         type: DataTypes.INTEGER,
