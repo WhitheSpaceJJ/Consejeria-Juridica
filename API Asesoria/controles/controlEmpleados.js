@@ -119,21 +119,6 @@ const agregarEmpleado = async (empleado) => {
     }
 };
 
-/**
- * @abstract Función que permite eliminar un empleado
- * @param {*} id id del empleado a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- * */
-const eliminarEmpleado = async (id) => {
-    try {
-        const result = await modeloEmpleado.Empleado.destroy({ where: { id_empleado: id } });
-        return result === 1;
-    } catch (error) {
-        console.log("Error empleados:", error.message);
-        return false;
-    }
-};
-
 
 
 /**
@@ -268,7 +253,6 @@ module.exports = {
     obtenerEmpleados,
     obtenerEmpleadoPorId,
     agregarEmpleado,
-    eliminarEmpleado,
     actualizarEmpleado,
     obtenerEmpleadosAsesoresPorZona, obtenerEmpleadosDefensoresPorZona
 

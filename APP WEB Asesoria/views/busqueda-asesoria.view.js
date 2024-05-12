@@ -6,7 +6,7 @@ class BusquedaAsesoriaView {
     this.controller = controller
 
     // Obtén los elementos de los botones
-    this.searchForm = document.getElementById('registrar-turno')
+    this.searchForm = document.getElementById('registrar-asesoria')
 
     // Agrega manejadores de eventos
     document.addEventListener(

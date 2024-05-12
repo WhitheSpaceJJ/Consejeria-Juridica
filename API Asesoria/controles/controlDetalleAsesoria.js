@@ -1,20 +1,5 @@
 const modeloDetalleAsesoriaCatalogo = require('../modelos/modeloDetalleAsesoria');
 
-/**
- *  @abstract Función que permite obtener todos los detalles de asesorias
- * @returns detalles de asesorias
- */
-const obtenerDetallesAsesoriaCatalogo = async () => {
-  try {
-    return await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.findAll({
-      raw: true,
-      nest: true
-    });
-  } catch (error) {
-    console.log("Error detalle asesoria:", error.message);
-    return null;
-  }
-};
 
 /**
  * @abstract Función que permite obtener un detalle de asesoria por su id
@@ -47,41 +32,9 @@ const agregarDetalleAsesoriaCatalogo = async (detalle) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un detalle de asesoria
- * @param {*} id id del detalle de asesoria a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- * */
-const eliminarDetalleAsesoriaCatalogo = async (id) => {
-  try {
-    const result = await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.destroy({ where: { id_detalle: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error detalle asesoria:", error.message);
-    return false;
-  }
-};
-
-/**
- * @abstract Función que permite actualizar un detalle de asesoria
- * @param {*} detalle detalle de asesoria a actualizar
- * @returns true si se actualiza correctamente, false si no se actualiza
- * */
-const actualizarDetalleAsesoriaCatalogo = async (detalle) => {
-  try {
-  const result=  await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.update(detalle, { where: { id_detalle: detalle.id_detalle } });
-    return result[0] === 1; 
-  } catch (error) {
-    console.log("Error detalle asesoria:", error.message);
-    return false;
-  }
-};
 
 // Module exports:
 module.exports = {
-  obtenerDetallesAsesoriaCatalogo,
   obtenerDetalleAsesoriaCatalogoPorId,
   agregarDetalleAsesoriaCatalogo,
-  eliminarDetalleAsesoriaCatalogo,
-  actualizarDetalleAsesoriaCatalogo
 };

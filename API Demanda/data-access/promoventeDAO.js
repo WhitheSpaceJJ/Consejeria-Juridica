@@ -20,35 +20,7 @@ class PromoventeDAO {
     }
   }
 
-  /**
- * @abstract Método que permite obtener todos los promoventes de la base de datos
- * @returns {array} Retorna un arreglo de objetos de promoventes si la operación fue exitosa, de lo contrario lanza un error
- */
-  async obtenerPromoventes() {
-    try {
-      const promoventes = await Promovente.findAll(
-        {
-        }
-      )
-      const promoventes_obejct =  JSON.parse(JSON.stringify(promoventes))  
-      for (let i = 0; i < promoventes_obejct.length; i++) {
-        const etnia =  await etniaDAO.obtenerEtnia(promoventes_obejct[i].id_etnia)
-        const escolaridad =  await escolaridadDAO.obtenerEscolaridadPorId(promoventes_obejct[i].id_escolaridad)
-        const ocupacion =  await ocupacionDAO.obtenerOcupacion(promoventes_obejct[i].id_ocupacion)
-        const familiares =  await familiarDAO.obtenerFamiliarPorPromovente(promoventes_obejct[i].id_promovente)
-        delete promoventes_obejct[i].id_etnia
-        delete promoventes_obejct[i].id_escolaridad
-        delete promoventes_obejct[i].id_ocupacion    
-        promoventes_obejct[i].etnia = etnia
-        promoventes_obejct[i].escolaridad = escolaridad
-        promoventes_obejct[i].ocupacion = ocupacion
-        promoventes_obejct[i].familiares = familiares
-      }
-      return promoventes_obejct
-    } catch (err) {
-      throw err
-    }
-  }
+
 
   /**
  * @abstract Método que permite obtener un promovente de la base de datos por su id
@@ -76,19 +48,14 @@ class PromoventeDAO {
     }
   }
 
-  /**
- * @abstract Método que permite obtener un promovente de la base de datos por el id del participante
- * @param {number} idParticipante - ID del participante a obtener
- * @returns {object} Retorna el objeto del promovente si la operación fue exitosa, de lo contrario lanza un error
- */
-  async obtenerPromoventePorParticipante(idParticipante) {
+ async obtenerPromoventeMiddlware(id) {
     try {
-      const promovente = await Promovente.findOne({ where: { id_participante: idParticipante } })
+      const promovente = await Promovente.findByPk(id)
       return promovente
     } catch (err) {
       throw err
     }
-  }
+ }
 
   /**
  * @abstract Método que permite actualizar un promovente en la base de datos
@@ -106,19 +73,7 @@ class PromoventeDAO {
     }
   }
 
-  /**
- * @abstract Método que permite eliminar un promovente de la base de datos
- * @param {number} idParticipante - ID del participante a eliminar
- * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
- */
-  async eliminarPromovente(id_promovente) {
-    try {
-      const promovente = await Promovente.destroy({ where: { id_promovente: id_promovente } })
-      return promovente == 1 
-    } catch (err) {
-      throw err
-    }
-  }
+
 }
 
 module.exports = new PromoventeDAO()

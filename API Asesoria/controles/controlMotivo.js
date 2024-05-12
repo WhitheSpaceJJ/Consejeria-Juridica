@@ -58,20 +58,7 @@ const agregarMotivo = async (motivo) => {
   }
 };
 
-/**
- * @abstract Funcion que permite eliminar un motivo
- * @param {*} id id del motivo a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarMotivo = async (id) => {
-  try {
-    const result = await modeloMotivo.Motivo.destroy({ where: { id_motivo: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error motivos:", error.message);
-    return false;
-  }
-};
+
 
 /**
  * @abstract Funcion que permite actualizar un motivo
@@ -94,6 +81,5 @@ module.exports = {
   obtenerMotivos,
   obtenerMotivoPorId,
   agregarMotivo,
-  eliminarMotivo,
   actualizarMotivo
 };

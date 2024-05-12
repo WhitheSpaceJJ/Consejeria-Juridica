@@ -18,35 +18,7 @@ class DomicilioParticipanteDAO {
             throw err
         }
     }
-   /**
-    * @abstract Método que permite obtener todos los domicilios de los participantes de la base de datos
-    * @returns {array} Retorna un arreglo de objetos de domicilios de los participantes si la operación fue exitosa, de lo contrario lanza un error
-    * */
-
-
-    async obtenerDomicilioParticipantes() {
-        try {
-            const domicilioParticipantes = await DomicilioParticipante.findAll()
-            return domicilioParticipantes
-        } catch (err) {
-            throw err
-        }
-    }
   
-    /**
-     * @abstract Método que permite obtener un domicilio de un participante de la base de datos por su id
-     * @param {number} id - ID del domicilio de un participante a obtener
-     * @returns {object} Retorna el objeto del domicilio de un participante si la operación fue exitosa, de lo contrario lanza un error
-     * */
-
-    async obtenerDomicilioParticipante(id) {
-        try {
-            const domicilioParticipante = await DomicilioParticipante.findByPk(id)
-            return domicilioParticipante
-        } catch (err) {
-            throw err
-        }
-    }
 
    /**
     * @abstract Método que permite obtener un domicilio de un participante de la base de datos por el id del participante
@@ -83,20 +55,7 @@ class DomicilioParticipanteDAO {
         }
     }
 
-    /**
-     * @abstract Método que permite eliminar un domicilio de un participante de la base de datos
-     * @param {number} id_domicilio - ID del domicilio de un participante a eliminar
-     * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
-     * */
-    async eliminarDomicilioParticipante(id_domicilio) {
-        try {
-            const domicilioParticipante = await DomicilioParticipante.destroy({ where: { id_domicilio: id_domicilio } })
-            return domicilioParticipante === 1
-        } catch (err) {
-            throw err
-        }
-    }
-
+ 
 
 
 }

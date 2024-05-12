@@ -59,20 +59,7 @@ const agregarCatalogoRequisito = async (catalogoRequisito) => {
   }
 };
 
-/**
- *  @abstract Función que permite eliminar un catalogo de requisito
- * @param {*} id id del catalogo de requisito a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarCatalogoRequisito = async (id) => {
-  try {
-    const resultado = await modeloCatalogoRequisito.CatalogoRequisito.destroy({ where: { id_catalogo: id } });
-    return resultado === 1; 
-  } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
-    return false;
-  }
-};
+
 
 /**
  *  @abstract Función que permite actualizar un catalogo de requisito
@@ -94,6 +81,5 @@ module.exports = {
   obtenerCatalogoRequisitos,
   obtenerCatalogoRequisitoPorId,
   agregarCatalogoRequisito,
-  eliminarCatalogoRequisito,
   actualizarCatalogoRequisito,
 };

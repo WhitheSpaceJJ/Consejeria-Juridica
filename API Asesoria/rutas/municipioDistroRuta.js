@@ -9,10 +9,7 @@ const router = express.Router();
 router.route('/')
     // Obtener todos los municipios
     .get(servicioMunicipiosDistro.obtenerMunicipios)
-    // Agregar un nuevo municipio
-//    .post(servicioMunicipiosDistro.agregarMunicipio);
-
-
+    // Obtener todos los municipios por distrito
     router.route('/distrito/:id')
     .get(servicioMunicipiosDistro.obtenerMunicipiosDistrito)
 
@@ -20,11 +17,6 @@ router.route('/')
 router.route('/:id')
     // Obtener un municipio por su ID
     .get(servicioMunicipiosDistro.obtenerMunicipioPorId)
-    // Eliminar un municipio por su ID
-   // .delete(servicioMunicipiosDistro.eliminarMunicipio)
-    // Actualizar un municipio por su ID
-   // .put(servicioMunicipiosDistro.actualizarMunicipio); 
-
 
 // Exportamos el router
 module.exports = router;

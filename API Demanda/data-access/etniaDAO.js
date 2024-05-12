@@ -63,19 +63,7 @@ class EtniaDAO {
     }
   }
 
-  /**
-   * @abstract Método que permite eliminar una etnia de la base de datos
-   * @param {number} id - ID de la etnia a eliminar
-   * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
-   */
-  async eliminarEtnia(id) {
-    try {
-      const etnia = await Etnia.destroy({ where: { id_etnia: id } })
-      return etnia === 1
-    } catch (err) {
-      throw err
-    }
-  }
+
 }
 
 module.exports = new EtniaDAO()

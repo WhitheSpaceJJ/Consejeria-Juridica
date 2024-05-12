@@ -9,7 +9,7 @@ const obtenerOcupaciones = async (req, res) => {
     const activo = req.query.activo;
     if (activo !== undefined && activo !== null && activo !== "") {
     const ocupaciones = await ocupacionDAO.obtenerOcupaciones(activo)
-    if (ocupaciones.length === 0) {
+    if (ocupaciones === null || ocupaciones === undefined ||  ocupaciones.length === 0) {
       return res.status(404).json({
         message: 'No se encontraron ocupaciones'
       });
@@ -17,8 +17,10 @@ const obtenerOcupaciones = async (req, res) => {
     res.json(ocupaciones)
   }else{
     const ocupaciones = await ocupacionDAO.obtenerOcupaciones()
-    if (ocupaciones.length === 0) {
-      return res.status(204).json(ocupaciones)
+    if (ocupaciones === null || ocupaciones === undefined || ocupaciones.length === 0) {
+      return res.status(404).json({
+        message: 'No se encontraron ocupaciones'
+      });
     }
     res.json(ocupaciones)
   }
@@ -100,44 +102,11 @@ const actualizarOcupacion = async (req, res) => {
   }
 }
 
-/**
- * @abstract Método que permite eliminar una ocupación
- * @param {number} id - ID de la ocupación a eliminar
- * @returns {object} Retorna el objeto de la ocupación eliminada si la operación fue exitosa, de lo contrario lanza un error
- */
-const eliminarOcupacion = async (req, res) => {
-  try {
-    const { id } = req.params
-    const ocupacion = await ocupacionDAO.eliminarOcupacion(Number(id))
-     if(ocupacion){
-      res.status(200).json({
-        message: 'Ocupación eliminada con éxito'
-      })
-    }
-    else{
-      res.status(404).json({
-        message: 'No se encontró la ocupación a eliminar'
-      })
-    }
 
-  } catch (error) {
-    if (error.message.includes('foreign key constraint fails')) {
-      return res.status(400).json({
-        message: 'No se puede eliminar la ocupación porque está siendo referenciada por uno o más participantes',
-        error: error.message
-      })
-    }
-    res.status(500).json({
-      message: 'Error al realizar la consulta con bd',
-      error: error.message
-    })
-  }
-}
 
 module.exports = {
   obtenerOcupaciones,
   crearOcupacion,
   obtenerOcupacion,
   actualizarOcupacion,
-  eliminarOcupacion
 }

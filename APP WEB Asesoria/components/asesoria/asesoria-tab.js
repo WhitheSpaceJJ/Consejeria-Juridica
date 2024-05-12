@@ -167,6 +167,8 @@ export class AsesoriaTab extends HTMLElement {
     this.manageFormFields()
     //Llamada a la funcion que obtiene los datos de los asesores, defensores, tipos de juicio y distritos
     await this.busquedaDatosYAsignaicon()
+    //Llamada a la funcion que llena los inputs con los valores obtenidos
+    await this.fillInputs()
 
     //Llamada a la funcion que maneja los eventos de los inputs
     this.manejadorDeEntrada()
@@ -189,17 +191,6 @@ export class AsesoriaTab extends HTMLElement {
     }
     catch (error) {
       this.#busquedaAsesor = true
-      /*
-       const modal = document.querySelector('modal-warning')
-      modal.setOnCloseCallback(() => {
-        if (modal.open === 'false') {
-          window.location = '/index.html'
-        }
-      })
-      modal.message = 'Error al cargar los asesores, por favor intenta de nuevo o verifique en el respectivo seccion administritiva.'
-      modal.title = 'Error'
-      modal.open = true
-      */
     }
 
     try {
@@ -208,18 +199,6 @@ export class AsesoriaTab extends HTMLElement {
     }
     catch (error) {
       this.#busquedaDefensor = true
-
-      /*
- const modal = document.querySelector('modal-warning')
-      modal.setOnCloseCallback(() => {
-        if (modal.open === 'false') {
-          window.location = '/index.html'
-        }
-      })
-      modal.message = 'Error al cargar los defensores, por favor intenta de nuevo o verifique en el respectivo seccion administritiva.'
-      modal.title = 'Error'
-      modal.open = true
-      */
     }
     if (this.#busquedaAsesor && this.#busquedaDefensor) {
       const modal = document.querySelector('modal-warning')
@@ -252,8 +231,7 @@ export class AsesoriaTab extends HTMLElement {
     // Llamada a la funcion que obtiene los distritos y los asigna a la variable distritos
     this.#distritos = await this.#api.getDistritos()
 
-    //Llamada a la funcion que llena los inputs
-    await this.fillInputs()
+
   }
 
   //Metodo que llena los inputs con los valores obtenidos
@@ -336,10 +314,7 @@ export class AsesoriaTab extends HTMLElement {
     this.#resumen = this.shadowRoot.getElementById('resumen')
     this.#conclusion = this.shadowRoot.getElementById('conclusion')
 
-    //Asignacion de las variables relacionados con los documentos recibos los cuales pueden ser varios y se asignan a un array
-    this.#recibido = this.shadowRoot.querySelectorAll(
-      '#recibido input[type="checkbox"]'
-    )
+
 
     // Asignacion del radio de requisitos que evalua si cumple o no con los requisitos
     this.#requisitos = this.shadowRoot.querySelectorAll(
@@ -375,39 +350,7 @@ export class AsesoriaTab extends HTMLElement {
     }
   }
 
-  //Metodo que llena los inputs con los valores obtenidos
-  fillInputs() {
-    //Llenado de los asesores, defensores, tipos de juicio y distritos
-    this.#asesores.forEach(asesor => {
-      const option = document.createElement('option')
-      option.value = asesor.id_asesor
-      option.textContent = asesor.nombre_asesor
-      this.#asesor.appendChild(option)
-    })
 
-    this.#defensores.forEach(defensor => {
-      const option = document.createElement('option')
-      option.value = defensor.id_defensor
-      option.textContent = defensor.nombre_defensor
-      this.#defensor.appendChild(option)
-    })
-
-    this.#tiposJuicio.forEach(tipoJuicio => {
-      const option = document.createElement('option')
-      option.value = tipoJuicio.id_tipo_juicio
-      option.textContent = tipoJuicio.tipo_juicio
-      this.#tipoJuicio.appendChild(option)
-    })
-
-    this.#distritos.forEach(distrito => {
-      const option = document.createElement('option')
-      option.value = distrito.id_distrito_judicial
-      option.textContent = distrito.nombre_distrito_judicial
-      this.#distrito.appendChild(option)
-    })
-
-
-  }
 
   //Metodo que obtiene los valores de los inputs
   getValues() {
@@ -538,6 +481,11 @@ export class AsesoriaTab extends HTMLElement {
         checkboxDiv.appendChild(label);
         recibidoDiv.appendChild(checkboxDiv);
       });
+      //Asignacion de las variables relacionados con los documentos recibos los cuales pueden ser varios y se asignan a un array
+      this.#recibido = this.shadowRoot.querySelectorAll(
+        '#recibido input[type="checkbox"]'
+      )
+
     }).catch(error => {
       const modal = document.querySelector('modal-warning')
       modal.setOnCloseCallback(() => {

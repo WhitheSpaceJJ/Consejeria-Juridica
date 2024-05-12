@@ -60,7 +60,7 @@ export class RegistroTab extends HTMLElement {
   //Metodo para obtener los datos 
   get data() {
     const promovente = this.#proceso.participantes.find(participante => participante.promovente !== null)
-    const imputado = this.#proceso.participantes.find(participante => participante.imputado !== null)
+    const demandado = this.#proceso.participantes.find(participante => participante.demandado !== null)
     const proceso = {
       id_proceso_judicial: this.#proceso.id_proceso_judicial,
       fecha_inicio: this.#proceso.fecha_inicio,
@@ -89,10 +89,10 @@ export class RegistroTab extends HTMLElement {
     return {
       proceso,
       promovente,
-      imputado,
+      demandado,
       id_proceso_judicial: this.#proceso.id_proceso_judicial,
       id_promovente: promovente.id_participante,
-      id_imputado: imputado.id_participante,
+      id_demandado: demandado.id_participante,
     }
 
   }

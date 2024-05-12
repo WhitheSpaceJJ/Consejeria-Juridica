@@ -22,20 +22,7 @@ class ResolucionDAO {
         }
     }
 
-    /**
-     * Método que permite obtener todas las resoluciones de la base de datos
-     * @returns {array} Retorna un arreglo de objetos de resoluciones si la operación fue exitosa, de lo contrario lanza un error
-     * */
-
-
-    async obtenerResoluciones() {
-        try {
-            const resoluciones = await Resolucion.findAll()
-            return resoluciones
-        } catch (err) {
-            throw err
-        }
-    }
+ 
 
     /**
      * Método que permite obtener una resolución de la base de datos por su id
@@ -82,19 +69,7 @@ class ResolucionDAO {
             throw err
         }
     }
-/**
- * Método que permite eliminar una resolución de la base de datos
- * @param {number} id_resolucion - ID de la resolución a eliminar
- * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
- * */
-    async eliminarResolucion(id_resolucion) {
-        try {
-            const resolucion = await Resolucion.destroy({ where: { id_resolucion: id_resolucion } })
-            return resolucion === 1
-        } catch (err) {
-            throw err
-        }
-    }
+
 }
 
 

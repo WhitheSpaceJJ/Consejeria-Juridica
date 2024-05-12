@@ -62,19 +62,7 @@ class EscolaridadDAO {
     }
   }
 
-  /**
-   * @abstract Método que permite eliminar una escolaridad de la base de datos
-   * @param {number} id - ID de la escolaridad a eliminar
-   * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
-   */
-  async eliminarEscolaridad(id) {
-    try {
-      const escolaridad = await Escolaridad.destroy({ where: { id_escolaridad: id } })
-      return escolaridad === 1
-    } catch (err) {
-      throw err
-    }
-  }
+ 
 }
 
 module.exports = new EscolaridadDAO()

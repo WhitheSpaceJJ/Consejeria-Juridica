@@ -7,14 +7,10 @@ const {
   obtenerEscolaridad,
   crearEscolaridad,
   actualizarEscolaridad,
-  eliminarEscolaridad
 } = require('../controllers/escolaridad')
-/*
-// Importamos los middlewares de las escolaridades
-const {
-  existeEscolaridad
-} = require('../middlewares/escolaridad')
-*/
+
+const { existeEscolaridad, validarJSONEscolaridadPOST, validarJSONEscolaridadPUT }
+ = require('../middlewares/middlewareEscolaridad')
 
 // Creamos una nueva instancia de Router
 const router = Router()
@@ -24,21 +20,20 @@ router.get('/', obtenerEscolaridades)
 
 // Definimos la ruta para obtener una escolaridad por su id
 router.get('/:id', 
-//[existeEscolaridad],
  obtenerEscolaridad)
 
 // Definimos la ruta para crear una nueva escolaridad
-router.post('/', crearEscolaridad)
+router.post('/', 
+ validarJSONEscolaridadPOST,
+crearEscolaridad)
 
 // Definimos la ruta para actualizar una escolaridad por su id
 router.put('/:id',
-// [existeEscolaridad], 
+  existeEscolaridad,
+  validarJSONEscolaridadPUT,
 actualizarEscolaridad)
 
-// Definimos la ruta para eliminar una escolaridad por su id
-//router.delete('/:id',
-// [existeEscolaridad],
-// eliminarEscolaridad)
+
 
 // Exportamos el router
 module.exports = router

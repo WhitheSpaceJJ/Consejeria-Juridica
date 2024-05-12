@@ -4,32 +4,43 @@ const { Router } = require('express')
 
 // Controlador de prueba que permite realizar la lógica de negocio para la tabla prueba
 const {
-    obtenerPruebas,
     obtenerPrueba,
     crearPrueba,
     actualizarPrueba,
-    eliminarPrueba
+    obtenerPruebasPorProcesoJudicial
     } = require('../controllers/prueba')
+
+ const { existePrueba, validarJSONPruebaPOST, validarJSONPruebaPUT, 
+    existeProcesoJudicial
+  } 
+    = require('../middlewares/middlewarePrueba')
 
 
 // Se crea una instancia de Router
 const router = Router()
 
-
-// Ruta para obtener todas las pruebas
-router.get('/', obtenerPruebas)
+router.get('/proceso-judicial/:id', 
+existeProcesoJudicial,
+obtenerPruebasPorProcesoJudicial)
 
 // Ruta para obtener una prueba por su id
 router.get('/:id', obtenerPrueba)
 
 // Ruta para crear una prueba
-router.post('/', crearPrueba)
+router.post('/', 
+
+validarJSONPruebaPOST,
+existeProcesoJudicial,
+crearPrueba)
 
 // Ruta para actualizar una prueba por su id
-router.put('/:id', actualizarPrueba)
+router.put('/:id',
+ existePrueba, 
+validarJSONPruebaPUT,
+existeProcesoJudicial,
+actualizarPrueba)
 
-// Ruta para eliminar una prueba por su id
-//router.delete('/:id', eliminarPrueba)
+
 
 
 module.exports = router

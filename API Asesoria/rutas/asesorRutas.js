@@ -10,20 +10,15 @@ const router = express.Router();
 
 // Definimos las rutas y sus manejadores de solicitudes
 router.route('/')
-  // Obtener todos los asesores
-  .get(servicioAsesor.obtenerAsesores)
-  // Agregar un nuevo asesor
-  .post(servicioAsesor.agregarAsesor);
+// Obtener todos los asesores
+.get(servicioAsesor.obtenerAsesores);
 
-  router.route('/zona/:id')
-  .get(servicioAsesor.obtenerAsesoresZona);
+router.route('/zona/:id')
+.get(servicioAsesor.obtenerAsesoresZona);
+
 router.route('/:id')
-  // Obtener un asesor por su ID
-  .get(servicioAsesor.obtenerAsesorPorId)
-  // Eliminar un asesor por su ID
-  //.delete(servicioAsesor.eliminarAsesor)
-  // Actualizar un asesor por su ID
-  .put(servicioAsesor.actualizarAsesor);
+// Obtener un asesor por su ID
+.get(servicioAsesor.obtenerAsesorPorId)
 
 
 // Exportamos el router

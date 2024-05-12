@@ -75,21 +75,6 @@ const agregarDefensor = async (defensor) => {
     }
 };
 
-/**
- *  @abstract Función que permite eliminar un defensor
- * @param {*} id id del defensor a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- * */
-
-const eliminarDefensor = async (id) => {
-    try {
-        const result = await modeloDefensor.Defensor.destroy({ where: { id_defensor: id } });
-        return result === 1;
-    } catch (error) {
-        console.log("Error defensor:", error.message);
-        return false;
-    }
-};
 
 /**
  * @abstract Función que permite actualizar un defensor
@@ -131,7 +116,6 @@ module.exports = {
     obtenerDefensores,
     obtenerDefensorPorId,
     agregarDefensor,
-    eliminarDefensor,
     actualizarDefensor,
     obtenerDefensoresZona
 };

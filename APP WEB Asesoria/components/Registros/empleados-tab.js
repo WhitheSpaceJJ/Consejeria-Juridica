@@ -453,10 +453,11 @@ class EmpleadosTab extends HTMLElement {
   //Metodo para mostrar los empleados
   mostrarEmpleados = async () => {
     let validar = 0;
+    const tableBody = this.#empleados;
+    tableBody.innerHTML = '';
     try {
       const asesores = await this.#api.getAsesores();
-      const tableBody = this.#empleados;
-      tableBody.innerHTML = '';
+
 
       const asesoresArray = Object.values(asesores.asesores);
 
@@ -524,7 +525,7 @@ class EmpleadosTab extends HTMLElement {
 
 
     } catch (error) {
-      console.error('Error al obtener los empleados:', error);
+      console.error('Error al obtener los empleados:', error.message);
       validar++;
     }
 

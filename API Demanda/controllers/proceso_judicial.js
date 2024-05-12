@@ -12,10 +12,10 @@ const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
 const crearProcesoJudicial = async (req, res) => {
   try {
 
- const { turno, promovente, imputado, proceso } = req.body
+ const { turno, promovente, demandado, proceso } = req.body
 
   const procesoJudicial = await procesoJudicialDAO.crearProcesoJudicial({
-    turno, promovente, imputado, proceso
+    turno, promovente, demandado, proceso
   })
   res.json(procesoJudicial)
   } catch (error) {

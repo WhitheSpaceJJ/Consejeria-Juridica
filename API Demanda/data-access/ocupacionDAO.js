@@ -63,19 +63,7 @@ class OcupacionDAO {
     }
   }
 
-  /**
- * @abstract Método que permite eliminar una ocupación de la base de datos
- * @param {number} id - ID de la ocupación a eliminar
- * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
- */
-  async eliminarOcupacion(id) {
-    try {
-      const ocupacion = await Ocupacion.destroy({ where: { id_ocupacion: id } })
-      return ocupacion === 1
-    } catch (err) {
-      throw err
-    }
-  }
+
 }
 
 module.exports = new OcupacionDAO()

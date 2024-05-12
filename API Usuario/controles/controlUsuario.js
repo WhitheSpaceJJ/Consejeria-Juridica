@@ -140,20 +140,7 @@ const agregarUsuario = async (usuario) => {
   }
 };
 
-/**
- * @description Función que permite eliminar un usuario
- * @param {Number} id Id del usuario a eliminar
- * @returns {Boolean} true si el usuario se elimina correctamente, false si no se elimina
- */
-const eliminarUsuario = async (id) => {
-  try {
-   const result =  await modelUsuario.Usuario.destroy({ where: { id_usuario: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error:", error.message);
-    return false;
-  }
-};
+
 
 /**
  * @description Función que permite actualizar un usuario
@@ -175,7 +162,6 @@ module.exports = {
   obtenerUsuarios,
   obtenerUsuarioPorId,
   actualizarUsuario,
-  eliminarUsuario,
   agregarUsuario,
   obtenerUsuarioCorreoPassword,
   obtenerUsuarioCorreo,

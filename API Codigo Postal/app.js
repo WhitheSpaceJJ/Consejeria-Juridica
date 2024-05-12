@@ -5,12 +5,9 @@ const {PORT,HOSTTOKEN} = require("./config/default.js");
 // Constantes que representa las rutas de la API
 // Rutas del serrvicio de estados
 const estadosRoutes = require('./routes/estados.routes.js');
-// Rutas del servicio de municipios
-const municipiosRoutes = require('./routes/municipios.routes.js');
 // Rutas del servicio de codigos postales
 const codigosPostalesRoutes = require('./routes/codigosPostales.routes.js');
-// Rutas del servicio de ciudades
-const ciudadesRoutes = require('./routes/ciudades.routes.js');
+
 // Rutas del servicio de colonias
 const coloniasRoutes = require('./routes/colonias.routes.js');
 // Variable que manda a llamar la clase de errores
@@ -78,14 +75,6 @@ app.use('/codigospostales',
 app.use('/estados',
 //jwtMiddleware,
 estadosRoutes);
-// Middleware para manejar las rutas de la API de municipios
-//app.use('/municipios',
-//jwtMiddleware,
-// municipiosRoutes);
-// Middleware para manejar las rutas de la API de ciudades
-//app.use('/ciudades',
-//jwtMiddleware, 
-//ciudadesRoutes);
 
 // Middleware para manejar las rutas no encontradas
 app.all("*", (req, res, next) => {

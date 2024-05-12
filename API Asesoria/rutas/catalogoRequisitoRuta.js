@@ -2,6 +2,8 @@
 const express = require('express');
 const servicioCatalogoRequisitos = require('../servicios/servicioCatalogoRequisitos');
 
+const { validarJSONCatalogoRequisitosPOST, validarJSONCatalogoRequisitosPUT, existeCatalogoRequisitos } = require('../middlewares/middlewareCatalogoRequisitos');
+
 // Creamos un nuevo router
 const router = express.Router();
 
@@ -11,15 +13,18 @@ router.route('/')
   // Obtener todos los requisitos del catálogo
   .get(servicioCatalogoRequisitos.obtenerCatalogoRequisitos)
   // Agregar un nuevo requisito al catálogo
-  .post(servicioCatalogoRequisitos.agregarCatalogoRequisito);
+  .post(
+    validarJSONCatalogoRequisitosPOST,
+    servicioCatalogoRequisitos.agregarCatalogoRequisito);
 
 router.route('/:id')
   // Obtener un requisito del catálogo por su ID
   .get(servicioCatalogoRequisitos.obtenerCatalogoRequisitoPorId)
-  // Eliminar un requisito del catálogo por su ID
-  //.delete(servicioCatalogoRequisitos.eliminarCatalogoRequisito)
   // Actualizar un requisito del catálogo por su ID
-  .put(servicioCatalogoRequisitos.actualizarCatalogoRequisito);
+  .put(
+    existeCatalogoRequisitos,
+    validarJSONCatalogoRequisitosPUT,
+    servicioCatalogoRequisitos.actualizarCatalogoRequisito);
 
 
 // Exportamos el router

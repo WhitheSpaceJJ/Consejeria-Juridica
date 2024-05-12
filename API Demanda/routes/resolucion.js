@@ -6,30 +6,40 @@ const { Router } = require('express')
 const {
 
     obtenerResolucion,
-    obtenerResoluciones,
     crearResolucion,
     actualizarResolucion,
-    eliminarResolucion,
-    
+     obtenerResolucionesPorProcesoJudicial
     } = require('../controllers/resolucion')
 
+    const { existeResolucion, validarJSONResolucionPOST, validarJSONResolucionPUT,
+        existeProcesoJudicial
+     }
+    = require('../middlewares/middlewareResolucion')
+const e = require('express')
 
     // Se crea una instancia de Router
     const router = Router()
 
 // Ruta para obtener todas las resoluciones
-router.get('/', obtenerResoluciones)
+router.get('/proceso-judicial/:id',
+ existeProcesoJudicial,
+obtenerResolucionesPorProcesoJudicial)
 
 // Ruta para obtener una resolucion por su id
 router.get('/:id', obtenerResolucion)
 
 // Ruta para crear una resolucion
-router.post('/', crearResolucion)
+router.post('/', 
+validarJSONResolucionPOST,
+existeProcesoJudicial,
+crearResolucion)
 
 // Ruta para actualizar una resolucion por su id
-router.put('/:id', actualizarResolucion)
+router.put('/:id',
+existeResolucion,
+validarJSONResolucionPUT,
+existeProcesoJudicial,
+actualizarResolucion)
 
-// Ruta para eliminar una resolucion por su id
-//router.delete('/:id', eliminarResolucion)
 
 module.exports = router

@@ -3,7 +3,7 @@ const template = document.createElement('template')
 class ProcesoTabs extends HTMLElement {
   //Variables privadas de la clase
   #activeTab
-  #tabs = ['registro', 'promovente','imputado',  'proceso', 'detalles']
+  #tabs = ['registro', 'promovente','demandado',  'proceso', 'detalles']
 
   //Constructor de la clase ProcesoTabs
   constructor() {
@@ -15,7 +15,7 @@ class ProcesoTabs extends HTMLElement {
     //Aqui se obtienen los botones correspondientes a las pestañas
     this.btnRegistro = this.shadowRoot.getElementById('btn-registro')
     this.btnPromovente = this.shadowRoot.getElementById('btn-promovente')
-   this.btnImputado = this.shadowRoot.getElementById('btn-imputado')
+   this.btnDemandado = this.shadowRoot.getElementById('btn-demandado')
     this.btnProceso = this.shadowRoot.getElementById('btn-proceso')
     this.btnDetalles = this.shadowRoot.getElementById('btn-detalles')
 
@@ -48,10 +48,10 @@ class ProcesoTabs extends HTMLElement {
        //Manejador de evento que cambia de pestaña
       this.handleTabClick('promovente')
     )
-    //Evento que se dispara cuando se hace click en el boton de imputado
-    this.btnImputado.addEventListener('click', () =>
+    //Evento que se dispara cuando se hace click en el boton de demandado
+    this.btnDemandado.addEventListener('click', () =>
       //Manejador de evento que cambia de pestaña
-    this.handleTabClick('imputado')
+    this.handleTabClick('demandado')
   )
   //Evento que se dispara cuando se hace click en el boton de proceso
     this.btnProceso.addEventListener('click', () =>
@@ -81,7 +81,7 @@ class ProcesoTabs extends HTMLElement {
   showTabSection(tabId) {
     //Se obtienen todas las secciones de pestañas
     const tabSections = document.querySelectorAll(
-      'registro-full-tab,promovente-full-tab,imputado-full-tab,proceso-full-tab,detalles-full-tab'
+      'registro-full-tab,promovente-full-tab,demandado-full-tab,proceso-full-tab,detalles-full-tab'
     )
 
     //Se ocultan todas las secciones
@@ -112,7 +112,7 @@ class ProcesoTabs extends HTMLElement {
     //Se obtienen las secciones de las pestañas o componentes
     const registroTab = document.querySelector('registro-full-tab')
     const promoventeTab = document.querySelector('promovente-full-tab')
-    const imputadoTab = document.querySelector('imputado-full-tab')
+    const demandadoTab = document.querySelector('demandado-full-tab')
     const procesoTab = document.querySelector('proceso-full-tab')
        
     //Si la pestaña a la que se quiere cambiar es la de promovente y no se han completado los datos
@@ -123,7 +123,7 @@ class ProcesoTabs extends HTMLElement {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
 
-    // Si la pestaña a la que se quiere cambiar es la de imputado y no se han completado los datos
+    // Si la pestaña a la que se quiere cambiar es la de demandado y no se han completado los datos
     if (
       tabId === this.#tabs[2] &&
       (!promoventeTab.isComplete || !registroTab.isComplete)
@@ -134,7 +134,7 @@ class ProcesoTabs extends HTMLElement {
     // Si la pestaña a la que se quiere cambiar es la de proceso y no se han completado los datos
     if (
       tabId === this.#tabs[3] &&
-      (!promoventeTab.isComplete || !imputadoTab.isComplete || !registroTab.isComplete)
+      (!promoventeTab.isComplete || !demandadoTab.isComplete || !registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
@@ -152,7 +152,7 @@ class ProcesoTabs extends HTMLElement {
     // Si la pestaña a la que se quiere cambiar es la de detalles y no se han completado los datos
     if (
       tabId === this.#tabs[4] &&
-      (!procesoTab.isComplete || !promoventeTab.isComplete || !imputadoTab.isComplete || !registroTab.isComplete)
+      (!procesoTab.isComplete || !promoventeTab.isComplete || !demandadoTab.isComplete || !registroTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }
@@ -183,7 +183,7 @@ class ProcesoTabs extends HTMLElement {
   //Funcion que actualiza los atributos ARIA
   updateAriaAttributes(activeTab) {
     //Se obtienen las pestañas
-    const tabs = ['btn-registro',  'btn-promovente' ,'btn-imputado', 'btn-proceso', 'btn-detalles']
+    const tabs = ['btn-registro',  'btn-promovente' ,'btn-demandado', 'btn-proceso', 'btn-detalles']
     //Se actualizan los atributos ARIA
     tabs.forEach(tab => {
       //Se obtiene el boton de la pestaña

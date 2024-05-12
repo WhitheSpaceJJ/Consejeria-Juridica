@@ -1,36 +1,10 @@
 // Constante que representa el modelo de Colonias
 const modelColonias = require("../models/colonias.models");
-// Constante que representa el modelo de Codigos Postales
-const modeloCodigosPostales = require("../models/codigosPostales.models");
-// Constante que representa el modelo de Ciudades
-const modeloCiudades = require("../models/ciudades.models");
+
 // Constante que representa el modelo de Municipios
 const getMunicipio = require("../controllers/municipios.controller");
 //const { get } = require("../routes/colonias.routes");
 
-/**
- * Funcion que obtiene todas las colonias
- * @name getColonias
- * @function
- * @returns {Object} - Objeto con las colonias
- * @throws {Error} - Error en la consulta de colonias
- */
-const getColonias = async () => {
-  try {
-    // Obtenemos todas las colonias
-    return await modelColonias.Colonia.findAll({
-      raw: true,
-      attributes: {
-        exclude: ["id_ciudad", "id_codigo_postal"],
-      },
-      nest: true,
-      include: [modelColonias.Ciudad, modelColonias.CodigoPostal],
-    });
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error en la consulta de colonias");
-  }
-};
 
 /**
  * Funcion que obtiene una colonia
@@ -54,7 +28,11 @@ const getColonia = async (id) => {
       nest: true,
       include: [modelColonias.Ciudad, modelColonias.CodigoPostal],
     });
-
+     
+   if (!colonia_pre) {
+      return null;
+    }
+      
     //console.log(colonia_pre);
     // Obtenemos el id del municipio
     const id_municipio=colonia_pre.codigo_postal.id_municipio;
@@ -92,7 +70,6 @@ const getColonia = async (id) => {
 
 // Exportamos las funciones
 module.exports = {
-  getColonias,
   getColonia,
 };
 

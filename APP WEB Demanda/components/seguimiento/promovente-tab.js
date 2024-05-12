@@ -837,7 +837,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       const event = new CustomEvent('next', {
         bubbles: true,
         composed: true,
-        detail: { tabId: 'imputado' },
+        detail: { tabId: 'demandado' },
       })
       this.dispatchEvent(event)
     })

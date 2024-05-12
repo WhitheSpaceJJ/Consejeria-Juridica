@@ -42,16 +42,13 @@ class FamiliarDAO {
       throw err
     }
   }
+   
+ 
 
-  /**
-   * Método que permite obtener todos los familiares de la base de datos
-   * @returns {Array} Retorna un array con todos los familiares registrados si la operación fue exitosa, de lo contrario lanza un error
-   * */
-
-  async obtenerFamiliars() {
+  async obtenerFamiliarPorPromovente(idPromovente) {
     try {
-      const familiars = await Familiar.findAll()
-      return familiars
+      const familiar = await Familiar.findAll({ where: { id_promovente: idPromovente } })
+      return familiar
     } catch (err) {
       throw err
     }
@@ -68,27 +65,8 @@ class FamiliarDAO {
   }
 
 
-  async obtenerFamiliarPorPromovente(idPromovente) {
-    try {
-      const familiar = await Familiar.findAll({ where: { id_promovente: idPromovente } })
-      return familiar
-    } catch (err) {
-      throw err
-    }
-  }
 
 
- 
-
-
-  async eliminarFamiliar(id_familiar) {
-    try {
-      const familiar = await Familiar.destroy({ where: { id_familiar: id_familiar } })
-      return familiar === 1
-    } catch (err) {
-      throw err
-    }
-  }
 }
 
 

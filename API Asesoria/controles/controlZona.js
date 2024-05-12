@@ -34,55 +34,9 @@ const obtenerZonaPorId = async (id) => {
   }
 };
 
-/**
- *  @abstract Función que permite agregar una zona
- * @param {*} zona zona a agregar
- * @returns zona si se agrega correctamente, false si no  agregar
- */
-const agregarZona = async (zona) => {
-  try {
-    return (await modeloZona.Zona.create(zona, { raw: true, nest: true })).dataValues;
-  } catch (error) {
-    console.log("Error zona:", error.message);
-    return false;
-  }
-};
 
-/**
- *  @abstract Función que permite eliminar una zona
- * @param {*} id id de la zona a eliminar
- *  @returns true si se elimina correctamente, false si no se elimina
- */
-
-const eliminarZona = async (id) => {
-  try {
-   const result=  await modeloZona.Zona.destroy({ where: { id_zona: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error zona:", error.message);
-    return false;
-  }
-};
-
-/**
- * @abstract Función que permite actualizar una zona
- * @param {*} zona zona a actualizar
- * @returns true si se actualiza correctamente, false si no se actualiza
- */
-const actualizarZona = async (zona) => {
-  try {
- const result=    await modeloZona.Zona.update(zona, { where: { id_zona: zona.id_zona } });
-    return result[0] === 1; 
-  } catch (error) {
-    console.log("Error zona:", error.message);
-    return false;
-  }
-};
 //Module exports:
 module.exports = {
   obtenerZonas,
   obtenerZonaPorId,
-  agregarZona,
-  eliminarZona,
-  actualizarZona
 };

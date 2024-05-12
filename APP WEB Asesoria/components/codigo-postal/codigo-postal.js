@@ -159,10 +159,7 @@ export class CodigoPostal extends HTMLElement {
       const { colonias: data } = await this.#API.getDomicilioByCP(
         this.#cp.value
       )
-      if (!data || typeof data === 'string') {
-        this.#showModal('No se encontró el código postal', 'Advertencia')
-        return
-      }
+ 
       this.#estado.innerHTML = '';
       this.#estado.value = data.estado.nombre_estado
       this.#municipio.innerHTML = '';
@@ -177,8 +174,7 @@ export class CodigoPostal extends HTMLElement {
         this.#colonia.appendChild(option)
       })
     } catch (error) {
-      console.error(error)
-      this.#showModal('Error al buscar el código postal', 'Error')
+      this.#showModal('Error al buscar el código postal o no hubo coincidencias', 'Error')
     }
   }
   

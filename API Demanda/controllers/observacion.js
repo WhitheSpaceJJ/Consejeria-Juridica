@@ -27,32 +27,6 @@ const crearObservacion = async (req, res) => {
     }
 }
 
-/**
- * Función que permite obtener todas las observaciones
- * @param {Object} req Objeto de petición
- * @param {Object} res Objeto de respuesta
- * @returns {Array} Array con todas las observaciones registradas
- * */
-
-
-const obtenerObservaciones = async (req, res) => {
-    try {
-        const observaciones = await observacionDAO.obtenerObservaciones()
-        if (observaciones !== null && observaciones !== undefined && observaciones.length > 0) {
-            res.status(200).json(observaciones)
-        }
-        else {
-            res.status(404).json({
-                message: 'No hay observaciones registradas'
-            })
-        }
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
-}
 
 /**
  * Función que permite obtener una observacion por su id
@@ -116,37 +90,26 @@ const actualizarObservacion = async (req, res) => {
     }
 }
 
-/**
- * Función que permite eliminar una observacion
- * @param {Object} req Objeto de petición
- * @param {Object} res Objeto de respuesta
- * @returns {Object} Objeto con la observacion eliminada
- * */
-
-
-
-
-const eliminarObservacion = async (req, res) => {
+ const obtenerObservacionesPorProcesoJudicial = async (req, res) => {
     try {
         const { id } = req.params
-        const observacion = await observacionDAO.eliminarObservacion(Number(id))
-        if (observacion) {
-            res.status(200).json({
-                message: 'Observacion eliminada'
-            })
-        }
-        else {
+        const observacion = await observacionDAO.obtenerObservacionesPorProcesoJudicial(Number(id))
+        if (observacion === null || observacion === undefined || observacion.length === 0) {
             res.status(404).json({
                 message: 'Observacion no encontrada'
             })
         }
+        else {
+            res.status(200).json(observacion)
+        }
+
     } catch (error) {
         res.status(500).json({
             message: error.message
         })
     }
-}
 
+}
 
 
 // Exportación de funciones
@@ -156,9 +119,8 @@ const eliminarObservacion = async (req, res) => {
 module.exports = {
 
     crearObservacion,
-    obtenerObservaciones,
     obtenerObservacion,
     actualizarObservacion,
-    eliminarObservacion
+    obtenerObservacionesPorProcesoJudicial
 }
 

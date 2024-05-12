@@ -48,27 +48,6 @@ const obtenerTurnos = asyncError(async (req, res, next) => {
 
 
 /**
- * @abstract Servicio  que permite eliminar un turno
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de turno
- */
-
-const eliminarTurno = asyncError(async (req, res, next) => {
-  const result = await controlTurnos.eliminarTurno(req.params.id);
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar el turno', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-        menssage: "El turno ha sido eliminado"
-    });
-  }
-});
-
-/**
  * @abstract Servicio  que permite actualizar un turno
  * @param {Object} req Request
  * @param {Object} res Response
@@ -127,7 +106,6 @@ const obtenerTurnoPorDefensorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarTurno,
   obtenerTurnos,
-  eliminarTurno,
   actualizarTurno,
   obtenerTurnoPorId,
   obtenerTurnoPorDefensorId

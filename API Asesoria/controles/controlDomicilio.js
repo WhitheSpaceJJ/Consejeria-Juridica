@@ -47,20 +47,7 @@ const agregarDomicilio = async (domicilio) => {
   }
 };
 
-/**
- *  @abstract Función que permite eliminar un domicilio
- * @param {*} id id del domicilio a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarDomicilio = async (id) => {
-  try {
-    const result = await modeloDomicilio.Domicilio.destroy({ where: { id_domicilio: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error domicilios :", error.message);
-    return false;
-  }
-};
+
 
 /**
  * @abstract Función que permite actualizar un domicilio
@@ -84,6 +71,5 @@ module.exports = {
   obtenerDomicilios,
   obtenerDomicilioPorId,
   agregarDomicilio,
-  eliminarDomicilio,
   actualizarDomicilio
 };

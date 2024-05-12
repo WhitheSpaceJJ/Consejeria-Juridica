@@ -9,16 +9,18 @@ const obtenerEscolaridades = async (req, res) => {
     const activo = req.query.activo;
     if (activo !== undefined && activo !== null && activo !== "") {
       const escolaridades = await escolaridadDAO.obtenerEscolaridades(activo)
-      if (escolaridades.length === 0) {
-        return  res.status(404).json({
+      if (escolaridades === null || escolaridades === undefined || escolaridades.length === 0) {
+        return res.status(404).json({
           message: 'No se encontraron escolaridades'
         });
       }
       res.json(escolaridades)
     } else {
       const escolaridades = await escolaridadDAO.obtenerEscolaridades()
-      if (escolaridades.length === 0) {
-        return res.status(204).json(escolaridades);
+      if (escolaridades === null || escolaridades === undefined || escolaridades.length === 0) {
+        return res.status(404).json({
+          message: 'No se encontraron escolaridades'
+        });
       }
       res.json(escolaridades)
     }
@@ -99,35 +101,11 @@ const actualizarEscolaridad = async (req, res) => {
   }
 }
 
-/**
- * @abstract Método que permite eliminar una escolaridad
- * @param {number} id - ID de la escolaridad a eliminar
- * @returns {object} Retorna el objeto de la escolaridad eliminada si la operación fue exitosa, de lo contrario lanza un error
- */
-const eliminarEscolaridad = async (req, res) => {
-  try {
-    const { id } = req.params
-    const escolaridad = await escolaridadDAO.eliminarEscolaridad(Number(id))
-    if (escolaridad) {
-      res.status(200).json({
-        message: 'Escolaridad eliminada'
-      })
-    } else {
-      res.status(404).json({
-        message: 'Escolaridad no encontrada'
-      })
-    }
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    })
-  }
-}
+
 
 module.exports = {
   obtenerEscolaridades,
   crearEscolaridad,
   obtenerEscolaridad,
   actualizarEscolaridad,
-  eliminarEscolaridad
 }

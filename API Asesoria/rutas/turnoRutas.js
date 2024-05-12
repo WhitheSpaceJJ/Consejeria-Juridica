@@ -17,8 +17,6 @@ router.route('/')
 router.route('/:id')
   // Obtener un turno por su ID
   .get(servicioTurnos.obtenerTurnoPorId)
-  // Eliminar un turno por su ID
- // .delete(servicioTurnos.eliminarTurno)
   // Actualizar un turno por su ID
   .put(servicioTurnos.actualizarTurno);
 

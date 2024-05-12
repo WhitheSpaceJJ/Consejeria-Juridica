@@ -123,7 +123,7 @@ export class ProcesoTab extends HTMLElement {
     //Obtenemos los componentes 
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
-    this.imputadoTab = document.querySelector('imputado-full-tab')
+    this.demandadoTab = document.querySelector('demandado-full-tab')
   }
 
   //Metodo para inicializar variables, obtener datos de la API y llenar los campos del formulario
@@ -308,7 +308,7 @@ export class ProcesoTab extends HTMLElement {
   validateInputs() {
     try {
       //Se validan los componentes y si estos estan completos
-      //los componentes son registroTab, promoventeTab, imputadoTab
+      //los componentes son registroTab, promoventeTab, demandadoTab
       if (this.registroTab.isComplete === false) {
         this.#showModal('No se ha seleccionado un turno, por favor seleccione uno.', 'Error de validación')
         return false
@@ -319,8 +319,8 @@ export class ProcesoTab extends HTMLElement {
         return false
       }
 
-      if (this.imputadoTab.isComplete === false) {
-        this.#showModal('No se han ingresado los datos del imputado, por favor ingreselos.', 'Error de validación')
+      if (this.demandadoTab.isComplete === false) {
+        this.#showModal('No se han ingresado los datos del demandado, por favor ingreselos.', 'Error de validación')
         return false
       }
 

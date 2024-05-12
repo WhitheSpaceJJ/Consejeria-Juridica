@@ -2,50 +2,6 @@
 const modelEstados = require("../models/estados.models.js");
 
 /**
- * Funcion que obtiene todos los estados
- * @name getEstados
- * @function
- * @returns {Object} - Objeto con los estados
- * @throws {Error} - Error en la consulta de estados
- */
-const getEstados = async () => { 
-  try {
-    // Obtenemos todos los estados
-    const estados = await modelEstados.Estado.findAll({
-      raw: false,
-      nest: true,
-      include: [
-        {
-          model: modelEstados.Municipio,
-          required: true,
-        },
-      ],
-    });
-    // Creamos un arreglo con los estados y sus municipios
-    const result = [];
-    // Iteramos sobre los estados para obtener sus municipios y agregarlos al arreglo
-    for (const estado of estados) { 
-      const municipios = []; 
-      // Iteramos sobre los municipios para obtener sus nombres y agregarlos al arreglo
-      for (const municipio of estado.municipios) { 
-        municipios.push(municipio.nombre_municipio);
-      }
-      // Agregamos el estado y sus municipios al arreglo
-      result.push({
-        id_estado: estado.id_estado,
-        nombre_estado: estado.nombre_estado,
-        municipios: municipios,
-      });
-    }
-    // Retornamos el arreglo
-    return result;
-  } catch (error) {
-    console.error(error);
-    return error.message;
-  }
-};
-
-/**
  * Funcion que obtiene un estado
  * @name getEstado  
  * @function
@@ -69,6 +25,9 @@ const getEstado = async (id) => {
         },
       ],
     });
+    if (!estado) {
+      return null;
+    }
     // Creamos un arreglo con los municipios del estado 
     const municipios = [];
     // Iteramos sobre los municipios para obtener sus nombres y agregarlos al arreglo
@@ -92,6 +51,5 @@ const getEstado = async (id) => {
 }
  // Exportamos las funciones
 module.exports = {
-  getEstados,
   getEstado,
 };

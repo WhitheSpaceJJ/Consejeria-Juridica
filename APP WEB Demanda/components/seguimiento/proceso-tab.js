@@ -138,7 +138,7 @@ export class ProcesoTab extends HTMLElement {
     //Componentes de las demas pestañas requeridas previamente
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
-    this.imputadoTab = document.querySelector('imputado-full-tab')
+    this.demandadoTab = document.querySelector('demandado-full-tab')
   }
 
 //Metodo que inicializa las variables de la clase, datos, etc

@@ -60,20 +60,7 @@ const agregarTipoDeJuicio = async (tipoDeJuicio) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un tipo de juicio
- * @param {*} id id del tipo de juicio a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- *  */
-const eliminarTipoDeJuicio = async (id) => {
-  try {
-   const result= await modeloTipoJuicio.TipoJuicio.destroy({ where: { id_tipo_juicio: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error tipo juicios:", error.message);
-    return false;
-  }
-};
+
 
 /**
  *  @abstract Función que permite actualizar un tipo de juicio
@@ -95,6 +82,5 @@ module.exports = {
   obtenerTiposDeJuicio,
   obtenerTipoDeJuicioPorId,
   agregarTipoDeJuicio,
-  eliminarTipoDeJuicio,
   actualizarTipoDeJuicio
 };

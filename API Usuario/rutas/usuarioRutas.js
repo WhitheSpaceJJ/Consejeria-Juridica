@@ -29,7 +29,6 @@ router.route('/')
 // La petición PUT utiliza el método actualizarUsuario del servicio de usuarios
 router.route('/:id')
   .get(servicioUsuarios.obtenerUsuarioPorId)
-  //.delete(servicioUsuarios.eliminarUsuario)
   .put(servicioUsuarios.actualizarUsuario);
 
 // Exportamos el router

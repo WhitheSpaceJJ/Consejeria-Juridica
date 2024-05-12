@@ -17,7 +17,7 @@ export class DetallesTab extends HTMLElement {
     #registroTab
     #promoventeTab
     #procesoTab
-    #imputadoTab
+    #demandadoTab
     #nombreDefensor
     #tipoJuicio
     #fechaInicio
@@ -44,22 +44,22 @@ export class DetallesTab extends HTMLElement {
     #municipioPromovente
     #ciudadPromovente
     #coloniaPromovente
-    #nombreImputado
-    #edadImputado
-    #sexoImputado
-    #telefonoImputado
-    #etniaImputado
-    #escolaridadImputado
-    #ocupacionImputado
-    #españolImputado
-    #calleImputado
-    #numeroExteriorImputado
-    #numeroInteriorImputado
-    #codigoPostalImputado
-    #estadoImputado
-    #municipioImputado
-    #ciudadImputado
-    #coloniaImputado
+    #nombreDemandado
+    #edadDemandado
+    #sexoDemandado
+    #telefonoDemandado
+    #etniaDemandado
+    #escolaridadDemandado
+    #ocupacionDemandado
+    #españolDemandado
+    #calleDemandado
+    #numeroExteriorDemandado
+    #numeroInteriorDemandado
+    #codigoPostalDemandado
+    #estadoDemandado
+    #municipioDemandado
+    #ciudadDemandado
+    #coloniaDemandado
 
 
 
@@ -72,10 +72,10 @@ export class DetallesTab extends HTMLElement {
         this.id = 'detalles'
         this.style.display = 'none'
         //Aqui se obtienen los web components que se van a utilizar en el componente de los demas
-        //tabs en este caso se obtienen los datos de los tabs de registro, promovente, imputado y proceso
+        //tabs en este caso se obtienen los datos de los tabs de registro, promovente, demandado y proceso
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
-        this.#imputadoTab = document.querySelector('imputado-full-tab')
+        this.#demandadoTab = document.querySelector('demandado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
     }
 
@@ -117,29 +117,29 @@ export class DetallesTab extends HTMLElement {
         this.#ciudadPromovente = this.shadowRoot.getElementById('ciudad-promovente')
         this.#coloniaPromovente = this.shadowRoot.getElementById('colonia-promovente')
 
-        this.#nombreImputado = this.shadowRoot.getElementById('nombre-imputado')
-        this.#edadImputado = this.shadowRoot.getElementById('edad-imputado')
-        this.#sexoImputado = this.shadowRoot.getElementById('sexo-imputado')
-        this.#telefonoImputado = this.shadowRoot.getElementById('telefono-imputado')
-        this.#calleImputado = this.shadowRoot.getElementById('calle-imputado')
-        this.#numeroExteriorImputado = this.shadowRoot.getElementById('numero-exterior-imputado')
-        this.#numeroInteriorImputado = this.shadowRoot.getElementById('numero-interior-imputado')
+        this.#nombreDemandado = this.shadowRoot.getElementById('nombre-demandado')
+        this.#edadDemandado = this.shadowRoot.getElementById('edad-demandado')
+        this.#sexoDemandado = this.shadowRoot.getElementById('sexo-demandado')
+        this.#telefonoDemandado = this.shadowRoot.getElementById('telefono-demandado')
+        this.#calleDemandado = this.shadowRoot.getElementById('calle-demandado')
+        this.#numeroExteriorDemandado = this.shadowRoot.getElementById('numero-exterior-demandado')
+        this.#numeroInteriorDemandado = this.shadowRoot.getElementById('numero-interior-demandado')
 
-        this.#codigoPostalImputado = this.shadowRoot.getElementById('codigo-postal-imputado')
-        this.#estadoImputado = this.shadowRoot.getElementById('estado-imputado')
-        this.#municipioImputado = this.shadowRoot.getElementById('municipio-imputado')
-        this.#ciudadImputado = this.shadowRoot.getElementById('ciudad-imputado')
-        this.#coloniaImputado = this.shadowRoot.getElementById('colonia-imputado')
+        this.#codigoPostalDemandado = this.shadowRoot.getElementById('codigo-postal-demandado')
+        this.#estadoDemandado = this.shadowRoot.getElementById('estado-demandado')
+        this.#municipioDemandado = this.shadowRoot.getElementById('municipio-demandado')
+        this.#ciudadDemandado = this.shadowRoot.getElementById('ciudad-demandado')
+        this.#coloniaDemandado = this.shadowRoot.getElementById('colonia-demandado')
 
     }
 
     //Metodo que se encarga de llenar los campos del formulario
     fillInputs() {
      
-        //Se obtienen los datos de los tabs de registro, promovente, imputado y proceso
+        //Se obtienen los datos de los tabs de registro, promovente, demandado y proceso
         const { turno } = this.#registroTab.data
         const { promovente } = this.#promoventeTab.data
-        const { imputado } = this.#imputadoTab.data
+        const { demandado } = this.#demandadoTab.data
         const { proceso } = this.#procesoTab.data
 
         //Se rellenan los campos del formulario con los datos obtenidos
@@ -171,7 +171,7 @@ export class DetallesTab extends HTMLElement {
         this.#familiares.textContent = proceso.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} Nacionalidad: ${familiar.nacionalidad}
     Parentesco: ${familiar.parentesco} Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT===true?'Si':'No'} Adulto Mayor: ${familiar.adultaMayor===true? 'Si': 'No'} Salud Precaria: ${familiar.saludPrecaria===true?'Si': 'No'} Pobreza Extrema: ${familiar.pobrezaExtrema ===true?'Si': 'No'}`).join(', ')
 
-        //Se rellenan los campos del promovente e imputado        
+        //Se rellenan los campos del promovente e demandado        
         this.#nombrePromovente.textContent = promovente.nombre + ' ' + promovente.apellido_paterno + ' ' + promovente.apellido_materno
         this.#edadPromovente.textContent = promovente.edad
         this.#sexoPromovente.textContent = promovente.sexo
@@ -189,18 +189,18 @@ export class DetallesTab extends HTMLElement {
         this.#ciudadPromovente.textContent = promovente.domicilio.ciudad
         this.#coloniaPromovente.textContent = promovente.domicilio.colonia
 
-        this.#nombreImputado.textContent = imputado.nombre  + ' ' + imputado.apellido_paterno + ' ' + imputado.apellido_materno
-        this.#edadImputado.textContent = imputado.edad
-        this.#sexoImputado.textContent = imputado.sexo
-        this.#telefonoImputado.textContent = imputado.telefono
-        this.#calleImputado.textContent = imputado.domicilio.calle_domicilio
-        this.#numeroExteriorImputado.textContent = imputado.domicilio.numero_exterior_domicilio
-        this.#numeroInteriorImputado.textContent = imputado.domicilio.numero_interior_domicilio
-        this.#codigoPostalImputado.textContent = imputado.domicilio.cp
-        this.#estadoImputado.textContent = imputado.domicilio.estado
-        this.#municipioImputado.textContent = imputado.domicilio.municipio
-        this.#ciudadImputado.textContent = imputado.domicilio.ciudad
-        this.#coloniaImputado.textContent = imputado.domicilio.colonia
+        this.#nombreDemandado.textContent = demandado.nombre  + ' ' + demandado.apellido_paterno + ' ' + demandado.apellido_materno
+        this.#edadDemandado.textContent = demandado.edad
+        this.#sexoDemandado.textContent = demandado.sexo
+        this.#telefonoDemandado.textContent = demandado.telefono
+        this.#calleDemandado.textContent = demandado.domicilio.calle_domicilio
+        this.#numeroExteriorDemandado.textContent = demandado.domicilio.numero_exterior_domicilio
+        this.#numeroInteriorDemandado.textContent = demandado.domicilio.numero_interior_domicilio
+        this.#codigoPostalDemandado.textContent = demandado.domicilio.cp
+        this.#estadoDemandado.textContent = demandado.domicilio.estado
+        this.#municipioDemandado.textContent = demandado.domicilio.municipio
+        this.#ciudadDemandado.textContent = demandado.domicilio.ciudad
+        this.#coloniaDemandado.textContent = demandado.domicilio.colonia
 
 
 
@@ -215,15 +215,15 @@ export class DetallesTab extends HTMLElement {
         //Evento que se ejecuta al hacer clic en el boton de crear asesoria
         this.btnCrearAsesoria.addEventListener('click', async () => {
             try {
-                //Obtencion de los datos de los tabs de registro, promovente, imputado y proceso
+                //Obtencion de los datos de los tabs de registro, promovente, demandado y proceso
                 const { turno } = this.#registroTab.data
                 const { promovente } = this.#promoventeTab.data
-                const { imputado } = this.#imputadoTab.data
+                const { demandado } = this.#demandadoTab.data
                 const { proceso } = this.#procesoTab.data
                 const procesoJudicial = {
                     turno,
                     promovente,
-                    imputado,
+                    demandado,
                     proceso
                 }
 

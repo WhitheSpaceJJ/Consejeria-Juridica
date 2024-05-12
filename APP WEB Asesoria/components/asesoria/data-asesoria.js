@@ -60,11 +60,14 @@ export class DataAsesoria extends HTMLElement {
     this.shadowRoot.getElementById('calle').textContent = persona.domicilio.calle_domicilio
     this.shadowRoot.getElementById('numero-exterior').textContent = persona.domicilio.numero_exterior_domicilio
     this.shadowRoot.getElementById('numero-interior').textContent = persona.domicilio.numero_interior_domicilio
-    this.shadowRoot.getElementById('codigo-postal').textContent = domicilioData.codigo_postal.codigo_postal
-    this.shadowRoot.getElementById('estado').textContent = domicilioData.estado.nombre_estado
-    this.shadowRoot.getElementById('municipio').textContent = domicilioData.municipio.nombre_municipio
-    this.shadowRoot.getElementById('ciudad').textContent = domicilioData.ciudad.nombre_ciudad
-    this.shadowRoot.getElementById('colonia').textContent = domicilioData.colonia.nombre_colonia
+    if(domicilioData !== undefined){
+      this.shadowRoot.getElementById('codigo-postal').textContent =  domicilioData.codigo_postal.codigo_postal
+      this.shadowRoot.getElementById('estado').textContent = domicilioData.estado.nombre_estado
+      this.shadowRoot.getElementById('municipio').textContent = domicilioData.municipio.nombre_municipio
+      this.shadowRoot.getElementById('ciudad').textContent = domicilioData.ciudad.nombre_ciudad
+      this.shadowRoot.getElementById('colonia').textContent = domicilioData.colonia.nombre_colonia
+    }
+  
     //Se llena el campo de nombre del asesor o defensor, dependiendo de si es asesor o defensor
     if (this.asesoria.asesoria.empleado) {
       const empleado = this.asesoria.asesoria.empleado

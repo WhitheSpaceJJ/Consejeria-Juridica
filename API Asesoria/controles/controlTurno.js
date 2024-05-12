@@ -108,20 +108,7 @@ const agregarTurno = async (turno) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un turno
- * @param {*} id id del turno a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarTurno = async (id) => {
-  try {
-    const result = await modeloTurno.Turno.destroy({ where: { id_turno: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error turno:", error.message);
-    return false;
-  }
-};
+
 
 /**
  * @abstract Función que permite actualizar un turno
@@ -144,7 +131,6 @@ module.exports = {
   obtenerTurnos,
   obtenerTurnoPorId,
   agregarTurno,
-  eliminarTurno,
   actualizarTurno,
   obtenerTurnoPorDefensorId
 };

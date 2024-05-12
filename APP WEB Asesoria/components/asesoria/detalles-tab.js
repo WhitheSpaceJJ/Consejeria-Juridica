@@ -60,7 +60,7 @@ export class DetallesTab extends HTMLElement {
 
     //Se limpia la seccion de datos y se agrega la informacion de la asesoria
     $section.innerHTML = ''
-     
+      
     //Se agrega la informacion de la asesoria a la seccion de datos
     $section.appendChild(dataAsesoria)
 

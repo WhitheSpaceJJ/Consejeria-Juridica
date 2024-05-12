@@ -56,20 +56,7 @@ const agregarEstadoCivil = async (estadoCivil) => {
   }
 };
 
-/**
- *  @abstract Función que permite eliminar un estado civil
- *    @param {*} id id del estado civil a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarEstadoCivil = async (id) => {
-  try {
-    const result=await modeloEstadoCivil.EstadoCivil.destroy({ where: { id_estado_civil: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error estados civiles:", error.message);
-    return false;
-  }
-};
+
 
 /**
  * @abstract Función que permite actualizar un estado civil
@@ -91,7 +78,6 @@ module.exports = {
   obtenerEstadosCiviles,
   obtenerEstadoCivilPorId,
   agregarEstadoCivil,
-  eliminarEstadoCivil,
   actualizarEstadoCivil
 
 };

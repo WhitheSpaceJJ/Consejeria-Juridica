@@ -1,14 +1,5 @@
 const modeloDistritoJudicial = require('../modelos/modeloDistritoJudicial.js');
 
-/**
- * @abstract Controlador que permite agregar un distrito judicial
- * @param {Object} distritoJudicial Distrito judicial
- * @returns {Object} Distrito judicial
- */
-const agregarDistritoJudicial = async (distritoJudicial) => {
-    const distritoJudicialNuevo = await modeloDistritoJudicial.DistritoJudicial.create(distritoJudicial);
-    return distritoJudicialNuevo;
-};
 
 /**
  * @abstract Controlador que permite obtener todos los distritos judiciales
@@ -31,19 +22,6 @@ const obtenerDistritosJudiciales = async () => {
     return distritosJudiciales;
 };
 
-/**
- * @abstract Controlador que permite eliminar un distrito judicial
- * @param {Number} id Id del distrito judicial
- * @returns {Object} Distrito judicial
- */
-const eliminarDistritoJudicial = async (id) => {
-    const result = await modeloDistritoJudicial.DistritoJudicial.destroy({
-        where: {
-            id_distrito_judicial: id
-        }
-    });
-    return result === 1;
-};
 
 /**
  * @abstract Controlador que permite obtener un distrito judicial
@@ -77,27 +55,10 @@ const obtenerDistritoJudicial = async (id) => {
 
 };
 
-/**
- * @abstract Controlador que permite actualizar un distrito judicial
- *  @param {Number} id Id del distrito judicial
- * @param {Object} distritoJudicial Distrito judicial
- * @returns {Object} Distrito judicial
- */
-const actualizarDistritoJudicial = async (id, distritoJudicial) => {
-    const result = await modeloDistritoJudicial.DistritoJudicial.update(distritoJudicial, {
-        where: {
-            id_distrito_judicial: id
-        }
-    });
-    return result[0] === 1;
-};
+
 
 //Module exports
 module.exports = {
-
-    agregarDistritoJudicial,
     obtenerDistritosJudiciales,
-    eliminarDistritoJudicial,
     obtenerDistritoJudicial,
-    actualizarDistritoJudicial
 };

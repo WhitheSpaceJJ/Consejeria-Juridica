@@ -9,7 +9,7 @@ const resolucionesDAO = require('../data-access/resolucionDAO')
 const pruebasDAO = require('../data-access/pruebaDAO')
 const familiaresDAO = require('../data-access/familiarDAO')
 
-const imputadoDAO = require('../data-access/imputadoDAO')
+const demandadoDAO = require('../data-access/demandadoDAO')
 const promoventeDAO = require('../data-access/promoventeDAO')
 const domicilioDAO = require('../data-access/domicilio_participanteDAO')
 
@@ -24,20 +24,20 @@ class ProcesoJudicialDAO {
  * @returns {object} Retorna el objeto del proceso judicial creado si la operación fue exitosa, de lo contrario lanza un error
  */
   async crearProcesoJudicial({
-    turno, promovente, imputado, proceso }) {
+    turno, promovente, demandado, proceso }) {
     try {
       const promovente_object = JSON.parse(JSON.stringify(promovente))
       const turno_object = JSON.parse(JSON.stringify(turno))
-      const imputado_object = JSON.parse(JSON.stringify(imputado))
+      const demandado_object = JSON.parse(JSON.stringify(demandado))
       const proceso_object = JSON.parse(JSON.stringify(proceso))
 
 
       const proceso_creado = await this.registrarProceso(proceso_object, turno_object)
       const promovente_creado = await this.registrarPromovente(promovente_object, proceso_object.familiares, proceso_creado.id_proceso_judicial)
-      const imputado_creado = await this.registrarImputado(imputado_object, proceso_creado.id_proceso_judicial)
+      const demandado_creado = await this.registrarDemandado(demandado_object, proceso_creado.id_proceso_judicial)
       const proces_cread_object = JSON.parse(JSON.stringify(proceso_creado))
       proces_cread_object.promovente = promovente_creado
-      proces_cread_object.imputado = imputado_creado
+      proces_cread_object.demandado = demandado_creado
       return await this.obtenerProcesoJudicial(proceso_creado.id_proceso_judicial)
     } catch (err) {
       throw err
@@ -45,28 +45,28 @@ class ProcesoJudicialDAO {
   }
    
   /** 
-   * Método que permite registrar un imputado en la base de datos
-   * @param {object} imputado - Objeto que contiene los datos del imputado
-   * @param {number} id_proceso_judicial - ID del proceso judicial al que pertenece el imputado
-   * @returns {object} Retorna el objeto del imputado creado si la operación fue exitosa, de lo contrario lanza un error
+   * Método que permite registrar un demandado en la base de datos
+   * @param {object} demandado - Objeto que contiene los datos del demandado
+   * @param {number} id_proceso_judicial - ID del proceso judicial al que pertenece el demandado
+   * @returns {object} Retorna el objeto del demandado creado si la operación fue exitosa, de lo contrario lanza un error
    * */
 
-  async registrarImputado(imputado, id_proceso_judicial) {
+  async registrarDemandado(demandado, id_proceso_judicial) {
 
-    const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = imputado
-    const imputado_creado = await participanteDAO.crearParticipante({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
-    const imputado_object = JSON.parse(JSON.stringify(imputado_creado))
+    const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = demandado
+    const demandado_creado = await participanteDAO.crearParticipante({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
+    const demandado_object = JSON.parse(JSON.stringify(demandado_creado))
 
-    const domicilio = imputado.domicilio
+    const domicilio = demandado.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
 
-    const domicilioParticipante = await domicilioDAO.crearDomicilioParticipante({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: imputado_object.id_participante })
-    imputado_object.domicilio = domicilioParticipante
+    const domicilioParticipante = await domicilioDAO.crearDomicilioParticipante({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: demandado_object.id_participante })
+    demandado_object.domicilio = domicilioParticipante
 
-    const imputado_creado_oficial = await imputadoDAO.crearImputado({ id_imputado: imputado_object.id_participante })
-    imputado_object.imputado = imputado_creado_oficial
+    const demandado_creado_oficial = await demandadoDAO.crearDemandado({ id_demandado: demandado_object.id_participante })
+    demandado_object.demandado = demandado_creado_oficial
 
-    return imputado_object
+    return demandado_object
 
   }
 
@@ -276,21 +276,21 @@ class ProcesoJudicialDAO {
     return proceso_judicial_object_pre
   }
   /**  
-   * Metodo que permite actualizar un imputado en la base de datos
-   * @param {object} imputado - Objeto que contiene los datos del imputado
-   * @returns {object} Retorna el objeto del imputado actualizado si la operación fue exitosa, de lo contrario lanza un error
+   * Metodo que permite actualizar un demandado en la base de datos
+   * @param {object} demandado - Objeto que contiene los datos del demandado
+   * @returns {object} Retorna el objeto del demandado actualizado si la operación fue exitosa, de lo contrario lanza un error
    * */
 
 
-  async actualizarImputado(imputado) {
+  async actualizarDemandado(demandado) {
   
-    const imputado_object = JSON.parse(JSON.stringify(imputado))
-    const { id_imputado, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = imputado_object
-    const imputado_ = await participanteDAO.actualizarParticipante(id_imputado, { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
-    const domicilio = imputado_object.domicilio
+    const demandado_object = JSON.parse(JSON.stringify(demandado))
+    const { id_demandado, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = demandado_object
+    const demandado_ = await participanteDAO.actualizarParticipante(id_demandado, { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
+    const domicilio = demandado_object.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
     const domicilioParticipante = await domicilioDAO.actualizarDomicilioParticipante(domicilio.id_domicilio, { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
-    return imputado_object
+    return demandado_object
   }
 
   /**
@@ -406,7 +406,7 @@ class ProcesoJudicialDAO {
     try {
       const procesoJudicial = await proceso_judicial.findByPk(id)
       const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
-
+       
       procesoJudicialObject.participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(id)
       procesoJudicialObject.juzgado = await juzgadoDAO.obtenerJuzgado(procesoJudicialObject.id_juzgado)
       procesoJudicialObject.estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(id)
@@ -421,22 +421,34 @@ class ProcesoJudicialDAO {
     }
   }
 
+
+   async obtenerProcesoJudicialMiddleware(id) {
+    try {
+      const procesoJudicial = await proceso_judicial.findByPk(id)
+      const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
+      return procesoJudicialObject
+    } catch (err) {
+      console.log(err.message)
+      throw err
+    }
+   }
+
   /**
  * @abstract Método que permite actualizar un proceso judicial en la base de datos
  * @param {number} id_proceso_judicial - ID del proceso judicial a actualizar
  * @param {object} procesoJudicial - Objeto que contiene los nuevos datos del proceso judicial
  * @returns {object} Retorna el objeto del proceso judicial actualizado si la operación fue exitosa, de lo contrario lanza un error
  */
-  async actualizarProcesoJudicialOficial(id, { promovente, imputado, proceso }) {
+  async actualizarProcesoJudicialOficial(id, { promovente, demandado, proceso }) {
     try {
 
       const promovente_object = JSON.parse(JSON.stringify(promovente))
-      const imputado_object = JSON.parse(JSON.stringify(imputado))
+      const demandado_object = JSON.parse(JSON.stringify(demandado))
       const proceso_object = JSON.parse(JSON.stringify(proceso))
 
       const proceso_actualizado = await this.actualizarProcesoJudicial(proceso_object, promovente_object)
       const promovente_actualizado = await this.actualizarPromovente(promovente_object)
-      const imputado_actualizado = await this.actualizarImputado(imputado_object)
+      const demandado_actualizado = await this.actualizarDemandado(demandado_object)
       return await this.obtenerProcesoJudicial(id)
     } catch (err) {
       console.log(err.message)
@@ -444,19 +456,7 @@ class ProcesoJudicialDAO {
     }
   }
 
-  /**
- * @abstract Método que permite eliminar un proceso judicial de la base de datos
- * @param {number} id - ID del proceso judicial a eliminar
- * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
- */
-  async eliminarProcesoJudicial(id) {
-    try {
-      const procesoJudicial = await proceso_judicial.destroy({ where: { id_proceso_judicial: id } })
-      return procesoJudicial === 1
-    } catch (err) {
-      throw err
-    }
-  }
+
  /**
   * Método que permite obtener todos los procesos judiciales de un juzgado de la base de datos por su estatus
   * @param {string} estatus_proceso - Estatus del proceso judicial a obtener

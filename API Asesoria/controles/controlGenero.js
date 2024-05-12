@@ -60,22 +60,6 @@ const agregarGenero = async (genero) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un genero
- * @param {*} id id del genero a eliminar
- *  @returns true si se elimina correctamente, false si no se elimina
- */
-
-const eliminarGenero = async (id) => {
-  try {
-    const result  =await modeloGenero.Genero.destroy({ where: { id_genero: id } });
-    return  result === 1;
-  } catch (error) {
-    console.log("Error generos:", error.message);
-    return false;
-  }
-};
-
 
 /**
  * @abstract Función que permite actualizar un genero
@@ -99,6 +83,5 @@ module.exports = {
   obtenerGeneros,
   obtenerGeneroPorId,
   agregarGenero,
-  eliminarGenero,
   actualizarGenero
 };

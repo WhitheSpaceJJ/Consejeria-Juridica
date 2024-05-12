@@ -57,20 +57,6 @@ const agregarPersona = async (persona) => {
   }
 };
 
-/**
- *  @abstract Función que permite eliminar una persona
- * @param {*} id id de la persona a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- */
-const eliminarPersona = async (id) => {
-  try {
-    const result= await modeloPersona.Persona.destroy({ where: { id_persona: id } });
-    return  result === 1; 
-  } catch (error) {
-    console.log("Error personas:", error.message);
-    return false;
-  }
-};
 
 /**
  * @abstract Función que permite actualizar una persona
@@ -138,7 +124,6 @@ module.exports = {
   obtenerPersonas,
   obtenerPersonaPorId,
   agregarPersona,
-  eliminarPersona,
   actualizarPersona,
   obtenerPersonasNombre
 };

@@ -1,5 +1,5 @@
 var DataTypes = require("sequelize").DataTypes;
-var _imputado = require("./Imputado");
+var _demandado = require("./demandado");
 //var _demanda = require("./demanda");
 //var _denuncia = require("./denuncia");
 var _escolaridad = require("./escolaridad");
@@ -20,7 +20,7 @@ var _domicilio_participante = require("./domicilio_participante");
 
 
 function initModels(sequelize) {
-  var imputado = _imputado(sequelize, DataTypes);
+  var demandado = _demandado(sequelize, DataTypes);
   var escolaridad = _escolaridad(sequelize, DataTypes);
   var estado_procesal = _estado_procesal(sequelize, DataTypes);
   var etnia = _etnia(sequelize, DataTypes);
@@ -50,9 +50,9 @@ function initModels(sequelize) {
   proceso_judicial.belongsTo(juzgado, { as: "id_juzgado_juzgado", foreignKey: "id_juzgado"});
   
   
-  imputado.belongsTo(participante, { as: "id_participante_participante", foreignKey: "id_participante"});
+  demandado.belongsTo(participante, { as: "id_participante_participante", foreignKey: "id_participante"});
   
-  participante.hasOne(imputado, { as: "Imputado", foreignKey: "id_participante"});
+  participante.hasOne(demandado, { as: "demandado", foreignKey: "id_participante"});
   
   
   promovente.belongsTo(participante, { as: "id_participante_participante", foreignKey: "id_participante"});

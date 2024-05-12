@@ -2,6 +2,9 @@
 const express = require('express');
 const servicioTiposDeJuicio = require('../servicios/servicioTiposJuicios');
 
+const { validarJSONTipoJuicioPOST, validarJSONTipoJuicioPUT, existeTipoJuicio } = require('../middlewares/middlewareTipoJuicio');
+
+
 // Creamos un nuevo router
 const router = express.Router();
 
@@ -9,15 +12,17 @@ router.route('/')
   // Obtener todos los tipos de juicio
   .get(servicioTiposDeJuicio.obtenerTiposDeJuicio)
   // Agregar un nuevo tipo de juicio
-  .post(servicioTiposDeJuicio.agregarTipoDeJuicio);
+  .post(
+     validarJSONTipoJuicioPOST,
+    servicioTiposDeJuicio.agregarTipoDeJuicio);
 
 router.route('/:id')
   // Obtener un tipo de juicio por su ID
   .get(servicioTiposDeJuicio.obtenerTipoDeJuicioPorId)
-  // Eliminar un tipo de juicio por su ID
- // .delete(servicioTiposDeJuicio.eliminarTipoDeJuicio)
   // Actualizar un tipo de juicio por su ID
-  .put(servicioTiposDeJuicio.actualizarTipoDeJuicio);
+  .put(
+     existeTipoJuicio, validarJSONTipoJuicioPUT,
+    servicioTiposDeJuicio.actualizarTipoDeJuicio);
 
 // Exportamos el router
 module.exports = router;

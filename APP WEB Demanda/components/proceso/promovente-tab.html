@@ -57,37 +57,6 @@
     </div>
   </div>
 
-  <!--
-  <div class="grid mt-6 md:grid-cols-2 md:gap-6 md:mt-0">
-    <div class="relative z-0 w-full mb-6 mt-2 group">
-      <input type="number" name="telefono" id="telefono" class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 
-      appearance-none text-md focus:outline-none focus:ring-0 peer" placeholder="" value="" required
-        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)" disabled/>
-      <label for="telefono"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Teléfono</label>
-    </div>
-    <div class="relative z-0 w-full mb-6 group">
-      <input disabled type="text" name="estado-civl" id="estado-civl"
-      class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
-      placeholder="" value="" required />
-    <label for="estado-civl"
-      class="font-medium absolute text-md text-black duration-300 transform -translate-y-6
-       top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">
-       Estado Civil</label>
-    </div>
-  </div>
-
-    <div class="relative z-0 w-full mb-6 group">
-      <input disabled type="text" name="detalles" id="detalles"
-      class="block w-full px-0 pt-4 text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
-      placeholder="Estatus de Trabajo,Motivo,Ingreso,Numero Hijos" value="" required />
-    <label for="detalles"
-      class="font-medium absolute text-md text-black duration-300 transform -translate-y-6
-       top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">
-       Detalles Asesorado</label>
-    </div>
-  
-  -->
   <div class="grid md:grid-cols-2 md:gap-6">
     <div class="flex flex-col gap-3">
       <label class="font-medium text-black text-md">Español?</label>
@@ -138,74 +107,10 @@
       </select>
     </div>
   </div>
-<!--
-
-  <div class="grid md:grid-cols-2 md:gap-6">
-    <div class="flex flex-col gap-3">
-      <label class="font-medium text-black text-md">¿Trabaja?</label>
-      <div class="flex items-center">
-        <input id="yes-option" type="radio" value="yes" name="rb-trabajo"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-0" />
-        <label for="yes-option" class="ml-2 text-sm font-medium text-black">Si</label>
-      </div>
-      <div class="flex items-center">
-        <input id="no-option" type="radio" value="no" name="rb-trabajo"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-0" />
-        <label for="no-option" class="ml-2 text-sm font-medium text-black">No</label>
-      </div>
-    </div>
-    <div class="">
-      <div class="flex-col hidden gap-3" id="ingreso-container">
-        <label class="font-medium text-black text-md">Ingreso mensual</label>
-        <div class="flex items-center">
-          <input id="mayor" type="radio" value="10001" name="rb-ingreso"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-0" />
-          <label for="mayor" class="ml-2 text-sm font-medium text-black">Mayor a dos veces el salario mínimo</label>
-        </div>
-        <div class="flex items-center">
-          <input id="menor-igual" type="radio" value="9999" name="rb-ingreso"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-0" />
-          <label for="menor-igual" class="ml-2 text-sm font-medium text-black">Mínimo mensual general vigente al
-            mes</label>
-        </div>
-      </div>
-      <div class="flex-col hidden w-full gap-2 mt-3 md:mt-0" id="motivo-container">
-        <label for="motivo" class="font-medium text-black text-md">Motivo</label>
-        <select id="motivo" name="motivo"
-          class="block w-full p-1 px-2.5 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
-          <option selected value="">Selecciona un motivo</option>
-        </select>
-      </div>
-    </div>
-  </div>
--->
- <!--
-  <div class="grid gap-6 mt-8 md:grid-cols-2">
-    <div class="relative z-0 w-full group">
-      <label for="estado-civil"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Estado
-        civil</label>
-      <select id="estado-civil" name="estado-civil"
-        class="block w-full p-1 px-2.5 mt-4 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500">
-        <option selected disabled value="">Selecciona un estado civil</option>
-      </select>
-    </div>
-    <div class="relative z-0 w-full mb-6 group">
-      <input type="number" name="numero-hijos" id="numero-hijos" class="block w-full px-0 pt-4 text-black bg-transparent
-         border-0 border-b-2 border-gray-300 appearance-none text-md focus:outline-none focus:ring-0 peer"
-        placeholder="" value="" required />
-      <label for="numero-hijos"
-        class="font-medium absolute text-md text-black duration-300 transform -translate-y-6 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-6">Número
-        de hijos</label>
-    </div>
-  </div>
--->
-
   <hr class="my-5 border-[#922B21] border" />
- 
- 
- 
-  <section class="">
+  </br>
+
+  <section class="w-full">
     <h3 class="text-[#922B21] text-3xl font-bold mb-8">Domicilio</h3>
     <div class="grid md:grid-cols-2 md:gap-6">
       <div class="relative z-0 w-full mb-6 group">
@@ -398,11 +303,12 @@
         </div>
       </div>
     </div>
+    <div class="flex items-start justify-end">
+      <button id="btn-promovente-next" type="button"
+        class="px-5 text-center py-3 rounded bg-[#a52a2a] text-white hover:bg-[#db2424] mt-2 font-semibold transition duration-200 w-fit ml-auto">
+        Siguiente
+      </button>
+    </div>
   </section>
-  <div class="flex items-start justify-end">
-    <button id="btn-promovente-next" type="button"
-      class="px-5 text-center py-3 rounded bg-[#a52a2a] text-white hover:bg-[#db2424] mt-2 font-semibold transition duration-200 w-fit ml-auto">
-      Siguiente
-    </button>
-  </div>
+
 </seccion>

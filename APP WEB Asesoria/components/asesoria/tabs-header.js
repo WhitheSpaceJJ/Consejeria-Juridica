@@ -93,7 +93,6 @@ class AsesoriaTabs extends HTMLElement {
    
     //Verifica si la pestaña a la que se quiere cambiar es la pestaña asesorado y si la seccion de la pestaña asesorado no esta completa
    
-   /*
     if (
       tabId === this.#tabs[1] &&
       (!asesoradoTab.isComplete)
@@ -106,7 +105,6 @@ class AsesoriaTabs extends HTMLElement {
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
     }  
-     */
        
 
   }

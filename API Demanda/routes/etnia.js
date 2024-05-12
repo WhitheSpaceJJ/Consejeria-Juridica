@@ -7,14 +7,15 @@ const {
     obtenerEtnia,
     crearEtnia,
     actualizarEtnia,
-    eliminarEtnia
 } = require('../controllers/etnia')
-/*
-// Importamos los middlewares de las etnias
+
 const {
-    existeEtnia
-} = require('../middlewares/etnias')
-*/
+    existeEtnia,
+    validarJSONEtniaPOST,
+    validarJSONEtniaPUT
+}   = require('../middlewares/middlewareEtnia')
+
+
 // Creamos una nueva instancia de Router
 const router = Router()
 
@@ -22,19 +23,20 @@ const router = Router()
 router.get('/', obtenerEtnias)
 
 // Definimos la ruta para obtener una etnia por su id
-router.get('/:id',// [existeEtnia], 
+router.get('/:id',
 obtenerEtnia)
 
 // Definimos la ruta para crear una nueva etnia
-router.post('/', crearEtnia)
+router.post('/',
+ validarJSONEtniaPOST,
+crearEtnia)
 
 // Definimos la ruta para actualizar una etnia por su id
-router.put('/:id',// [existeEtnia], 
+router.put('/:id',
+ existeEtnia,
+    validarJSONEtniaPUT,
 actualizarEtnia)
 
-// Definimos la ruta para eliminar una etnia por su id
-//router.delete('/:id', //[existeEtnia],
-// eliminarEtnia)
 
 // Exportamos el router
 module.exports = router

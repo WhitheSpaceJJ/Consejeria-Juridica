@@ -63,25 +63,6 @@ const obtenerGeneros = asyncError(async (req, res, next) => {
 
 });
 
-/**
- * @abstract Servicio  que permite eliminar un género
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de género
- */
-const eliminarGenero = asyncError(async (req, res, next) => {
-  const result = await controlGeneros.eliminarGenero(req.params.id);
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar el género', 400);
-    return next(error);
-  } else {
- 
-    res.status(200).json({
-        menssage: "El genero ha sido eliminado"
-    });
-  }
-});
 
 /**
  * @abstract Servicio  que permite actualizar un género
@@ -129,7 +110,6 @@ const obtenerGeneroPorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarGenero,
   obtenerGeneros,
-  eliminarGenero,
   actualizarGenero,
   obtenerGeneroPorId
 };

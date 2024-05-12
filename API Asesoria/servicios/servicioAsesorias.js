@@ -1,7 +1,6 @@
 const controlAsesorias = require('../controles/controlAsesoria');
 const asyncError = require("../utilidades/asyncError");
 const CustomeError = require("../utilidades/customeError");
-const controlPersonas = require('../controles/controlPersonas');
 const ExcelJS = require('exceljs');
 /**
  * @abstract Servicio  que permite obtener una asesoría por filtro
@@ -531,47 +530,9 @@ const agregarAsesoria = asyncError(async (req, res, next) => {
   }
 });
 
-/**
- *  @abstract Servicio  que permite obtener todas las asesorías
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} asesorías  de la base de datos
- */
 
-const obtenerAsesorias = asyncError(async (req, res, next) => {
-  const result = await controlAsesorias.obtenerAsesorias();
-  if (result === null || result === undefined || result.length === 0) {
-    const error = new CustomeError('No se encontraron asesorías', 404);
-    return next(error);
-  } else {
 
-    res.status(200).json({
-      asesorias: result
-    });
-  }
-});
 
-/**
- * @abstract Servicio  que permite eliminar una asesoría
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de asesoría
- */
-
-const eliminarAsesoria = asyncError(async (req, res, next) => {
-  const result = await controlAsesorias.eliminarAsesoria(req.params.id);
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar la asesoría', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-      menssage: "La asesoria ha sido eliminada"
-    });
-  }
-});
 
 /**
  *  
@@ -682,8 +643,6 @@ const obtenerAsesoriaFiltroTotal = asyncError(async (req, res, next) => {
 //Module exports
 module.exports = {
   agregarAsesoria,
-  obtenerAsesorias,
-  eliminarAsesoria,
   actualizarAsesoria,
   obtenerAsesoriaPorId,
   obtenerAsesoriaNombre,

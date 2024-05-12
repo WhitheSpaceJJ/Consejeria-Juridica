@@ -10,7 +10,7 @@ const obtenerJuzgados = async (req, res) => {
     const activo = req.query.activo;
     if (activo !== undefined && activo !== null && activo !== "") {
       const juzgados = await juzgadoDAO.obtenerJuzgados(activo)
-      if (juzgados.length === 0) {
+      if (juzgados === null || juzgados ===undefined || juzgados.length === 0) {
         return res.status(404).json({
           message: 'No se encontraron juzgados'
         });
@@ -18,7 +18,7 @@ const obtenerJuzgados = async (req, res) => {
       res.json(juzgados)
     } else {
       const juzgados = await juzgadoDAO.obtenerJuzgados()
-      if (juzgados.length === 0) {
+      if (juzgados === null || juzgados ===undefined || juzgados.length === 0) {
         return res.status(404).json({
           message: 'No se encontraron juzgados'
         });
@@ -98,36 +98,11 @@ const actualizarJuzgado = async (req, res) => {
   }
 }
 
-/**
- * @abstract Método que permite eliminar un juzgado
- * @param {number} id - ID del juzgado a eliminar
- * @returns {object} Retorna el objeto del juzgado eliminado si la operación fue exitosa, de lo contrario lanza un error
- */
-const eliminarJuzgado = async (req, res) => {
-  try {
-    const { id } = req.params
-    const juez = await juzgadoDAO.eliminarJuzgado(Number(id))
-    if(juez){
-      res.status(200).json({
-        message: 'Juzgado eliminado'
-      })
-    }
-     else {
-      res.status(404).json({
-        message: 'Juzgado no eliminado'
-      })
-    }
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    })
-  }
-}
+
 
 module.exports = {
   obtenerJuzgados,
   obtenerJuzgado,
   crearJuzgado,
   actualizarJuzgado,
-  eliminarJuzgado
 }

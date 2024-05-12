@@ -17,7 +17,7 @@ export class DetallesTab extends HTMLElement {
     #registroTab
     #promoventeTab
     #procesoTab
-    #imputadoTab
+    #demandadoTab
     #nombreDefensor
     #tipoJuicio
     #fechaInicio
@@ -46,22 +46,22 @@ export class DetallesTab extends HTMLElement {
     #ciudadPromovente
     #coloniaPromovente
 
-    #nombreImputado
-    #edadImputado
-    #sexoImputado
-    #telefonoImputado
-    #etniaImputado
-    #escolaridadImputado
-    #ocupacionImputado
-    #españolImputado
-    #calleImputado
-    #numeroExteriorImputado
-    #numeroInteriorImputado
-    #codigoPostalImputado
-    #estadoImputado
-    #municipioImputado
-    #ciudadImputado
-    #coloniaImputado
+    #nombreDemandado
+    #edadDemandado
+    #sexoDemandado
+    #telefonoDemandado
+    #etniaDemandado
+    #escolaridadDemandado
+    #ocupacionDemandado
+    #españolDemandado
+    #calleDemandado
+    #numeroExteriorDemandado
+    #numeroInteriorDemandado
+    #codigoPostalDemandado
+    #estadoDemandado
+    #municipioDemandado
+    #ciudadDemandado
+    #coloniaDemandado
 
     //Metodo que obtiene los atributos que se observan
     static get observedAttributes() {
@@ -106,7 +106,7 @@ export class DetallesTab extends HTMLElement {
         //Inicializamos las variables de los componentes
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
-        this.#imputadoTab = document.querySelector('imputado-full-tab')
+        this.#demandadoTab = document.querySelector('demandado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
     }
 
@@ -149,19 +149,19 @@ export class DetallesTab extends HTMLElement {
         this.#ciudadPromovente = this.shadowRoot.getElementById('ciudad-promovente')
         this.#coloniaPromovente = this.shadowRoot.getElementById('colonia-promovente')
 
-        this.#nombreImputado = this.shadowRoot.getElementById('nombre-imputado')
-        this.#edadImputado = this.shadowRoot.getElementById('edad-imputado')
-        this.#sexoImputado = this.shadowRoot.getElementById('sexo-imputado')
-        this.#telefonoImputado = this.shadowRoot.getElementById('telefono-imputado')
-        this.#calleImputado = this.shadowRoot.getElementById('calle-imputado')
-        this.#numeroExteriorImputado = this.shadowRoot.getElementById('numero-exterior-imputado')
-        this.#numeroInteriorImputado = this.shadowRoot.getElementById('numero-interior-imputado')
+        this.#nombreDemandado = this.shadowRoot.getElementById('nombre-demandado')
+        this.#edadDemandado = this.shadowRoot.getElementById('edad-demandado')
+        this.#sexoDemandado= this.shadowRoot.getElementById('sexo-demandado')
+        this.#telefonoDemandado = this.shadowRoot.getElementById('telefono-demandado')
+        this.#calleDemandado = this.shadowRoot.getElementById('calle-demandado')
+        this.#numeroExteriorDemandado = this.shadowRoot.getElementById('numero-exterior-demandado')
+        this.#numeroInteriorDemandado = this.shadowRoot.getElementById('numero-interior-demandado')
 
-        this.#codigoPostalImputado = this.shadowRoot.getElementById('codigo-postal-imputado')
-        this.#estadoImputado = this.shadowRoot.getElementById('estado-imputado')
-        this.#municipioImputado = this.shadowRoot.getElementById('municipio-imputado')
-        this.#ciudadImputado = this.shadowRoot.getElementById('ciudad-imputado')
-        this.#coloniaImputado = this.shadowRoot.getElementById('colonia-imputado')
+        this.#codigoPostalDemandado = this.shadowRoot.getElementById('codigo-postal-demandado')
+        this.#estadoDemandado = this.shadowRoot.getElementById('estado-demandado')
+        this.#municipioDemandado = this.shadowRoot.getElementById('municipio-demandado')
+        this.#ciudadDemandado = this.shadowRoot.getElementById('ciudad-demandado')
+        this.#coloniaDemandado = this.shadowRoot.getElementById('colonia-demandado')
 
     }
 
@@ -169,11 +169,11 @@ export class DetallesTab extends HTMLElement {
     fillInputs() {
 
         //Obtencion de los datos de los tabs, para llenar los inputs
-        //en este caso se obtienen los datos de los tabs de promovente, imputado y proceso
+        //en este caso se obtienen los datos de los tabs de promovente, demandado y proceso
         //y se rellenan los datos al html correspondiente
 
         const { promovente } = this.#promoventeTab.data
-        const { imputado } = this.#imputadoTab.data
+        const { demandado } = this.#demandadoTab.data
         const { proceso } = this.#procesoTab.data
         
         this.#tipoJuicio.textContent = proceso.tipo_juicio
@@ -218,18 +218,18 @@ export class DetallesTab extends HTMLElement {
         this.#ciudadPromovente.textContent = promovente.domicilio.ciudad
         this.#coloniaPromovente.textContent = promovente.domicilio.colonia
 
-        this.#nombreImputado.textContent = imputado.nombre + ' ' + imputado.apellido_paterno + ' ' + imputado.apellido_materno
-        this.#edadImputado.textContent = imputado.edad
-        this.#sexoImputado.textContent = imputado.sexo
-        this.#telefonoImputado.textContent = imputado.telefono
-        this.#calleImputado.textContent = imputado.domicilio.calle_domicilio
-        this.#numeroExteriorImputado.textContent = imputado.domicilio.numero_exterior_domicilio
-        this.#numeroInteriorImputado.textContent = imputado.domicilio.numero_interior_domicilio
-        this.#codigoPostalImputado.textContent = imputado.domicilio.cp
-        this.#estadoImputado.textContent = imputado.domicilio.estado
-        this.#municipioImputado.textContent = imputado.domicilio.municipio
-        this.#ciudadImputado.textContent = imputado.domicilio.ciudad
-        this.#coloniaImputado.textContent = imputado.domicilio.colonia
+        this.#nombreDemandado.textContent = demandado.nombre + ' ' + demandado.apellido_paterno + ' ' + demandado.apellido_materno
+        this.#edadDemandado.textContent = demandado.edad
+        this.#sexoDemandado.textContent = demandado.sexo
+        this.#telefonoDemandado.textContent = demandado.telefono
+        this.#calleDemandado.textContent = demandado.domicilio.calle_domicilio
+        this.#numeroExteriorDemandado.textContent = demandado.domicilio.numero_exterior_domicilio
+        this.#numeroInteriorDemandado.textContent = demandado.domicilio.numero_interior_domicilio
+        this.#codigoPostalDemandado.textContent = demandado.domicilio.cp
+        this.#estadoDemandado.textContent = demandado.domicilio.estado
+        this.#municipioDemandado.textContent = demandado.domicilio.municipio
+        this.#ciudadDemandado.textContent = demandado.domicilio.ciudad
+        this.#coloniaDemandado.textContent = demandado.domicilio.colonia
 
 
 
@@ -245,16 +245,16 @@ export class DetallesTab extends HTMLElement {
             try {
                 //Onjeto que contiene los datos de los tabs
                 const { promovente } = this.#promoventeTab.data
-                const { imputado } = this.#imputadoTab.data
+                const { demandado } = this.#demandadoTab.data
                 const { proceso } = this.#procesoTab.data
-                const { id_proceso_judicial, id_promovente, id_imputado } = this.#registroTab.data
+                const { id_proceso_judicial, id_promovente, id_demandado} = this.#registroTab.data
                 promovente.id_promovente = id_promovente
-                imputado.id_imputado = id_imputado
+                demandado.id_demandado = id_demandado
                 proceso.id_proceso_judicial = id_proceso_judicial
                 //Creacion del objeto que contiene los datos de los tabs
                 const data = {
                     promovente,
-                    imputado,
+                    demandado,
                     proceso
                 }
                 //LLamada a la API para crear un proceso judicial

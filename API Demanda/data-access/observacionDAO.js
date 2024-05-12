@@ -22,21 +22,6 @@ class ObservacionDAO {
    }
 
    /**
-    * Método que permite obtener todas las observaciones de la base de datos
-    * @returns {array} Retorna un arreglo de objetos de observaciones si la operación fue exitosa, de lo contrario lanza un error
-    * */
-
-
-   async obtenerObservaciones() {
-      try {
-         const observaciones = await Observacion.findAll()
-         return observaciones
-      } catch (err) {
-         throw err
-      }
-   }
-
-   /**
     * Método que permite obtener una observación de la base de datos por su id
     * @param {number} id_observacion - ID de la observación a obtener
     * @returns {object} Retorna el objeto de la observación si la operación fue exitosa, de lo contrario lanza un error
@@ -83,21 +68,7 @@ class ObservacionDAO {
          throw err
       }
    }
-   /** 
-    * Método que permite eliminar una observación de la base de datos
-    * @param {number} id_observacion - ID de la observación a eliminar
-    * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
-    * */
-   
 
-   async eliminarObservacion( id_observacion) {
-      try {
-         const observacion = await Observacion.destroy({ where: { id_observacion: id_observacion } })
-         return observacion === 1
-      } catch (err) {
-         throw err
-      }
-   }
 }
 
 module.exports = new ObservacionDAO()

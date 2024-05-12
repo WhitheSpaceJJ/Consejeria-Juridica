@@ -4,57 +4,7 @@ const modelCodigosPostales = require("../models/codigosPostales.models");
 const getColonias = require("../controllers/colonias.controllers");
 
 
-/**
- * Funcion que obtiene todos los codigos postales
- * @name getCodigosPostales
- * @function
- * @returns {Object} - Objeto con los codigos postales
- * @throws {Error} - Error en la consulta de codigos postales
- */
-const getCodigosPostales = async () => {
-  try {
-     //  Obtenemos todos los codigos postales
-    return await modelCodigosPostales.CodigoPostal.findAll({
-      raw: true,
-      attributes: {
-        exclude: ["id_municipio"],
-      },
-      nest: true,
-      include: [modelCodigosPostales.Municipio],
-    });
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error en la consulta de codigos postales");
-  }
-};
 
-/**
- * Funcion que obtiene un codigo postal
- * @name getCodigoPostal
- * @function
- * @param {number} id - Identificador del codigo postal
- * @returns {Object} - Objeto con el codigo postal
- * @throws {Error} - Error en la consulta de codigo postal
- */
-const getCodigoPostal = async (id) => {
-  try {
-    // Obtenemos un codigo postal
-    return await modelCodigosPostales.CodigoPostal.findOne({
-      raw: true,
-      where: {
-        id_codigo_postal: id,
-      },
-      attributes: {
-        exclude: ["id_municipio"],
-      },
-      nest: true,
-      include: [modelCodigosPostales.Municipio],
-    });
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error en la consulta de codigo postal");
-  }
-};
 /**
  *  Funcion que obtiene las colonias por codigo postal
  * @param {*} cp  Codigo Postal
@@ -79,6 +29,9 @@ const getColoniasByCodigoPostal = async (cp) => {
         },
       ],
     });
+    if (!codigoPostal_pre) {
+      return null;
+     }
     // Creamos un arreglo con las colonias del codigo postal
     const colonias = [];
     // Recorremos las colonias
@@ -130,7 +83,5 @@ const getColoniasByCodigoPostal = async (cp) => {
 
 // Exportamos las funciones
 module.exports = {
-  getCodigosPostales,
-  getCodigoPostal,
   getColoniasByCodigoPostal,
 };

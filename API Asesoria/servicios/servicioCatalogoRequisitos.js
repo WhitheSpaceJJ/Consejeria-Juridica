@@ -59,25 +59,6 @@ const obtenerCatalogoRequisitos = asyncError(async (req, res, next) => {
 
 });
 
-/**
- *  @abstract Servicio  que permite eliminar un requisito del catálogo
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de requisito del catálogo
- */
-const eliminarCatalogoRequisito = asyncError(async (req, res, next) => {
-  const result = await controlCatalogoRequisitos.eliminarCatalogoRequisito(req.params.id);
-  if ( result === false) {
-    const error = new CustomeError('Error al eliminar el requisito del catálogo', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-      menssage:   'Requisito del catálogo eliminado'
-    });
-  }
-});
 
 /**
  *  @abstract Servicio  que permite actualizar un requisito del catálogo
@@ -125,7 +106,6 @@ const obtenerCatalogoRequisitoPorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarCatalogoRequisito,
   obtenerCatalogoRequisitos,
-  eliminarCatalogoRequisito,
   actualizarCatalogoRequisito,
   obtenerCatalogoRequisitoPorId
 };

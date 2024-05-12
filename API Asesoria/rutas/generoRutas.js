@@ -2,6 +2,14 @@
 const express = require('express');
 const servicioGeneros = require('../servicios/servicioGenero');
 
+//Importamos el middleware
+const {
+  existeGenero,
+  validarJSONGeneroPOST,
+  validarJSONGeneroPUT
+} = require('../middlewares/middlewareGenero');
+
+
 // Creamos un nuevo router
 const router = express.Router();
 
@@ -10,15 +18,19 @@ router.route('/')
   // Obtener todos los géneros
   .get(servicioGeneros.obtenerGeneros)
   // Agregar un nuevo género
-  .post(servicioGeneros.agregarGenero);
+  .post(
+    validarJSONGeneroPOST,
+    servicioGeneros.agregarGenero);
 
 router.route('/:id')
   // Obtener un género por su ID
   .get(servicioGeneros.obtenerGeneroPorId)
-  // Eliminar un género por su ID
- // .delete(servicioGeneros.eliminarGenero)
+ 
   // Actualizar un género por su ID
-  .put(servicioGeneros.actualizarGenero);
+  .put(
+    existeGenero,
+    validarJSONGeneroPUT,
+    servicioGeneros.actualizarGenero);
 
 
 // Exportamos el router

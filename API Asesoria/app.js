@@ -4,7 +4,6 @@ const express = require('express');
 const {PORT,HOSTTOKEN} = require("./configuracion/default.js");
 // Rutas de la aplicación
 const zonasRutas = require("./rutas/zonaRutas");
-const domiciliosRutas = require("./rutas/domicilioRutas");
 const tipoDeJuiciosRutas = require("./rutas/tipoJuicioRutas");
 const generosRutas = require("./rutas/generoRutas");
 const estadosCivilesRutas = require("./rutas/estadoCivilRutas");
@@ -13,9 +12,7 @@ const asesoriasRutas = require("./rutas/asesoriaRutas");
 const asesoresRutas = require("./rutas/asesorRutas");
 const turnoRutas = require("./rutas/turnoRutas");
 const catalogoRequisitosRutas = require("./rutas/catalogoRequisitoRuta");
-const personasRutas = require("./rutas/personaRuta");
 const asesoradoRutas = require("./rutas/asesorRutas");
-const detalleAsesoriaRutas = require("./rutas/detalleAsesoriaRuta");
 
 
 const defensorRuta = require("./rutas/defensorRuta.js");
@@ -90,23 +87,11 @@ app.use('/motivos',
 app.use('/zonas',
  //jwtMiddleware, 
  zonasRutas);
-//app.use('/detalle-asesoria',
- //jwtMiddleware, 
-// detalleAsesoriaRutas);
-//app.use('/domicilios', 
-//jwtMiddleware, 
-//domiciliosRutas);
 app.use('/turnos', 
 //jwtMiddleware, 
 turnoRutas);
-//app.use('/personas',
- //jwtMiddleware, 
- //personasRutas);
-app.use('/asesorados', 
-//jwtMiddleware, 
-asesoradoRutas);
 app.use('/catalogo-requisitos', 
-//jwtMiddleware, 
+//jwtMiddlre, 
 catalogoRequisitosRutas);
 app.use('/defensores',
  //jwtMiddleware,

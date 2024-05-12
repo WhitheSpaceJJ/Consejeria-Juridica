@@ -428,20 +428,6 @@ const agregarAsesoria = async (asesoria_pre) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un asesoria
- * @param {*} id id del asesoria a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- * */
-const eliminarAsesoria = async (id) => {
-  try {
-    const result = await modeloAsesoria.Asesoria.destroy({ where: { id_asesoria: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error Asesorias:", error.message);
-    return false;
-  }
-};
 
 /**
  * @abstract Función que permite actualizar un asesoria
@@ -916,7 +902,6 @@ module.exports = {
   obtenerAsesoriaPorId,
   obtenerAsesoriaPorIdAsesorado,
   agregarAsesoria,
-  eliminarAsesoria,
   actualizarAsesoria,
   obtenerAsesoriasFiltro,
   obtenerAsesoriasPorPagina

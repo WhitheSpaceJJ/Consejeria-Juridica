@@ -25,31 +25,6 @@
       }
     }
 
-    /**
-     * Función que permite obtener todas las pruebas
-     * @param {Object} req Objeto de petición
-     * @param {Object} res Objeto de respuesta
-     * @returns {Array} Array con todas las pruebas registradas
-     * */
-
-    const obtenerPruebas = async (req, res) => {
-      try {
-        const pruebas = await PruebaDAO.obtenerPruebas()
-         if(pruebas !== null && pruebas !== undefined && pruebas.length > 0){
-           res.status(200).json(pruebas)
-          }else{
-            res.status(404).json({
-              message: 'No hay pruebas registradas'
-            })
-          }
-
-      } catch (error) {
-        res.status(500).json({
-          message: error.message
-        })
-      }
-    }
-
     
     /**
      * Función que permite obtener una prueba por su id
@@ -106,39 +81,33 @@
       }
     }
 
-    /**
-     * Función que permite eliminar una prueba
-     * @param {Object} req Objeto de petición
-     * @param {Object} res Objeto de respuesta
-     * @returns {Object} Objeto con la prueba eliminada
-     * */
-
-    const eliminarPrueba = async (req, res) => {
-      try {
-        const { id } = req.params
-        const prueba = await PruebaDAO.eliminarPrueba(Number(id))
-        if (prueba) {
-          res.status(200).json({
-            message: 'Prueba eliminada'
-          })
-        } else {
-          res.status(500).json({
-            message: 'Error al eliminar la prueba'
-          })
-        }
-      } catch (error) {
-        res.status(500).json({
-          message: error.message
-        })
-      }
+const obtenerPruebasPorProcesoJudicial = async (req, res) => {
+  try {
+    const { id } = req.params
+    const pruebas = await PruebaDAO.obtenerPruebasPorProcesoJudicial(Number(id))
+    if ( pruebas === undefined || pruebas  ===null || pruebas.length === 0) {
+      res.status(404).json({
+        message: 'Pruebas no encontradas'
+      })
     }
+    else {
+      res.status(200).json(pruebas)
+    }
+  }
+  catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
+    
 
     // Exportar todas las funciones
     module.exports = {
       crearPrueba,
-      obtenerPruebas,
       obtenerPrueba,
       actualizarPrueba,
-      eliminarPrueba
+      obtenerPruebasPorProcesoJudicial
     }
 

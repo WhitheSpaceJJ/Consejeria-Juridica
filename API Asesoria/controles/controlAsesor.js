@@ -78,20 +78,6 @@ const agregarAsesor = async (asesor) => {
   }
 };
 
-/**
- * @abstract Función que permite eliminar un asesor
- *  @param {*} id id del asesor a eliminar
- * @returns true si se elimina correctamente, false si no se elimina
- * */
-const eliminarAsesor = async (id) => {
-  try {
-    const result= await modeloAsesor.Asesor.destroy({ where: { id_asesor: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error de asesores:", error.message);
-    return false;
-  }
-};
 
 /**
  * @abstract Función que permite actualizar un asesor
@@ -131,6 +117,5 @@ module.exports = {
   obtenerAsesores,
   obtenerAsesorPorId,
   agregarAsesor,
-  eliminarAsesor,
   actualizarAsesor, obtenerAsesoresZona
 };

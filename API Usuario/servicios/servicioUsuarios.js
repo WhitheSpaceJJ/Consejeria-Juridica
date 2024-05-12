@@ -37,29 +37,9 @@ const obtenerUsuarios = asyncError(async (req, res, next) => {
     const error = new CustomeError('No se encontraron usuarios', 404); // Cambio de zonas a usuarios
     return next(error);
   } else {
- 
+
     res.status(200).json({
       usuarios: result // Cambio de zonas a usuarios
-    });
-  }
-});
-
-/**
- * @description Servicio que permite eliminar un usuario por su id
- * @param {Object} req Objeto de petición
- * @param {Object} res Objeto de respuesta
- * @param {Object} next Objeto de siguiente
- * @returns {Object} respuesta con estatus 200 con el mensaje de eliminación, o error correspondiente
- * */
-const eliminarUsuario = asyncError(async (req, res, next) => {
-  const result = await controlUsuarios.eliminarUsuario(req.params.id); // Cambio de controlZonas a controlUsuarios
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar el usuario', 400); // Cambio de zona a usuario
-    return next(error);
-  } else {
-
-    res.status(200).json({
-      message: "El usuario ha sido eliminado" // Cambio de menssage a message
     });
   }
 });
@@ -77,7 +57,7 @@ const actualizarUsuario = asyncError(async (req, res, next) => {
     const error = new CustomeError('Error al actualizar el usuario', 400); // Cambio de zona a usuario
     return next(error);
   } else {
- 
+
     res.status(200).json({
       usuario: req.body // Cambio de zona a usuario
     });
@@ -122,7 +102,7 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
   } else if (usuarioObj.estatus_general === 'INACTIVO') {
     const error = new CustomeError('El usuario esta desabilitado.', 404); // Cambio de zona a usuario
     return next(error);
-  }else  if (usuarioObj.estatus_general === 'ACTIVO') {
+  } else if (usuarioObj.estatus_general === 'ACTIVO') {
     const payload = usuarioObj;
     const token = await jwtController.generateToken(payload);
     res.status(200).json({
@@ -199,10 +179,10 @@ const recuperarContraseña = asyncError(async (req, res, next) => {
 
   const result = await controlUsuarios.obtenerUsuarioCorreo
     (req.query.correo, req.query.password);
-    console.log(result);
+  console.log(result);
   const usuarioStr = JSON.stringify(result);
   const usuarioObj = JSON.parse(usuarioStr);
- 
+
   if (usuarioObj === null) {
     const error = new CustomeError('No existe un usuario con ese correo.', 404); // Cambio de zona a usuario
     return next(error);
@@ -223,7 +203,7 @@ const recuperarContraseña = asyncError(async (req, res, next) => {
     }
 
   }
-  
+
 
 
 });
@@ -233,7 +213,6 @@ module.exports = {
   recuperarContraseña,
   agregarUsuario,
   obtenerUsuarios,
-  eliminarUsuario,
   actualizarUsuario,
   obtenerUsuarioPorId,
   obtenerUsuarioCorreoPassword

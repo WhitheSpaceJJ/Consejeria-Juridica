@@ -63,19 +63,6 @@ class JuzgadoDAO {
     }
   }
 
-  /**
- * @abstract Método que permite eliminar un juzgado de la base de datos
- * @param {number} id - ID del juzgado a eliminar
- * @returns {string} Retorna un mensaje de éxito si la operación fue exitosa, de lo contrario lanza un error
- */
-  async eliminarJuzgado(id) {
-    try {
-      const juzgado = await Juzgado.destroy( { where: { id_juzgado: id } })
-      return juzgado === 1
-    } catch (err) {
-      throw err
-    }
-  }
 }
 
 module.exports = new JuzgadoDAO()

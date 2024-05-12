@@ -4,7 +4,14 @@ const cors = require('cors')
 const verify_jwt = require('../middlewares/verify-jwt')
 const sequelize = require('../config/db')
 const {
-  routerOcupacion,routerEstadoProcesal, routerProcesoJudicial, routerJuzgado, routerEscolaridad, routerEtnia, routerImputado, routerParticipante, routerPromovente, routerPrueba,  routerDomicilioParticipante, routerObservacion,   rouiterResolucion, routerFamiliar 
+  routerOcupacion,
+  routerEstadoProcesal,
+   routerProcesoJudicial, 
+   routerJuzgado, routerEscolaridad,
+    routerEtnia,
+ 
+     routerPrueba, 
+routerObservacion,   rouiterResolucion, routerFamiliar 
 } = require('../routes')
 
 // Definimos la clase Server
@@ -16,7 +23,13 @@ class Server {
     this.port = process.env.PORT 
     // Definimos las rutas de la aplicación
     this.paths = {
-      ocupacion: '/ocupacion', estadoProcesal: '/estado-procesal', procesoJudicial: '/proceso-judicial', juzgado: '/juzgado', escolaridad: '/escolaridad',etnia: '/etnia',imputado: '/imputado', participante: '/participante',promovente: '/promovente',routerPrueba: '/prueba',routerDomicilioParticipante: '/domicilio-participante',routerObservacion: '/observacion',rouiterResolucion: '/resolucion',routerFamiliar: '/familiar'
+      ocupacion: '/ocupacion', estadoProcesal: '/estado-procesal', 
+      procesoJudicial: '/proceso-judicial', juzgado: '/juzgado', 
+      escolaridad: '/escolaridad',etnia: '/etnia'
+     ,routerPrueba: 
+       '/prueba',
+       routerObservacion: '/observacion',routerResolucion: '/resolucion',
+       routerFamiliar: '/familiar'
     }
     // Llamamos a los middlewares
     this.middlewares()
@@ -51,34 +64,26 @@ class Server {
       this.app.use(this.paths.etnia,
         //  verify_jwt, 
           routerEtnia)
-          this.app.use(this.paths.procesoJudicial, /*verify_jwt,*/ routerProcesoJudicial)
+          this.app.use(this.paths.procesoJudicial, 
+            /*verify_jwt,*/
+             routerProcesoJudicial)
           this.app.use(this.paths.juzgado, 
             //verify_jwt,
            routerJuzgado)
       
-//A comentar
+//A comentar ya que no se usan
     this.app.use(this.paths.estadoProcesal,
       // verify_jwt,
       routerEstadoProcesal)
-    this.app.use(this.paths.imputado, 
-     // verify_jwt, 
-      routerImputado)
-    this.app.use(this.paths.participante,
-      // verify_jwt,
-       routerParticipante)
-    this.app.use(this.paths.promovente, 
-    //  verify_jwt, 
-      routerPromovente)
+
     this.app.use(this.paths.routerPrueba,
       // verify_jwt,
        routerPrueba)
-    this.app.use(this.paths.routerDomicilioParticipante,
-      // verify_jwt,
-       routerDomicilioParticipante)
+
     this.app.use(this.paths.routerObservacion,
       // verify_jwt,
        routerObservacion)
-    this.app.use(this.paths.rouiterResolucion,
+    this.app.use(this.paths.routerResolucion,
       // verify_jwt,
        rouiterResolucion)
     this.app.use(this.paths.routerFamiliar,

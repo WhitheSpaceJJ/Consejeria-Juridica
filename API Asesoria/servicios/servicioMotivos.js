@@ -66,25 +66,6 @@ const obtenerMotivos = asyncError(async (req, res, next) => {
 
 });
 
-/**
- * @abstract Servicio  que permite eliminar un motivo
- * @param {Object} req Request
- * @param {Object} res Response
- *  @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de motivo
- */
-const eliminarMotivo = asyncError(async (req, res, next) => {
-  const result = await controlMotivos.eliminarMotivo(req.params.id);
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar el motivo', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-        menssage: "El motivo ha sido eliminado"
-    });
-  }
-});
 
 /**
  * @abstract Servicio  que permite actualizar un motivo
@@ -129,7 +110,6 @@ const obtenerMotivoPorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarMotivo,
   obtenerMotivos,
-  eliminarMotivo,
   actualizarMotivo,
   obtenerMotivoPorId
 };

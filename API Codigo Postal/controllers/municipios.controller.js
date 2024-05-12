@@ -2,31 +2,6 @@
 const modelMunicipios = require('../models/municipios.models');
 
 /**
- * Funcion que obtiene todos los municipios
- * @name getMunicipios
- * @function
- * @returns {Object} - Objeto con los municipios
- * @throws {Error} - Error en la consulta de municipios
- */
-const getMunicipios = async () => {
-    try {
-        //Obtenemos todos los municipios
-        return await modelMunicipios.Municipio.findAll({
-            raw: true,
-            attributes:{
-                exclude:['id_estado']
-            },
-            nest: true,
-            include: [modelMunicipios.Estado]
-            
-        });
-    } catch (error) {
-        console.log(error);
-        throw new Error('Error en la consulta de municipios');
-    }
-};
-
-/**
  * Funcion que obtiene un municipio
  * @name getMunicipio
  * @function
@@ -57,6 +32,5 @@ const getMunicipio = async (id) => {
 
 // Exportamos las funciones
 module.exports = {
-    getMunicipios,
     getMunicipio,
 };

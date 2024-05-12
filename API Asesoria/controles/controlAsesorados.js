@@ -59,20 +59,7 @@ const agregarAsesorado = async (asesorado) => {
   }
 };
 
-/**
- *  @abstract Función que permite eliminar un asesorado
- * @param {*} id  id del asesorado a eliminar
- * @returns   true si se elimina correctamente, false si no se elimina
- */
-const eliminarAsesorado = async (id) => {
-  try {
-    const result =await modeloAsesorado.Asesorado.destroy({ where: { id_asesorado: id } });
-    return result === 1;
-  } catch (error) {
-    console.log("Error asesorados:", error.message);
-    return false;
-  }
-};
+
 
 /**
  *   @abstract Función que permite actualizar un asesorado
@@ -94,6 +81,5 @@ module.exports = {
   obtenerAsesorados,
   obtenerAsesoradoPorId,
   agregarAsesorado,
-  eliminarAsesorado,
   actualizarAsesorado,
 };

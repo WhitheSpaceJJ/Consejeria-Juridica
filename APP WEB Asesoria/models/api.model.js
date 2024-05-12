@@ -13,273 +13,7 @@ class APIModel {
 
   constructor() { }
 
-  // ---------------------- Tipos de Juicio ----------------------
-  //Metodo para agregar un nuevo tipo de juicio
-  async postTiposJuicio(tipoDeJuicio) {
-    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-        body: JSON.stringify(tipoDeJuicio),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-  }
-   
-  //Metodo para actualizar un tipo de juicio existente por su id y los datos a modificar
-  async putTiposJuicio(id, tipoDeJuicio) {
-    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
-    try {
-      // console.log(tipoDeJuicio) 
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-        body: JSON.stringify(tipoDeJuicio),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-  }
-
-  // Metodo para obtener el tipo de juicio por su id
-  async getTiposJuicioByID(id) {
-    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-  }
-
-  //Metodo para obtener todos los tipos de juicio
-  async getTiposJuicio() {
-    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-  //Metodo para obtener todos los tipos de juicio activos del sistema
-  async getTiposJuicio2() {
-    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio?activo=true`;
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      throw new Error('Error en la petición');
-    }
-  }
-
-  // ---------------------- Motivos ----------------------
-
-  //Metodo para obtener un motivo por su id
-  async getMotivoByID(id) {
-    const url = `${this.ASESORIAS_API_URL}/motivos/${id}`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-  }
-
-  //Metodo para agregar un nuevo motivo
-  async postMotivo(motivo) {
-    const url = `${this.ASESORIAS_API_URL}/motivos`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-        body: JSON.stringify(motivo),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-  }
-
-  //Metodo para actualizar un motivo existente por su id y los datos a modificar
-  async putMotivo(id, motivo) {
-    const url = `${this.ASESORIAS_API_URL}/motivos/${id}`;
-    try {
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.user.token}`,
-        },
-        body: JSON.stringify(motivo),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      } else {
-        throw new Error('Error en la petición');
-      }
-    } catch (error) {
-      console.log('Error:', error.message);
-      return null;
-    }
-
-  }
-
-  //Metodo  para obtener todos los motivos
-  async getMotivos() {
-    const url = `${this.ASESORIAS_API_URL}/motivos`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-  //Metodo para obtener todos los motivos activos del sistema
-  async getMotivos2() {
-    const url = `${this.ASESORIAS_API_URL}/motivos?activo=true`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-
-  // ---------------------- Demandas ----------------------
-
-  //Metodo para obtener el total de demandas
-  async getTotalDemandas() {
-    const url = `${this.DEMANDAS_API_URL}/proceso-judicial`
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
- 
-  //Metodo para obtener una demanda por su id
-  async getDemandaById(id) {
-    const url = `${this.DEMANDAS_API_URL}/proceso-judicial/${id}`
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
 
 
   // --------------------Turno------------------------
@@ -344,26 +78,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  
-   //Metodo para darse de alta con un usuario
-  async signUp(userObject) {
-    const url = `${this.USERS_API_URL}/usuarios`
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: ` ${this.user.token}`,
-      },
-      body: JSON.stringify(userObject),
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-
+ 
   //Metodo para recuperar la contraseña de un usuario
   async recover(correo) {
     const url = `${this.USERS_API_URL}/usuarios/recuperacion?correo=${correo}`
@@ -773,14 +488,12 @@ class APIModel {
   //Metodo para obtener todos los asesores
   async getAsesores() {
     const url = `${this.ASESORIAS_API_URL}/asesores`
-
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
     })
-
     if (response.ok) {
       const data = await response.json()
       return data
@@ -965,6 +678,278 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
+// ---------------------- Estados ----------------------
+//Metodo para obtener los municipios relacionados al estado numero 26 en este caso sonora
+  async getMunicipios() {
+    const url = `${this.CP_API_URL}/estados/26`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      let data = await response.json()
+      data = data.estado.municipios
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  //---------------------- Zonas ----------------------
+  //Metodo para obtener todas las zonas
+  async getZonas() {
+    const url = `${this.ASESORIAS_API_URL}/zonas`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      let data = await response.json()
+      data = data.zonas
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+   // ---------------------- Tipos de Juicio ----------------------
+  //Metodo para agregar un nuevo tipo de juicio
+  async postTiposJuicio(tipoDeJuicio) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(tipoDeJuicio),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+   
+  //Metodo para actualizar un tipo de juicio existente por su id y los datos a modificar
+  async putTiposJuicio(id, tipoDeJuicio) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
+    try {
+      // console.log(tipoDeJuicio) 
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(tipoDeJuicio),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+
+  // Metodo para obtener el tipo de juicio por su id
+  async getTiposJuicioByID(id) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+
+  //Metodo para obtener todos los tipos de juicio
+  async getTiposJuicio() {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  //Metodo para obtener todos los tipos de juicio activos del sistema
+  async getTiposJuicio2() {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio?activo=true`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error('Error en la petición');
+    }
+  }
+
+  // ---------------------- Motivos ----------------------
+
+  //Metodo para obtener un motivo por su id
+  async getMotivoByID(id) {
+    const url = `${this.ASESORIAS_API_URL}/motivos/${id}`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+
+  //Metodo para agregar un nuevo motivo
+  async postMotivo(motivo) {
+    const url = `${this.ASESORIAS_API_URL}/motivos`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(motivo),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+  }
+
+  //Metodo para actualizar un motivo existente por su id y los datos a modificar
+  async putMotivo(id, motivo) {
+    const url = `${this.ASESORIAS_API_URL}/motivos/${id}`;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.user.token}`,
+        },
+        body: JSON.stringify(motivo),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error('Error en la petición');
+      }
+    } catch (error) {
+      console.log('Error:', error.message);
+      return null;
+    }
+
+  }
+
+  //Metodo  para obtener todos los motivos
+  async getMotivos() {
+    const url = `${this.ASESORIAS_API_URL}/motivos`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  //Metodo para obtener todos los motivos activos del sistema
+  async getMotivos2() {
+    const url = `${this.ASESORIAS_API_URL}/motivos?activo=true`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+
 
   //---------------------- Generos ----------------------
   //Metodo para obtener todos los generos
@@ -1146,163 +1131,120 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-//---------------------- Estados Civiles ----------------------
- //Metodo para obtener todos los estados civiles por su id
-  async getEstadosCivilByID(id) {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-  //Metodo para actualizar un estado civil existente por su id y los datos a modificar
-  async putEstadosCivil(id, data) {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-      body: JSON.stringify(data),
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-  //Metodo para agregar un nuevo estado civil
-  async postEstadosCivil(estadoCivil) {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-      body: JSON.stringify(estadoCivil),
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-
-   //Metodo para agregar un nuevo estado civil
-  async postEstadosCivil(estadoCivil) {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-      body: JSON.stringify(estadoCivil),
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-
-  //Metodo para obtener todos los estados civiles
-  async getEstadosCiviles() {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
-  //Metodo para obtener todos los estados civiles activos del sistema
-  async getEstadosCiviles2() {
-    const url = `${this.ASESORIAS_API_URL}/estados-civiles?activo=true`
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
-  }
 
   
-// ---------------------- Estados ----------------------
-//Metodo para obtener los municipios relacionados al estado numero 26 en este caso sonora
-  async getMunicipios() {
-    const url = `${this.CP_API_URL}/estados/26`
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-    if (response.ok) {
-      let data = await response.json()
-      data = data.estado.municipios
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
+
+
+
+//---------------------- Estados Civiles ----------------------
+ //Metodo para obtener todos los estados civiles por su id
+ async getEstadosCivilByID(id) {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
   }
-
-  //---------------------- Zonas ----------------------
-  //Metodo para obtener todas las zonas
-  async getZonas() {
-    const url = `${this.ASESORIAS_API_URL}/zonas`
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
-      },
-    })
-
-    if (response.ok) {
-      let data = await response.json()
-      data = data.zonas
-      return data
-    } else {
-      throw new Error('Error en la petición')
-    }
+}
+//Metodo para actualizar un estado civil existente por su id y los datos a modificar
+async putEstadosCivil(id, data) {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+    body: JSON.stringify(data),
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
   }
+}
+//Metodo para agregar un nuevo estado civil
+async postEstadosCivil(estadoCivil) {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+    body: JSON.stringify(estadoCivil),
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
 
- 
+ //Metodo para agregar un nuevo estado civil
+async postEstadosCivil(estadoCivil) {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.user.token}`,
+    },
+    body: JSON.stringify(estadoCivil),
+  })
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
 
+//Metodo para obtener todos los estados civiles
+async getEstadosCiviles() {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
 
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
 
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
+//Metodo para obtener todos los estados civiles activos del sistema
+async getEstadosCiviles2() {
+  const url = `${this.ASESORIAS_API_URL}/estados-civiles?activo=true`
 
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${this.user.token}`,
+    },
+  })
+
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Error en la petición')
+  }
+}
 
 }
 

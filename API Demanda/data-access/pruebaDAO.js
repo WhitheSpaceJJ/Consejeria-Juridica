@@ -20,20 +20,7 @@ class PruebaDAO {
     }
   }
 
- /**
-  * Método que permite obtener todas las pruebas de la base de datos
-  *   * @returns {array} Retorna un arreglo de objetos de pruebas si la operación fue exitosa, de lo contrario lanza un error
-  * */
-
-  async obtenerPruebas() {
-    try {
-      const pruebas = await Prueba.findAll()
-      return pruebas
-    } catch (err) {
-      throw err
-    }
-  }
-
+ 
   /**
    * Método que permite obtener una prueba de la base de datos por su id
    * @param {number} id_prueba - ID de la prueba a obtener
@@ -77,20 +64,7 @@ class PruebaDAO {
       throw err
     }
   }
-/**
- * Método que permite eliminar una prueba de la base de datos
- * @param {number} id_prueba - ID de la prueba a eliminar
- * @returns {boolean} Retorna true si la operación fue exitosa, de lo contrario lanza un error
- * */
 
-  async eliminarPrueba(id_prueba) {
-    try {
-      const prueba = await Prueba.destroy({ where: { id_prueba:id_prueba} })
-      return prueba === 1
-    } catch (err) {
-      throw err
-    }
-  }
 }   
 
 module.exports = new PruebaDAO ()

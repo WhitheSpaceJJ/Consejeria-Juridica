@@ -9,7 +9,7 @@ const obtenerEtnias = async (req, res) => {
     const activo = req.query.activo;
     if (activo !== undefined && activo !== null && activo !== "") {
       const etnias = await etniaDAO.obtenerEtnias(activo)
-      if (etnias.length === 0) {
+      if ( etnias === null || etnias === undefined ||  etnias.length === 0) {
         return res.status(404).json({
           message: 'No se encontraron etnias'
         });
@@ -17,7 +17,7 @@ const obtenerEtnias = async (req, res) => {
       res.json(etnias)
     } else {
       const etnias = await etniaDAO.obtenerEtnias()
-      if (etnias.length === 0) {
+      if (etnias === null || etnias === undefined ||  etnias.length === 0) {
          return res.status(404).json({
           message: 'No se encontraron etnias'
         });
@@ -97,36 +97,10 @@ const actualizarEtnia = async (req, res) => {
   }
 }
 
-/**
- * @abstract Método que permite eliminar una etnia
- * @param {number} id - ID de la etnia a eliminar
- * @returns {object} Retorna el objeto de la etnia eliminada si la operación fue exitosa, de lo contrario lanza un error
- */
-const eliminarEtnia = async (req, res) => {
-  try {
-    const { id } = req.params
-    const etnia = await etniaDAO.eliminarEtnia(Number(id))
-     if(etnia){
-      res.status(200).json({
-        message: 'Etnia eliminada'
-      })
-    }
-    else{
-      res.status(404).json({
-        message: 'Etnia no eliminada'
-      })
-    }
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    })
-  }
-}
 
 module.exports = {
   obtenerEtnias,
   obtenerEtnia,
   crearEtnia,
   actualizarEtnia,
-  eliminarEtnia
 }

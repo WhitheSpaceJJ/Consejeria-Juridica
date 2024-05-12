@@ -3,30 +3,43 @@ const { Router } = require('express')
 
 // Controlador de observacion que permite realizar la lógica de negocio para la tabla observacion
 const {
-    obtenerObservaciones,
     obtenerObservacion,
     crearObservacion,
     actualizarObservacion,
-    eliminarObservacion
+    obtenerObservacionesPorProcesoJudicial
     } = require('../controllers/observacion')
+
+const { existeObservacion, validarJSONObservacionPOST, validarJSONObservacionPUT 
+ , existeProcesoJudicial
+
+} 
+= require('../middlewares/middlewareObservacion')
+const e = require('express')
 
 // Se crea una instancia de Router
 const router = Router()
+// Ruta para obtener todas las observaciones de un proceso judicial por su id
+router.get('/proceso-judicial/:id', 
+ existeProcesoJudicial,
+obtenerObservacionesPorProcesoJudicial)
 
-// Ruta para obtener todas las observaciones
-router.get('/', obtenerObservaciones)
 
 // Ruta para obtener una observacion por su id
 router.get('/:id', obtenerObservacion)
 
 // Ruta para crear una observacion
-router.post('/', crearObservacion)
+router.post('/', 
+validarJSONObservacionPOST,
+existeProcesoJudicial,
+crearObservacion)
 
 // Ruta para actualizar una observacion por su id
-router.put('/:id', actualizarObservacion)
+router.put('/:id', 
+existeObservacion,
+validarJSONObservacionPUT,
+existeProcesoJudicial,
+actualizarObservacion)
 
-// Ruta para eliminar una observacion por su id
-//router.delete('/:id', eliminarObservacion)
 
 module.exports = router
 

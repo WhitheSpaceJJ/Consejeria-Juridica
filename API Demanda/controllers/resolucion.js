@@ -25,29 +25,7 @@ const crearResolucion = async (req, res) => {
     }
 }
 
-/**
- * Función que permite obtener todas las resoluciones
- * @param {Object} req Objeto de petición
- * @param {Object} res Objeto de respuesta
- * @returns {Array} Array con todas las resoluciones registradas
- * */
 
-const obtenerResoluciones = async (req, res) => {
-    try {
-        const resoluciones = await ResolucionDAO.obtenerResoluciones()
-        if (resoluciones !== null && resoluciones !== undefined && resoluciones.length > 0) {
-            res.status(200).json(resoluciones)
-        } else {
-            res.status(404).json({
-                message: 'No hay resoluciones registradas'
-            })
-        }
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
-}
 
 /**
  * Función que permite obtener una resolucion por su id
@@ -104,25 +82,16 @@ const actualizarResolucion = async (req, res) => {
     }
 }
 
-/**
- * Función que permite eliminar una resolucion
- * @param {Object} req Objeto de petición
- * @param {Object} res Objeto de respuesta
- * @returns {Object} Objeto con la resolucion eliminada
- * */
-
-const eliminarResolucion = async (req, res) => {
+const obtenerResolucionesPorProcesoJudicial = async (req, res) => {
     try {
         const { id } = req.params
-        const resolucion = await ResolucionDAO.eliminarResolucion(Number(id))
-        if (resolucion) {
-            res.status(200).json({
-                message: 'Resolucion eliminada'
+        const resoluciones = await ResolucionDAO.obtenerResolucionesPorProcesoJudicial(Number(id))
+        if (resoluciones === null || resoluciones === undefined || resoluciones.length === 0) {
+            res.status(404).json({
+                message: 'Resoluciones no encontradas'
             })
         } else {
-            res.status(500).json({
-                message: 'Error al realizar la eliminacion de la resolucion'
-            })
+            res.status(200).json(resoluciones)
         }
     } catch (error) {
         res.status(500).json({
@@ -134,8 +103,7 @@ const eliminarResolucion = async (req, res) => {
 // Exportar todas las funciones
 module.exports = {
     crearResolucion,
-    obtenerResoluciones,
     obtenerResolucion,
     actualizarResolucion,
-    eliminarResolucion
+    obtenerResolucionesPorProcesoJudicial
 }

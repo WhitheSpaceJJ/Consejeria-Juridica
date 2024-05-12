@@ -63,28 +63,6 @@ const obtenerTiposDeJuicio = asyncError(async (req, res, next) => {
 });
 
 
-
-/**
- * @abstract Servicio  que permite eliminar un tipo de juicio
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de tipo de juicio
- */
-
-const eliminarTipoDeJuicio = asyncError(async (req, res, next) => {
-  const result = await controlTiposDeJuicio.eliminarTipoDeJuicio(req.params.id);
-  if (result === false) {
-    const error = new CustomeError('Error al eliminar el tipo de juicio', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-      menssage: "El tipo de juicio ha sido eliminado"
-    });
-  }
-});
-
 /**
  * @abstract Servicio  que permite actualizar un tipo de juicio
  * @param {Object} req Request
@@ -133,7 +111,6 @@ const obtenerTipoDeJuicioPorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarTipoDeJuicio,
   obtenerTiposDeJuicio,
-  eliminarTipoDeJuicio,
   actualizarTipoDeJuicio,
   obtenerTipoDeJuicioPorId
 };

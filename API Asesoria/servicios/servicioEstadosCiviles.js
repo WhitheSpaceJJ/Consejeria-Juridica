@@ -1,5 +1,4 @@
 const controlEstados = require('../controles/controlEstadoCivil');
-
 const asyncError = require("../utilidades/asyncError");
 const CustomeError = require("../utilidades/customeError");
 
@@ -65,25 +64,6 @@ const obtenerEstadosCiviles = asyncError(async (req, res, next) => {
 
 });
 
-/**
- *  @abstract Servicio  que permite eliminar un estado civil
- *  @param {Object} req Request
- *  @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} mensaje de confirmación de eliminación de estado civil
- */
-const eliminarEstadoCivil = asyncError(async (req, res, next) => {
-  const result = await controlEstados.eliminarEstadoCivil(req.params.id);
-  if ( result === false) {
-    const error = new CustomeError('Error al eliminar el estado civil', 400);
-    return next(error);
-  } else {
-
-    res.status(200).json({
-        menssage: "El estado civil ha sido eliminado"
-    });
-  }
-});
 
 /**
  * @abstract Servicio  que permite actualizar un estado civil
@@ -130,7 +110,6 @@ const obtenerEstadoCivilPorId = asyncError(async (req, res, next) => {
 module.exports = {
   agregarEstadoCivil,
   obtenerEstadosCiviles,
-  eliminarEstadoCivil,
   actualizarEstadoCivil,
   obtenerEstadoCivilPorId
 };
