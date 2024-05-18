@@ -16,7 +16,7 @@ const agregarEmpleado = asyncError(async (req, res, next) => {
     } else {
     
         res.status(201).json({
-            empleado:result
+            empleado: "Empleado agregado correctamente"
         });
     }
     }
@@ -34,19 +34,49 @@ const actualizarEmpleado = asyncError(async (req, res, next) => {
 
     const result = await controlEmpleado.actualizarEmpleado(req.params.id,req.body);
     if ( result === false) {
-        const error = new CustomeError('Error al actualizar el empleado', 400);
+        const error = new CustomeError('Error al actualizar el empleado, o datos iguales', 400);
         return next(error);
     } else {
     
         res.status(200).json({
-            empleado:result
+            empleado: "Empleado actualizado correctamente"
+        });
+    }
+}
+);
+/*
+const obtenerEmpleados = asyncError(async (req, res, next) => {
+    const result = await controlEmpleado.obtenerEmpleados();
+    if ( result === false) {
+        const error = new CustomeError('Error al obtener los empleados', 400);
+        return next(error);
+    } else {
+    
+        res.status(200).json({
+            empleados: result
         });
     }
 }
 );
 
+const obtenerEmpleadoPorId = asyncError(async (req, res, next) => {
+    const result = await controlEmpleado.obtenerEmpleadoPorId(req.params.id);
+    if ( result === false) {
+        const error = new CustomeError('Error al obtener el empleado', 400);
+        return next(error);
+    } else {
+    
+        res.status(200).json({
+            empleado: result
+        });
+    }
+}
+);
+*/
 //Module exports
 module.exports = {
     agregarEmpleado,
-    actualizarEmpleado
+    actualizarEmpleado,
+    //obtenerEmpleados,
+    //obtenerEmpleadoPorId
 }

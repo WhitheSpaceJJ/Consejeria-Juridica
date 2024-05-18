@@ -23,11 +23,11 @@ class Server {
     this.port = process.env.PORT 
     // Definimos las rutas de la aplicación
     this.paths = {
-      ocupacion: '/ocupacion', estadoProcesal: '/estado-procesal', 
+
       procesoJudicial: '/proceso-judicial', juzgado: '/juzgado', 
-      escolaridad: '/escolaridad',etnia: '/etnia'
-     ,routerPrueba: 
-       '/prueba',
+      escolaridad: '/escolaridad',etnia: '/etnia', ocupacion: '/ocupacion', 
+     routerPrueba: 
+       '/prueba',     estadoProcesal: '/estado-procesal', 
        routerObservacion: '/observacion',routerResolucion: '/resolucion',
        routerFamiliar: '/familiar'
     }

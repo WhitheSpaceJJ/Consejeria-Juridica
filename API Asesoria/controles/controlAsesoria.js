@@ -27,71 +27,9 @@ const controlTurno= require('./controlTurno');
  */
 const obtenerAsesoriasFiltro = async (filtros) => {
   try {
-    console.log("Filtros:", JSON.parse(JSON.stringify(filtros)));
-    // Verificar si el arreglo de filtros tiene al menos una clave
-    const filtroKeys = Object.keys(filtros);
-    if (filtroKeys.length === 0) {
-      throw new Error("El arreglo de filtros debe contener al menos una clave.");
-    }
-    if (filtroKeys.length > 8) {
-      throw new Error("El arreglo de filtros no debe contener más de seis claves.");
-    }
+  
+    const whereClause = await obtenerWhereClause(filtros);
 
-    // Verificar que las claves sean las esperadas
-    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor', 'fecha_registro', 'id_distrito_judicial'];
-    const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
-    if (clavesInvalidas.length > 0) {
-      throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
-    }
-
-    const whereClause = {};
-
-    //if (filtros.fecha_registro) {
-    //  whereClause.fecha_registro = filtros.fecha_registro;
-    //} else 
-
-
-    if (filtros['fecha-inicio'] !== "null" && filtros['fecha-final'] !== "null") {
-      whereClause.fecha_registro = {
-        [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
-      };
-    }
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
-
-    if (filtros.fecha_registro !== "null") {
-      whereClause.fecha_registro = filtros.fecha_registro;
-    }
-
-    if (filtros.id_asesor && filtros.id_defensor) {
-      whereClause[Op.or] = [
-        { id_empleado: filtros.id_asesor },
-        { id_empleado: filtros.id_defensor },
-      ];
-    } else if (filtros.id_asesor) {
-      whereClause.id_empleado = filtros.id_asesor;
-    } else if (filtros.id_defensor) {
-      whereClause.id_empleado = filtros.id_defensor;
-    }
-
-    if (filtros.id_municipio) {
-
-      whereClause.id_municipio_distrito = filtros.id_municipio;
-      // Asegúrate de que la relación entre Empleado y Municipio esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      //  whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
-    }
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
-
-    if (filtros.id_zona) {
-      // Asegúrate de que la relación entre Empleado y Zona esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      whereClause['$distrito_judicial.id_zona$'] = filtros.id_zona;
-    }
-    // Resto del código...
 
     const asesorias_pre = await modeloAsesoria.Asesoria.findAll({
       raw: false,
@@ -532,28 +470,9 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
   }
 };
 
-//Funcion que te regrese una lista de asesorias por asi decirlo si te envian el numero 1 como paramtro te regrese las primeras 10 asesorias, y se te envia el dos que te envie las otras 10 y asi sucesivamente
 
-const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
-  try {
-    // Verificar si el arreglo de filtros tiene al menos una clave
-    const filtroKeys = Object.keys(filtros);
-    if (filtroKeys.length === 0) {
-      throw new Error("El arreglo de filtros debe contener al menos una clave.");
-    }
-    if (filtroKeys.length > 8) {
-      throw new Error("El arreglo de filtros no debe contener más de seis claves.");
-    }
-
-    // Verificar que las claves sean las esperadas
-    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor', 'fecha_registro', 'id_distrito_judicial'];
-    const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
-    if (clavesInvalidas.length > 0) {
-      throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
-    }
-
-
-    const whereClause = {};
+const obtenerWhereClause =async  (filtros) => {
+  const whereClause = {};
 
     //if (filtros.fecha_registro) {
     //  whereClause.fecha_registro = filtros.fecha_registro;
@@ -604,6 +523,18 @@ const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
       whereClause['$distrito_judicial.id_zona$'] = filtros.id_zona;
     }
     // Resto del código...
+    return whereClause;
+
+};
+
+
+
+//Funcion que te regrese una lista de asesorias por asi decirlo si te envian el numero 1 como paramtro te regrese las primeras 10 asesorias, y se te envia el dos que te envie las otras 10 y asi sucesivamente
+
+const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
+  try {
+  
+    const whereClause = await obtenerWhereClause(filtros);
 
 
     const asesorias_pre = await modeloAsesoria.Asesoria.findAll({
@@ -765,76 +696,10 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
  */
 const obtenerTotalAsesorias = async (filtros) => {
   try {
-    console.log("Filtros:", JSON.parse(JSON.stringify(filtros)));
-
-    // Verificar si el arreglo de filtros tiene al menos una clave
-    const filtroKeys = Object.keys(filtros);
-    if (filtroKeys.length === 0) {
-      throw new Error("El arreglo de filtros debe contener al menos una clave.");
-    }
-    if (filtroKeys.length > 8) {
-      throw new Error("El arreglo de filtros no debe contener más de seis claves.");
-    }
-
-    // Verificar que las claves sean las esperadas
-    const clavesEsperadas = ['fecha-inicio', 'fecha-final', 'id_defensor', 'id_municipio', 'id_zona', 'id_asesor', 'fecha_registro', 'id_distrito_judicial'];
-    const clavesInvalidas = filtroKeys.filter(key => !clavesEsperadas.includes(key));
-    if (clavesInvalidas.length > 0) {
-      throw new Error(`Claves inválidas en el arreglo de filtros: ${clavesInvalidas.join(', ')}`);
-    }
 
 
-    const whereClause = {};
+    const whereClause = await obtenerWhereClause(filtros);
 
-    //if (filtros.fecha_registro) {
-    //  whereClause.fecha_registro = filtros.fecha_registro;
-    //} else 
-
-
-    if (filtros['fecha-inicio'] !== "null" && filtros['fecha-final'] !== "null") {
-      whereClause.fecha_registro = {
-        [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
-      };
-    }
-
-
-
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
-
-    if (filtros.fecha_registro !== "null") {
-      whereClause.fecha_registro = filtros.fecha_registro;
-    }
-
-    if (filtros.id_asesor && filtros.id_defensor) {
-      whereClause[Op.or] = [
-        { id_empleado: filtros.id_asesor },
-        { id_empleado: filtros.id_defensor },
-      ];
-    } else if (filtros.id_asesor) {
-      whereClause.id_empleado = filtros.id_asesor;
-    } else if (filtros.id_defensor) {
-      whereClause.id_empleado = filtros.id_defensor;
-    }
-
-    if (filtros.id_municipio) {
-
-      whereClause.id_municipio_distrito = filtros.id_municipio;
-      // Asegúrate de que la relación entre Empleado y Municipio esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      //  whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
-    }
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
-
-    if (filtros.id_zona) {
-      // Asegúrate de que la relación entre Empleado y Zona esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      whereClause['$distrito_judicial.id_zona$'] = filtros.id_zona;
-    }
-    // Resto del código...
 
     const asesorias_pre = await modeloAsesoria.Asesoria.findAll({
       raw: false,

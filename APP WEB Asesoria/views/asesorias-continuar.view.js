@@ -1,10 +1,11 @@
-import '../components/modal-warning/modal-warning.js'
+import '../components/asesoria/modal-asesoria.js'
+import '../components/asesoria/data-asesoria.js'
 import '../components/navbar/navbar.js'
-import '../components/Registros/juez-tab.js'
 
-class JuezView {
+class AsesoriasContinuarView {
   constructor(controller) {
     this.controller = controller
+
     document.addEventListener(
       'DOMContentLoaded',
       this.controller.handleDOMContentLoaded()
@@ -12,4 +13,4 @@ class JuezView {
   }
 }
 
-export { JuezView }
+export { AsesoriasContinuarView }

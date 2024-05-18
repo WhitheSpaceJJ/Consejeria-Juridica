@@ -58,19 +58,15 @@ class JuiciosTab extends HTMLElement {
 
     //Evento de entrada del tipo de juicio
     tipoJuicioInput.addEventListener('input', function () {
-      if (tipoJuicioInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de tipo de juicio es obligatorio, no debe estar vacío.'
-        modal.title = 'Error de validación'
-        modal.open = true
-
+      if (tipoJuicioInput.value !== '') {
+        if (tipoJuicioInput.value.length > 100) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de tipo de juicio no puede contener más de 100 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
       }
-      else if (tipoJuicioInput.value.length > 100) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de tipo de juicio no puede contener más de 100 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
+       
     });
 
 

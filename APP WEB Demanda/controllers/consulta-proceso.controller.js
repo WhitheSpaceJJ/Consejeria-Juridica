@@ -6,15 +6,18 @@ import { DataPromovente } from '../components/consultaProceso/data-promovente'
 import { DataEstadosProcesales } from '../components/consultaProceso/data-estados-procesales'
 
 class ConsultaProcesoController {
+ //Variables privadas
   #pagina = 1
   #numeroPaginas
   #busquedaExitosa = false
+  #defensores
+
+  //Constructor de la clase
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
     // this.buttonsEventListeners()
   }
-  #defensores
 
   // DOMContentLoaded
   handleDOMContentLoaded = () => {
@@ -22,8 +25,12 @@ class ConsultaProcesoController {
     this.utils.validatePermissions({})
     //this.getNumeroPaginas()
     // this.handleConsultarDemanda()
+    //Se consulta los procesos judiciales
     this.consultarProcesos()
+    //Se agregan los defensores al select
     this.agregarDefensores()
+     
+    //Se agregan los eventos a los botones
     const searchButton = document.getElementById('searchButton');
     searchButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -43,7 +50,8 @@ class ConsultaProcesoController {
 
     });
   }
-
+ 
+  //Metodo para agregar los defensores
   agregarDefensores = async () => {
     const { defensores } = await this.model.getDefensores()
     this.#defensores = defensores
@@ -67,7 +75,7 @@ class ConsultaProcesoController {
 
   }
 
-
+  //Metodo para consultar los procesos judiciales
   consultarProcesos = async () => {
     try {
       const procesosResponse = await this.model.getProcesosJudiciales()
@@ -92,7 +100,8 @@ class ConsultaProcesoController {
       modal.open = true
     }
   }
-
+ 
+  //Metodo para consultar la asesoria por id
   handleConsultarAsesoriaById = async id => {
     try {
       const button = document.querySelector('.consulta-button')
@@ -123,6 +132,7 @@ class ConsultaProcesoController {
     }
   }
 
+   //Metodo para consultar el demandado
   handleConsultarDemandado = async id => {
     try {
       const button = document.querySelector('.consulta2-button')
@@ -139,7 +149,8 @@ class ConsultaProcesoController {
       console.error('Error:', error.message)
     }
   }
-
+ 
+  //Metodo para abrir el modal del demandado
   modalDemandado = async demandado =>{
     try {
       const button = document.querySelector('.consulta2-button')
@@ -165,6 +176,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para consultar el promovente
   handleConsultarPromovente = async id => {
     try {
       const button = document.querySelector('.consulta3-button')
@@ -184,6 +196,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para abrir el modal del promovente
   modalPromovente = async promovente =>{
     try {
       const button = document.querySelector('.consulta3-button')
@@ -210,6 +223,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para consultar la prueba
   handleConsultarPrueba = async id => {
     try {
       const button = document.querySelector('.consulta4-button')
@@ -223,6 +237,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para abrir el modal de la prueba
   modalPrueba = async proceso =>{
     try {
       const button = document.querySelector('.consulta4-button')
@@ -247,6 +262,7 @@ class ConsultaProcesoController {
     }
   }
   
+  //Metodo para consultar los estados procesales
   handleConsultarEstadosProcesales = async id => {
     try {
       const button = document.querySelector('.consulta5-button')
@@ -260,6 +276,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para abrir el modal de los estados procesales
   modalEstadosProcesales = async proceso =>{
     try {
       const button = document.querySelector('.consulta5-button')
@@ -284,6 +301,7 @@ class ConsultaProcesoController {
     }
   }
 
+  //Metodo para manejar los filtros y las consultas respectivas
   handleFiltros = async () => {
 
     const defensor = document.getElementById('defensor')
@@ -408,6 +426,7 @@ class ConsultaProcesoController {
     //   }
   }
 
+  //Metodo para crear las filas de la tabla
   crearRow = proceso => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')

@@ -67,19 +67,16 @@ class EstadoTab extends HTMLElement {
 
     //Evento que se activa cuando el campo de texto de estado civil esta vacio
     estadoCivilInput.addEventListener('input', function () {
-      if (estadoCivilInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de estado civil es obligatorio, no debe estar vacío.'
-        modal.title = 'Error de validación'
-        modal.open = true
+      if (estadoCivilInput.value !== '') {
+        if (estadoCivilInput.value.length > 50) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de estado civil no puede contener más de 50 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
 
       }
-      else if (estadoCivilInput.value.length > 50) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de estado civil no puede contener más de 50 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
+      
     });
   }
 

@@ -166,8 +166,49 @@ class APIModel {
     }
 
   }
+ 
+   // ---------------------- Permisos ----------------------
+
+ async getPermisos() {
+    const url = `${this.USERS_API_URL}/permisos`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  
 
 
+
+   // ---------------------- Tipo Usuarios ----------------------
+    
+   async getTipoUsuarios() {
+    const url = `${this.USERS_API_URL}/tipo-usuario`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    } 
+    
+  }
+    
+ 
   // ---------------------- Asesorias ----------------------
   //Metodo para obtener todas las asesorias deacurdos a la pagina
   async getAsesorias(pagina) {

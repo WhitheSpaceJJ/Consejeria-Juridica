@@ -280,11 +280,13 @@ export class AsesoriaTab extends HTMLElement {
     var resumenInput = this.#resumen;
     // Evento que se dispara cuando se escribe en el input resumen
     resumenInput.addEventListener('input', function () {
-      if (resumenInput.value.length > 500) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El resumen no puede tener más de 500 caracteres, por favor revisa.'
-        modal.title = 'Error de validación'
-        modal.open = true
+      if (resumenInput.value !== '') {
+        if (resumenInput.value.length > 500) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El resumen no puede tener más de 500 caracteres, por favor revisa.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
       }
 
     });
@@ -292,11 +294,13 @@ export class AsesoriaTab extends HTMLElement {
     var conclusionInput = this.#conclusion;
     // Evento que se dispara cuando se escribe en el input conclusion
     conclusionInput.addEventListener('input', function () {
-      if (conclusionInput.value.length > 250) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'La conclusión no puede tener más de 250 caracteres, por favor revisa.'
-        modal.title = 'Error de validación'
-        modal.open = true
+      if (conclusionInput.value !== '') {
+        if (conclusionInput.value.length > 250) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'La conclusión no puede tener más de 250 caracteres, por favor revisa.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
       }
     });
 

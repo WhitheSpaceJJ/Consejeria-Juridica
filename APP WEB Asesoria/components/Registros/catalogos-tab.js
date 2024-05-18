@@ -55,19 +55,15 @@ class CatalogosTab extends HTMLElement {
   manejadorEventos() {
     var catalogoInput = this.#catalogo;
     catalogoInput.addEventListener('input', function () {
-      if (catalogoInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de catalogo es obligatorio, no debe estar vacío.'
-        modal.title = 'Error de validación'
-        modal.open = true
+      if (catalogoInput.value !== '') {
+        if (catalogoInput.value.length > 75) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de catalogo no puede contener más de 75 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+      }
 
-      }
-      else if (catalogoInput.value.length > 75) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de catalogo no puede contener más de 75 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
     });
   }
   //Función fillInputs que se encarga de llenar los campos del formulario, agregar eventos a los botones y mostrar los catalogos
@@ -255,7 +251,7 @@ class CatalogosTab extends HTMLElement {
                 this.#estatusCatalogo.value = '0';
                 this.#idSeleccion = null;
               }
-              else {   
+              else {
                 const response = await this.#api.putCatalogos(catalogoID, catalogo);
                 if (response) {
                   this.#catalogo.value = '';
@@ -264,7 +260,7 @@ class CatalogosTab extends HTMLElement {
                   this.mostrarCatalogos();
                 }
 
-             } 
+              }
             } catch (error) {
               //Se muestra un mensaje de error en caso de que no se haya podido editar el catalogo y redirige a la página principal
               console.error('Error al editar el catalogo:', error);
@@ -289,7 +285,7 @@ class CatalogosTab extends HTMLElement {
 
 
   }
-  
+
   //Función mostrarCatalogos que se encarga de mostrar los catalogos en una tabla
   mostrarCatalogos = async () => {
     try {
@@ -320,23 +316,23 @@ class CatalogosTab extends HTMLElement {
       //Se muestra un mensaje de error en caso de que no se hayan podido obtener los catalogos y redirige a la página principal
       console.error('Error al obtener los catalogos:', error);
       const modal = document.querySelector('modal-warning')
-   //    modal.setOnCloseCallback(() => {
-   //      if (modal.open === 'false') {
-    //       window.location = '/index.html'
-   //      }
-    //   });
+      //    modal.setOnCloseCallback(() => {
+      //      if (modal.open === 'false') {
+      //       window.location = '/index.html'
+      //      }
+      //   });
       modal.message = 'Error al obtener los catalogos, intente nuevamente o verifique el estatus del servidor.'
       modal.title = 'Error de validación'
       modal.open = true
     }
 
   }
-  
+
   //Función activarBotonSeleccionar que se encarga de activar el botón de seleccionar el cual rellena los campos del formulario
   activarBotonSeleccionar = async catalogoId => {
     try {
       //Llamada a la función getCatalogosByID de la clase APIModel para obtener un catalogo por ID
-       const catalogoID = await this.#api.getCatalogosByID(catalogoId);
+      const catalogoID = await this.#api.getCatalogosByID(catalogoId);
       console.log(catalogoID);
       //En caso de que el catalogo exista se rellenan los campos del formulario con los datos del catalogo seleccionado
       if (catalogoID) {

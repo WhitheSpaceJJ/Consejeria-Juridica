@@ -140,7 +140,7 @@ const Permiso = sequelize.define("permisos", {
 
 
 const Detalle_Permiso_Usuario = sequelize.define("detalle_permiso_usuario", {
-  id_detalle_permisos
+  id_detalle_permiso
     : {
     type: DataTypes.INTEGER,
     primaryKey: true,

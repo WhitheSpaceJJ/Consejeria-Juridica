@@ -1003,7 +1003,425 @@ class APIModel {
     }
   }
 
- 
+  // --------------------Prueba------------------------
+  async getPruebaByID(id) {
+    const url = `${this.DEMANDAS_API_URL}/prueba/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+ async getPruebasByProcesoJudicial(id) {
+    const url = `${this.DEMANDAS_API_URL}/prueba/proceso-judicial/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+  async postPrueba(data) {
+    const url = `${this.DEMANDAS_API_URL}/prueba`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+  async putPrueba(id, data) {
+    const url = `${this.DEMANDAS_API_URL}/prueba/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+  // --------------------Estado Procesal------------------------
+  async getEstadoProcesalByID(id) {
+    const url = `${this.DEMANDAS_API_URL}/estado-procesal/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+  async getEstadosProcesalesByProcesoJudicial(id) {
+    const url = `${this.DEMANDAS_API_URL}/estado-procesal/proceso-judicial/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+  async postEstadoProcesal(data) {
+    const url = `${this.DEMANDAS_API_URL}/estado-procesal`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+  async putEstadoProcesal(id, data) {
+    const url = `${this.DEMANDAS_API_URL}/estado-procesal/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  // --------------------Observacion------------------------
+
+  async getObservacionByID(id) {
+    const url = `${this.DEMANDAS_API_URL}/observacion/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+  async getObservacionesByProcesoJudicial(id) {
+    const url = `${this.DEMANDAS_API_URL}/observacion/proceso-judicial/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  async postObservacion(data) {
+    const url = `${this.DEMANDAS_API_URL}/observacion`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+
+  async putObservacion(id, data) {
+    const url = `${this.DEMANDAS_API_URL}/observacion/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  // --------------------Resolucion------------------------
+
+
+  async getResolucionByID(id) {
+    const url = `${this.DEMANDAS_API_URL}/resolucion/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  async getResolucionesByProcesoJudicial(id) {
+    const url = `${this.DEMANDAS_API_URL}/resolucion/proceso-judicial/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+
+  async postResolucion(data) {
+    const url = `${this.DEMANDAS_API_URL}/resolucion`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  async putResolucion(id, data) {
+    const url = `${this.DEMANDAS_API_URL}/resolucion/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+
+  // --------------------Familiar------------------------
+
+  async getFamiliarByID(id) {
+    const url = `${this.DEMANDAS_API_URL}/familiar/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+  async getFamiliaresByPromovente(id) {
+    const url = `${this.DEMANDAS_API_URL}/familiar/promovente/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+  async postFamiliar(data) {
+    const url = `${this.DEMANDAS_API_URL}/familiar`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+
+  async putFamiliar(id, data) {
+    const url = `${this.DEMANDAS_API_URL}/familiar/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+
+  }
+
+
+
+
 
  
 

@@ -35,14 +35,24 @@ class BusquedaTurnarController {
       })
 
       //Si el resultado es cero se mostrara un modal con el mensaje de que no se encontraron resultados
-      if (asesorias.length === 0) {
+      if (asesorias === undefined || asesorias === null || asesorias.length === 0) {
         throw new ValidationError(
           'No se encontraron resultados con los datos proporcionados'
         )
       } else {
-        //En caso de que se encuentren resultados se procedera a guardar en el sessionStorage y redirigir a la pagina de asesorias-turnar
-        sessionStorage.setItem('asesorias', JSON.stringify(asesorias))
-        location.href = 'asesorias-turnar.html'
+        if (asesorias.length <= 1) {
+          const asesoriaEnviar = asesorias[0];
+          const dataColonia = await this.model.getColoniaById(
+            asesoriaEnviar.persona.domicilio.id_colonia
+          )
+          sessionStorage.setItem('asesoria', JSON.stringify(asesoriaEnviar))
+          sessionStorage.setItem('colonia', JSON.stringify(dataColonia.colonia))
+          location.href = 'turnar.html'
+        } else {
+          //En caso de que se encuentren resultados se procedera a guardar en el sessionStorage y redirigir a la pagina de asesorias-turnar
+          sessionStorage.setItem('asesorias', JSON.stringify(asesorias))
+          location.href = 'asesorias-turnar.html'
+        }
       }
     } catch (error) {
       //Muestra de modales en caso de errores

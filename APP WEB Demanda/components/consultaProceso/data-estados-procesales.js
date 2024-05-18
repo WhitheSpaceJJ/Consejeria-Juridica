@@ -4,6 +4,8 @@ const html = await (await fetch('../assets/data-estados-procesales.html')).text(
 template.innerHTML = html
 
 export class DataEstadosProcesales extends HTMLElement {
+
+  //Constructor de la clase
   constructor(procesoRecibido) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -15,6 +17,7 @@ export class DataEstadosProcesales extends HTMLElement {
   connectedCallback() {
   }
 
+  //Metodo para llenar los datos de los estados procesales
   fillData = async () => {
     this.shadowRoot.getElementById('estados-procesales').textContent = this.proceso.estados_procesales.map((estado, index) =>
             `${index + 1}. Estado Procesal: ${estado.descripcion_estado_procesal} , Fecha: ${estado.fecha_estado_procesal}`).join(', ')

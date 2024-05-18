@@ -5,7 +5,10 @@ const html = await (await fetch('../assets/data-promovente.html')).text()
 template.innerHTML = html
 
 export class DataPromovente extends HTMLElement {
+  //Variables de la clase
   #familiares
+
+  //Constructor de la clase
   constructor(promovente) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -17,6 +20,7 @@ export class DataPromovente extends HTMLElement {
   connectedCallback() {
   }
 
+  //Metodo para llenar los datos del promovente
   fillData = async () => {
 
     //Promovente

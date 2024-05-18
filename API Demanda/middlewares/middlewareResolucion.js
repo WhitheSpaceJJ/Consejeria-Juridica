@@ -32,12 +32,41 @@ async function existeResolucion(req, res, next) {
 
 
 async function validarJSONResolucionPOST(req, res, next) {
-    const { resolucion, fecha_resolucion, id_proceso_judicial } = req.body
+    const { resolucion, fecha_resolucion, id_proceso_judicial, ...extraData } = req.body
+
+    if (Object.keys(extraData).length !== 0) {
+        return res.status(400).json({
+            message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
+        });
+    }
+
     if (!resolucion || !fecha_resolucion || !id_proceso_judicial) {
         return res.status(400).json({
-            message: 'Faltan datos en el cuerpo de la petición.'
+            message: 'Faltan datos en el cuerpo de la petición,  la resolución, la fecha de la resolución o el id del proceso judicial esta vacio.'
         })
     }
+
+   if(isNaN(id_proceso_judicial)){
+        return res.status(400).json({
+            message: 'El id del proceso judicial no es un número.'
+        })
+    }
+
+
+    if (resolucion.length > 200) {
+        return res.status(400).json({
+            message: 'El campo "resolucion" excede el tamaño permitido.'
+        });
+    }
+   
+    if (isNaN(Date.parse(fecha_resolucion))) {
+        return res.status(400).json({
+            message: 'El campo "fecha_estado_procesal" no es una fecha.'
+        });
+    }
+
+
+
     next()
 }
 
@@ -45,17 +74,72 @@ async function validarJSONResolucionPOST(req, res, next) {
 
 
 async function validarJSONResolucionPUT(req, res, next) {
-    const { id_resolucion, resolucion, fecha_resolucion, id_proceso_judicial } = req.body
+    const { id_resolucion, resolucion, fecha_resolucion, id_proceso_judicial, ...extraData } = req.body
+   
+    if (Object.keys(extraData).length !== 0) {
+        return res.status(400).json({
+            message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
+        });
+    }
+
+
     if (!id_resolucion || !resolucion || !fecha_resolucion || !id_proceso_judicial) {
         return res.status(400).json({
             message: 'Faltan datos en el cuerpo de la petición.'
         })
-    } else
+    } 
+
+    if(isNaN(id_resolucion)){
+        return res.status(400).json({
+            message: 'El id de la resolución no es un número.'
+        })
+    }
+
+    if(isNaN(id_proceso_judicial)){
+        return res.status(400).json({
+            message: 'El id del proceso judicial no es un número.'
+        })
+    }
+
+      
+    if (resolucion.length > 200) {
+        return res.status(400).json({
+            message: 'El campo "resolucion" excede el tamaño permitido.'
+        });
+    }
+
+
+    if (isNaN(Date.parse(fecha_resolucion))) {
+        return res.status(400).json({
+            message: 'El campo "fecha_estado_procesal" no es una fecha.'
+        });
+    }
+    
+
     if (id_resolucion !== Number(req.params.id)) {
         return res.status(400).json({
             message: 'El id de la resolución proporcionado no coincide con el id de la resolución que se quiere modificar.'
         })
     }
+
+   /*
+{
+    "id_resolucion": 1,
+    "resolucion": "aaaaaaaaaaaa",
+    "fecha_resolucion": "2024-05-11",
+    "id_proceso_judicial": 1
+}
+   */
+    
+  const resolucion_obtenida= await controlResolucion.obtenerResolucion(Number(id_resolucion)) ;
+  //Evalua que el id del proceso judicial sea el mismo que el de la resolucion encontrada
+    if(resolucion_obtenida.id_proceso_judicial !== id_proceso_judicial){
+        return res.status(400).json({
+            message: 'El id del proceso judicial proporcionado no coincide con el id del proceso judicial de la resolución que se quiere modificar.'
+        })
+    }
+
+
     next()
 }
 

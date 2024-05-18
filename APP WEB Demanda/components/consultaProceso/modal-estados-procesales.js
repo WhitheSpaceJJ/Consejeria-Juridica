@@ -4,10 +4,33 @@ const html = await (await fetch('../assets/modal-estados-procesales.html')).text
 template.innerHTML = html
 
 export class ModalEstadosProcesales extends HTMLElement {
+
+  // Atributos que se observarán
   static get observedAttributes() {
     return ['open', 'title', 'onClose']
   }
+   
+  //Metodo para obtener el modal
+  get open() {
+    return this.getAttribute('open')
+  }
 
+  //Metodo para abrir el modal
+  set open(value) {
+    this.setAttribute('open', value)
+  }
+
+  //Metodo para obtener el titulo
+  get title() {
+    return this.getAttribute('title')
+  }
+
+  //Metodo para establecer el titulo
+  set title(value) {
+    this.shadowRoot.getElementById('title-alerta').innerHTML = value
+  }
+
+  //Constructor de la clase
   constructor() {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -26,6 +49,8 @@ export class ModalEstadosProcesales extends HTMLElement {
     }
   }
 
+
+  //Metodo para establecer los eventos
   connectedCallback() {
     this.btnClose = this.shadowRoot.getElementById('btn-close')
     this.modal = this.shadowRoot.getElementById('modal')
@@ -42,11 +67,13 @@ export class ModalEstadosProcesales extends HTMLElement {
     })
   }
 
+  //Metodo para cerrar el modal
   setOnCloseCallback(callback) {
     // Permite configurar la función de cierre desde fuera de la clase
     this._onCloseCallback = callback
   }
 
+  //Metodo para observar los cambios
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'open' && newValue === 'true') {
       const alerta = this.shadowRoot.getElementById('modal')
@@ -54,21 +81,6 @@ export class ModalEstadosProcesales extends HTMLElement {
     }
   }
 
-  get open() {
-    return this.getAttribute('open')
-  }
-
-  set open(value) {
-    this.setAttribute('open', value)
-  }
-
-  get title() {
-    return this.getAttribute('title')
-  }
-
-  set title(value) {
-    this.shadowRoot.getElementById('title-alerta').innerHTML = value
-  }
 }
 
 customElements.define('modal-estados-procesales', ModalEstadosProcesales)

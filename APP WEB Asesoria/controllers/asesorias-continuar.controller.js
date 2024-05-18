@@ -1,7 +1,7 @@
 import { DataAsesoria } from '../components/asesoria/data-asesoria'
 import { ControllerUtils } from '../lib/controllerUtils'
 
-class AsesoriasTurnarController {
+class AsesoriasContinuarController {
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
@@ -14,12 +14,12 @@ class AsesoriasTurnarController {
     this.handleAgregarAsesorias()
     //Se agregan las funciones al window para poder ser llamadas desde el html
     window.handleConsultarAsesoriasById = this.handleConsultarAsesoriasById
-    window.handleTurnarAsesoriasById = this.handleTurnarAsesoriasById
+    window.handleContinuarAsesoriasById = this.handleContinuarAsesoriasById
   }
   //Metodo que se encarga de agregar las asesorias a la tabla
   handleAgregarAsesorias = async () => {
     const table = document.getElementById('table-body')
-    const asesorias = JSON.parse(sessionStorage.getItem('asesorias'))
+    const asesorias = JSON.parse(sessionStorage.getItem('asesorias-continuacion'))
     //Caso contrario se procedera a agregar las asesorias a la tabla
     asesorias.forEach(asesoria => {
       if (asesoria === null) return
@@ -68,10 +68,10 @@ class AsesoriasTurnarController {
       console.error('Error:', error.message)
     }
   }
-  //Metodo que se encarga de redirigir a la pagina de turnar
-  handleTurnarAsesoriasById = async id => {
+  //Metodo que se encarga de redirigir a la pagina de continuar
+  handleContinuarAsesoriasById = async id => {
     try {
-      const asesorias = JSON.parse(sessionStorage.getItem('asesorias'))
+      const asesorias = JSON.parse(sessionStorage.getItem('asesorias-continuacion'))
       //Se obtiene la asesoria por su id
       const asesoria = asesorias.find(asesoria => {
         if (asesoria === null) return false
@@ -83,10 +83,10 @@ class AsesoriasTurnarController {
       )
 
       //Se procede a guardar en el sessionStorage los datos de la asesoria y la colonia
-      sessionStorage.setItem('asesoria', JSON.stringify(asesoria))
-      sessionStorage.setItem('colonia', JSON.stringify(dataColonia.colonia))
+      sessionStorage.setItem('asesoria-continuacion', JSON.stringify(asesoria))
+      sessionStorage.setItem('colonia-continuacion', JSON.stringify(dataColonia.colonia))
       //Se redirige a la pagina de turnar
-      location.href = 'turnar.html'
+      location.href = 'continuar-asesoria.html'
     } catch (error) {
       console.error('Error:', error.message)
     }
@@ -119,7 +119,7 @@ class AsesoriasTurnarController {
                 <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
             </td>
             <td class="px-6 py-4 text-right">
-                <button href="#" class="turnar-button font-medium text-[#db2424] hover:underline" onclick="handleTurnarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Turnar</button>
+                <button href="#" class="turnar-button font-medium text-[#db2424] hover:underline" onclick="handleContinuarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Cotinuar</button>
             </td>`
 
     return row
@@ -127,4 +127,4 @@ class AsesoriasTurnarController {
 
 }
 
-export { AsesoriasTurnarController }
+export { AsesoriasContinuarController }

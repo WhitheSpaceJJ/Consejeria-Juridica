@@ -50,19 +50,15 @@ class GenerosTab extends HTMLElement {
     var generoInput = this.#genero;
     //Evento de entrada para el campo de género
     generoInput.addEventListener('input', function () {
-      if (generoInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de género es obligatorio, no debe estar vacío.'
-        modal.title = 'Error de validación'
-        modal.open = true
-
+      if (generoInput.value !== '') {
+        if (generoInput.value.length > 25) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de género no puede contener más de 100 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
       }
-      else if (generoInput.value.length > 25) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de género no puede contener más de 100 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
+       
     });
   }
 

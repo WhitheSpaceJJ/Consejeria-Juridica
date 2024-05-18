@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host  --port 3032", 
+    "dev": "vite --host  --port 3032",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -16,7 +16,8 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
-    "flowbite": "^1.8.1"
+    "flowbite": "^1.8.1",
+    "vite-plugin-inspect": "^0.8.4"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",

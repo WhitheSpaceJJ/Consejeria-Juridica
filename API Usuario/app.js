@@ -5,6 +5,12 @@ const express = require('express');
 const {PORT,HOSTTOKENGRPCPORT} = require("./configuracion/default.js");
 
 const usuariosRutas = require("./rutas/usuarioRutas");
+
+const permisosRutas = require("./rutas/permisosRutas"); 
+ 
+const tipoUsuarioRutas = require("./rutas/tipoUsuarioRutas");
+
+
 const CustomeError = require("./utilidades/customeError");
 const errorController = require("./utilidades/errrorController")
 
@@ -45,6 +51,14 @@ const jwtMiddleware = async (req, res, next) => {
 
 // Usamos el middleware de rutas de usuarios
 app.use('/usuarios', usuariosRutas);
+
+app.use('/permisos', 
+//jwtMiddleware,
+ permisosRutas);
+
+app.use('/tipo-usuario',
+//jwtMiddleware,
+ tipoUsuarioRutas);
 
 
 // Si ninguna ruta coincide, creamos un error personalizado y lo pasamos al siguiente middleware

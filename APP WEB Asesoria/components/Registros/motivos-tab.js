@@ -54,19 +54,15 @@ class MotivosTab extends HTMLElement {
 
     //Evento de entrada de motivo
     motivoInput.addEventListener('input', function () {
-      if (motivoInput.value === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de motivo es obligatorio, no debe estar vacío.'
-        modal.title = 'Error de validación'
-        modal.open = true
+      if (motivoInput.value !== '') {
+        if (motivoInput.value.length > 75) {
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'El campo de motivo no puede contener más de 75 caracteres.'
+          modal.title = 'Error de validación'
+          modal.open = true
+        }
+      }
 
-      }
-      else if (motivoInput.value.length > 75) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de motivo no puede contener más de 75 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
     });
   }
 
@@ -204,7 +200,7 @@ class MotivosTab extends HTMLElement {
     }
   }
 
-//Función que edita un motivo
+  //Función que edita un motivo
   editarMotivo = async () => {
     //Se obtiene el id de selección el cual es el id del motivo que se ha seleccionado y nos permite saber si se ha seleccionado un motivo o no
     const motivoID = this.#idSeleccion;
@@ -217,7 +213,7 @@ class MotivosTab extends HTMLElement {
       modal.open = true
     }
     else {
-       //Variable que obtiene el valor del campo de motivo
+      //Variable que obtiene el valor del campo de motivo
       const motivoInput = this.#motivo.value;
       //Variable que obtiene el valor del campo de estatus de motivo
       const estatusMotivoInput = this.#estatusMotivo.value;
@@ -232,7 +228,7 @@ class MotivosTab extends HTMLElement {
           modal.open = true
         }
 
-      //Validación del campo de estatus de motivo en caso de que este vacío se muestra un modal de advertencia
+        //Validación del campo de estatus de motivo en caso de que este vacío se muestra un modal de advertencia
         if (estatusMotivoInput === '0') {
           const modal = document.querySelector('modal-warning')
           modal.message = 'El campo de estatus de motivo es obligatorio.'
@@ -258,10 +254,10 @@ class MotivosTab extends HTMLElement {
             };
 
             const motivoObtenido = await this.#api.getMotivoByID(motivoID);
-             
+
             //Validación de que los datos del motivo sean iguales a los actuales 
             if (motivoObtenido.motivo.descripcion_motivo === motivo.descripcion_motivo && motivoObtenido.motivo.estatus_general === motivo.estatus_general) {
-             //Se muestra un modal de advertencia en caso de que no se hayan realizado cambios en el motivo
+              //Se muestra un modal de advertencia en caso de que no se hayan realizado cambios en el motivo
               const modal = document.querySelector('modal-warning')
               modal.message = 'No se han realizado cambios en el motivo, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
@@ -271,29 +267,29 @@ class MotivosTab extends HTMLElement {
               this.#idSeleccion = null;
 
             } else {
-              try{
+              try {
 
-              const response = await this.#api.putMotivo(motivoID, motivo);
+                const response = await this.#api.putMotivo(motivoID, motivo);
 
-              if (response) {
-                this.#motivo.value = '';
-                this.#estatusMotivo.value = '0';
-                this.#idSeleccion = null;
-                this.mostrarMotivos();
-              }
-            } catch (error) {
-              //Se muestra un modal de advertencia en caso de que haya un error al editar un motivo en caso de error en el servidor
-              console.error('Error al editar el motivo:', error);
-              const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
+                if (response) {
+                  this.#motivo.value = '';
+                  this.#estatusMotivo.value = '0';
+                  this.#idSeleccion = null;
+                  this.mostrarMotivos();
                 }
-              })
-              modal.message = 'Error al editar el motivo, intente de nuevo o verifique el status del servidor.'
-              modal.title = 'Error de validación'
-              modal.open = true
-            }
+              } catch (error) {
+                //Se muestra un modal de advertencia en caso de que haya un error al editar un motivo en caso de error en el servidor
+                console.error('Error al editar el motivo:', error);
+                const modal = document.querySelector('modal-warning')
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    window.location = '/index.html'
+                  }
+                })
+                modal.message = 'Error al editar el motivo, intente de nuevo o verifique el status del servidor.'
+                modal.title = 'Error de validación'
+                modal.open = true
+              }
 
             }
           }
@@ -305,7 +301,7 @@ class MotivosTab extends HTMLElement {
 
 
   }
-   
+
   //Función que muestra los motivos en la tabla
   mostrarMotivos = async () => {
     try {
@@ -339,11 +335,11 @@ class MotivosTab extends HTMLElement {
     } catch (error) {
       console.error('Error al obtener los motivos:', error);
       const modal = document.querySelector('modal-warning')
-     // modal.setOnCloseCallback(() => {
-    //    if (modal.open === 'false') {
-    //      window.location = '/index.html'
-    //    }
-    //  })
+      // modal.setOnCloseCallback(() => {
+      //    if (modal.open === 'false') {
+      //      window.location = '/index.html'
+      //    }
+      //  })
       modal.message = 'Error al obtener los motivos, intente de nuevo o verifique el status del servidor.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -351,12 +347,12 @@ class MotivosTab extends HTMLElement {
     }
 
   }
- 
+
   //Función que activa el botón de seleccionar el cual se encarga de rellenar los campos de motivo y estatus de motivo
   activarBotonSeleccionar = async motivoId => {
 
     try {
-       //Se obtiene el motivo por ID
+      //Se obtiene el motivo por ID
       const motivoID = await this.#api.getMotivoByID(motivoId);
       if (motivoID) {
         //Se rellenan los campos de motivo y estatus de motivo con los datos del motivo obtenido

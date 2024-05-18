@@ -54,13 +54,7 @@ class EmpleadosTab extends HTMLElement {
     nombreInput.addEventListener('input', function () {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
-      if (nombreInput.value === '') {
-        // Si el campo está vacío, lanzar una excepción
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El nombre no puede estar vacío, por favor ingréselo.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      } else
+      if (nombreInput.value !== '') {
         if (!nombrePattern.test(nombreInput.value)) {
           // Si el campo contiene caracteres no válidos, lanzar una excepción
 
@@ -76,6 +70,8 @@ class EmpleadosTab extends HTMLElement {
           modal.title = 'Error de validación'
           modal.open = true
         }
+      } 
+        
     });
 
 
@@ -214,8 +210,7 @@ class EmpleadosTab extends HTMLElement {
             };
             //    console.log(nuevoEmpleado);
             try {
-              const response = await this.#api.postEmpleado(nuevoEmpleado);
-
+             const response = await this.#api.postEmpleado(nuevoEmpleado);
               if (response) {
                 this.#nombre.value = '';
                 this.#tipoUsuario.value = '0';
@@ -328,6 +323,7 @@ class EmpleadosTab extends HTMLElement {
             //Si el nombre es valido se procede a editar el empleado
             //Crear un objeto con los datos del empleado
             const empleado = {
+              id_empleado: this.#idSeleccion,
               nombre: this.#nombre.value,
               tipo_empleado: this.#tipoUsuario.value,
               estatus_general: this.#estatusUsuario.value.toUpperCase(),
@@ -352,6 +348,7 @@ class EmpleadosTab extends HTMLElement {
                 this.#distritoJudicial.value = '0';
                 this.#idSeleccion = null;
                 this.liberarTipoEmpleado();
+                this.liberarDistritoJudicial();
               }
               else {
                 //Validar si el tipo de empleado es diferente
@@ -362,8 +359,8 @@ class EmpleadosTab extends HTMLElement {
                   modal.open = true;
                 } else {
                   try {
-                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-                    if (response) {
+           const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+                 if (response) {
                       this.#nombre.value = '';
                       this.#tipoUsuario.value = '0';
                       this.#estatusUsuario.value = '0';
@@ -371,6 +368,7 @@ class EmpleadosTab extends HTMLElement {
                       this.#idSeleccion = null;
                       this.mostrarEmpleados();
                       this.liberarTipoEmpleado();
+                      this.liberarDistritoJudicial();
                     }
                   } catch (error) {
                     console.error('Error al editar el empleado:', error);
@@ -401,6 +399,7 @@ class EmpleadosTab extends HTMLElement {
                 this.#distritoJudicial.value = '0';
                 this.#idSeleccion = null;
                 this.liberarTipoEmpleado();
+                this.liberarDistritoJudicial();
               }
               else {
                 //Validar si el tipo de empleado es diferente
@@ -413,9 +412,9 @@ class EmpleadosTab extends HTMLElement {
                 else {
                   //Si el tipo de empleado es igual se procede a editar el empleado
                   try {
-                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-
-                    if (response) {
+         const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+            
+          if (response) {
                       this.#nombre.value = '';
                       this.#tipoUsuario.value = '0';
                       this.#estatusUsuario.value = '0';
@@ -423,6 +422,7 @@ class EmpleadosTab extends HTMLElement {
                       this.#idSeleccion = null;
                       this.mostrarEmpleados();
                       this.liberarTipoEmpleado();
+                      this.liberarDistritoJudicial();
                     }
                   } catch (error) {
                     //Mensaje de advertencia en caso de error
@@ -554,6 +554,15 @@ class EmpleadosTab extends HTMLElement {
     this.#tipoUsuario.disabled = false;
   }
 
+  bloquearDistritoJudicial = () => {
+    this.#distritoJudicial.disabled = true;
+  }
+
+  liberarDistritoJudicial = () => {
+    this.#distritoJudicial.disabled = false;
+  }
+
+
   //Metodo para activar el boton seleccionar
   activarBotonSeleccionar = async (empleado) => {
     try {
@@ -583,6 +592,7 @@ class EmpleadosTab extends HTMLElement {
 
 
       this.bloquearTipoEmpleado();
+      this.bloquearDistritoJudicial();
 
 
     } catch (error) {

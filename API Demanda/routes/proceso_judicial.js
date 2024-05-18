@@ -39,9 +39,7 @@ router.get('/:id',
 router.put('/:id',
  actualizarProcesoJudicial)
 
-// Definimos la ruta para eliminar un proceso judicial por su id
-//router.delete('/:id',
- //eliminarProcesoJudicial)
+
 
 // Exportamos el router
 module.exports = router

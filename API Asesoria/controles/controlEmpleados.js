@@ -10,9 +10,6 @@ const obtenerEmpleados = async () => {
         return await modeloEmpleado.Empleado.findAll({
             raw: false,
             nest: true,
-            attributes: {
-                exclude: ["id_distrito_judicial"]
-            },
             include: [{
                 model: modeloEmpleado.DistritoJudicial
             }
@@ -37,9 +34,7 @@ const obtenerEmpleadoPorId = async (id) => {
         return await modeloEmpleado.Empleado.findByPk(id, {
             raw: false,
             nest: true,
-            attributes: {
-                exclude: ["id_distrito_judicial"]
-            },
+         
             include: [{
                 model: modeloEmpleado.DistritoJudicial
             }
@@ -58,16 +53,7 @@ const obtenerEmpleadoPorId = async (id) => {
  * */
 const agregarEmpleado = async (empleado) => {
     try {
-        /*
-        Ejemplo de empleado
-             const empleado = {
-        nombre: nombreInput,
-        tipo_empleado: tipoUsuarioInput,
-        estatus_general: estatusUsuarioInput.toUpperCase(),
-        id_distrito_judicial: distritoJudicialInput
-      };
-
-         */
+ 
         const controlAsesor = require('./controlAsesor.js');
         const controlDefensor = require('./controlDefensor.js');
         const empleado_objeto = JSON.parse(JSON.stringify(empleado));
@@ -129,24 +115,11 @@ const agregarEmpleado = async (empleado) => {
  * */
 const actualizarEmpleado = async (id, empleado) => {
     try {
-
-        /*
-    Ejemplo de empleado
-         const empleado = {
-            id_empleado: id,
-    nombre: nombreInput,
-    tipo_empleado: tipoUsuarioInput,
-    estatus_general: estatusUsuarioInput.toUpperCase(),
-    id_distrito_judicial: distritoJudicialInput
-  };
-
-     */
-
         //       realiza algo similar con respect al metodo de agregar pero ahora en actualizar
         const controlAsesor = require('./controlAsesor.js');
         const controlDefensor = require('./controlDefensor.js');
         const empleado_objeto = JSON.parse(JSON.stringify(empleado));
-        if (empleado_objeto.tipo_empleado === "asesor") {
+        if (empleado_objeto.tipo_empleado === "asesor") { 
 
             const datos_empleado = {
                 id_distrito_judicial: empleado_objeto.id_distrito_judicial,
@@ -173,7 +146,7 @@ const actualizarEmpleado = async (id, empleado) => {
             }
         }
         if (empleado_objeto.tipo_empleado === "defensor") {
-
+ 
             const datos_empleado = {
                 id_distrito_judicial: empleado_objeto.id_distrito_judicial,
                 tipo_empleado: empleado_objeto.tipo_empleado,
@@ -183,13 +156,13 @@ const actualizarEmpleado = async (id, empleado) => {
 
             const empleado_actualizado = (await modeloEmpleado.Empleado.update(datos_empleado, { where: { id_empleado: id } }))[0];
             if (empleado_actualizado === 1) {
+                 
                 const datos_defensor = {
                     id_defensor: id,
                     nombre_defensor: empleado_objeto.nombre,
                 }
                  await controlDefensor.actualizarDefensor(datos_defensor);
                  return true
-                //   return await controlDefensor.obtenerDefensorPorId(defensor_actualizado.id_defensor);
             }else {
                 const datos_defensor = {
                     id_defensor: id,
@@ -199,14 +172,7 @@ const actualizarEmpleado = async (id, empleado) => {
             }
         }
         return false;
-        //return (await modeloEmpleado.Empleado.update(empleado, { where: { id_empleado: id } }))[0] === 1;
-
-
-
-        //   const result= await modeloEmpleado.Empleado.update(empleado, { where: { id_empleado: id } });
-        //    return result[0] === 1; 
     } catch (error) {
-        console.log("Error empleados:", error.message);
         return false;
     }
 };
@@ -216,9 +182,7 @@ const obtenerEmpleadosAsesoresPorZona = async (id) => {
         return await modeloEmpleado.Empleado.findAll({
             raw: false,
             nest: true,
-            attributes: {
-                exclude: ["id_distrito_judicial"]
-            },
+        
             include: [{
                 model: modeloEmpleado.DistritoJudicial,
                 where: { id_zona: id }
@@ -235,9 +199,7 @@ const obtenerEmpleadosDefensoresPorZona = async (id) => {
         return await modeloEmpleado.Empleado.findAll({
             raw: false,
             nest: true,
-            attributes: {
-                exclude: ["id_distrito_judicial"]
-            },
+   
             include: [{
                 model: modeloEmpleado.DistritoJudicial,
                 where: { id_zona: id }

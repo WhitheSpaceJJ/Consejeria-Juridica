@@ -130,30 +130,6 @@ const actualizarProcesoJudicial = async (req, res) => {
   }
 }
 
-/**
- * @abstract Método que permite eliminar un proceso judicial
- * @param {number} id - ID del proceso judicial a eliminar
- * @returns {object} Retorna el objeto del proceso judicial eliminado si la operación fue exitosa, de lo contrario lanza un error
- */
-const eliminarProcesoJudicial = async (req, res) => {
-  try {
-    const { id } = req.params
-    const procesoJudicial = await procesoJudicialDAO.eliminarProcesoJudicial(Number(id))
-    if (procesoJudicial === false) {
-      res.status(404).json({
-        message: "Proceso judicial no  eliminado"
-      })
-    }
-    else {
-      res.status(200).json({ message: "Proceso judicial eliminado con éxito" })
-    }
-
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    })
-  }
-}
 
 const obtenerProcesosJudicialesPorTramite = async (req, res) => {
   try {
@@ -180,7 +156,6 @@ module.exports = {
   obtenerProcesosJudiciales,
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
-  eliminarProcesoJudicial,
   obtenerProcesosJudicialesPorDefensor
   ,
   obtenerProcesosJudicialesPorTramite

@@ -105,6 +105,8 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
   } else if (usuarioObj.estatus_general === 'ACTIVO') {
     const payload = usuarioObj;
     const token = await jwtController.generateToken(payload);
+
+    
     res.status(200).json({
       token: token,
       role: usuarioObj.tipo_user.tipo_usuario,
@@ -179,7 +181,6 @@ const recuperarContraseña = asyncError(async (req, res, next) => {
 
   const result = await controlUsuarios.obtenerUsuarioCorreo
     (req.query.correo, req.query.password);
-  console.log(result);
   const usuarioStr = JSON.stringify(result);
   const usuarioObj = JSON.parse(usuarioStr);
 

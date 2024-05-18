@@ -4,6 +4,9 @@ const html = await (await fetch('../assets/data-prueba.html')).text()
 template.innerHTML = html
 
 export class DataPrueba extends HTMLElement {
+
+
+  //Constructor de la clase
   constructor(procesoRecibido) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -15,6 +18,7 @@ export class DataPrueba extends HTMLElement {
   connectedCallback() {
   }
 
+  //Metodo para llenar los datos de las pruebas
   fillData = async () => {
     this.shadowRoot.getElementById('pruebas').textContent = this.proceso.pruebas.map((prueba, index) => `${index + 1}. Prueba: ${prueba.descripcion_prueba}`).join(', ')
     this.shadowRoot.getElementById('resoluciones').textContent = this.proceso.resoluciones.map((resolucion, index) => `${index + 1}. Resolucion: ${resolucion.resolucion}

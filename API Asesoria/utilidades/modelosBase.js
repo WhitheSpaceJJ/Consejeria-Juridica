@@ -215,6 +215,10 @@ const Empleado = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    id_distrito_judicial: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     estatus_general: {
       type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
       allowNull: false,

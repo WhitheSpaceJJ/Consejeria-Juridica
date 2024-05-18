@@ -4,6 +4,8 @@ const html = await (await fetch('../assets/data-asesoria.html')).text()
 template.innerHTML = html
 
 export class DataAsesoria extends HTMLElement {
+
+  //Contructor de la clase
   constructor(asesoria) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -15,6 +17,7 @@ export class DataAsesoria extends HTMLElement {
   connectedCallback() {
   }
 
+  //Metodo para llenar los datos de la asesoria
   fillData = async () => {
     const datosAsesoria = this.asesoria.asesoria.datos_asesoria
     const recibidos = this.asesoria.asesoria.recibidos

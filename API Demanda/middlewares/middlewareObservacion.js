@@ -30,12 +30,32 @@ async function existeObservacion(req, res, next) {
 
 
 async function validarJSONObservacionPOST(req, res, next) {
-    const { observacion, id_proceso_judicial } = req.body
+    const { observacion, id_proceso_judicial, ...extraData } = req.body
+
+    if (Object.keys(extraData).length !== 0) {
+        return res.status(400).json({
+            message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
+        });
+    }
+
     if (!observacion || !id_proceso_judicial) {
         return res.status(400).json({
-            message: 'Faltan datos en el cuerpo de la petición.'
+            message: 'Faltan datos en el cuerpo de la petición, o la observacion o el id del proceso judicial esta vacio.'
         })
     }
+   if(isNaN(id_proceso_judicial)){
+        return res.status(400).json({
+            message: 'El id del proceso judicial no es un número.'
+        })
+    }
+
+  //Limite 200
+    if (observacion.length > 200) {
+        return res.status(400).json({
+            message: 'El campo "observacion" excede el tamaño permitido.'
+        });
+    }
+
     next()
 }
 
@@ -43,17 +63,66 @@ async function validarJSONObservacionPOST(req, res, next) {
 
 
 async function validarJSONObservacionPUT(req, res, next) {
-    const { id_observacion, observacion, id_proceso_judicial } = req.body
+    const { id_observacion, observacion, id_proceso_judicial, ...extraData } = req.body
+    
+    if (Object.keys(extraData).length !== 0) {
+        return res.status(400).json({
+            message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
+        });
+    }
+
     if (!id_observacion || !observacion || !id_proceso_judicial) {
         return res.status(400).json({
-            message: 'Faltan datos en el cuerpo de la petición.'
+            message: 'Faltan datos en el cuerpo de la petición, o el id de la observacion o la observacion o el id del proceso judicial esta vacio.'
         })
-    } else
+    } 
+     
+    if(isNaN(id_observacion)){
+        return res.status(400).json({
+            message: 'El id de la observacion no es un número.'
+        })
+    }
+
+
+    if(isNaN(id_proceso_judicial)){
+        return res.status(400).json({
+            message: 'El id del proceso judicial no es un número.'
+        })
+    }
+
+
+
+    if (observacion.length > 200) {
+        return res.status(400).json({
+            message: 'El campo "observacion" excede el tamaño permitido.'
+        });
+    }
+
     if (id_observacion !== Number(req.params.id)) {
         return res.status(400).json({
             message: 'El id de la observacion proporcionado no coincide con el id de la observacion que se quiere modificar.'
         })
     }
+    
+    /*
+    {
+    "id_observacion": 1,
+    "observacion": "bbbbb",
+    "id_proceso_judicial": 1
+}
+    */
+     
+    const observacion_obtenida = await controlObservacion.obtenerObservacion(Number(id_observacion))
+
+    //Evalua que el id de proceso judicial sea el mismo que el de la observacion encontrada
+
+    if(observacion_obtenida.id_proceso_judicial !== Number(id_proceso_judicial)){
+        return res.status(400).json({
+            message: 'El id del proceso judicial proporcionado no coincide con el id del proceso judicial de la observacion que se quiere modificar.'
+        })
+    }
+
+
     next()
 }
 

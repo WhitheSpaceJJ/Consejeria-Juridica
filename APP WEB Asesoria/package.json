@@ -20,7 +20,8 @@
     "flowbite": "^1.8.1",
     "fs": "^0.0.1-security",
     "jStat": "^1.8.6",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "vite-plugin-inspect": "^0.8.4"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",

@@ -4,6 +4,7 @@ const html = await (await fetch('../assets/data-demandado.html')).text()
 template.innerHTML = html
 
 export class DataDemandado extends HTMLElement {
+  //Constructor de la clase
   constructor(demandado) {
     super()
     const shadow = this.attachShadow({ mode: 'open' })
@@ -14,7 +15,8 @@ export class DataDemandado extends HTMLElement {
 
   connectedCallback() {
   }
-
+ 
+  //Metodo para llenar los datos del demandado
   fillData = async () => {
 
     //demandado
