@@ -8,43 +8,60 @@ const router = express.Router();
 const { validarPeticionPOST, 
   validarPeticionPUT, validarPeticionPaginacion,
   validarPeticionBuscarNombre, 
-  validarFiltros,
+  validarFiltros,validarPaginaFiltro,
    validarPeticionDescargarExcel } = require('../middlewares/middlewareAsesoria');
 
 
  router.route('/paginacion')  //
-.get(servicioAsesorias.obtenerAsesoriasPagina);
+.get(
+  validarPeticionPaginacion,
+  servicioAsesorias.obtenerAsesoriasPagina);
 
+//Listp
 router.route('/paginacion-filtro') //
 .get(
-  validarFiltros,
+  validarPaginaFiltro,
+  validarFiltros, 
   servicioAsesorias.obtenerAsesoriasPaginaFiltro);
  
 router.route('/buscar') //
-  .get(servicioAsesorias.obtenerAsesoriaNombre);
+  .get(
+     validarPeticionBuscarNombre,
+    servicioAsesorias.obtenerAsesoriaNombre);
   router.route('/total-asesorias') //
   .get(servicioAsesorias.obtenerAsesoriaTotal);
-  router.route('/total-asesorias-filtro'). //
 
+  router.route('/total-asesorias-filtro'). //
+   //Listo
   get(
     validarFiltros,
     servicioAsesorias.obtenerAsesoriaFiltroTotal);
   
   
     router.route('/filtro') //
+    //Listo
   .get(
     validarFiltros,
     servicioAsesorias.obtenerAsesoriaFiltro);
 
 
-
+   //Si requeirdo
   router.route('/descargar-excel') //
-  .get(servicioAsesorias.obtenerAsesoriaFiltroExcel);
+  .get(
+    validarPeticionDescargarExcel,
+    servicioAsesorias.obtenerAsesoriaFiltroExcel);
 router.route('/')
-  .post(servicioAsesorias.agregarAsesoria); //
+//Si requerido
+  .post(
+     validarPeticionPOST,
+    servicioAsesorias.agregarAsesoria); //
 router.route('/:id')
-  .get(servicioAsesorias.obtenerAsesoriaPorId) //
-  .put(servicioAsesorias.actualizarAsesoria) //
+//No requerido
+  .get(servicioAsesorias.obtenerAsesoriaPorId)
+   // Si requerido
+  .put(
+    validarPeticionPUT,
+    servicioAsesorias.actualizarAsesoria) //
 ;
 module.exports = router;
  

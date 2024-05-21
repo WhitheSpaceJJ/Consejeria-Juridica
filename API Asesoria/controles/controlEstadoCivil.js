@@ -42,6 +42,20 @@ const obtenerEstadoCivilPorId = async (id) => {
   }
 };
 
+const obtenerEstadoCivilPorPorIdMiddleware = async (id) => {
+  try {
+    return  await modeloEstadoCivil.EstadoCivil.findOne({
+      raw: true,
+      nest: true,
+      where: { id_estado_civil: id, estatus_general: "ACTIVO" }
+    });
+    
+  } catch (error) {
+    console.log("Error estados civiles:", error.message);
+    return null;
+  }
+};
+
 /**
  *    @abstract Función que permite agregar un estado civil
  * @param {*} estadoCivil estado civil a agregar
@@ -78,6 +92,7 @@ module.exports = {
   obtenerEstadosCiviles,
   obtenerEstadoCivilPorId,
   agregarEstadoCivil,
-  actualizarEstadoCivil
+  actualizarEstadoCivil, 
+  obtenerEstadoCivilPorPorIdMiddleware
 
 };

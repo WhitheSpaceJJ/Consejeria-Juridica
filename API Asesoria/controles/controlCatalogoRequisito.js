@@ -43,6 +43,19 @@ const obtenerCatalogoRequisitoPorId = async (id) => {
   }
 };
 
+const obtenerDocumentoPorPorIdMiddleware = async (id) => {
+  try {
+    return await modeloCatalogoRequisito.CatalogoRequisito.findOne({
+      raw: false,
+      nest: true,
+      where: { id_catalogo: id, estatus_general: "ACTIVO" }
+    });
+  } catch (error) {
+    console.log("Error de catalogo requisito:", error.message);
+    return null;
+  }
+}
+
 
 /**
  * @abstract Función que permite agregar un catalogo de requisito
@@ -82,4 +95,5 @@ module.exports = {
   obtenerCatalogoRequisitoPorId,
   agregarCatalogoRequisito,
   actualizarCatalogoRequisito,
+  obtenerDocumentoPorPorIdMiddleware
 };

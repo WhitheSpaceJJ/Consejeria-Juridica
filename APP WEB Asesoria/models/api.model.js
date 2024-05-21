@@ -256,7 +256,6 @@ class APIModel {
     }
     url.search = new URLSearchParams(params).toString()
 
-    console.log(url)
 
 
     const response = await fetch(url, {
@@ -267,7 +266,6 @@ class APIModel {
     })
     if (response.ok) {
       const data = await response.json()
-      console.log(data)
       return data
     } else {
       throw new Error('Error en la petición')
@@ -354,7 +352,6 @@ class APIModel {
   async getTotalAsesoriasfiltro(filtros) {
     const url = `${this.ASESORIAS_API_URL}/asesorias/total-asesorias-filtro?filtros={"fecha-inicio":"${filtros.fecha_inicio}","fecha-final":"${filtros.fecha_final}","id_municipio":${filtros.id_municipio},"id_zona":${filtros.id_zona},"id_defensor":${filtros.id_defensor},"id_asesor":${filtros.id_asesor},"fecha_registro":"${filtros.fecha_registro}","id_distrito_judicial":${filtros.id_distrito}}`;
     // http://200.58.127.244:3009/asesorias/filtro?filtros={"fecha-inicio":"2021-10-23","fecha-final":"2024-11-22","id_municipio":251,"id_zona":null,"id_defensor":null,"id_asesor":null}
-    //console.log(url)
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -374,11 +371,9 @@ class APIModel {
 
   //Metodo para obtener las asesorias en base al filtro y paginacion
   async getAsesoriasByFiltersPaginacion(pagina, filtros) {
-    //console.log("Entro a filtros paginacion")
     const url = `${this.ASESORIAS_API_URL}/asesorias/paginacion-filtro?filtros={"fecha-inicio":"${filtros.fecha_inicio}","fecha-final":"${filtros.fecha_final}","id_municipio":${filtros.id_municipio},"id_zona":${filtros.id_zona},"id_defensor":${filtros.id_defensor},"id_asesor":${filtros.id_asesor},"fecha_registro":"${filtros.fecha_registro}","id_distrito_judicial":${filtros.id_distrito}} &pagina=${pagina}`;
 
     // http://200.58.127.244:3009/asesorias/filtro?filtros={"fecha-inicio":"2021-10-23","fecha-final":"2024-11-22","id_municipio":251,"id_zona":null,"id_defensor":null,"id_asesor":null}
-    //console.log(url)
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -389,7 +384,6 @@ class APIModel {
 
     if (response.ok) {
       let data = await response.json()
-      // console.log(data)
       data = data.asesorias
       return data
     } else {
@@ -410,7 +404,6 @@ class APIModel {
     else if (filtros === null && campos === null) {
       url = `${this.ASESORIAS_API_URL}/asesorias/descargar-excel`
     }
-
     try {
       // Construir la URL para el servicio
       // Realizar la llamada al servicio y descargar el archivo
@@ -479,13 +472,11 @@ class APIModel {
       },
     })
     if (response.ok) {
-      //console.log("Entro a distritos")
       let data = await response.json()
       data = data.distritosJudiciales
       return data
     }
     else {
-      console.log("Error en la petición")
       throw new Error('Error en la petición')
     }
   }
@@ -595,7 +586,6 @@ class APIModel {
     if (response.ok) {
       let data = await response.json()
       data = data.asesores
-      // console.log(data)
       return data
     } else {
       throw new Error('Error en la petición')
@@ -791,7 +781,6 @@ class APIModel {
   async putTiposJuicio(id, tipoDeJuicio) {
     const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
     try {
-      // console.log(tipoDeJuicio) 
       const response = await fetch(url, {
         method: 'PUT',
         headers: {

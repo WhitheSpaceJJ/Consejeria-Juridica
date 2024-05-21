@@ -10,13 +10,13 @@ const obtenerUsuarios = async () => {
     return await modelUsuario.Usuario.findAll({
       attributes: {
         exclude: ['id_tipouser',
-      'password'
+          'password'
         ],
       },
       raw: false,
       nest: true,
       include: [
-        {model:modelUsuario.TipoUser},
+        { model: modelUsuario.TipoUser },
 
       ]
     });
@@ -35,15 +35,15 @@ const obtenerUsuarioPorId = async (id) => {
   try {
     return await modelUsuario.Usuario.findByPk(id, {
       attributes: {
-        exclude: ['id_tipouser', 
-        'password'
-      ],
+        exclude: ['id_tipouser',
+          'password'
+        ],
       },
       raw: true,
       nest: true,
       include: [
-        {model:modelUsuario.TipoUser},
-    
+        { model: modelUsuario.TipoUser },
+
       ]
     });
   } catch (error) {
@@ -70,7 +70,7 @@ const obtenerUsuarioCorreoPassword = async (correo, password) => {
       },
       include: [
         { model: modelUsuario.TipoUser },
-     
+
       ],
     });
 
@@ -112,7 +112,7 @@ const obtenerUsuarioCorreo = async (correo, password) => {
 
     if (!usuario) {
       return null;
-    }else {
+    } else {
       return usuario;
     }
   } catch (error) {
@@ -158,6 +158,41 @@ const actualizarUsuario = async (usuario) => {
   }
 };
 
+const obtenerUsuarioByIDAndNameGrpc = async (id_usuario, usuario) => {
+  try {
+    const usuario_pre = await modelUsuario.Usuario.findOne({
+      raw: false,
+      nest: true,
+      where: {
+        id_usuario: id_usuario,
+      },
+    });
+    if (!usuario_pre) {
+      return null;
+    }
+
+    const nombre = usuario_pre.nombre;
+    const materno = usuario_pre.materno;
+    const paterno = usuario_pre.paterno;
+
+    const nombreCompletoRegex = new RegExp(
+      `${nombre}\\s*${materno}\\s*${paterno}` 
+    );
+
+    if (!nombreCompletoRegex.test(usuario)) {
+      return null;
+    } else {
+      return usuario;
+    }
+  }
+  catch (error) {
+    console.log("Error:", error.message);
+    return null;
+  }
+
+
+};
+
 module.exports = {
   obtenerUsuarios,
   obtenerUsuarioPorId,
@@ -165,4 +200,5 @@ module.exports = {
   agregarUsuario,
   obtenerUsuarioCorreoPassword,
   obtenerUsuarioCorreo,
+  obtenerUsuarioByIDAndNameGrpc
 };

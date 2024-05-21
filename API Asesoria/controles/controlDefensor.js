@@ -110,6 +110,16 @@ const obtenerDefensoresZona = async (id) => {
         return null;
     }
 };
+const  obtenerDefensorIDSimpleMiddleware  = async (id) => {
+    try {
+        const defensor= await modeloDefensor.Defensor.findByPk(id);
+        return defensor;
+    } catch (error) {
+        console.log("Error defensor:", error.message);
+        return null;
+    }
+}
+
 
 // Exportar los módulos
 module.exports = {
@@ -117,5 +127,6 @@ module.exports = {
     obtenerDefensorPorId,
     agregarDefensor,
     actualizarDefensor,
-    obtenerDefensoresZona
+    obtenerDefensoresZona,
+    obtenerDefensorIDSimpleMiddleware
 };

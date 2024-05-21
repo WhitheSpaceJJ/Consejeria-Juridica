@@ -363,8 +363,8 @@ export class TurnoTab extends HTMLElement {
         if (turnoData.horaTurno === '') {
           throw new ValidationError('La hora del turno no puede estar vacía, por favor ingrésela.');
         } else {
-          // Expresión regular para validar horas en formato de 12 o 24 horas
-          var horaRegex = /^(0?[1-9]|1[0-2]|2[0-3])$/;
+          // Expresión regular para validar horas en formato de 24 horas
+          var horaRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
           if (!horaRegex.test(turnoData.horaTurno)) {
             throw new ValidationError('La hora del turno no es válida, por favor ingrese un valor válido.');
           }
@@ -404,10 +404,35 @@ export class TurnoTab extends HTMLElement {
         this.#asesoria.turno = {
           fecha_turno: getDate(),
           hora_turno: `${turnoData.horaTurno}:${turnoData.minutoTurno}`,
-          id_defensor: this.#nombreDefensor.value,
+          id_defensor: Number(this.#nombreDefensor.value),
           id_asesoria: this.#asesoria.datos_asesoria.id_asesoria,
+          estatus_general:"NO_SEGUIMIENTO"
         }
+        delete this.#asesoria.asesorado;
+        delete this.#asesoria.recibidos;
+        /*
+            delete this.#asesoria.defensor;
+         delete this.#asesoria.asesor;
+         antes de eliminarlo verifica que existan con hasOwnProperty y ademas agregale a this.#asesoria.datos_asesoria.id_empleado ya sea el id del asesor o del defensor el que exita
+        */
+        try {
+          //Validar que exista el asesor
+          if (this.#asesoria.hasOwnProperty('asesor')) {
+            this.#asesoria.datos_asesoria.id_empleado = this.#asesoria.asesor.id_asesor
+            delete this.#asesoria.asesor;
+          }
+          //Validar que exista el defensor
+          if (this.#asesoria.hasOwnProperty('defensor')) {
+            this.#asesoria.datos_asesoria.id_empleado = this.#asesoria.defensor.id_defensor
+            delete this.#asesoria.defensor;
+          }
+        } catch (error) {
+          console.error(error)
+        }
+    
+        console.log(this.#asesoria)
 
+        /*
         //Registro del turno
         await this.#api.putAsesoria({
           id: this.#asesoria.datos_asesoria.id_asesoria,
@@ -419,7 +444,7 @@ export class TurnoTab extends HTMLElement {
         this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
           location.href = '/'
         })
-
+*/
       } catch (error) {
         //mensaje de error
         if (error instanceof ValidationError) {

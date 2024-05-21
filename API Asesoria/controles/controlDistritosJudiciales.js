@@ -55,10 +55,17 @@ const obtenerDistritoJudicial = async (id) => {
 
 };
 
-
+const obtenerDistritoPorPorIdMiddleware = async (id) => {
+    const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.findByPk(id,{
+        raw: false,
+        nest: true,
+    });
+    return distritoJudicial;
+}
 
 //Module exports
 module.exports = {
     obtenerDistritosJudiciales,
     obtenerDistritoJudicial,
+    obtenerDistritoPorPorIdMiddleware
 };

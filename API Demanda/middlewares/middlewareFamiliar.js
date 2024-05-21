@@ -36,7 +36,7 @@ async function validarJSONFamiliarPOST(req, res, next) {
             message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
         });
     }
-    if (!nombre || !nacionalidad || !parentesco || !perteneceComunidadLGBT || !adultaMayor || !saludPrecaria || !pobrezaExtrema || !id_promovente) {
+    if (!nombre || !nacionalidad || !parentesco || perteneceComunidadLGBT === undefined || adultaMayor === undefined || saludPrecaria === undefined || pobrezaExtrema === undefined || !id_promovente) {
         return res.status(400).json({
             message: 'Faltan datos en el cuerpo de la petición, o el nombre del familiar o la nacionalidad o el parentesco o si pertenece a la comunidad LGBT o si es adulto mayor o si tiene salud precaria o si se encuentra en pobreza extrema o el id del promovente esta vacio.'
         })
@@ -108,8 +108,8 @@ async function validarJSONFamiliarPUT(req, res, next) {
             message: 'Hay datos adicionales en el cuerpo de la petición que no son permitidos.'
         });
     }
-
-    if (!id_familiar || !nombre || !nacionalidad || !parentesco || !perteneceComunidadLGBT || !adultaMayor || !saludPrecaria || !pobrezaExtrema || !id_promovente) {
+  //Esta peticion de abajo por ejemplo si adulto mayor es booleando pos entrara dentro del if verda y solo lo que quiero verificar es que esita
+    if (!id_familiar || !nombre || !nacionalidad || !parentesco || perteneceComunidadLGBT===undefined || adultaMayor===undefined || saludPrecaria===undefined || pobrezaExtrema===undefined || !id_promovente) {
         return res.status(400).json({
             message: 'Faltan datos en el cuerpo de la petición, o el id del familiar o el nombre del familiar o la nacionalidad o el parentesco o si pertenece a la comunidad LGBT o si es adulto mayor o si tiene salud precaria o si se encuentra en pobreza extrema o el id del promovente esta vacio.'
         })

@@ -36,9 +36,9 @@ async function validarJSONCatalogoRequisitosPOST(req, res, next) {
         });
     }
 
-    if (estatus_general !== 'ACTIVO' && estatus_general !== 'INACTIVO') {
+    if (estatus_general !== 'ACTIVO' ) {
         return res.status(400).json({
-            message: 'El campo "estatus_general" solo acepta los valores "ACTIVO" o "INACTIVO".'
+            message: 'El campo "estatus_general" solo acepta los valores "ACTIVO".'
         });
     }
 

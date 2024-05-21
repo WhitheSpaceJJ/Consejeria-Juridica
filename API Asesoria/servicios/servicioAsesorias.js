@@ -589,12 +589,6 @@ const obtenerAsesoriaPorId = asyncError(async (req, res, next) => {
 
 const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
   const { nombre, apellido_materno, apellido_paterno } = req.query;
-  if (nombre === '' && apellido_paterno === '' && apellido_materno === '') {
-    const error = new CustomeError('Es requerido escribir algun campo(Nombre,Apellido Paterno, Apellido Materno).', 400);
-    return next(error);
-  }
-  else {
-
     const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno);
     if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('Error al obtener las asesorías', 404);
@@ -606,7 +600,6 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
       });
     }
 
-  }
 });
 
 /**

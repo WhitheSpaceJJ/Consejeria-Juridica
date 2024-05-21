@@ -46,6 +46,20 @@ const obtenerGeneroPorId = async (id) => {
   }
 };
 
+const obtenerGeneroPorPorIdMiddleware =async (id) => {
+  try {
+    return  await modeloGenero.Genero.findOne({
+      raw: true,
+      nest: true,
+      where: { id_genero: id, estatus_general: "ACTIVO" }
+    });
+  } catch (error) {
+    console.log("Error generos:", error.message);
+    return null;
+  }
+};
+
+
 /**
  *  @abstract Función que permite agregar un genero
  * @param {*} genero genero a agregar 
@@ -83,5 +97,6 @@ module.exports = {
   obtenerGeneros,
   obtenerGeneroPorId,
   agregarGenero,
-  actualizarGenero
+  actualizarGenero,
+  obtenerGeneroPorPorIdMiddleware
 };

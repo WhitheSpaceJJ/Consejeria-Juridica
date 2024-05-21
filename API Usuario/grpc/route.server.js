@@ -1,4 +1,4 @@
-const PROTO_PATH = 'route.proto';
+const PROTO_PATH = 'routeUsuarios.proto';
 const protoLoader = require('@grpc/proto-loader');
 //  PackageDefinition encapsula la definición de paquete de un servicio gRPC.
 const packageDefinition = protoLoader.loadSync(

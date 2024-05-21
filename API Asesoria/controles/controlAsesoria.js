@@ -19,7 +19,7 @@ const { Op, literal } = require("sequelize");
 const Sequelize = require('sequelize');
 const controlDistritoJudicial = require('./controlDistritosJudiciales');
 const controlMunicipios = require('./controlMunicipioDistro');
-const controlTurno= require('./controlTurno');
+const controlTurno = require('./controlTurno');
 
 /**
  * @abstract Función que permite obtener asesorias por filtro
@@ -27,7 +27,7 @@ const controlTurno= require('./controlTurno');
  */
 const obtenerAsesoriasFiltro = async (filtros) => {
   try {
-  
+
     const whereClause = await obtenerWhereClause(filtros);
 
 
@@ -140,14 +140,14 @@ const formarAseoria = async (asesoria_pre) => {
       }
       delete asesoria_obj.detalle_asesorias_catalogos;
       asesoria_obj.recibidos = recibidos;
-    //  console.log("Paso recibidos");
+      //  console.log("Paso recibidos");
     }
     if (asesoria_obj.turno !== null) {
       const defensor = await controlDefensor.obtenerDefensorPorId(asesoria_obj.turno.id_defensor);
       asesoria_obj.turno.defensor = defensor;
       delete asesoria_obj.turno.id_defensor;
       delete asesoria_obj.turno.id_asesoria;
-    //  console.log("Paso turno");
+      //  console.log("Paso turno");
     }
     // Add other data processing steps similar to obtenerAsesoriaPorIdAsesorado here
     const tipo_empleado = asesoria_obj.empleado.tipo_empleado;
@@ -156,13 +156,13 @@ const formarAseoria = async (asesoria_pre) => {
       const asesor = await controlAsesor.obtenerAsesorPorId(id_empleado);
       asesoria_obj.asesor = asesor;
       delete asesoria_obj.empleado;
-  //    console.log("Paso asesor");
+      //    console.log("Paso asesor");
     } else if (tipo_empleado === "defensor") {
       const id_empleado = asesoria_obj.empleado.id_empleado;
       const defensor = await controlDefensor.obtenerDefensorPorId(id_empleado);
       asesoria_obj.defensor = defensor;
       delete asesoria_obj.empleado;
-    //  console.log("Paso defensor");
+      //  console.log("Paso defensor");
     }
     const persona = await controlPersonas.obtenerPersonaPorId(asesoria_obj.asesorado.id_asesorado);
     asesoria_obj.persona = persona;
@@ -171,7 +171,7 @@ const formarAseoria = async (asesoria_pre) => {
       const motivo = await controlMotivo.obtenerMotivoPorId(asesoria_obj.asesorado.id_motivo);
       delete asesoria_obj.asesorado.id_motivo;
       asesoria_obj.asesorado.motivo = motivo;
-     // console.log("Paso motivo");
+      // console.log("Paso motivo");
     }
     const estado_civil = await controlEstadoCivil.obtenerEstadoCivilPorId(asesoria_obj.asesorado.id_estado_civil);
     delete asesoria_obj.asesorado.id_estado_civil;
@@ -187,13 +187,13 @@ const formarAseoria = async (asesoria_pre) => {
     // datos_asesoria.id_distrito_judicial = asesoria_obj.id_distrito_judicial;
     //  datos_asesoria.id_municipio_distrito = asesoria_obj.id_municipio_distrito;
     datos_asesoria.estatus_asesoria = asesoria_obj.estatus_asesoria;
-  //  console.log("Paso datos_asesoria");
+    //  console.log("Paso datos_asesoria");
     const distrito_judicial = await controlDistritoJudicial.obtenerDistritoJudicial(asesoria_obj.id_distrito_judicial);
     asesoria_obj.distrito_judicial = distrito_judicial;
-  //  console.log("Paso distrito_judicial");
+    //  console.log("Paso distrito_judicial");
     const municipio = await controlMunicipios.obtenerMunicipioPorId(asesoria_obj.id_municipio_distrito);
     asesoria_obj.municipio = municipio;
-  //  console.log("Paso municipio");
+    //  console.log("Paso municipio");
     asesoria_obj.datos_asesoria = datos_asesoria;
 
     delete asesoria_obj.id_asesoria;
@@ -208,7 +208,7 @@ const formarAseoria = async (asesoria_pre) => {
     delete asesoria_obj.id_municipio_distrito;
     delete asesoria_obj.estatus_asesoria;
 
-   // console.log("Paso final");
+    // console.log("Paso final");
 
     return asesoria_obj;
   } catch (error) {
@@ -278,7 +278,7 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
         modeloAsesoria.Empleado,
         modeloAsesoria.TipoJuicio
       ],
-   
+
     });
     return await formarAseoria(asesoria_pre);
   } catch (error) {
@@ -298,7 +298,6 @@ const agregarAsesoria = async (asesoria_pre) => {
   try {
     const asesoria_str = JSON.stringify(asesoria_pre);
     const asesoria_obj = JSON.parse(asesoria_str);
-    console.log("Asesoria:", asesoria_obj);
 
     const asesorado = asesoria_obj.asesorado;
     const datos_asesoria = asesoria_obj.datos_asesoria;
@@ -306,9 +305,6 @@ const agregarAsesoria = async (asesoria_pre) => {
     const persona = asesoria_obj.persona;
     const recibidos = asesoria_obj.recibidos;
     const tipojuicio = asesoria_obj.tipos_juicio;
-
-
-    //Persona
 
     const domicilio_pre = await controlDomicilios.agregarDomicilio(persona.domicilio);
     const domicilio_str = JSON.stringify(domicilio_pre);
@@ -334,18 +330,8 @@ const agregarAsesoria = async (asesoria_pre) => {
 
     datos_asesoria.id_asesorado = asesorado_pre.id_asesorado;
     datos_asesoria.id_empleado = empleado.id_empleado;
-    /*
-      const turno = asesoria_obj.turno;
-        if (turno !== null) {
-          const turno_pre = await controlTurnos.agregarTurno(turno);
-          datos_asesoria.id_turno = turno_pre.id_turno;
-        }
-      */
+
     datos_asesoria.id_tipo_juicio = tipojuicio.id_tipo_juicio;
-    //   const municipio = asesoria_obj.municipio;
-    //   datos_asesoria.id_municipio_distrito = municipio.id_municipio_distrito; 
-    // const distrito_judicial = asesoria_obj.distrito_judicial;
-    // datos_asesoria.id_distrito_judicial = distrito_judicial.id_distrito_judicial;
 
     const asesoria_cre = (await modeloAsesoria.Asesoria.create(datos_asesoria, { raw: true, nest: true })).dataValues;
     const asesoria_str2 = JSON.stringify(asesoria_cre);
@@ -358,8 +344,6 @@ const agregarAsesoria = async (asesoria_pre) => {
       }
     }
     return await obtenerAsesoriaPorIdAsesorado(asesoria_obj2.id_asesorado);
-    //return asesoria_obj2;
-    //    return (await modeloAsesoria.Asesoria.create(asesoria, { raw: true, nest: true })).dataValues;
   } catch (error) {
     console.log("Error Asesorias:", error.message);
     return false;
@@ -375,6 +359,71 @@ const agregarAsesoria = async (asesoria_pre) => {
 const actualizarAsesoria = async (asesoria_pre) => {
   //Falta verificar
   try {
+
+/*
+{
+    "turno": {
+        "fecha_turno": "2024-05-20",
+        "hora_turno": "12:12",
+        "id_defensor": "10",
+        "id_asesoria": 31
+    },
+    "distrito_judicial": {
+        "id_distrito_judicial": 1,
+        "nombre_distrito_judicial": "Distrito Judicial de Alamos",
+        "municipio_distrito": {
+            "id_municipio_distrito": 60,
+            "nombre_municipio": "Álamos",
+            "id_distrito_judicial": 1
+        },
+        "zona": {
+            "id_zona": 3,
+            "nombre_zona": "SUR"
+        }
+    },
+    "tipos_juicio": {
+        "id_tipo_juicio": 1,
+        "tipo_juicio": "Divorcio Incausado",
+        "estatus_general": "ACTIVO"
+    },
+    "persona": {
+        "id_persona": 31,
+        "nombre": "Martha",
+        "apellido_materno": "Gonzalez",
+        "apellido_paterno": "Lopez",
+        "edad": 20,
+        "telefono": "6442138093",
+        "domicilio": {
+            "id_domicilio": 31,
+            "calle_domicilio": "13 de octubre",
+            "numero_exterior_domicilio": "1130",
+            "numero_interior_domicilio": "",
+            "id_colonia": "197"
+        },
+        "genero": {
+            "id_genero": 2,
+            "descripcion_genero": "Femenino",
+            "estatus_general": "ACTIVO"
+        }
+    },
+    "municipio": {
+        "id_municipio_distrito": 60,
+        "nombre_municipio": "Álamos",
+        "id_distrito_judicial": 1
+    },
+    "datos_asesoria": {
+        "id_asesoria": 31,
+        "resumen_asesoria": "En resumen la asesoria trato de como resolver el divorcio en cuestion por inconformidad de la pareja",
+        "conclusion_asesoria": "Al final se pudo llegar a un acuerdo que era lo mejor se repartieron los vienes en cantidades equitativas",
+        "estatus_requisitos": true,
+        "fecha_registro": "2023-12-16",
+        "usuario": "DPS Usuario Nueve",
+        "id_usuario": 9,
+        "estatus_asesoria": "TURNADA",
+        "id_empleado": 17
+    }
+}
+*/
     const asesoria_str = JSON.stringify(asesoria_pre);
     const asesoria_obj = JSON.parse(asesoria_str);
 
@@ -382,36 +431,26 @@ const actualizarAsesoria = async (asesoria_pre) => {
     const domicilio = persona.domicilio;
     const datos_asesoria = asesoria_obj.datos_asesoria;
     const turno = asesoria_obj.turno;
+    const municipio = asesoria_obj.municipio;
+    const distrito_judicial = asesoria_obj.distrito_judicial;
+    const tipos_juicio = asesoria_obj.tipos_juicio;
+     //Primero actualiza el domicilio
 
-  if(turno !== null){
-    //Turnado correctamente asignado
-     const domicilio_actualizado = await controlDomicilios.actualizarDomicilio(domicilio);
-    persona.id_domicilio = domicilio_actualizado.id_domicilio;
-    persona.id_genero = persona.genero.id_genero;
-    delete persona.genero;
-    delete persona.domicilio;
-    const persona_actualizada = await controlPersonas.actualizarPersona(persona); 
-    const asesoria_actualizada = (await modeloAsesoria.Asesoria.update(datos_asesoria, { where: { id_asesoria: datos_asesoria.id_asesoria } }));
-    turno.estatus_general="NO_SEGUIMIENTO";
-    const turno_agregado= await controlTurno.agregarTurno(turno);
-  }
-  /*else 
-  {
-    //Para cuando se actualice el turno o este fue erronamente asignado
-  
     const domicilio_actualizado = await controlDomicilios.actualizarDomicilio(domicilio);
     persona.id_domicilio = domicilio_actualizado.id_domicilio;
     persona.id_genero = persona.genero.id_genero;
     delete persona.genero;
     delete persona.domicilio;
-    const persona_actualizada = await controlPersonas.actualizarPersona(persona); 
+    const persona_actualizada = await controlPersonas.actualizarPersona(persona);
+
+    datos_asesoria.id_asesorado = persona_actualizada.id_persona;
+    datos_asesoria.id_tipo_juicio = tipos_juicio.id_tipo_juicio;
+    datos_asesoria.id_distrito_judicial = distrito_judicial.id_distrito_judicial;
+    datos_asesoria.id_municipio_distrito = municipio.id_municipio_distrito;
+
     const asesoria_actualizada = (await modeloAsesoria.Asesoria.update(datos_asesoria, { where: { id_asesoria: datos_asesoria.id_asesoria } }));
-    const turno_eliminado = await controlTurno.eliminarTurno(turno.id_turno);
-  }
- */
-
+    const turno_agregado = await controlTurno.agregarTurno(turno);
     return await obtenerAsesoriaPorId(datos_asesoria.id_asesoria);
-
   } catch (error) {
     console.log("Error Asesorias:", error.message);
     return false;
@@ -471,59 +510,59 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
 };
 
 
-const obtenerWhereClause =async  (filtros) => {
+const obtenerWhereClause = async (filtros) => {
   const whereClause = {};
 
-    //if (filtros.fecha_registro) {
-    //  whereClause.fecha_registro = filtros.fecha_registro;
-    //} else 
+  //if (filtros.fecha_registro) {
+  //  whereClause.fecha_registro = filtros.fecha_registro;
+  //} else 
 
 
-    if (filtros['fecha-inicio'] !== "null" && filtros['fecha-final'] !== "null") {
-      whereClause.fecha_registro = {
-        [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
-      };
-    }
+  if (filtros['fecha-inicio'] !== "null" && filtros['fecha-final'] !== "null") {
+    whereClause.fecha_registro = {
+      [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
+    };
+  }
 
 
 
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
+  if (filtros.id_distrito_judicial) {
+    whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
+  }
 
-    if (filtros.fecha_registro !== "null") {
-      whereClause.fecha_registro = filtros.fecha_registro;
-    }
+  if (filtros.fecha_registro !== "null") {
+    whereClause.fecha_registro = filtros.fecha_registro;
+  }
 
-    if (filtros.id_asesor && filtros.id_defensor) {
-      whereClause[Op.or] = [
-        { id_empleado: filtros.id_asesor },
-        { id_empleado: filtros.id_defensor },
-      ];
-    } else if (filtros.id_asesor) {
-      whereClause.id_empleado = filtros.id_asesor;
-    } else if (filtros.id_defensor) {
-      whereClause.id_empleado = filtros.id_defensor;
-    }
+  if (filtros.id_asesor && filtros.id_defensor) {
+    whereClause[Op.or] = [
+      { id_empleado: filtros.id_asesor },
+      { id_empleado: filtros.id_defensor },
+    ];
+  } else if (filtros.id_asesor) {
+    whereClause.id_empleado = filtros.id_asesor;
+  } else if (filtros.id_defensor) {
+    whereClause.id_empleado = filtros.id_defensor;
+  }
 
-    if (filtros.id_municipio) {
+  if (filtros.id_municipio) {
 
-      whereClause.id_municipio_distrito = filtros.id_municipio;
-      // Asegúrate de que la relación entre Empleado y Municipio esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      //  whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
-    }
-    if (filtros.id_distrito_judicial) {
-      whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
-    }
+    whereClause.id_municipio_distrito = filtros.id_municipio;
+    // Asegúrate de que la relación entre Empleado y Municipio esté definida
+    // y ajusta el nombre del modelo y la clave foránea según sea necesario
+    //  whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
+  }
+  if (filtros.id_distrito_judicial) {
+    whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
+  }
 
-    if (filtros.id_zona) {
-      // Asegúrate de que la relación entre Empleado y Zona esté definida
-      // y ajusta el nombre del modelo y la clave foránea según sea necesario
-      whereClause['$distrito_judicial.id_zona$'] = filtros.id_zona;
-    }
-    // Resto del código...
-    return whereClause;
+  if (filtros.id_zona) {
+    // Asegúrate de que la relación entre Empleado y Zona esté definida
+    // y ajusta el nombre del modelo y la clave foránea según sea necesario
+    whereClause['$distrito_judicial.id_zona$'] = filtros.id_zona;
+  }
+  // Resto del código...
+  return whereClause;
 
 };
 
@@ -533,7 +572,7 @@ const obtenerWhereClause =async  (filtros) => {
 
 const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
   try {
-  
+
     const whereClause = await obtenerWhereClause(filtros);
 
 
@@ -612,7 +651,7 @@ const obtenerAsesoriaPorIdAsesorados = async (ids_asesorados) => {
     const asesorias = [];
     for (const id_asesorado of ids_asesorados) {
       const asesoria = await obtenerAsesoriaPorIdAsesorado(id_asesorado);
-          asesorias.push(asesoria);
+      asesorias.push(asesoria);
     }
     if (asesorias.length > 0) {
       return asesorias;
@@ -635,9 +674,9 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
 
     // Construir el whereClause para la tabla Persona
     if (nombre || apellido_paterno || apellido_materno) {
-      whereClause['$asesorado.persona.nombre$'] = nombre ? {[Op.like]: `%${nombre}%`} : {[Op.not]: null};
-      whereClause['$asesorado.persona.apellido_paterno$'] = apellido_paterno ? {[Op.like]: `%${apellido_paterno}%`} : {[Op.not]: null};
-      whereClause['$asesorado.persona.apellido_materno$'] = apellido_materno ? {[Op.like]: `%${apellido_materno}%`} : {[Op.not]: null};
+      whereClause['$asesorado.persona.nombre$'] = nombre ? { [Op.like]: `%${nombre}%` } : { [Op.not]: null };
+      whereClause['$asesorado.persona.apellido_paterno$'] = apellido_paterno ? { [Op.like]: `%${apellido_paterno}%` } : { [Op.not]: null };
+      whereClause['$asesorado.persona.apellido_materno$'] = apellido_materno ? { [Op.like]: `%${apellido_materno}%` } : { [Op.not]: null };
     }
 
 
@@ -672,13 +711,13 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
         {
           model: modeloAsesoria.TipoJuicio,
         }
-       
+
       ],
       where: whereClause
     });
     const asesorias = [];
     for (const asesoria of asesoria_pre) {
-        asesorias.push(await formarAseoria(asesoria));
+      asesorias.push(await formarAseoria(asesoria));
     }
 
     return asesorias;
@@ -758,7 +797,36 @@ const obtenerTotalAsesoriasSistema = async () => {
   }
 };
 
+const obtenerAsesoriaIDSimpleMiddleware = async (id) => {
+  try {
+    const asesoria = await modeloAsesoria.Asesoria.findByPk(id);
+    return asesoria;
+  } catch (error) {
+    console.log("Error asesorias:", error.message);
+    return null;
+  }
+};
 
+const obtenerAsesoriaIDSimpleMiddleware2WithData = async (id) => {
+  try {
+    const asesoria = await modeloAsesoria.Asesoria.findByPk(id, {
+      raw: false,
+      nest: true,
+      include: [
+        modeloAsesoria.Asesorado,
+        modeloAsesoria.DetalleAsesoriaCatalogo,
+        modeloAsesoria.Turno,
+        modeloAsesoria.DistritoJudicial,
+        modeloAsesoria.Empleado,
+        modeloAsesoria.TipoJuicio
+      ]
+    });
+    return asesoria;
+  } catch (error) {
+    console.log("Error asesorias:", error.message);
+    return null;
+  }
+}
 
 // Export model functions and routes  
 module.exports = {
@@ -775,5 +843,6 @@ module.exports = {
   obtenerTotalAsesorias
   ,
   obtenerAsesoriasFiltroPagina,
-  obtenerAsesoriasNombre
+  obtenerAsesoriasNombre,
+  obtenerAsesoriaIDSimpleMiddleware
 };

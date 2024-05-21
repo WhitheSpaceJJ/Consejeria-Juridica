@@ -48,10 +48,19 @@ const obtenerMunicipioPorId = async (id) => {
 };
 
 
+const obtenerMunicipioDistritoPorPorIdMiddleware = async (id) => {
+    const municipio = await modeloMunicipioDistro.MunicipioDistro.findByPk(id,{
+        raw: false,
+        nest: true,
+    });
+    return municipio;
+};
+
 
 // Exportar los módulos
 module.exports = {
     obtenerMunicipios,
     obtenerMunicipioPorId,
-    obtenerMunicipiosDistrito
+    obtenerMunicipiosDistrito,
+    obtenerMunicipioDistritoPorPorIdMiddleware
 };

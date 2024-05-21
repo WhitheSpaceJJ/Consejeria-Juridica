@@ -44,6 +44,20 @@ const obtenerMotivoPorId = async (id) => {
   }
 };
 
+const obtenerMotivoPorPorIdMiddleware = async (id) => {
+  try {
+    return  await modeloMotivo.Motivo.findOne({
+      raw: true,
+      nest: true,
+      where: { id_motivo: id, estatus_general: "ACTIVO" }
+    });
+    
+  } catch (error) {
+    console.log("Error motivos:", error.message);
+    return null;
+  }
+}
+
 /**
  * @abstract Funcion que permite agregar un motivo
  * @param {*} motivo motivo a agregar
@@ -81,5 +95,6 @@ module.exports = {
   obtenerMotivos,
   obtenerMotivoPorId,
   agregarMotivo,
-  actualizarMotivo
+  actualizarMotivo,
+  obtenerMotivoPorPorIdMiddleware
 };

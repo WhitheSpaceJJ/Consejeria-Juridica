@@ -75,41 +75,57 @@ app.listen(PORT, () => {
   console.log(`Aplicación corriendo en el puerto ${PORT}`);
 });
 
-
-/**
- * Variables del servicio de usuarios GRPC para validar el token
- */
-const { packageDefinition } = require("./grpc/route.server")
+const { packageDefinition } = require("./grpc/route.server");
 const grpc = require('@grpc/grpc-js');
 
-/**
- * Importamos el controlador de jwt,roteguide y constantes de respuesta
- */
-//const jwtController = require("./utilidades/jwtController");
-const routeguide = grpc.loadPackageDefinition(packageDefinition).tokenService;
+const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
+
 const responseValido = { message: 'Token válido' };
 const responseInvalido = { message: 'Token inválido' };
 
 /**
- * Función que permite crear el servidor GRPC el cual valida el token
- *  */
+ * Función que permite crear el servidor GRPC el cual valida el token y el usuario.
+ */
 function getServer() {
-  var server = new grpc.Server();
-  server.addService(routeguide.TokenService.service, {
+  const server = new grpc.Server();
+
+  server.addService(serviciosProto.TokenService.service, {
     validarToken: (call, callback) => {
-      jwtController.verifyToken(call.request.token).
-        then((response) => {
+      jwtController.verifyToken(call.request.token)
+        .then(() => {
           callback(null, responseValido);
-        }).catch((err) => {
+        })
+        .catch(() => {
           callback(null, responseInvalido);
         });
     }
   });
+
+  server.addService(serviciosProto.UsuarioService.service, {
+    validarUsuario: (call, callback) => {
+      // Aquí puedes agregar la lógica para validar el usuario
+      const { id_usuario, usuario } = call.request;
+      controlUsuarios.obtenerUsuarioByIDAndNameGrpc(id_usuario, usuario)
+        .then((usuario) => {
+          if (usuario) {
+            callback(null, { message: 'Usuario válido' });
+          } else {
+            callback(null, { message: 'Usuario inválido' });
+          }
+        })
+        .catch(() => {
+          callback(null, { message: 'Usuario inválido' });
+        });
+    }
+  });
+
   return server;
 }
 
-//Inicializamos el servidor GRPC en el puerto 161
-var server = getServer();
+const controlUsuarios = require("./controles/controlUsuario");
+
+
+const server = getServer();
 server.bindAsync(
   `localhost:${HOSTTOKENGRPCPORT}`,
   grpc.ServerCredentials.createInsecure(),
@@ -117,9 +133,7 @@ server.bindAsync(
     if (err != null) {
       return console.error(err);
     }
-    console.log("")
-    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`)
+    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`);
     server.start();
   }
 );
-

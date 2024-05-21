@@ -1,7 +1,7 @@
 // Variable express que maneja las rutas de la API
 const express = require("express");
 // Variable que manda a llamar las variables de entorno, en este caso el puerto y el host del token
-const {PORT,HOSTTOKEN} = require("./config/default.js");
+const {PORT,HOSTTOKEN,HOSTTOKENGRPCPORT} = require("./config/default.js");
 // Constantes que representa las rutas de la API
 // Rutas del serrvicio de estados
 const estadosRoutes = require('./routes/estados.routes.js');
@@ -16,7 +16,7 @@ const CustomeError = require("./utilities/customeError.js");
 //Variable que manda a llamar el servicio de GRPC de usuarios
 const grpc = require('@grpc/grpc-js');
 // Variable que manda a llamar el paquete de definiciones de los servicios GRPC
-const {packageDefinition}=require("./cliente/cliente.js")
+const {packageDefinition}=require("./clienteUsuarios/cliente.js")
 // Constante que maneja los  de errores
 const errorController = require("./utilities/errrorController.js")
 
@@ -30,34 +30,33 @@ app.use(express.json());
 // Middleware para manejar los datos en formato URL
 app.use(cors());
 
-//Aqui se utilizara el servicio GRPC de usuarios ya que ahi estara el token.
 const jwtMiddleware = async (req, res, next) => {
-   // Obtener el valor del encabezado "Authorization"
-  const tokenHeader = req.headers.authorization;
+  const tokenHeader = req.headers.authorization; // Obtener el valor del encabezado "Authorization"
+
   // Verificar si el token existe en el encabezado
   if (!tokenHeader) {
-    // Si no existe, enviar un error
     const customeError = new CustomeError('Token no proporcionado.', 401);
     next(customeError);
     return;
   }
+
   // Extraer el token del encabezado "Authorization"
-  // Quita "Bearer " del encabezado
-  const token = tokenHeader.replace('Bearer ', ''); 
-  // Crear un cliente GRPC
-  let token_client = grpc.loadPackageDefinition(packageDefinition).tokenService;
-  // Crear un cliente GRPC para el servicio de token
-  const validador = new token_client.TokenService(HOSTTOKEN , grpc.credentials.createInsecure());
-   
-  // Llamar al servicio de validación de token
-  validador.validarToken({ token: token }, function (err, response) {
-    // Verificar si el token es inválido
+  const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
+  const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
+
+  const tokenClient = new serviciosProto.TokenService(HOSTTOKEN, grpc.credentials.createInsecure());
+
+  tokenClient.validarToken({ token: token }, (err, response) => {
+    if (err) {
+      const customeError = new CustomeError('Error en la validación del token.', 500);
+      next(customeError);
+      return;
+    }
+
     if (response.message === "Token inválido") {
-      // Si es inválido, enviar un error
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión.', 401);
       next(customeError);
     } else if (response.message === "Token válido") {
-      // Si es válido, continuar con la petición
       next();
     }
   });
@@ -87,3 +86,55 @@ app.use(errorController);
 app.listen(PORT, () => {
   console.log(`Aplicación corriendo en el puerto ${PORT}`);
 });
+
+
+
+/**
+ * Variables del servicio de usuarios GRPC para validar el token
+ */
+const { packageDefinition2 } = require("./grpc/route.server")
+const grpc2 = require('@grpc/grpc-js');
+
+/**
+ * Importamos el controlador de jwt,roteguide y constantes de respuesta
+ */
+//const jwtController = require("./utilidades/jwtController");
+const routeguide = grpc2.loadPackageDefinition(packageDefinition2).codigoService;
+const responseValido = { message: 'Codigo válido' };
+const responseInvalido = { message: 'Codigo inválido' };
+const controlColonias = require("./controllers/colonias.controllers.js");
+/**
+ * Función que permite crear el servidor GRPC el cual valida el token
+ *  */
+function getServer() {
+  var server = new grpc2.Server();
+  server.addService(routeguide.CodigoService.service, {
+    validarCodigo: (call, callback) => {
+      controlColonias.getColoniaByIDService(call.request.id_colonia).then((response) => {
+        if (response !== null) {
+          callback(null, responseValido);
+        } else {
+          callback(null, responseInvalido);
+        }
+      }).catch((err) => {
+        callback(null, responseInvalido);
+      });
+    }
+  });
+  return server;
+}
+
+//Inicializamos el servidor GRPC en el puerto 161
+var server2 = getServer();
+server2.bindAsync(
+  `localhost:${HOSTTOKENGRPCPORT}`,
+  grpc2.ServerCredentials.createInsecure(),
+  (err, port) => {
+    if (err != null) {
+      return console.error(err);
+    }
+    console.log("")
+    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`)
+    server2.start();
+  }
+);

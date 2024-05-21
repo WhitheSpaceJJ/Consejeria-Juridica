@@ -46,6 +46,20 @@ const obtenerEmpleadoPorId = async (id) => {
     }
 };
 
+const obtenerEmpleadoPorPorIdMiddleware = async (id) => {
+    try {
+        return await modeloEmpleado.Empleado.findOne({
+            raw: false,
+            nest: true,
+            where: { id_empleado: id, estatus_general: "ACTIVO" },
+        });
+    } catch (error) {
+        console.log("Error empleados:", error.message);
+        return null;
+    }
+}
+
+
 /**
  * @abstract Función que permite agregar un empleado
  * @param {*} empleado empleado a agregar
@@ -216,6 +230,7 @@ module.exports = {
     obtenerEmpleadoPorId,
     agregarEmpleado,
     actualizarEmpleado,
-    obtenerEmpleadosAsesoresPorZona, obtenerEmpleadosDefensoresPorZona
+    obtenerEmpleadosAsesoresPorZona, obtenerEmpleadosDefensoresPorZona,
+    obtenerEmpleadoPorPorIdMiddleware
 
 };

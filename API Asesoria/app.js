@@ -23,7 +23,7 @@ const municipioDistro = require("./rutas/municipioDistroRuta.js");
 // Variable para cargar el módulo de gRPC
 const grpc = require('@grpc/grpc-js');
 // Variable para cargar el módulo de proto-loader
-const { packageDefinition } = require("./cliente/cliente.js")
+const { packageDefinition } = require("./clienteUsuarios/cliente.js")
 // Variable para cargar el módulo de errores personalizados
 const CustomeError = require("./utilidades/customeError");
 // Variable para cargar el módulo de control de errores
@@ -37,8 +37,6 @@ app.use(express.json());
 // Uso de cors
 app.use(cors());
 
-
-//Aqui se utilizara el servicio GRPC de usuarios ya que ahi estara el token.
 const jwtMiddleware = async (req, res, next) => {
   const tokenHeader = req.headers.authorization; // Obtener el valor del encabezado "Authorization"
 
@@ -51,11 +49,17 @@ const jwtMiddleware = async (req, res, next) => {
 
   // Extraer el token del encabezado "Authorization"
   const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
+  const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
 
-  let token_client = grpc.loadPackageDefinition(packageDefinition).tokenService;
-  const validador = new token_client.TokenService(HOSTTOKEN, grpc.credentials.createInsecure());
-  
-  validador.validarToken({ token: token }, function (err, response) {
+  const tokenClient = new serviciosProto.TokenService(HOSTTOKEN, grpc.credentials.createInsecure());
+
+  tokenClient.validarToken({ token: token }, (err, response) => {
+    if (err) {
+      const customeError = new CustomeError('Error en la validación del token.', 500);
+      next(customeError);
+      return;
+    }
+
     if (response.message === "Token inválido") {
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión.', 401);
       next(customeError);
@@ -64,6 +68,8 @@ const jwtMiddleware = async (req, res, next) => {
     }
   });
 };
+
+
 
 // Usamos el middleware de validación de tokens en nuestras rutas
 app.use('/asesorias', 

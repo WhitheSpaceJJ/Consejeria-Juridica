@@ -62,7 +62,7 @@ class Server {
         // verify_jwt, 
          routerEscolaridad)
       this.app.use(this.paths.etnia,
-        //  verify_jwt, 
+    //  verify_jwt, 
           routerEtnia)
           this.app.use(this.paths.procesoJudicial, 
             /*verify_jwt,*/

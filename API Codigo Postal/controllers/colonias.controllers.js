@@ -68,8 +68,34 @@ const getColonia = async (id) => {
   }
 };
 
+
+const getColoniaByIDService = async (id) => {
+  try {
+    // Obtenemos una colonia
+    const colonia_pre = await modelColonias.Colonia.findOne({
+      raw: true,
+      where: {
+        id_colonia: id,
+      },
+      attributes: {
+        exclude: ["id_ciudad", "id_codigo_postal"],
+      },
+      nest: true,
+    });
+   if (!colonia_pre) {
+      return null;
+    }
+ 
+    return colonia_pre;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error en la consulta de colonias");
+  }
+}
+
 // Exportamos las funciones
 module.exports = {
   getColonia,
+  getColoniaByIDService
 };
 

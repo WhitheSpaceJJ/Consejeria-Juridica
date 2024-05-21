@@ -46,6 +46,20 @@ const obtenerTipoDeJuicioPorId = async (id) => {
   }
 };
 
+const obtenerTipoJuicioPorPorIdMiddleware = async (id) => {
+  try {
+    return await modeloTipoJuicio.TipoJuicio.findOne({
+      raw: true,
+      nest: true,
+      where: { id_tipo_juicio: id, estatus_general: "ACTIVO" }
+    });
+  } catch (error) {
+    console.log("Error tipo juicios:", error.message);
+    return null;
+  }
+}
+
+
 /**
  * @abstract Función que permite agregar un tipo de juicio
  * @param {*} tipoDeJuicio tipo de juicio a agregar
@@ -82,5 +96,6 @@ module.exports = {
   obtenerTiposDeJuicio,
   obtenerTipoDeJuicioPorId,
   agregarTipoDeJuicio,
-  actualizarTipoDeJuicio
+  actualizarTipoDeJuicio,
+  obtenerTipoJuicioPorPorIdMiddleware
 };

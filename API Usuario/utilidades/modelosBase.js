@@ -98,10 +98,10 @@ const Usuario = sequelize.define("usuarios", {
     allowNull: true
   },
   estatus_general: {
-    type: DataTypes.ENUM('ACTIVO', 'INACTIVO'), // Usar ENUM con los valores permitidos
+    type: DataTypes.ENUM('ACTIVO', 'INACTIVO'),
     allowNull: false,
     validate: {
-      isIn: [['ACTIVO', 'INACTIVO']], // Validar que solo acepte estos valores
+      isIn: [['ACTIVO', 'INACTIVO']], 
     },
   }
 }, {

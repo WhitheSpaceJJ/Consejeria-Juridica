@@ -64,6 +64,15 @@ const actualizarDomicilio = async (domicilio) => {
   }
 };
 
+const obtenerDomicilioPorIdMiddleware = async (id) => {
+  try {
+    return await modeloDomicilio.Domicilio.findByPk(id);
+  } catch (error) {
+    console.log("Error domicilios :", error.message);
+    return null;
+  }
+}
+
 /**
  *  @module controlDomicilio
  */
@@ -71,5 +80,6 @@ module.exports = {
   obtenerDomicilios,
   obtenerDomicilioPorId,
   agregarDomicilio,
-  actualizarDomicilio
+  actualizarDomicilio,
+  obtenerDomicilioPorIdMiddleware
 };

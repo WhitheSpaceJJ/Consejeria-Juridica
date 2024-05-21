@@ -1,6 +1,6 @@
 const grpc = require('@grpc/grpc-js')
-const { packageDefinition } = require('../grpc/route.sever')
-
+const { packageDefinition } = require('../clienteUsuarios/cliente')
+ 
 /**
  * @abstract Middleware que verifica y valida el token JWT en el encabezado "Authorization" de la solicitud
  * @param {object} req - Objeto de la solicitud
@@ -9,33 +9,35 @@ const { packageDefinition } = require('../grpc/route.sever')
  * @returns {object} Retorna un mensaje de error si el token no es válido o no se proporcionó, de lo contrario pasa al siguiente middleware
  */
 const jwtMiddleware = async (req, res, next) => {
-  const tokenHeader = req.headers.authorization // Obtener el valor del encabezado "Authorization"
+  const tokenHeader = req.headers.authorization; // Obtener el valor del encabezado "Authorization"
+
   // Verificar si el token existe en el encabezado
   if (!tokenHeader) {
-    return res.status(401).json({
-      message: 'Token no proporcionado.'
-    })
+    const customeError = new CustomeError('Token no proporcionado.', 401);
+    next(customeError);
+    return;
   }
+
   // Extraer el token del encabezado "Authorization"
-  const token = tokenHeader.replace('Bearer ', '') // Quita "Bearer " del encabezado
+  const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
+  const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
 
-  const tokenClient = grpc.loadPackageDefinition(packageDefinition).tokenService
-  const validador = new tokenClient.TokenService(process.env.HOSTTOKEN , grpc.credentials.createInsecure())
+  const tokenClient = new serviciosProto.TokenService(process.env.HOSTTOKEN, grpc.credentials.createInsecure());
 
-  validador.validarToken({ token }, function (err, response) {
+  tokenClient.validarToken({ token: token }, (err, response) => {
     if (err) {
-      return res.status(500).json({
-        message: 'Error al validar token'
-      })
+      const customeError = new CustomeError('Error en la validación del token.', 500);
+      next(customeError);
+      return;
     }
-    if (response.message === 'Token inválido') {
-      res.status(401).json({
-        message: 'Token inválido, no ha iniciado sesión.'
-      })
-    } else if (response.message === 'Token válido') {
-      next()
+
+    if (response.message === "Token inválido") {
+      const customeError = new CustomeError('Token inválido, no ha iniciado sesión.', 401);
+      next(customeError);
+    } else if (response.message === "Token válido") {
+      next();
     }
-  })
-}
+  });
+};
 
 module.exports = jwtMiddleware

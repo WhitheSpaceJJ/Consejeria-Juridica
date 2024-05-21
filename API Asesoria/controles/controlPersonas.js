@@ -117,7 +117,14 @@ const obtenerPersonasNombre = async (nombre, apellido_paterno, apellido_materno)
   }
 };
 
-
+const obtenerPersonaPorPorIdMiddleware = async (id) => {
+  try {
+    return await modeloPersona.Persona.findByPk(id);
+  } catch (error) {
+    console.log("Error personas:", error.message);
+    return null;
+  }
+};
 
 //Module exports
 module.exports = {
@@ -125,5 +132,6 @@ module.exports = {
   obtenerPersonaPorId,
   agregarPersona,
   actualizarPersona,
-  obtenerPersonasNombre
+  obtenerPersonasNombre,
+  obtenerPersonaPorPorIdMiddleware
 };

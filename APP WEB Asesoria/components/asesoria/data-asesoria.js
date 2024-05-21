@@ -60,7 +60,7 @@ export class DataAsesoria extends HTMLElement {
     this.shadowRoot.getElementById('calle').textContent = persona.domicilio.calle_domicilio
     this.shadowRoot.getElementById('numero-exterior').textContent = persona.domicilio.numero_exterior_domicilio
     this.shadowRoot.getElementById('numero-interior').textContent = persona.domicilio.numero_interior_domicilio
-    if(domicilioData !== undefined){
+    if( domicilioData !== undefined){
       this.shadowRoot.getElementById('codigo-postal').textContent =  domicilioData.codigo_postal.codigo_postal
       this.shadowRoot.getElementById('estado').textContent = domicilioData.estado.nombre_estado
       this.shadowRoot.getElementById('municipio').textContent = domicilioData.municipio.nombre_municipio

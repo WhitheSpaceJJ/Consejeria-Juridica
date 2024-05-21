@@ -4,6 +4,7 @@ class IndexController {
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
+   // console.log(model.user)
   }
 
   // DOMContentLoaded

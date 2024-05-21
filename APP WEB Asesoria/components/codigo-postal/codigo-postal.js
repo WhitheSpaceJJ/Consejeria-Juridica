@@ -78,20 +78,22 @@ export class CodigoPostal extends HTMLElement {
     this.#ciudad = this.shadowRoot.getElementById('ciudad')
     this.#colonia = this.shadowRoot.getElementById('colonia')
   }
- 
+
   //Función manejadorEntradaInputs para manejar la entrada de los inputs
   manejadorEntradaInputs() {
     var calleInput = this.#calle;
     //Se crea la expresión regular para validar que solo se ingresen letras
     calleInput.addEventListener('input', function () {
-     if (calleInput.value.length > 75) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
-        modal.title = 'Error de validación';
-        modal.open = true;
+      if (calleInput.value !== '') {
+        if (calleInput.value.length > 75) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
       }
     });
-     
+
     //Expresione regulare para validar que solo se ingresen números en los campos de número exterior e interior y variables de los inputs
     var numeroExteriorInput = this.#numeroExt;
     var numeroInteriorInput = this.#numeroExt;
@@ -99,17 +101,18 @@ export class CodigoPostal extends HTMLElement {
 
     //Se crea la expresión regular para validar que solo se ingresen números
     numeroExteriorInput.addEventListener('input', function () {
-     
-     if (numeroExteriorInput.value === 'e' || !enterosPattern.test(numeroExteriorInput.value)) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El número exterior solo permite números, verifique su respuesta.';
-        modal.title = 'Error de validación';
-        modal.open = true;
-      }else  if (numeroExteriorInput.value.length > 10) {
-        const modal = document.querySelector('modal-warning');
-        modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
-        modal.title = 'Error de validación';
-        modal.open = true;
+      if (numeroExteriorInput.value !== '') {
+        if (numeroExteriorInput.value === 'e' || !enterosPattern.test(numeroExteriorInput.value)) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número exterior solo permite números, verifique su respuesta.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        } else if (numeroExteriorInput.value.length > 10) {
+          const modal = document.querySelector('modal-warning');
+          modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
+          modal.title = 'Error de validación';
+          modal.open = true;
+        }
       }
     });
 
@@ -117,7 +120,7 @@ export class CodigoPostal extends HTMLElement {
     numeroInteriorInput.addEventListener('input', function () {
 
       if (numeroInteriorInput.value !== '') {
-        if ( numeroInteriorInput.value ==='e' && !enterosPattern.test(numeroInteriorInput.value)) {
+        if (numeroInteriorInput.value === 'e' && !enterosPattern.test(numeroInteriorInput.value)) {
           const modal = document.querySelector('modal-warning');
           modal.message = 'El número interior solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -132,12 +135,12 @@ export class CodigoPostal extends HTMLElement {
       }
     });
   }
-   
+
   //ConecctedCallback para conectar el componente y manejar el evento submit del formulario
   connectedCallback() {
     //Se inicializan las variables que representan los campos del formulario
     this.formCP = this.shadowRoot.getElementById('form-cp')
-    
+
     //Se maneja el evento submit del formulario
     this.formCP.addEventListener('submit', e => {
       e.preventDefault()
@@ -152,14 +155,14 @@ export class CodigoPostal extends HTMLElement {
       this.searchCP()
     })
   }
- 
+
   //Función para buscar el código postal y llenar los campos de estado, municipio, ciudad y colonia
   async searchCP() {
     try {
       const { colonias: data } = await this.#API.getDomicilioByCP(
         this.#cp.value
       )
- 
+
       this.#estado.innerHTML = '';
       this.#estado.value = data.estado.nombre_estado
       this.#municipio.innerHTML = '';
@@ -177,7 +180,7 @@ export class CodigoPostal extends HTMLElement {
       this.#showModal('Error al buscar el código postal o no hubo coincidencias', 'Error')
     }
   }
-  
+
   //Función para mostrar el modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
