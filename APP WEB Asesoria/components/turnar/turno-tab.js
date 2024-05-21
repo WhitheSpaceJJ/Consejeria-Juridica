@@ -349,8 +349,8 @@ export class TurnoTab extends HTMLElement {
         //Validar el resumen de la asesoria ,en este caso que no este vacio y que no tenga más de 250 caracteres
         if (this.#resumen.value === '') {
           throw new ValidationError('El resumen no puede estar vacío, por favor ingreselo.')
-        } else if (this.#resumen.value.length > 250) {
-          throw new ValidationError('El resumen no puede tener más de 250 caracteres, por favor revisa.')
+        } else if (this.#resumen.value.length > 500) {
+          throw new ValidationError('El resumen no puede tener más de 500 caracteres, por favor revisa.')
         }
 
 
@@ -430,9 +430,7 @@ export class TurnoTab extends HTMLElement {
           console.error(error)
         }
     
-        console.log(this.#asesoria)
 
-        /*
         //Registro del turno
         await this.#api.putAsesoria({
           id: this.#asesoria.datos_asesoria.id_asesoria,
@@ -444,7 +442,6 @@ export class TurnoTab extends HTMLElement {
         this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
           location.href = '/'
         })
-*/
       } catch (error) {
         //mensaje de error
         if (error instanceof ValidationError) {

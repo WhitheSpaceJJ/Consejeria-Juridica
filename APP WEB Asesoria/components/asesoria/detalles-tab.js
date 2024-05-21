@@ -101,8 +101,7 @@ export class DetallesTab extends HTMLElement {
     this.btnCrearAsesoria.addEventListener('click', async () => {
       try {
         //Creacion de la asesoria por medio de la API
-        console.log(this.#asesoria)
-        /* await this.#api.postAsesoria(this.#asesoria)
+       await this.#api.postAsesoria(this.#asesoria)
          this.#showModal(
            'La asesoría se ha creado correctamente',
            'Asesoría creada',
@@ -110,7 +109,6 @@ export class DetallesTab extends HTMLElement {
              location.href = '/'
            }
          )
-         */
       } catch (error) {
         console.error(error)
         this.#showModal(

@@ -711,29 +711,7 @@ async function validarPeticionPUT(req, res, next) {
   }
   catch (error) {
   }
-  /*
-     "persona": {
-         "id_persona": 4,
-         "nombre": "María",
-         "apellido_materno": "Sánchez",
-         "apellido_paterno": "Gómez",
-         "edad": 22,
-         "telefono": "644333444",
-         "domicilio": {
-             "id_domicilio": 4,
-             "calle_domicilio": "Constitución",
-             "numero_exterior_domicilio": "201",
-             "numero_interior_domicilio": "",
-             "id_colonia": "21225"
-         },
-         "genero": {
-             "id_genero": 2,
-             "descripcion_genero": "Femenino",
-             "estatus_general": "ACTIVO"
-         }
-     },
-  
-     */
+ 
 
 
   //Hacer validaciones con respecto a los datos de la persona  incluye el id

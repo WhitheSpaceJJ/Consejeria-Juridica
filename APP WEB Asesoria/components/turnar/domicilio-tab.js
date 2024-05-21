@@ -124,11 +124,13 @@ export class DomicilioTab extends HTMLElement {
     //Se valida que la calle no tenga mas de 75 caracteres
     calleInput.addEventListener('input', function () {
       if (editableCbx.checked) {
-        if (calleInput.value.length > 75) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
+        if (calleInput.value !== '') {
+          if (calleInput.value.length > 75) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          }
         }
       }
 
@@ -145,18 +147,19 @@ export class DomicilioTab extends HTMLElement {
     numeroExteriorInput.addEventListener('input', function () {
 
       if (editableCbx.checked) {
+        if (numeroExteriorInput.value !== '') {
 
-
-        if (!enterosPattern.test(numeroExteriorInput.value)) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior solo permite números, verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (numeroExteriorInput.value.length > 10) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
+          if (!enterosPattern.test(numeroExteriorInput.value)) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El número exterior solo permite números, verifique su respuesta.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          } else if (numeroExteriorInput.value.length > 10) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          }
         }
       }
     });

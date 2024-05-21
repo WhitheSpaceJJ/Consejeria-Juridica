@@ -19,13 +19,13 @@ export class AsesoradoTab extends HTMLElement {
   #ediatableCbx
   #generoActual
 
-  
+
   //Metodo para observar los cambios en los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
 
-//Metodo que se encarga de observar los cambios en los atributos
+  //Metodo que se encarga de observar los cambios en los atributos
   get id() {
     return this.getAttribute('id')
   }
@@ -47,7 +47,7 @@ export class AsesoradoTab extends HTMLElement {
       ),
     }
   }
-  
+
   //Metodo que se encarga de setear los datos
   set data(value) {
     this.setAttribute('data', value)
@@ -65,10 +65,10 @@ export class AsesoradoTab extends HTMLElement {
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
 
 
-     
+
     // Se obtiene la informacion de la API
     this.#api = new APIModel()
-     
+
 
     //Se obtiene el genero de la persona 
     this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero).then(data => {
@@ -82,10 +82,10 @@ export class AsesoradoTab extends HTMLElement {
       this.manageFormFields()
       this.fillInputs()
     })
-   
+
 
   }
- 
+
   //Rellenar los inputs con los datos de la asesoria
   fillInputs() {
     //Se obtienen los inputs
@@ -105,13 +105,13 @@ export class AsesoradoTab extends HTMLElement {
     const option = document.createElement('option')
     option.value = this.#generoActual.id_genero
     option.text = this.#generoActual.descripcion_genero
-    this.#sexo.appendChild(option) 
+    this.#sexo.appendChild(option)
 
     this.#sexo.value = this.#generoActual.id_genero
   }
 
 
-   //Metodo que se encarga de manejar los campos del formulario
+  //Metodo que se encarga de manejar los campos del formulario
   manageFormFields() {
     //Asignacion de los inputs
     this.#nombre = this.shadowRoot.getElementById('nombre')
@@ -122,10 +122,10 @@ export class AsesoradoTab extends HTMLElement {
     this.#ediatableCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')
 
     //Llamada al manejador de entrada de texto
-     this.manejadorEntradaTexto()
+    this.manejadorEntradaTexto()
 
   }
-  
+
   //Manejador de entrada de texto para validar los campos
   manejadorEntradaTexto() {
     var nombreInput = this.#nombre;
@@ -141,8 +141,8 @@ export class AsesoradoTab extends HTMLElement {
 
         var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
+        if (nombreInput.value !== '') {
 
-      
           if (!nombrePattern.test(nombreInput.value)) {
             // Si el campo contiene caracteres no válidos, lanzar una excepción
 
@@ -159,6 +159,7 @@ export class AsesoradoTab extends HTMLElement {
             modal.open = true
           }
 
+        }
       }
     });
 
@@ -171,19 +172,19 @@ export class AsesoradoTab extends HTMLElement {
 
 
         var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-
-if (!apellidoPattern.test(apellidoPaternoInput.value)) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (apellidoPaternoInput.value.length > 50) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
+        if (apellidoPaternoInput.value !== '') {
+          if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          } else if (apellidoPaternoInput.value.length > 50) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          }
         }
-
       }
 
     });
@@ -197,17 +198,18 @@ if (!apellidoPattern.test(apellidoPaternoInput.value)) {
 
         var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
-
-        if (!apellidoPattern.test(apellidoMaternoInput.value)) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
-        } else if (apellidoMaternoInput.value.length > 50) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
-          modal.title = 'Error de validación';
-          modal.open = true;
+        if (apellidoMaternoInput.value !== '') {
+          if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          } else if (apellidoMaternoInput.value.length > 50) {
+            const modal = document.querySelector('modal-warning');
+            modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
+            modal.title = 'Error de validación';
+            modal.open = true;
+          }
         }
 
       }
@@ -222,32 +224,34 @@ if (!apellidoPattern.test(apellidoPaternoInput.value)) {
 
 
         var edadPattern = /^\d+$/;
-        if (!edadPattern.test(edadInput.value)) {
-          if (edadInput.value === '') {
+        if (edadInput.value !== '') {
+          if (!edadPattern.test(edadInput.value)) {
+            if (edadInput.value === '') {
+              const modal = document.querySelector('modal-warning');
+              modal.message = 'La edad no puede estar vacía, por favor ingresela.';
+              modal.title = 'Error de validación';
+              modal.open = true;
+            } else {
+              const modal = document.querySelector('modal-warning');
+              modal.message = 'La edad solo permite números, verifique su respuesta.';
+              modal.title = 'Error de validación';
+              modal.open = true;
+            }
+          } else if (edadInput.value > 200) {
             const modal = document.querySelector('modal-warning');
-            modal.message = 'La edad no puede estar vacía, por favor ingresela.';
-            modal.title = 'Error de validación';
-            modal.open = true;
-          } else {
-            const modal = document.querySelector('modal-warning');
-            modal.message = 'La edad solo permite números, verifique su respuesta.';
+            modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
             modal.title = 'Error de validación';
             modal.open = true;
           }
-        } else if (edadInput.value > 200) {
-          const modal = document.querySelector('modal-warning');
-          modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
-          modal.title = 'Error de validación';
-          modal.open = true;
         }
 
       }
 
     });
-      
+
   }
 
-   
+
   //Metodo encargado de activar los eventos del boton y el checkbox
   connectedCallback() {
     // Se obtienen los elementos del DOM
