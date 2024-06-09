@@ -19,13 +19,11 @@ const PORT = process.env.PORT;
 // Obtenemos el valor de la variable de entorno DBPORT
 const DBPORT = process.env.DBPORT ; 
  // Obtenemos el valor de la variable de entorno HOSTTOKEN 
-const HOSTTOKEN = process.env.HOSTTOKEN ;
+const HOSTTOKENUSUARIOS = process.env.HOSTTOKENUSUARIOS ;
 // Obtenemos el valor de la variable de entorno HOSTTOKENGR
-const HOSTTOKENGRPCPORT = process.env.HOSTTOKENGRPCPORT ; 
+const GRPCPORTASESORIAS = process.env.GRPCPORTASESORIAS ; 
 
- const HOSTTOKENPORT2= process.env.HOSTTOKENPORT2;
-
- const HOSTTOKEN2 = process.env.HOSTTOKEN2 ;
+ const HOSTGRPCCODIGOSPOSTALES = process.env.HOSTGRPCCODIGOSPOSTALES ;
 // Exportamos las variables
 module.exports = {
     DBHOST,
@@ -34,9 +32,7 @@ module.exports = {
     DATABASE,
     PORT,
     DBPORT,
-    HOSTTOKEN,HOSTTOKENGRPCPORT
-    ,HOSTTOKENPORT2
-    ,HOSTTOKEN2
+    HOSTTOKENUSUARIOS ,  GRPCPORTASESORIAS , HOSTGRPCCODIGOSPOSTALES
 }
  
 

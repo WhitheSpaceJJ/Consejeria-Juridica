@@ -1,25 +1,33 @@
-const template = document.createElement('template')
+ 
 
 class TurnarTabs extends HTMLElement {
-
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+       //Botones de los tabs
+       this.btnAsesorado = this.shadowRoot.getElementById('btn-asesorado')
+       this.btnDomicilio = this.shadowRoot.getElementById('btn-domicilio')
+       this.btnTurno = this.shadowRoot.getElementById('btn-turno')
+      await this.campos()
+       //Se añaden los eventos de cl ick
+       this.addClickEventListeners()
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/turnar/tabs.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Constructor de la clase
   constructor() {
     super()
-    this.attachShadow({ mode: 'open' }).appendChild(
-      template.content.cloneNode(true)
-    )
-
-    //Botones de los tabs
-    this.btnAsesorado = this.shadowRoot.getElementById('btn-asesorado')
-    this.btnDomicilio = this.shadowRoot.getElementById('btn-domicilio')
-    this.btnTurno = this.shadowRoot.getElementById('btn-turno')
-
-    //Se añaden los eventos de click
-    this.addClickEventListeners()
+    this.init2()
+ 
   }
 
   //MEtodo encargado de dar de alta el evento de cambio de tab
-  connectedCallback() {
+ async campos() {
     document.addEventListener('next', event => {
       const tabId = event.detail.tabId
       this.handleTabClick(tabId)
@@ -87,7 +95,5 @@ class TurnarTabs extends HTMLElement {
   }
 }
 
-const html = await (await fetch('../assets/turnar/tabs.html')).text()
-template.innerHTML = html
-
+ 
 customElements.define('turnar-tabs', TurnarTabs)

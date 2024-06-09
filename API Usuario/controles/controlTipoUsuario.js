@@ -12,8 +12,20 @@ const obtenerTipoUsuarios = async () => {
         return null;
     }
 }
+const obtenerTipoUsuarioById = async (id) => {  
+    try {
+        return await modeloTipoUsuario.TipoUser.findOne({
+            where: {
+                id_tipouser: id
+            }
+        });
+    } catch (error) {
+        console.log("Error:", error.message);
+        return null;
+    }
+}
 
 
 module.exports = {
-    obtenerTipoUsuarios,
+    obtenerTipoUsuarios, obtenerTipoUsuarioById
 };

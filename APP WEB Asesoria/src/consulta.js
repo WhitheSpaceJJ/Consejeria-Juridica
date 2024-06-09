@@ -1,6 +1,6 @@
-import { ConsultaController } from '../controllers/consulta.controller'
-import { APIModel } from '../models/api.model'
-import { ConsultaView } from '../views/consulta.view'
+import { ConsultaController } from '../controllers/consulta.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { ConsultaView } from '../views/consulta.view.js'
 
 const main = () => {
   const model = new APIModel()

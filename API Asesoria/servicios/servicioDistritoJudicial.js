@@ -27,31 +27,11 @@ const obtenerDistritosJudiciales = asyncError(async (req, res, next) => {
 
 
 
-/**
- * @abstract Servicio que permite obtener un distrito judicial
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- *  
- * */
-const obtenerDistritoJudicial = asyncError(async (req, res, next) => {
-    const result = await controlDistritoJudicial.obtenerDistritoJudicial(req.params.id);
-    if (result === null || result === undefined) {
-        const error = new CustomeError('No se encontro el distrito judicial', 404);
-        return next(error);
-    } else {
-        res.status(200).json({
-            distritoJudicial: result
-        });
-    }
 
-}
-);
 
 
 //Module exports
 module.exports = {
 
-    obtenerDistritosJudiciales,
-    obtenerDistritoJudicial,
+    obtenerDistritosJudiciales
 };

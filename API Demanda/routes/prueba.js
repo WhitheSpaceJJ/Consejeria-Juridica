@@ -18,23 +18,30 @@ const {
 
 // Se crea una instancia de Router
 const router = Router()
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
+const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
 
 router.get('/proceso-judicial/:id', 
+validarPermisos(permisosAceptables2),
 existeProcesoJudicial,
 obtenerPruebasPorProcesoJudicial)
 
 // Ruta para obtener una prueba por su id
-router.get('/:id', obtenerPrueba)
+ router.get('/:id', 
+  validarPermisos(permisosAceptables2),
+ obtenerPrueba)
 
 // Ruta para crear una prueba
 router.post('/', 
-
+validarPermisos(permisosAceptables1),
 validarJSONPruebaPOST,
 existeProcesoJudicial,
 crearPrueba)
 
 // Ruta para actualizar una prueba por su id
 router.put('/:id',
+validarPermisos(permisosAceptables2),
  existePrueba, 
 validarJSONPruebaPUT,
 existeProcesoJudicial,

@@ -1,4 +1,4 @@
-import { ValidationError } from '../lib/errors'
+import { ValidationError } from '../lib/errors.js'
 
 class RecuperacionController {
   constructor(model) {

@@ -11,11 +11,14 @@ const crearDetallePermisoUsuario = async (detallePermisoUsuario) => {
 }
 
 
-const eliminarDetallePermisoUsuario = async (idDetallePermisoUsuario) => {
+const eliminarDetallePermisoUsuario = async (id_usuario, id_permiso) => {
     try {
-        const result= await modeloDetallePermisoUsuario.Detalle_Permiso_Usuario.destroy({ where: { idDetallePermisoUsuario } });
-        return result 
-    }
+        const result= await modeloDetallePermisoUsuario.Detalle_Permiso_Usuario.destroy({ where: {
+            id_usuario: id_usuario,
+            id_permiso: id_permiso
+         } });
+        return result  
+    } 
 
     catch (error) {
         console.log("Error:", error.message);
@@ -23,6 +26,24 @@ const eliminarDetallePermisoUsuario = async (idDetallePermisoUsuario) => {
     }
 }
 
+const obtenerPermisosUsuario = async (idUsuario) => {
+    try {
+        return await modeloDetallePermisoUsuario.Detalle_Permiso_Usuario.findAll({
+             where: { id_usuario: idUsuario },
+             include: [modeloDetallePermisoUsuario.Permiso]
+            });
+    } catch (error) {
+        console.log("Error:", error.message);
+        return null;
+    }
+}
+
+
+
+
 module.exports = {  
-    crearDetallePermisoUsuario
+    crearDetallePermisoUsuario,
+    eliminarDetallePermisoUsuario,
+    obtenerPermisosUsuario
+
 }

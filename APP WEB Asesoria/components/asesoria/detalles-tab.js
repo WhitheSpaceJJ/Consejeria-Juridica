@@ -1,140 +1,100 @@
-import { APIModel } from '../../models/api.model'
-import { DataAsesoria } from './data-asesoria'
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/asesoria/detalles-tab.html')
-).text()
-template.innerHTML = html
+import { APIModel } from '../../models/api.model.js';
+import { DataAsesoria } from './data-asesoria.js';
 
 export class DetallesTab extends HTMLElement {
-  //Variable privada que almacena la informacion de la asesoria
-  //Variable que almacena la instancia de la clase APIModel,en la cual se realizan las peticiones a la API
-  #api
-  //Variable que almacena la informacion de la asesoria
-  #asesoria
+  #api;
+  #asesoria;
 
-  // Se crea el constructor de la clase
   constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
-    //ID del componente con respecto a la pestaña de detalles y se oculta
-    this.id = 'detalles'
-    this.style.display = 'none'
-
-    //Se obtienen los componentes de asesorado y asesoria
-    this.asesoradoTab = document.querySelector('asesorado-full-tab')
-    this.asesoriaTab = document.querySelector('asesoria-tab')
+    super();
+    this.id = 'detalles';
+    this.style.display = 'none';
+    this.attachShadow({ mode: 'open' });
+    this.initTemplate();
   }
 
+  async initTemplate() {
+    const templateContent = await this.fetchTemplate();
+    this.shadowRoot.appendChild(templateContent.content.cloneNode(true));
+    await this.campos(); // Mueve esta llamada aquí para asegurar que el contenido está listo
+  }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const response = await fetch('./components/asesoria/detalles-tab.html');
+    const html = await response.text();
+    template.innerHTML = html;
+    return template;
+  }
 
-  //Metodo que se encarga de inicializar el componente
   async init() {
-    //Se crea una instancia de la clase APIModel
-    this.#api = new APIModel()
-    //Se obtiene el elemento del DOM que representa la seccion de datos
-    const $section = this.shadowRoot.getElementById('data')
+    this.asesoradoTab = document.querySelector('asesorado-full-tab');
+    this.asesoriaTab = document.querySelector('asesoria-tab');
+    this.#api = new APIModel();
 
-    //Se obtiene la informacion de la asesoria
+    // Espera a que el DOM del shadow esté listo antes de seleccionar elementos
+    await this.campos();
 
-    //La informacion que se obtiene de los tabs tiene un formato especifico  que la API del sistema 
-    //espera, por lo que cambios que se le hagan a la informacion o la data, se deben de realizar en la API
+    const $section = this.shadowRoot.getElementById('data');
+    if ($section === null) {
+      console.error('Section "data" not found in shadow DOM');
+      return;
+    }
+
     this.#asesoria = {
       ...this.asesoradoTab.data,
       ...this.asesoriaTab.data,
-    }
+    };
 
-    //Se obtiene la colonia por medio del id de la colonia esto con el fin de obtener la informacion de la colonia estado, municipio, ciudad y codigo postal
-    // const domicilio = await this.#api.getColoniaById(
-    //    this.#asesoria.persona.domicilio.id_colonia
-    //  )
-    
     if (this.#asesoria.persona.domicilio.id_colonia !== '') {
-      const domicilio = await this.#api.getColoniaById(
-        this.#asesoria.persona.domicilio.id_colonia
-      )
-      //Se crea una instancia de la clase DataAsesoria y se le pasa la informacion de la asesoria y el domicilio y asi poder rellenar el html con la informacion
+      const domicilio = await this.#api.getColoniaById(this.#asesoria.persona.domicilio.id_colonia);
       const dataAsesoria = new DataAsesoria(
-        { asesoria: this.#asesoria },
-        domicilio
-      )
-
-      //Se limpia la seccion de datos y se agrega la informacion de la asesoria
-      $section.innerHTML = ''
-
-      //Se agrega la informacion de la asesoria a la seccion de datos
-      $section.appendChild(dataAsesoria)
-
-      this.#asesoria.datos_asesoria = {
-        ...this.#asesoria.datos_asesoria,
-        id_empleado: this.#asesoria.empleado.id_empleado,
-      }
+ {asesoria: this.#asesoria},{
+   domicilio}
+      );
+      $section.innerHTML = '';
+      $section.appendChild(dataAsesoria);
     } else {
-
-      //Se crea una instancia de la clase DataAsesoria y se le pasa la informacion de la asesoria y el domicilio y asi poder rellenar el html con la informacion
-      const dataAsesoria = new DataAsesoria(
-        { asesoria: this.#asesoria },
-        {}
-      )
-
-      //Se limpia la seccion de datos y se agrega la informacion de la asesoria
-      $section.innerHTML = ''
-
-      //Se agrega la informacion de la asesoria a la seccion de datos
-      $section.appendChild(dataAsesoria)
-
-      this.#asesoria.datos_asesoria = {
-        ...this.#asesoria.datos_asesoria,
-        id_empleado: this.#asesoria.empleado.id_empleado,
-      }
+      const dataAsesoria = new DataAsesoria({asesoria:this.#asesoria}, {});
+      $section.innerHTML = '';
+      $section.appendChild(dataAsesoria);
     }
+
+    this.#asesoria.datos_asesoria = {
+      ...this.#asesoria.datos_asesoria,
+      id_empleado: this.#asesoria.empleado.id_empleado,
+    };
   }
 
-  //Metodo que se ejecuta cuando el componente es agregado al DOM
-  connectedCallback() {
-    this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-asesoria')
-
-    //Se agrega el evento de click al boton de crear asesoria
+  async campos() {
+    this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-asesoria');
     this.btnCrearAsesoria.addEventListener('click', async () => {
       try {
-        //Creacion de la asesoria por medio de la API
-       await this.#api.postAsesoria(this.#asesoria)
-         this.#showModal(
-           'La asesoría se ha creado correctamente',
-           'Asesoría creada',
-           () => {
-             location.href = '/'
-           }
-         )
+        await this.#api.postAsesoria(this.#asesoria);
+        this.#showModal('La asesoría se ha creado correctamente', 'Asesoría creada', () => {
+          location.href = '/';
+        });
       } catch (error) {
-        console.error(error)
-        this.#showModal(
-          'Ocurrió un error al crear la asesoría, verifique los datos o el servidor',
-          'Error al crear asesoría'
-        )
+        console.error(error);
+        this.#showModal('Ocurrió un error al crear la asesoría, verifique los datos o el servidor', 'Error al crear asesoría');
       }
-    })
-    //Evento que se dispara cuando se cambia de pestaña
+    });
+
     document.addEventListener('tab-change', event => {
-      const tabId = event.detail.tabId
-      if (tabId !== 'detalles') {
-        return
+      const tabId = event.detail.tabId;
+      if (tabId === 'detalles') {
+        this.init();
       }
-      this.init()
-    })
+    });
   }
 
-  //Metodo que se encarga de mostrar un modal con un mensaje y un titulo de error
   #showModal(message, title, onCloseCallback) {
-    const modal = document.querySelector('modal-warning')
-    modal.message = message
-    modal.title = title
-    modal.open = true
-    modal.setOnCloseCallback(onCloseCallback)
+    const modal = document.querySelector('modal-warning');
+    modal.message = message;
+    modal.title = title;
+    modal.open = true;
+    modal.setOnCloseCallback(onCloseCallback);
   }
 }
 
-customElements.define('detalles-tab', DetallesTab)
+customElements.define('detalles-tab', DetallesTab);

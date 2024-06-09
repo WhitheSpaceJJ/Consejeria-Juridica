@@ -3,7 +3,7 @@ const controlTipoJuicio = require('../controles/controlTipoJuicio')
 
 async function existeTipoJuicio(req, res, next) {
     const { id } = req.params
-    const tipoJuicio = await controlTipoJuicio.obtenerTipoJuicioPorId(id)
+    const tipoJuicio = await controlTipoJuicio.obtenerTipoDeJuicioPorId(id)
     if (!tipoJuicio) {
         return res.status(404).json({
             message: 'No existe un tipo de juicio con el id proporcionado, asi que no se puede continuar con la petición.'

@@ -1,16 +1,9 @@
 //const template = document.createElement('template');
 //import { ControllerUtils } from '......./lib/controllerUtils';
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
-
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/juicios-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 class JuiciosTab extends HTMLElement {
 
@@ -25,14 +18,21 @@ class JuiciosTab extends HTMLElement {
   // Constructor
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //LLamado a la funcion init
     this.init();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/juicios-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Funcion encarga de inicializar las variables, datos,etc
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     // Inicialización de variables API 
     this.#api = new APIModel();
     //Inicializacion de idSeleccion

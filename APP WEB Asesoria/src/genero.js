@@ -1,6 +1,6 @@
-import {  GeneroController } from '../controllers/genero.controller'
-import { APIModel } from '../models/api.model'
-import { GeneroView } from '../views/genero.view'
+import {  GeneroController } from '../controllers/genero.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { GeneroView } from '../views/genero.view.js'
 
 const main = () => {
   const model = new APIModel()

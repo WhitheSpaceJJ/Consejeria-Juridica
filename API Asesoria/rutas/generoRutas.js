@@ -9,6 +9,8 @@ const {
   validarJSONGeneroPUT
 } = require('../middlewares/middlewareGenero');
 
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables = ["AD_GENEROS_SA","ALL_SA"]
 
 // Creamos un nuevo router
 const router = express.Router();
@@ -16,18 +18,24 @@ const router = express.Router();
 
 router.route('/')
   // Obtener todos los géneros
-  .get(servicioGeneros.obtenerGeneros)
+  .get(
+    validarPermisos(["AD_GENEROS_SA","ALL_SA","ALL_SD","REGISTRO_ASESORIA_SA", "REGISTRO_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD"]),
+    servicioGeneros.obtenerGeneros)
   // Agregar un nuevo género
   .post(
+    validarPermisos(permisosAceptables),
     validarJSONGeneroPOST,
     servicioGeneros.agregarGenero);
 
 router.route('/:id')
-  // Obtener un género por su ID
-  .get(servicioGeneros.obtenerGeneroPorId)
+  // Obtener un género por su ID 
+  .get(
+    validarPermisos(["AD_GENEROS_SA","ALL_SA","ALL_SD", "SEGUIMIENTO_PROCESO_JUDICIAL_SD","TURNAR_ASESORIA_SA"]),
+    servicioGeneros.obtenerGeneroPorId)
  
   // Actualizar un género por su ID
   .put(
+    validarPermisos(permisosAceptables),
     existeGenero,
     validarJSONGeneroPUT,
     servicioGeneros.actualizarGenero);

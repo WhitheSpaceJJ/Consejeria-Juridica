@@ -1,6 +1,6 @@
-import {  EstadoCivilController } from '../controllers/estado-civil.controller'
-import { APIModel } from '../models/api.model'
-import { EstadoCivilView } from '../views/estado-civil.view'
+import {  EstadoCivilController } from '../controllers/estado-civil.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { EstadoCivilView } from '../views/estado-civil.view.js'
 
 const main = () => {
   const model = new APIModel()

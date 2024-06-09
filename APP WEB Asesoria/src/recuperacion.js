@@ -1,6 +1,6 @@
-import { RecuperacionController } from '../controllers/recuperacion.controller'
-import { APIModel } from '../models/api.model'
-import { RecuperacionView } from '../views/recuperacion.view'
+import { RecuperacionController } from '../controllers/recuperacion.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { RecuperacionView } from '../views/recuperacion.view.js'
 
 const main = () => {
   const model = new APIModel()

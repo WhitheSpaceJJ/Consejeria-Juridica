@@ -4,23 +4,31 @@ const servicioTiposDeJuicio = require('../servicios/servicioTiposJuicios');
 
 const { validarJSONTipoJuicioPOST, validarJSONTipoJuicioPUT, existeTipoJuicio } = require('../middlewares/middlewareTipoJuicio');
 
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables = ["AD_JUICIOS_SA","ALL_SA"]
 
 // Creamos un nuevo router
 const router = express.Router();
 
 router.route('/')
   // Obtener todos los tipos de juicio
-  .get(servicioTiposDeJuicio.obtenerTiposDeJuicio)
+  .get(
+    validarPermisos(["AD_JUICIOS_SA","ALL_SA", "ALL_SD", "REGISTRO_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD"]),
+    servicioTiposDeJuicio.obtenerTiposDeJuicio)
   // Agregar un nuevo tipo de juicio
   .post(
+    validarPermisos(permisosAceptables),
      validarJSONTipoJuicioPOST,
     servicioTiposDeJuicio.agregarTipoDeJuicio);
 
 router.route('/:id')
   // Obtener un tipo de juicio por su ID
-  .get(servicioTiposDeJuicio.obtenerTipoDeJuicioPorId)
+  .get(
+    validarPermisos(["AD_JUICIOS_SA","ALL_SA", "ALL_SD", "SEGUIMIENTO_PROCESO_JUDICIAL_SD"]),
+    servicioTiposDeJuicio.obtenerTipoDeJuicioPorId)
   // Actualizar un tipo de juicio por su ID
   .put(
+    validarPermisos(permisosAceptables),
      existeTipoJuicio, validarJSONTipoJuicioPUT,
     servicioTiposDeJuicio.actualizarTipoDeJuicio);
 

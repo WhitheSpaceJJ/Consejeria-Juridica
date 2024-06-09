@@ -1,4 +1,4 @@
-import { ControllerUtils } from '../lib/controllerUtils';
+import { ControllerUtils } from '../lib/controllerUtils.js';
 
 class AsesoriaController {
   constructor(model) {

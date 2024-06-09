@@ -39,7 +39,7 @@ const obtenerUsuarios = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-      usuarios: result // Cambio de zonas a usuarios
+      usuarios: result 
     });
   }
 });
@@ -54,7 +54,7 @@ const obtenerUsuarios = asyncError(async (req, res, next) => {
 const actualizarUsuario = asyncError(async (req, res, next) => {
   const result = await controlUsuarios.actualizarUsuario(req.body); // Cambio de controlZonas a controlUsuarios
   if (result === false) {
-    const error = new CustomeError('Error al actualizar el usuario', 400); // Cambio de zona a usuario
+    const error = new CustomeError('Error al actualizar el usuario o datos iguakes', 400); // Cambio de zona a usuario
     return next(error);
   } else {
 
@@ -103,18 +103,22 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
     const error = new CustomeError('El usuario esta desabilitado.', 404); // Cambio de zona a usuario
     return next(error);
   } else if (usuarioObj.estatus_general === 'ACTIVO') {
-    const payload = usuarioObj;
+    
+    const payload = JSON.parse(JSON.stringify(usuarioObj));
+    delete payload.tipo_user;
     const token = await jwtController.generateToken(payload);
 
     
     res.status(200).json({
       token: token,
-      role: usuarioObj.tipo_user.tipo_usuario,
-      name: usuarioObj.nombre + " " + usuarioObj.materno + " " + usuarioObj.paterno,
-      distrito_judicial: usuarioObj.id_distrito_judicial,
-      id_tipouser: usuarioObj.id_tipouser,
-      estatus_general: usuarioObj.estatus_general,
-      id_usuario: usuarioObj.id_usuario
+   //   role: usuarioObj.tipo_user.tipo_usuario,
+      name: usuarioObj.nombre ,
+      id_distrito_judicial: usuarioObj.id_distrito_judicial,
+    //  id_tipouser: usuarioObj.id_tipouser,
+   //   estatus_general: usuarioObj.estatus_general,
+   //   id_empleado: usuarioObj.id_empleado,  
+      id_usuario: usuarioObj.id_usuario,
+      permisos : usuarioObj.permisos  
     });
   }
 });

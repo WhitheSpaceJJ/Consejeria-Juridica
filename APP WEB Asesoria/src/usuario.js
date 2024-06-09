@@ -1,6 +1,6 @@
-import {  UsuarioController } from '../controllers/usuario.controller'
-import { APIModel } from '../models/api.model'
-import { UsuarioView } from '../views/usuario.view'
+import {  UsuarioController } from '../controllers/usuario.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { UsuarioView } from '../views/usuario.view.js'
 
 const main = () => {
   const model = new APIModel()

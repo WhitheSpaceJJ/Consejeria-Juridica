@@ -1,5 +1,5 @@
-import { ValidationError } from '../lib/errors'
-import { validateNonEmptyFields } from '../lib/utils'
+import { validateNonEmptyFields } from '../lib/utils.js'
+import { ValidationError } from '../lib/errors.js'
 
 class LoginController {
   constructor(model) {
@@ -20,7 +20,8 @@ class LoginController {
       const user = await this.model.login({ correo, password })
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')
-    } catch (error) {
+    } catch (error) { 
+      console.error(error.message)
       //Aqui se manejan los errores que se puedan presentar
       if (error instanceof ValidationError) {
         const modal = document.querySelector('modal-warning')

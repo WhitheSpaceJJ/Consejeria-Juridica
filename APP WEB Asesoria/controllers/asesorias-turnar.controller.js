@@ -1,5 +1,5 @@
-import { DataAsesoria } from '../components/asesoria/data-asesoria'
-import { ControllerUtils } from '../lib/controllerUtils'
+import { DataAsesoria } from '../components/asesoria/data-asesoria.js'
+import { ControllerUtils } from '../lib/controllerUtils.js'
 
 class AsesoriasTurnarController {
   constructor(model) {

@@ -131,6 +131,7 @@ class APIModel {
   //Metodo para agregar un nuevo usuario
   async postUsuario(data) {
     const url = `${this.USERS_API_URL}/usuarios`
+    console.log(data)
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -150,6 +151,7 @@ class APIModel {
   //Metodo para actualizar un usuario existente por su id y los datos a modificar
   async putUsuario(id, data) {
     const url = `${this.USERS_API_URL}/usuarios/${id}`
+    console.log(data)
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -552,6 +554,24 @@ class APIModel {
     }
   }
 
+  async getAsesoresByDistrito(id) {
+    const url = `${this.ASESORIAS_API_URL}/asesores/distrito/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      let data = await response.json()
+      data = data.asesores
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
 
   //Metodo para obtener un asesor por su id
   async getAsesorID(id_asesor) {

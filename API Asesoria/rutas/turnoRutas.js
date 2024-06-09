@@ -5,20 +5,31 @@ const servicioTurnos = require('../servicios/servicioTurnos');
 // Creamos un nuevo router
 const router = express.Router();
 
+
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables = ["ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD" ]
+
+
 router.route('/defensor/:id')
-.get(servicioTurnos.obtenerTurnoPorDefensorId)
+.get(
+  validarPermisos( permisosAceptables),
+  servicioTurnos.obtenerTurnoPorDefensorId)
 
 router.route('/')
   // Obtener todos los turnos
-  .get(servicioTurnos.obtenerTurnos)
-  // Agregar un nuevo turno
-  .post(servicioTurnos.agregarTurno);
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioTurnos.obtenerTurnos);
 
 router.route('/:id')
   // Obtener un turno por su ID
-  .get(servicioTurnos.obtenerTurnoPorId)
+  .get(
+    validarPermisos(["ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD","CONSULTA_PROCESO_JUDICIAL_SD" ]),
+    servicioTurnos.obtenerTurnoPorId)
   // Actualizar un turno por su ID
-  .put(servicioTurnos.actualizarTurno);
+  .put(
+    validarPermisos(permisosAceptables),
+    servicioTurnos.actualizarTurno);
 
 // Exportamos el router
 module.exports = router;

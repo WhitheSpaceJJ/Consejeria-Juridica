@@ -1,13 +1,8 @@
-import { ValidationError } from '../../lib/errors'
-import { getDate, validateNonEmptyFields } from '../../lib/utils'
-import { APIModel } from '../../models/api.model'
+import { ValidationError } from '../../lib/errors.js'
+import { getDate, validateNonEmptyFields } from '../../lib/utils.js'
+import { APIModel } from '../../models/api.model.js'
 
-const template = document.createElement('template')
 
-const html = await (
-  await fetch('./components/asesoria/asesoria-tab.html')
-).text()
-template.innerHTML = html
 
 export class AsesoriaTab extends HTMLElement {
 
@@ -146,11 +141,16 @@ export class AsesoriaTab extends HTMLElement {
     this.setAttribute('id', value)
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/asesoria/asesoria-tab.html')).text();
+    template.innerHTML = html;
+
+    return template;
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Id del componente con el fin de establecer la pestaña correspondiente en el tab
     this.id = 'asesoria'
     this.style.display = 'none'
@@ -161,17 +161,23 @@ export class AsesoriaTab extends HTMLElement {
 
   //Metodo que inicializa las variables y llena los inputs
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+
     //Instancia de la clase APIModel
     this.#api = new APIModel()
+    await this.campos()
+
     //Llamada a la funcion que obtiene los datos y los asigna a las variables
-    this.manageFormFields()
+   await this.manageFormFields()
     //Llamada a la funcion que obtiene los datos de los asesores, defensores, tipos de juicio y distritos
     await this.busquedaDatosYAsignaicon()
     //Llamada a la funcion que llena los inputs con los valores obtenidos
     await this.fillInputs()
 
     //Llamada a la funcion que maneja los eventos de los inputs
-    this.manejadorDeEntrada()
+    await this.manejadorDeEntrada()
   }
 
   #busquedaAsesor = false
@@ -186,6 +192,10 @@ export class AsesoriaTab extends HTMLElement {
     // Llamada a la funcion que obtiene los datos de los asesores, defensores, tipos de juicio y distritos, los metodos de getAsesores2, getDefensores2 y getTiposJuicio2 
     // son medotos que solicitan solo aquellos datos que esten activos
     try {
+
+      console.log("id distrito judicial:")
+      console.log(this.#api.user.id_distrito_judicial)
+
       const { asesores } = await this.#api.getAsesores2()
       this.#asesores = asesores
     }
@@ -275,7 +285,7 @@ export class AsesoriaTab extends HTMLElement {
 
 
   //Metodo que maneja los eventos de los inputs
-  manejadorDeEntrada() {
+ async manejadorDeEntrada() {
     // Asignacion de la variable asesor al input con id asesor 
     var resumenInput = this.#resumen;
     // Evento que se dispara cuando se escribe en el input resumen
@@ -307,7 +317,7 @@ export class AsesoriaTab extends HTMLElement {
   }
 
   //Metodo que maneja los campos del formulario y la asignacion de los valores a las variables
-  manageFormFields() {
+ async  manageFormFields() {
     //Asignacion de las variables a los inputs
     this.#asesor = this.shadowRoot.getElementById('asesor')
     this.#defensor = this.shadowRoot.getElementById('defensor')
@@ -394,7 +404,6 @@ export class AsesoriaTab extends HTMLElement {
     ]
 
     try {
-
       //Se valida si el tipo de empleado es asesor o defensor y si no se selecciona uno se muestra un mensaje de error
       if (
         (this.#tipoEmpleadoValue === 'asesor' && !this.#asesor.value) ||
@@ -439,6 +448,7 @@ export class AsesoriaTab extends HTMLElement {
       if (!this.#requisitosValue) {
         throw new ValidationError('Selecciona si cumple con los requisitos, por favor.')
       }
+
       return true
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -456,7 +466,7 @@ export class AsesoriaTab extends HTMLElement {
   }
 
   //Metodo que se ejecuta cuando se agrega el componente al DOM
-  connectedCallback() {
+  async campos() {
     //Boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-asesoria-next')
 

@@ -1,6 +1,6 @@
-import { TurnarController } from '../controllers/turnar.controller'
-import { APIModel } from '../models/api.model'
-import { TurnarView } from '../views/turnar.view'
+import { TurnarController } from '../controllers/turnar.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { TurnarView } from '../views/turnar.view.js'
 
 const main = () => {
   const model = new APIModel()

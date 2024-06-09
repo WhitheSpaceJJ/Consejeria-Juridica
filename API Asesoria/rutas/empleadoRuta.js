@@ -13,6 +13,9 @@ const { validarJSONEmpleadoPOST,
 
 
 
+ const validarPermisos = require("../utilidades/validadorPermisos");
+ const permisosAceptables = ["AD_EMPLEADOS_SA","ALL_SA"]
+ 
 
 
 router.route('/')
@@ -21,6 +24,7 @@ router.route('/')
 
     // Agregar un nuevo empleado
     .post(
+        validarPermisos(permisosAceptables),
           existeDistritoJudicial,
           validarJSONEmpleadoPOST,
         servicioEmpleado.agregarEmpleado);
@@ -30,6 +34,7 @@ router.route('/:id')
         servicioEmpleado.obtenerEmpleadoPorId) */
     // Actualizar un empleado por su ID
     .put(
+        validarPermisos(permisosAceptables),
         existeEmpleado,
         existeDistritoJudicial,
         validarJSONEmpleadoPUT,

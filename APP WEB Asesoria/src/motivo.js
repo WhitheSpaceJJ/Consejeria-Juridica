@@ -1,6 +1,6 @@
-import {  MotivoController } from '../controllers/motivo.controller'
-import { APIModel } from '../models/api.model'
-import { MotivoView } from '../views/motivo.view'
+import {  MotivoController } from '../controllers/motivo.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { MotivoView } from '../views/motivo.view.js'
 
 const main = () => {
   const model = new APIModel()

@@ -10,7 +10,7 @@ async function existeAsesoria(req, res, next) {
   }
   next();
 }
-const { HOSTTOKEN2, HOSTTOKEN } = require("../configuracion/default.js");
+const { HOSTGRPCCODIGOSPOSTALES, HOSTTOKENUSUARIOS } = require("../configuracion/default.js");
 
 // Variable para cargar el módulo de gRPC
 const grpc = require('@grpc/grpc-js');
@@ -31,6 +31,9 @@ const controlMotivos = require('../controles/controlMotivo.js');
 const controlDefensor = require('../controles/controlDefensor.js');
 const controlPersonas = require('../controles/controlPersonas.js');
 const controlDomicilios = require('../controles/controlDomicilio.js');
+
+
+
 async function validarPeticionPaginacion(req, res, next) {
 
   if (Object.keys(req.query).length > 1) {
@@ -281,7 +284,7 @@ async function validarPeticionPOST(req, res, next) {
     }
     try {
       let codigo_client = grpc.loadPackageDefinition(packageDefinition2).codigoService;
-      const validador = new codigo_client.CodigoService(HOSTTOKEN2, grpc.credentials.createInsecure());
+      const validador = new codigo_client.CodigoService(HOSTGRPCCODIGOSPOSTALES, grpc.credentials.createInsecure());
       const auxiliar = [];
 
       const validarCodigoPromise = new Promise((resolve, reject) => {
@@ -525,14 +528,14 @@ async function validarPeticionPOST(req, res, next) {
     return res.status(400).json({ message: "El id de usuario debe ser un número." });
   }
 
-  if (usuario.length > 135) {
-    return res.status(400).json({ message: "El usuario no puede tener más de 135 caracteres." });
+  if (usuario.length > 100) {
+    return res.status(400).json({ message: "El usuario no puede tener más de 100 caracteres." });
   }
 
 
   try {
     let usuario_client = grpc3.loadPackageDefinition(packageDefinition3).servicios;
-    const validador = new usuario_client.UsuarioService(HOSTTOKEN, grpc3.credentials.createInsecure());
+    const validador = new usuario_client.UsuarioService(HOSTTOKENUSUARIOS, grpc3.credentials.createInsecure());
     const auxiliar = [];
 
     const validarUsuarioPromise = new Promise((resolve, reject) => {
@@ -676,9 +679,11 @@ async function validarPeticionPUT(req, res, next) {
     if (asesoria_object.id_usuario !== datos_asesoria.id_usuario) {
       return res.status(400).json({ message: "El id de usuario no coincide." });
     }
-    if (asesoria_object.usuario !== datos_asesoria.usuario) {
+
+    /*if (asesoria_object.usuario !== datos_asesoria.usuario) {
       return res.status(400).json({ message: "El usuario no coincide." });
-    }
+    } 
+*/
     if (asesoria_object.fecha_registro !== datos_asesoria.fecha_registro) {
       return res.status(400).json({ message: "La fecha de registro no coincide." });
     }
@@ -711,7 +716,7 @@ async function validarPeticionPUT(req, res, next) {
   }
   catch (error) {
   }
- 
+
 
 
   //Hacer validaciones con respecto a los datos de la persona  incluye el id
@@ -752,7 +757,7 @@ async function validarPeticionPUT(req, res, next) {
 
 
 
-  
+
   //Valida que la edad sea un numero entero y que no sea mayor a 200 en try cat
   try {
     if (!Number.isInteger(parseInt(edad))) {
@@ -817,7 +822,7 @@ async function validarPeticionPUT(req, res, next) {
     return res.status(400).json({ message: "El teléfono solo permite números." });
   }
 
-  const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia,id_domicilio, ...extraData8 } = persona.domicilio;
+  const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_domicilio, ...extraData8 } = persona.domicilio;
 
   if (Object.keys(extraData8).length > 0) {
     return res.status(400).json({
@@ -826,7 +831,7 @@ async function validarPeticionPUT(req, res, next) {
     }
     );
   }
-   
+
   //OBtener domicilio para ver si existe 
   try {
     const domicilio2 = await controlDomicilios.obtenerDomicilioPorIdMiddleware(id_domicilio);
@@ -878,39 +883,39 @@ async function validarPeticionPUT(req, res, next) {
     }
   }
 
-    try {
-      if (!Number.isInteger(parseInt(id_colonia))) {
-        return res.status(400).json({ message: "El id de colonia debe ser un número." });
-      }
-    }
-    catch (error) {
+  try {
+    if (!Number.isInteger(parseInt(id_colonia))) {
       return res.status(400).json({ message: "El id de colonia debe ser un número." });
     }
-    try {
-      let codigo_client = grpc.loadPackageDefinition(packageDefinition2).codigoService;
-      const validador = new codigo_client.CodigoService(HOSTTOKEN2, grpc.credentials.createInsecure());
-      const auxiliar = [];
+  }
+  catch (error) {
+    return res.status(400).json({ message: "El id de colonia debe ser un número." });
+  }
+  try {
+    let codigo_client = grpc.loadPackageDefinition(packageDefinition2).codigoService;
+    const validador = new codigo_client.CodigoService(HOSTGRPCCODIGOSPOSTALES, grpc.credentials.createInsecure());
+    const auxiliar = [];
 
-      const validarCodigoPromise = new Promise((resolve, reject) => {
-        validador.validarCodigo({ id_colonia: id_colonia }, function (err, response) {
-          if (err) {
-            reject(err);
-          } else {
-            if (response.message === "Codigo inválido") {
-              auxiliar.push(response.message);
-            }
-            resolve();
+    const validarCodigoPromise = new Promise((resolve, reject) => {
+      validador.validarCodigo({ id_colonia: id_colonia }, function (err, response) {
+        if (err) {
+          reject(err);
+        } else {
+          if (response.message === "Codigo inválido") {
+            auxiliar.push(response.message);
           }
-        });
+          resolve();
+        }
       });
-      await validarCodigoPromise;
-      if (auxiliar.length > 0) {
-        return res.status(400).json({ message: "El id de colonia no existe." });
-      }
-    } catch (error) {
+    });
+    await validarCodigoPromise;
+    if (auxiliar.length > 0) {
       return res.status(400).json({ message: "El id de colonia no existe." });
     }
-    next();
+  } catch (error) {
+    return res.status(400).json({ message: "El id de colonia no existe." });
+  }
+  next();
 }
 
 

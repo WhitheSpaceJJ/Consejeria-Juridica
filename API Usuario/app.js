@@ -2,13 +2,9 @@
 
 // Importamos los módulos necesarios
 const express = require('express');
-const {PORT,HOSTTOKENGRPCPORT} = require("./configuracion/default.js");
+const { PORT, GRPCPORTUSUARIOS } = require("./configuracion/default.js");
 
 const usuariosRutas = require("./rutas/usuarioRutas");
-
-const permisosRutas = require("./rutas/permisosRutas"); 
- 
-const tipoUsuarioRutas = require("./rutas/tipoUsuarioRutas");
 
 
 const CustomeError = require("./utilidades/customeError");
@@ -30,35 +26,38 @@ app.use(cors());
 
 const jwtMiddleware = async (req, res, next) => {
   // Obtenemos el token del encabezado de la solicitud
-  const tokenHeader = req.headers.authorization; 
-  if (!tokenHeader) {
-    // Si no hay token, creamos un error personalizado y lo pasamos al siguiente middleware
-    const customeError = new CustomeError('Token no proporcionado.', 401);
-    next(customeError);
-    return;
-  }
-  // Eliminamos el prefijo 'Bearer ' del token
-  const token = tokenHeader.replace('Bearer ', '');
-  
-    try {
-  await  jwtController.verifyToken(token);
+  if (req.path === "/usuario" || req.path === "/recuperacion") {
     next();
-  } catch (error) {
-    const customeError = new CustomeError('Token inválido, no ha iniciado sesión.', 401);
-    next(customeError);
+  } else {
+
+    const tokenHeader = req.headers.authorization;
+    if (!tokenHeader) {
+      // Si no hay token, creamos un error personalizado y lo pasamos al siguiente middleware
+      const customeError = new CustomeError('Token no proporcionado.', 401);
+      next(customeError);
+      return;
+    }
+    // Eliminamos el prefijo 'Bearer ' del token
+    const token = tokenHeader.replace('Bearer ', '');
+    try {
+      const data= await jwtController.verifyToken(token);
+      req.id_usuario = data.id_usuario;
+      req.id_distrito_judicial = data.id_distrito_judicial;
+      req.permisos = data.permisos;
+      next();
+    } catch (error) {
+      const customeError = new CustomeError('Token inválido, no ha iniciado sesión o cuenta con permisos', 401);
+      next(customeError);
+    }
   }
+
 };
 
 // Usamos el middleware de rutas de usuarios
-app.use('/usuarios', usuariosRutas);
+app.use('/usuarios',
+  jwtMiddleware,
+  usuariosRutas);
 
-app.use('/permisos', 
-//jwtMiddleware,
- permisosRutas);
-
-app.use('/tipo-usuario',
-//jwtMiddleware,
- tipoUsuarioRutas);
 
 
 // Si ninguna ruta coincide, creamos un error personalizado y lo pasamos al siguiente middleware
@@ -92,11 +91,13 @@ function getServer() {
   server.addService(serviciosProto.TokenService.service, {
     validarToken: (call, callback) => {
       jwtController.verifyToken(call.request.token)
-        .then(() => {
-          callback(null, responseValido);
+        .then((data) => {
+          callback(null, { permisos: data.permisos, id_distrito_judicial: data.id_distrito_judicial, 
+             id_usuario: data.id_usuario
+           });
         })
-        .catch(() => {
-          callback(null, responseInvalido);
+        .catch((error) => {
+          callback(null, { permisos: [] });
         });
     }
   });
@@ -127,13 +128,13 @@ const controlUsuarios = require("./controles/controlUsuario");
 
 const server = getServer();
 server.bindAsync(
-  `localhost:${HOSTTOKENGRPCPORT}`,
+  `localhost:${GRPCPORTUSUARIOS}`,
   grpc.ServerCredentials.createInsecure(),
   (err, port) => {
     if (err != null) {
       return console.error(err);
     }
-    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`);
+    console.log(`gRPC listening on ${GRPCPORTUSUARIOS}`);
     server.start();
   }
 );

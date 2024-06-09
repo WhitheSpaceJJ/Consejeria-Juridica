@@ -126,11 +126,25 @@ const actualizarTurno = async (turno) => {
   }
 };
 
+
+const onbtenerTurnoIDSimple = async (id) => {
+  try {
+    const turno = await modeloTurno.Turno.findByPk(id, {
+      raw: true,
+    });
+    return turno;
+  } catch (error) {
+    console.log("Error turno:", error.message);
+    return null;
+  }
+};
+
 //    Module exports:
 module.exports = {
   obtenerTurnos,
   obtenerTurnoPorId,
   agregarTurno,
   actualizarTurno,
-  obtenerTurnoPorDefensorId
+  obtenerTurnoPorDefensorId,
+  onbtenerTurnoIDSimple
 };

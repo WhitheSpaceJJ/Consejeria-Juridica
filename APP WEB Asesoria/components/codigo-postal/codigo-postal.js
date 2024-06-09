@@ -1,11 +1,5 @@
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('/components/codigo-postal/codigo-postal.html')
-).text()
-template.innerHTML = html
 
 export class CodigoPostal extends HTMLElement {
 
@@ -53,19 +47,34 @@ export class CodigoPostal extends HTMLElement {
   set data(value) {
     this.setAttribute('data', value)
   }
+
+
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('/components/codigo-postal/codigo-postal.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init()
+
+  }
+
+  async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Se inicializa la variable API
     this.#API = new APIModel()
+    await this.campos()
     //Llamada a la función manageFormFields para manejar los campos del formulario
     this.manageFormFields()
     //Llamada a la función manejadorEntradaInputs para manejar la entrada de los inputs
     this.manejadorEntradaInputs()
   }
-
   //Función para manejar los campos del formulario
   manageFormFields() {
     //Se inicializan las variables que representan los campos del formulario
@@ -137,7 +146,7 @@ export class CodigoPostal extends HTMLElement {
   }
 
   //ConecctedCallback para conectar el componente y manejar el evento submit del formulario
-  connectedCallback() {
+  async campos() {
     //Se inicializan las variables que representan los campos del formulario
     this.formCP = this.shadowRoot.getElementById('form-cp')
 

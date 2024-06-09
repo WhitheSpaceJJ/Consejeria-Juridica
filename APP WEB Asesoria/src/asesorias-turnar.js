@@ -1,6 +1,6 @@
-import { AsesoriasTurnarController } from '../controllers/asesorias-turnar.controller'
-import { APIModel } from '../models/api.model'
-import { AsesoriasTurnarView } from '../views/asesorias-turnar.view'
+import { AsesoriasTurnarController } from '../controllers/asesorias-turnar.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { AsesoriasTurnarView } from '../views/asesorias-turnar.view.js'
 
 const main = () => {
   const model = new APIModel()

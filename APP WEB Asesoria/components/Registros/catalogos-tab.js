@@ -1,16 +1,10 @@
 //const template = document.createElement('template');
 //import { ControllerUtils } from '......./lib/controllerUtils';
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
 
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/catalogos-tab.html')
-).text()
-template.innerHTML = html
 
 class CatalogosTab extends HTMLElement {
   //IdSeleccion es una variable privada que se utiliza para almacenar el id del catalogo seleccionado
@@ -24,14 +18,22 @@ class CatalogosTab extends HTMLElement {
   //Constructor de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+
     //Llamada a la función init
     this.init();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/catalogos-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Función init que se encarga de inicializar las variables de la clase y de llamar a las funciones que se encargan de llenar los campos del formulario
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Creación de una instancia de la clase APIModel
     this.#api = new APIModel();
     //Inicialización de las variables
@@ -333,7 +335,6 @@ class CatalogosTab extends HTMLElement {
     try {
       //Llamada a la función getCatalogosByID de la clase APIModel para obtener un catalogo por ID
       const catalogoID = await this.#api.getCatalogosByID(catalogoId);
-      console.log(catalogoID);
       //En caso de que el catalogo exista se rellenan los campos del formulario con los datos del catalogo seleccionado
       if (catalogoID) {
         this.#idSeleccion = catalogoID.requisitoCatalogo.id_catalogo;

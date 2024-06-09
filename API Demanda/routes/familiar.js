@@ -13,23 +13,33 @@ const { existeFamiliar, validarJSONFamiliarPOST, validarJSONFamiliarPUT,
  }
 = require('../middlewares/middlewareFamiliar')
 
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
+const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
+
+
 // Se crea una instancia de Router
 const router = Router()
 
 router.get('/promovente/:id', 
+validarPermisos(permisosAceptables2),
 existePromovente,
 obtenerFamiliaresPorPromovente)
 
 // Ruta para obtener un familiar por su id
-router.get('/:id', obtenerFamiliar)
+router.get('/:id',
+validarPermisos(permisosAceptables2),
+obtenerFamiliar)
 
 // Ruta para crear un familiar
 router.post('/', 
+validarPermisos(permisosAceptables1),
 validarJSONFamiliarPOST,
 crearFamiliar)
 
 // Ruta para actualizar un familiar por su id
 router.put('/:id', 
+validarPermisos(permisosAceptables2),
 existeFamiliar,
 validarJSONFamiliarPUT,
 actualizarFamiliar)

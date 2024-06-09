@@ -1,10 +1,5 @@
-import { APIModel } from '../../models/api.model'
-
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/turnar/asesorado-tab.html')).text()
-template.innerHTML = html
-
+import { APIModel } from '../../models/api.model.js'
+ 
 export class AsesoradoTab extends HTMLElement {
 
   //Variables privadas  
@@ -52,15 +47,11 @@ export class AsesoradoTab extends HTMLElement {
   set data(value) {
     this.setAttribute('data', value)
   }
-
-  //Constructor de la clase
-  constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-    //Este id es con respecto a la pestaña actual
-    this.id = 'asesorado'
-
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    
     //Se obtiene la asesoria de la sesion esto es con respecto a la busqueda
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
 
@@ -68,6 +59,7 @@ export class AsesoradoTab extends HTMLElement {
 
     // Se obtiene la informacion de la API
     this.#api = new APIModel()
+    await this.campos()
 
 
     //Se obtiene el genero de la persona 
@@ -82,6 +74,20 @@ export class AsesoradoTab extends HTMLElement {
       this.manageFormFields()
       this.fillInputs()
     })
+
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/turnar/asesorado-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    //Este id es con respecto a la pestaña actual
+    this.id = 'asesorado'
+    this.init2()
 
 
   }
@@ -253,7 +259,7 @@ export class AsesoradoTab extends HTMLElement {
 
 
   //Metodo encargado de activar los eventos del boton y el checkbox
-  connectedCallback() {
+async  campos() {
     // Se obtienen los elementos del DOM
     this.btnNext = this.shadowRoot.getElementById('btn-asesorado-next')
     this.editCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')

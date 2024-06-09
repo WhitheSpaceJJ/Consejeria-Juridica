@@ -1,9 +1,4 @@
-const template = document.createElement('template')
 
-const html = await (
-  await fetch('../assets/modal-asesoria.html')
-).text()
-template.innerHTML = html
 
 export class ModalAsesoria extends HTMLElement {
    
@@ -32,12 +27,23 @@ export class ModalAsesoria extends HTMLElement {
     this.shadowRoot.getElementById('title-alerta').innerHTML = value
   }
   
+  async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    await this.campos()
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/modal-asesoria.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+
   //Constructor de la clase ModalAsesoria
   constructor() {
     super()
-
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))     
+    this.init()
     //Metodo que se encarga de cerrar el modal
     this.onClose = () => {
       const modal = this.shadowRoot.getElementById('modal')
@@ -54,7 +60,7 @@ export class ModalAsesoria extends HTMLElement {
   }
 
   //Metodo que se encarga de inicializar el componente
-  connectedCallback() { 
+  async campos() { 
      
     //Se obtienen los elementos del DOM que representan el boton de cerrar, el modal y el boton de aceptar
     this.btnClose = this.shadowRoot.getElementById('btn-close')

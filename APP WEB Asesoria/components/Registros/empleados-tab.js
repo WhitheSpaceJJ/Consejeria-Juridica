@@ -1,12 +1,7 @@
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('/components/Registros/empleados-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 class EmpleadosTab extends HTMLElement {
 
@@ -22,11 +17,15 @@ class EmpleadosTab extends HTMLElement {
   #idSeleccion
   #distritos
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('/components/Registros/empleados-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   // Constructor de la clase EmpleadosTab
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Establece null como valor inicial para el id de la selección
     this.#idSeleccion = null;
     // Inicializa datos de la clase
@@ -35,6 +34,9 @@ class EmpleadosTab extends HTMLElement {
 
   // Método para inicializar la clase EmpleadosTab
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     // Crear una instancia de la clase APIModel
     this.#api = new APIModel();
     // Obtener los distritos judiciales

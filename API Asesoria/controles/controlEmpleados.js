@@ -31,10 +31,11 @@ const obtenerEmpleados = async () => {
  * */
 const obtenerEmpleadoPorId = async (id) => {
     try {
+        //La busqueda sera por el id empleado y id distrito judicial
         return await modeloEmpleado.Empleado.findByPk(id, {
             raw: false,
             nest: true,
-         
+
             include: [{
                 model: modeloEmpleado.DistritoJudicial
             }
@@ -67,7 +68,7 @@ const obtenerEmpleadoPorPorIdMiddleware = async (id) => {
  * */
 const agregarEmpleado = async (empleado) => {
     try {
- 
+
         const controlAsesor = require('./controlAsesor.js');
         const controlDefensor = require('./controlDefensor.js');
         const empleado_objeto = JSON.parse(JSON.stringify(empleado));
@@ -133,7 +134,7 @@ const actualizarEmpleado = async (id, empleado) => {
         const controlAsesor = require('./controlAsesor.js');
         const controlDefensor = require('./controlDefensor.js');
         const empleado_objeto = JSON.parse(JSON.stringify(empleado));
-        if (empleado_objeto.tipo_empleado === "asesor") { 
+        if (empleado_objeto.tipo_empleado === "asesor") {
 
             const datos_empleado = {
                 id_distrito_judicial: empleado_objeto.id_distrito_judicial,
@@ -151,16 +152,16 @@ const actualizarEmpleado = async (id, empleado) => {
                 }
                 await controlAsesor.actualizarAsesor(datos_asesor);
                 return true
-            }else {
+            } else {
                 const datos_asesor = {
                     id_asesor: id,
                     nombre_asesor: empleado_objeto.nombre,
                 }
-                return   await controlAsesor.actualizarAsesor(datos_asesor);
+                return await controlAsesor.actualizarAsesor(datos_asesor);
             }
         }
         if (empleado_objeto.tipo_empleado === "defensor") {
- 
+
             const datos_empleado = {
                 id_distrito_judicial: empleado_objeto.id_distrito_judicial,
                 tipo_empleado: empleado_objeto.tipo_empleado,
@@ -170,19 +171,19 @@ const actualizarEmpleado = async (id, empleado) => {
 
             const empleado_actualizado = (await modeloEmpleado.Empleado.update(datos_empleado, { where: { id_empleado: id } }))[0];
             if (empleado_actualizado === 1) {
-                 
+
                 const datos_defensor = {
                     id_defensor: id,
                     nombre_defensor: empleado_objeto.nombre,
                 }
-                 await controlDefensor.actualizarDefensor(datos_defensor);
-                 return true
-            }else {
+                await controlDefensor.actualizarDefensor(datos_defensor);
+                return true
+            } else {
                 const datos_defensor = {
                     id_defensor: id,
                     nombre_defensor: empleado_objeto.nombre,
                 }
-                return   await controlDefensor.actualizarDefensor(datos_defensor);
+                return await controlDefensor.actualizarDefensor(datos_defensor);
             }
         }
         return false;
@@ -196,7 +197,7 @@ const obtenerEmpleadosAsesoresPorZona = async (id) => {
         return await modeloEmpleado.Empleado.findAll({
             raw: false,
             nest: true,
-        
+
             include: [{
                 model: modeloEmpleado.DistritoJudicial,
                 where: { id_zona: id }
@@ -213,7 +214,7 @@ const obtenerEmpleadosDefensoresPorZona = async (id) => {
         return await modeloEmpleado.Empleado.findAll({
             raw: false,
             nest: true,
-   
+
             include: [{
                 model: modeloEmpleado.DistritoJudicial,
                 where: { id_zona: id }
@@ -225,12 +226,37 @@ const obtenerEmpleadosDefensoresPorZona = async (id) => {
         return null;
     }
 }
+
+const obtenerEmpleadoIDAndDistrito = async (req) => {
+    try {
+        const req_objeto = JSON.parse(JSON.stringify(req));
+        const objeto_encontrado = await modeloEmpleado.Empleado.findOne({
+            raw: false,
+            nest: true,
+            where: { id_empleado: req_objeto.id_empleado, id_distrito_judicial: req_objeto.id_distrito_judicial }
+        });
+        const pre_objeto = JSON.parse(JSON.stringify(objeto_encontrado));
+        
+        if (pre_objeto.tipo_empleado === "asesor" && req_objeto.id_tipouser === "2") {
+            return pre_objeto;
+        }
+        if (pre_objeto.tipo_empleado === "defensor" && req_objeto.id_tipouser === "3") {
+            return pre_objeto;
+        }
+        return null;
+    } catch (error) {
+        console.log("Error empleados:", error.message);
+        return null;
+    }
+}
+
+
 module.exports = {
     obtenerEmpleados,
     obtenerEmpleadoPorId,
     agregarEmpleado,
     actualizarEmpleado,
     obtenerEmpleadosAsesoresPorZona, obtenerEmpleadosDefensoresPorZona,
-    obtenerEmpleadoPorPorIdMiddleware
+    obtenerEmpleadoPorPorIdMiddleware, obtenerEmpleadoIDAndDistrito
 
 };

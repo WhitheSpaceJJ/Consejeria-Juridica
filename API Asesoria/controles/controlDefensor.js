@@ -120,6 +120,26 @@ const  obtenerDefensorIDSimpleMiddleware  = async (id) => {
     }
 }
 
+/**
+ * @abstract Función que permite obtener un defensor por su id
+ * @param {*} id id del defensor
+ * @returns defensor
+ * */
+const obtenerDefensorPorIdActivo = async (id) => {
+    try {
+        return await modeloDefensor.Defensor.findByPk(id, {
+            raw: false,
+            nest: true,
+            include: [{
+                model: modeloDefensor.Empleado
+            }
+            ]
+        });
+    } catch (error) {
+        console.log("Error defensor:", error.message);
+        return null;
+    }
+};
 
 // Exportar los módulos
 module.exports = {

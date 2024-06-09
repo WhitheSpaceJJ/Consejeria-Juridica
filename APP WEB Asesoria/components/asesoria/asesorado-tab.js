@@ -1,15 +1,9 @@
 import { ValidationError } from '../../lib/errors.js'
 import { validateNonEmptyFields } from '../../lib/utils.js'
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import '../codigo-postal/codigo-postal.js'
 
-// Esto es con el fin  de crear un template, donde se almacena el html del componente
-
-const template = document.createElement('template')
-const html = await (
-  await fetch('./components/asesoria/asesorado-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 // Se crea la clase AsesoradoTab que extiende de HTMLElement
 export class AsesoradoTab extends HTMLElement {
@@ -120,13 +114,18 @@ export class AsesoradoTab extends HTMLElement {
       persona,
     }
   }
+ 
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/asesoria/asesorado-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
 
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Este id es con respecto al manejo de las tabs y los eventos relacionaos al archivo de tabs-header.js
     this.id = 'asesorado'
     // Llamado al metodo init
@@ -135,8 +134,12 @@ export class AsesoradoTab extends HTMLElement {
 
   //Metodo que se encarga de inicializar el componente
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     // Se crea una instancia de la clase APIModel
     this.#api = new APIModel()
+    await this.campos()
     // Metodo que se encarga de establecer las variables con respecto a los campos del formulario
     this.manageFormFields()
     //v Metodo que rellena los campos select del formulario
@@ -395,7 +398,6 @@ export class AsesoradoTab extends HTMLElement {
       // Expresión regular para validar que solo se ingresen números enteros
       var enterosPattern = /^\d+$/;
 
-
       // Se valida que el campo nombre no este vacio     
       if (this.#nombre.value === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingreselo.')
@@ -510,6 +512,8 @@ export class AsesoradoTab extends HTMLElement {
             throw new ValidationError('El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.')
           }
       }
+    
+
 
       /*
       if (this.#domicilio.data.colonia === '') {
@@ -534,7 +538,7 @@ export class AsesoradoTab extends HTMLElement {
   }
 
   //Metodo que se encarga de manejar los eventos de los elementos del formulario
-  connectedCallback() {
+  async campos() {
     this.btnNext = this.shadowRoot.getElementById('btn-asesorado-next')
     const radioButtons = this.shadowRoot.querySelectorAll(
       'input[name="rb-trabajo"]'

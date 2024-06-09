@@ -1,6 +1,6 @@
-import { BusquedaTurnarController } from '../controllers/busqueda-turnar.controller'
-import { APIModel } from '../models/api.model'
-import { BusquedaTurnarView } from '../views/busqueda-turnar.view'
+import { BusquedaTurnarController } from '../controllers/busqueda-turnar.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { BusquedaTurnarView } from '../views/busqueda-turnar.view.js'
 
 const main = () => {
   const model = new APIModel()

@@ -1,13 +1,8 @@
 //const template = document.createElement('template');
 //import { ControllerUtils } from '......./lib/controllerUtils';
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
-
-const template = document.createElement('template');
-const html = await (
-  await fetch('./components/Registros/motivos-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 class MotivosTab extends HTMLElement {
 
@@ -21,16 +16,23 @@ class MotivosTab extends HTMLElement {
   //Constructor de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Inicialización de variables de clase en este caso se inicializa en null
     this.#idSeleccion = null;
     //Llamada a la función init
     this.init();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/motivos-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Función que inicializa las variables de clase y los eventos de los botones,etc
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Se inicializa la variable de clase api con la clase APIModel
     this.#api = new APIModel();
     //Llamada a la función manageFormFields

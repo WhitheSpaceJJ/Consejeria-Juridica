@@ -14,27 +14,34 @@ const { existeObservacion, validarJSONObservacionPOST, validarJSONObservacionPUT
 
 } 
 = require('../middlewares/middlewareObservacion')
-const e = require('express')
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
+const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
 
 // Se crea una instancia de Router
 const router = Router()
 // Ruta para obtener todas las observaciones de un proceso judicial por su id
 router.get('/proceso-judicial/:id', 
+validarPermisos(permisosAceptables2),
  existeProcesoJudicial,
 obtenerObservacionesPorProcesoJudicial)
 
 
 // Ruta para obtener una observacion por su id
-router.get('/:id', obtenerObservacion)
+router.get('/:id',
+validarPermisos(permisosAceptables2),
+obtenerObservacion)
 
 // Ruta para crear una observacion
 router.post('/', 
+validarPermisos(permisosAceptables1),
 validarJSONObservacionPOST,
 existeProcesoJudicial,
 crearObservacion)
 
 // Ruta para actualizar una observacion por su id
 router.put('/:id', 
+validarPermisos(permisosAceptables2),
 existeObservacion,
 validarJSONObservacionPUT,
 existeProcesoJudicial,

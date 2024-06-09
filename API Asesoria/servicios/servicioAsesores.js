@@ -39,8 +39,34 @@ const obtenerAsesores = asyncError(async (req, res, next) => {
     
   }
 
-
-
+});
+const obtenerAsesoresByDistrito = asyncError(async (req, res, next) => {
+  
+  const activo = req.query.activo;
+  if (activo !== undefined && activo !== null && activo !== "") {
+    const result = await controlAsesores.obtenerAsesores(activo);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('No se encontraron asesores', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+       
+          asesores: result
+      });
+    }
+  }else {
+    const result = await controlAsesores.obtenerAsesores();
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('No se encontraron asesores', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+       
+          asesores: result
+      });
+    }
+    
+  }
 
 });
 

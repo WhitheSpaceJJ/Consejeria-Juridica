@@ -1,24 +1,16 @@
 //const template = document.createElement('template');
 //import { ControllerUtils } from '......./lib/controllerUtils';
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
 
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/usuarios-tab.html')
-).text()
-template.innerHTML = html
-
+ 
 
 class UsuariosTab extends HTMLElement {
   //  Variables de clase para el manejo de la API y el id de selección
   #api
   #idSeleccion
-  #empleadoRadio
-  #distritoRadio
+  #empleadoTipo
   #asesores
   #defensores
   #distritos
@@ -33,24 +25,70 @@ class UsuariosTab extends HTMLElement {
   #bloqueAsesor
   #bloqueDefensor
   #nombre
-  #apellidoPaterno
-  #apellidoMaterno
   #correo
   #password
   #estatusUsuario
   #usuarios
+  #distrito3
+  #bloqueGeneral
 
+  //Permisos
+  #permiso_1
+  #permiso_2
+  #permiso_3
+  #permiso_4
+  #permiso_5
+  #permiso_6
+  #permiso_7
+  #permiso_8
+  #permiso_9
+  #permiso_10
+  #permiso_11
+  #permiso_12
+  #permiso_13
+  #permiso_14
+  #permiso_15
+  #permiso_16
+  #permiso_17
+  #permiso_18
+  #permiso_19
+  #permiso_20
+  #permiso_21
+  #permiso_22
+
+
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/usuarios-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //  Constructor de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Llamada a la función init 
     this.init();
   }
+  async obtenerCheckboxesSeleccionados() {
+    // Obtener todos los checkboxes con el nombre "permisos"
+    const checkboxes = this.shadowRoot.querySelectorAll('input[name="permisos"]:checked');
 
+    // Crear un array para almacenar los valores seleccionados
+    let permisosSeleccionados = [];
+
+    // Recorrer todos los checkboxes seleccionados y añadir sus valores al array
+    checkboxes.forEach((checkbox) => {
+      permisosSeleccionados.push(checkbox.value);
+    });
+
+    // Devolver el array con los valores seleccionados
+    return permisosSeleccionados;
+  }
   //Funcion encargada de inicializar las variables de la clase y de llenar los campos de la tabla, etc
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Inicialización de las variables de la clase
     this.#api = new APIModel();
     //Inicialización de la variable de selección de usuario
@@ -58,6 +96,8 @@ class UsuariosTab extends HTMLElement {
 
     //Llamada a la funcion de asignación de campos
     this.manageFormFields();
+    this.deshabilitarPermisosAsesorias();
+    this.deshabilitarPermisosDemandas();
     //Llamada a la función de llenado de campos
     this.fillInputs();
     try {
@@ -134,6 +174,16 @@ class UsuariosTab extends HTMLElement {
       this.#distrito.appendChild(option)
     })
 
+    //Empleado General
+    this.#distritos.forEach(distrito => {
+      const option = document.createElement('option')
+      option.value = distrito.id_distrito_judicial
+      option.textContent = distrito.nombre_distrito_judicial
+      this.#distrito3.appendChild(option)
+    })
+
+
+
     //Llenado del select de distritos judiciales con respecto al select de distritios judiciales del asesor verificar html del asset si tiene duda
     this.#distritos.forEach(distrito => {
       const option = document.createElement('option')
@@ -141,13 +191,19 @@ class UsuariosTab extends HTMLElement {
       option.textContent = distrito.nombre_distrito_judicial
       this.#distrito2.appendChild(option)
     })
-    
-     //Lladma a la funcion de manejo de eventos de radio
-    this.eventosRadios();
+
+
+
+
+
+    //Lladma a la funcion de manejo de eventos de radio
+    this.eventosRadiosSelect();
     //Asignación de eventos a el radio de asesor
     this.#asesor.addEventListener('change', this.handleAsesorChange);
     //Asignación de eventos a el radio de defensor
     this.#defensor.addEventListener('change', this.handleDefensorChange);
+
+
   }
   //Metodo que se encarga de seleccionar el distrito judicial de un asesor
   handleAsesorChange = () => {
@@ -164,40 +220,186 @@ class UsuariosTab extends HTMLElement {
   //Manejador de variables con respecto a los campos del formulario
   manageFormFields() {
 
-    this.#empleadoRadio = this.shadowRoot.getElementById('empleado');
-    this.#distritoRadio = this.shadowRoot.getElementById('distrito');
-    this.#asesor = this.shadowRoot.getElementById('asesor');
-    this.#defensor = this.shadowRoot.getElementById('defensor');
+    this.#empleadoTipo = this.shadowRoot.getElementById('asociacion');
+    this.#bloqueGeneral = this.shadowRoot.getElementById('bloque-general');
+
+    //Encargado de distritito
     this.#distrito = this.shadowRoot.getElementById('distrito-judicial');
+    this.#bloqueDistrito = this.shadowRoot.getElementById('bloque-distrito');
+
+
+    //Usuario General
+    this.#distrito3 = this.shadowRoot.getElementById('distrito-judicial-general');
+
+
+    //Distrito judicial del asesor o defensor
     this.#distrito2 = this.shadowRoot.getElementById('distrito-judicial2');
     this.#asesorRadio = this.shadowRoot.getElementById('asesor-option');
     this.#defensorRadio = this.shadowRoot.getElementById('defensor-option');
     this.#bloqueOpciones = this.shadowRoot.getElementById('bloque-opciones');
-    this.#bloqueDistrito = this.shadowRoot.getElementById('bloque-distrito');
     this.#bloqueAsesor = this.shadowRoot.getElementById('bloque-asesor');
     this.#bloqueDefensor = this.shadowRoot.getElementById('bloque-defensor');
+    this.#asesor = this.shadowRoot.getElementById('asesor');
+    this.#defensor = this.shadowRoot.getElementById('defensor');
+
+
     this.#nombre = this.shadowRoot.getElementById('nombre');
-    this.#apellidoPaterno = this.shadowRoot.getElementById('apellido-paterno');
-    this.#apellidoMaterno = this.shadowRoot.getElementById('apellido-materno');
     this.#correo = this.shadowRoot.getElementById('correo-electronico');
     this.#password = this.shadowRoot.getElementById('password');
     this.#estatusUsuario = this.shadowRoot.getElementById('estatus-usuario');
+
     this.#usuarios = this.shadowRoot.getElementById('table-usuario');
 
+    //Permisos
+    //Asesorias
+    this.#permiso_1 = this.shadowRoot.getElementById('permiso_1');
+    this.#permiso_2 = this.shadowRoot.getElementById('permiso_2');
+    this.#permiso_3 = this.shadowRoot.getElementById('permiso_3');
+    this.#permiso_4 = this.shadowRoot.getElementById('permiso_4');
+    this.#permiso_5 = this.shadowRoot.getElementById('permiso_5');
+    this.#permiso_6 = this.shadowRoot.getElementById('permiso_6');
+    this.#permiso_7 = this.shadowRoot.getElementById('permiso_7');
+    this.#permiso_8 = this.shadowRoot.getElementById('permiso_8');
+    this.#permiso_9 = this.shadowRoot.getElementById('permiso_9');
+    this.#permiso_10 = this.shadowRoot.getElementById('permiso_10');
+    this.#permiso_11 = this.shadowRoot.getElementById('permiso_11');
+    this.#permiso_12 = this.shadowRoot.getElementById('permiso_12');
+    this.#permiso_20 = this.shadowRoot.getElementById('permiso_20');
+    this.#permiso_21 = this.shadowRoot.getElementById('permiso_21');
+
+    //Demandas
+    this.#permiso_13 = this.shadowRoot.getElementById('permiso_13');
+    this.#permiso_14 = this.shadowRoot.getElementById('permiso_14');
+    this.#permiso_15 = this.shadowRoot.getElementById('permiso_15');
+    this.#permiso_16 = this.shadowRoot.getElementById('permiso_16');
+    this.#permiso_17 = this.shadowRoot.getElementById('permiso_17');
+    this.#permiso_18 = this.shadowRoot.getElementById('permiso_18');
+    this.#permiso_19 = this.shadowRoot.getElementById('permiso_19');
+    this.#permiso_22 = this.shadowRoot.getElementById('permiso_22');
+
   }
-  
+
+  deshabilitarPermisosAsesorias() {
+    //Que no se pueden usar disable
+    this.#permiso_2.disabled = true;
+    this.#permiso_3.disabled = true;
+    this.#permiso_4.disabled = true;
+    this.#permiso_5.disabled = true;
+    this.#permiso_6.disabled = true;
+    this.#permiso_7.disabled = true;
+    this.#permiso_8.disabled = true;
+    this.#permiso_9.disabled = true;
+    this.#permiso_10.disabled = true;
+    this.#permiso_11.disabled = true;
+    this.#permiso_12.disabled = true;
+    this.#permiso_20.disabled = true;
+    this.#permiso_21.disabled = true;
+  }
+
+  deshabilitarPermisosDemandas() {
+    //Que no se pueden usar disable
+    this.#permiso_14.disabled = true;
+    this.#permiso_15.disabled = true;
+    this.#permiso_16.disabled = true;
+    this.#permiso_17.disabled = true;
+    this.#permiso_18.disabled = true;
+    this.#permiso_19.disabled = true;
+    this.#permiso_22.disabled = true;
+  }
+
+
+  habilitarPermisosAsesorias() {
+    //Que no se pueden usar disable
+    this.#permiso_2.disabled = false;
+    this.#permiso_3.disabled = false;
+    this.#permiso_4.disabled = false;
+    this.#permiso_5.disabled = false;
+    this.#permiso_6.disabled = false;
+    this.#permiso_7.disabled = false;
+    this.#permiso_8.disabled = false;
+    this.#permiso_9.disabled = false;
+    this.#permiso_10.disabled = false;
+    this.#permiso_11.disabled = false;
+    this.#permiso_12.disabled = false;
+    this.#permiso_20.disabled = false;
+    this.#permiso_21.disabled = false;
+  }
+
+  habilitarPermisosDemandas() {
+    //Que no se pueden usar disable
+    this.#permiso_14.disabled = false;
+    this.#permiso_15.disabled = false;
+    this.#permiso_16.disabled = false;
+    this.#permiso_17.disabled = false;
+    this.#permiso_18.disabled = false;
+    this.#permiso_19.disabled = false;
+    this.#permiso_22.disabled = false;
+  }
+
+
+  chequearPermisosAsesoria() {
+    this.#permiso_2.checked = true;
+    this.#permiso_3.checked = true;
+    this.#permiso_4.checked = true;
+    this.#permiso_5.checked = true;
+    this.#permiso_6.checked = true;
+    this.#permiso_7.checked = true;
+    this.#permiso_8.checked = true;
+    this.#permiso_9.checked = true;
+    this.#permiso_10.checked = true;
+    this.#permiso_11.checked = true;
+    this.#permiso_12.checked = true;
+    this.#permiso_20.checked = true;
+    this.#permiso_21.checked = true;
+  }
+
+  chequearPermisosDemandas() {
+    this.#permiso_14.checked = true;
+    this.#permiso_15.checked = true;
+    this.#permiso_16.checked = true;
+    this.#permiso_17.checked = true;
+    this.#permiso_18.checked = true;
+    this.#permiso_19.checked = true;
+    this.#permiso_22.checked = true;
+  }
+
+  deschequearPermisosAsesoria() {
+    this.#permiso_2.checked = false;
+    this.#permiso_3.checked = false;
+    this.#permiso_4.checked = false;
+    this.#permiso_5.checked = false;
+    this.#permiso_6.checked = false;
+    this.#permiso_7.checked = false;
+    this.#permiso_8.checked = false;
+    this.#permiso_9.checked = false;
+    this.#permiso_10.checked = false;
+    this.#permiso_11.checked = false;
+    this.#permiso_12.checked = false;
+    this.#permiso_20.checked = false;
+    this.#permiso_21.checked = false;
+  }
+
+  deschequearPermisosDemandas() {
+    this.#permiso_14.checked = false;
+    this.#permiso_15.checked = false;
+    this.#permiso_16.checked = false;
+    this.#permiso_17.checked = false;
+    this.#permiso_18.checked = false;
+    this.#permiso_19.checked = false;
+    this.#permiso_22.checked = false;
+  }
+
+
   //Metodo encargado de validar las entradas de texto de los campos del formulario
-  manejadorEntradaTexto(){
+  manejadorEntradaTexto() {
     //Asignacion de variables para proceder con los eventos de los campos de texto
     var nombreInput = this.#nombre;
-    var apellidoPaternoInput = this.#apellidoPaterno;
-    var apellidoMaternoInput = this.#apellidoMaterno;
     var correoInput = this.#correo;
     var passwordInput = this.#password;
 
     //Evento de input en el campo de nombre y validación de longitud
     nombreInput.addEventListener('input', function () {
-   if (nombreInput.value.length > 45) {
+      if (nombreInput.value.length > 45) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de nombre no puede contener más de 45 caracteres.'
         modal.title = 'Error de validación'
@@ -205,29 +407,11 @@ class UsuariosTab extends HTMLElement {
       }
     });
 
-    //Evento de input en el campo de apellido paterno y validación de longitud
-    apellidoPaternoInput.addEventListener('input', function () {
-     if (apellidoPaternoInput.value.length > 45) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de apellido paterno no puede contener más de 45 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-    });
 
-    //Evento de input en el campo de apellido materno y validación de longitud
-    apellidoMaternoInput.addEventListener('input', function () {
-    if (apellidoMaternoInput.value.length > 45) {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de apellido materno no puede contener más de 45 caracteres.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-    });
 
     //Evento de input en el campo de correo y validación de longitud
     correoInput.addEventListener('input', function () {
-  if (correoInput.value.length > 45) {
+      if (correoInput.value.length > 45) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de correo electrónico no puede contener más de 45 caracteres.'
         modal.title = 'Error de validación'
@@ -256,17 +440,44 @@ class UsuariosTab extends HTMLElement {
   }
 
 
-  //Manejador de eventos con resecto a los radio buttons que hay en los formularios
-  eventosRadios() {
+  //Manejador de eventos con resecto a los radio buttonsy select
+  eventosRadiosSelect() {
     //Encaje de verificar si 
-    this.#empleadoRadio.addEventListener('change', this.handleRadioChange);
-    this.#distritoRadio.addEventListener('change', this.handleRadioChange);
+    //Agregar un evento de cambio al select empleadoTipo pero tambien se le debe de agregar change no sera otro
+    this.#empleadoTipo.addEventListener('change', this.handleSelectChange);
+
+    this.#permiso_1.addEventListener('change', this.checkBoxChange);
+    this.#permiso_2.addEventListener('change', this.checkBoxChange);
+    this.#permiso_3.addEventListener('change', this.checkBoxChange);
+    this.#permiso_4.addEventListener('change', this.checkBoxChange);
+    this.#permiso_5.addEventListener('change', this.checkBoxChange);
+    this.#permiso_6.addEventListener('change', this.checkBoxChange);
+    this.#permiso_7.addEventListener('change', this.checkBoxChange);
+    this.#permiso_8.addEventListener('change', this.checkBoxChange);
+    this.#permiso_9.addEventListener('change', this.checkBoxChange);
+    this.#permiso_10.addEventListener('change', this.checkBoxChange);
+    this.#permiso_11.addEventListener('change', this.checkBoxChange);
+    this.#permiso_12.addEventListener('change', this.checkBoxChange);
+    this.#permiso_13.addEventListener('change', this.checkBoxChange);
+    this.#permiso_14.addEventListener('change', this.checkBoxChange);
+    this.#permiso_15.addEventListener('change', this.checkBoxChange);
+    this.#permiso_16.addEventListener('change', this.checkBoxChange);
+    this.#permiso_17.addEventListener('change', this.checkBoxChange);
+    this.#permiso_18.addEventListener('change', this.checkBoxChange);
+    this.#permiso_19.addEventListener('change', this.checkBoxChange);
+    this.#permiso_20.addEventListener('change', this.checkBoxChange);
+    this.#permiso_21.addEventListener('change', this.checkBoxChange);
+    this.#permiso_22.addEventListener('change', this.checkBoxChange);
+
+
+
+
     this.#asesorRadio.addEventListener('change', this.handleRadioChange2);
     this.#defensorRadio.addEventListener('change', this.handleRadioChange2);
   }
   handleRadioChange2 = () => {
     // Hide or show fields based on selected radio button
-    if (this.#empleadoRadio.checked) {
+    if (this.#empleadoTipo.value === '2' || this.#empleadoTipo.value === '3') {
       if (this.#asesorRadio.checked) {
         this.#bloqueAsesor.classList.remove('hidden');
         this.#bloqueDefensor.classList.add('hidden');
@@ -276,17 +487,116 @@ class UsuariosTab extends HTMLElement {
       }
 
     }
+  }
+
+  checkBoxChange = () => {
+    //Quiero que verifiques osea que por ejemplo por default esta seleccionado el permiso 1 y 13 porque 
+    //esto hace referencia a que son todos los permisos, sin embargo, cuando 
+    if (!this.#permiso_1.checked) {
+      this.desabilitarPermiso1();
+      this.habilitarPermisosAsesorias();
+    }
+    if (!this.#permiso_13.checked) {
+      this.desabilitarPermiso13();
+      this.habilitarPermisosDemandas();
+    }
+
+
+
+    if (this.#permiso_2.checked && this.#permiso_3.checked && this.#permiso_4.checked &&
+      this.#permiso_5.checked && this.#permiso_6.checked && this.#permiso_7.checked &&
+      this.#permiso_8.checked && this.#permiso_9.checked && this.#permiso_10.checked && this.#permiso_12.checked) {
+      this.#permiso_1.checked = true;
+      this.habilitarPermiso1();
+      this.deshabilitarPermisosAsesorias();
+      this.deschequearPermisosAsesoria();
+    }
+
+    if (this.#permiso_14.checked && this.#permiso_15.checked && this.#permiso_16.checked
+      && this.#permiso_17.checked && this.#permiso_18.checked && this.#permiso_19.checked && this.#permiso_22.checked) {
+      this.#permiso_13.checked = true;
+      this.habilitarPermiso13();
+      this.deshabilitarPermisosDemandas();
+      this.deschequearPermisosDemandas();
+    }
 
   }
 
-  handleRadioChange = () => {
+  desabilitarPermiso1() {
+    this.#permiso_1.disabled = true;
+  }
+  desabilitarPermiso13() {
+    this.#permiso_13.disabled = true;
+  }
+
+  habilitarPermiso1() {
+    this.#permiso_1.disabled = false;
+  }
+  habilitarPermiso13() {
+    this.#permiso_13.disabled = false;
+  }
+
+  liberarPermisos() {
+    this.habilitarPermiso1();
+    this.habilitarPermiso13();
+    this.desabilitarPermisosAsesorias();
+    this.desabilitarPermisosDemandas();
+    this.deschequearPermisosAsesoria();
+    this.deschequearPermisosDemandas();
+    this.#permiso_1.checked = true;
+    this.#permiso_13.checked = true;
+    this.#empleadoTipo.value = '1';
+  }
+
+  handleSelectChange = () => {
     // Hide or show fields based on selected radio button
-    if (this.#empleadoRadio.checked) {
-      this.#bloqueOpciones.classList.remove('hidden');
-      this.#bloqueDistrito.classList.add('hidden');
-    } else if (this.#distritoRadio.checked) {
+    if (this.#empleadoTipo.value === '1') {
       this.#bloqueOpciones.classList.add('hidden');
       this.#bloqueDistrito.classList.remove('hidden');
+      this.#bloqueGeneral.classList.add('hidden');
+      this.#permiso_1.checked = true;
+      this.#permiso_13.checked = true;
+      this.deshabilitarPermisosDemandas();
+      this.deshabilitarPermisosAsesorias();
+      this.deschequearPermisosAsesoria();
+      this.deschequearPermisosDemandas();
+    } else if (this.#empleadoTipo.value === '2' || this.#empleadoTipo.value === '3') {
+      this.#bloqueOpciones.classList.remove('hidden');
+      this.#bloqueDistrito.classList.add('hidden');
+      this.#bloqueGeneral.classList.add('hidden');
+
+      if (this.#empleadoTipo.value === '2') {
+
+        this.#permiso_13.checked = false;
+        this.#permiso_1.checked = true;
+        this.deshabilitarPermisosAsesorias();
+        this.deshabilitarPermisosDemandas();
+        this.deschequearPermisosAsesoria();
+        this.deschequearPermisosDemandas();
+        this.habilitarPermisosDemandas();
+
+      }
+      else if (this.#empleadoTipo.value === '3') {
+        this.#permiso_1.checked = false;
+        this.#permiso_13.checked = true;
+        this.deshabilitarPermisosDemandas();
+        this.deshabilitarPermisosAsesorias();
+        this.deschequearPermisosAsesoria();
+        this.deschequearPermisosDemandas();
+        this.habilitarPermisosAsesorias();
+      }
+
+    }
+    else if (this.#empleadoTipo.value === '4') {
+      this.#bloqueOpciones.classList.add('hidden');
+      this.#bloqueDistrito.classList.add('hidden');
+      this.#bloqueGeneral.classList.remove('hidden');
+      this.#permiso_1.checked = true;
+      this.#permiso_13.checked = true;
+      this.deshabilitarPermisosDemandas();
+      this.deshabilitarPermisosAsesorias();
+      this.deschequearPermisosAsesoria();
+      this.deschequearPermisosDemandas();
     }
   };
   //Funcion encargada 
@@ -335,8 +645,6 @@ class UsuariosTab extends HTMLElement {
     if (usuarioID === null) {
       //Obtención de los valores de los campos del formulario
       const nombreInput = this.#nombre.value;
-      const apellidoPaternoInput = this.#apellidoPaterno.value;
-      const apellidoMaternoInput = this.#apellidoMaterno.value;
       const correoInput = this.#correo.value;
       const passwordInput = this.#password.value;
       const estatusUsuarioInput = this.#estatusUsuario.value;
@@ -352,21 +660,6 @@ class UsuariosTab extends HTMLElement {
           modal.open = true
         }
 
-        //Validacion del apellido paterno del usuario si esta vacio se mostrara un modal de error
-        if (apellidoPaternoInput === '') {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de apellido paterno es obligatorio.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-
-        //Validacion del apellido materno del usuario si esta vacio se mostrara un modal de error
-        if (apellidoMaternoInput === '') {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de apellido materno es obligatorio.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
 
         //Validacion del correo del usuario si esta vacio se mostrara un modal de error
         if (correoInput === '') {
@@ -393,7 +686,7 @@ class UsuariosTab extends HTMLElement {
         }
 
         //En caso de que los campos no esten vacios se procede a realizar las validaciones de longitud y formato
-        if (nombreInput !== '' && apellidoPaternoInput !== '' && apellidoMaternoInput !== '' && correoInput !== '' && passwordInput !== '' && estatusUsuarioInput !== '0') {
+        if (nombreInput !== '' && correoInput !== '' && passwordInput !== '' && estatusUsuarioInput !== '0') {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           //Validacion de la longitud del nombre del usuario si es mayor a 45 caracteres se mostrara un modal de error
           if (nombreInput.length > 45) {
@@ -402,205 +695,117 @@ class UsuariosTab extends HTMLElement {
             modal.title = 'Error de validación'
             modal.open = true
           } else
-            //Validacion de la longitud del apellido paterno del usuario si es mayor a 45 caracteres se mostrara un modal de error
-            if (apellidoPaternoInput.length > 45) {
+
+            //Validacion de la longitud del correo del usuario si es mayor a 45 caracteres se mostrara un modal de error
+            if (correoInput.length > 45) {
               const modal = document.querySelector('modal-warning')
-              modal.message = 'El campo de apellido paterno no puede contener más de 45 caracteres.'
+              modal.message = 'El campo de correo electrónico no puede contener más de 45 caracteres.'
               modal.title = 'Error de validación'
               modal.open = true
-
-            } else
-              //Validacion de la longitud del apellido materno del usuario si es mayor a 45 caracteres se mostrara un modal de error
-              if (apellidoMaternoInput.length > 45) {
+            }
+            else
+              //Validacion del formato del correo del usuario si no cumple con el formato se mostrara un modal de error
+              if (!emailRegex.test(correoInput)) {
                 const modal = document.querySelector('modal-warning')
-                modal.message = 'El campo de apellido materno no puede contener más de 45 caracteres.'
+                modal.message = 'El correo electrónico no es válido.'
                 modal.title = 'Error de validación'
                 modal.open = true
+
               }
               else
-                //Validacion de la longitud del correo del usuario si es mayor a 45 caracteres se mostrara un modal de error
-                if (correoInput.length > 45) {
+                //Validacion de la longitud de la contraseña del usuario si es mayor a 65 caracteres se mostrara un modal de error
+                if (passwordInput.length > 65) {
                   const modal = document.querySelector('modal-warning')
-                  modal.message = 'El campo de correo electrónico no puede contener más de 45 caracteres.'
+                  modal.message = 'El campo de contraseña no puede contener más de 65 caracteres.'
                   modal.title = 'Error de validación'
                   modal.open = true
                 }
-                else
-                  //Validacion del formato del correo del usuario si no cumple con el formato se mostrara un modal de error
-                  if (!emailRegex.test(correoInput)) {
-                    const modal = document.querySelector('modal-warning')
-                    modal.message = 'El correo electrónico no es válido.'
-                    modal.title = 'Error de validación'
-                    modal.open = true
+                else {
 
-                  }
-                  else
-                    //Validacion de la longitud de la contraseña del usuario si es mayor a 65 caracteres se mostrara un modal de error
-                    if (passwordInput.length > 65) {
-                      const modal = document.querySelector('modal-warning')
-                      modal.message = 'El campo de contraseña no puede contener más de 65 caracteres.'
-                      modal.title = 'Error de validación'
-                      modal.open = true
-                    }
-                    else {
+                  // Esto es con el fin de verificar si has sido selecionado la opcion de empleado o encargado de distritito y asi asociar el usuario
+                  if (this.#empleadoTipo.value === '2' || this.#empleadoTipo.value === '3') {
+                    //En caso de que se haya seleccionado la opcion de asesor
+                    if (this.#asesorRadio.checked) {
+                      //Validacion de si se ha seleccionado un asesor, se verifica si es igual a 0 se mostrara un modal de error
+                      if (this.#asesor.value === '0') {
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Debe seleccionar un asesor para poder agregar un usuario.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      }
 
-                      // Esto es con el fin de verificar si has sido selecionado la opcion de empleado o encargado de distritito y asi asociar el usuario
-                      if (this.#empleadoRadio.checked) {
-                        //En caso de que se haya seleccionado la opcion de asesor
-                        if (this.#asesorRadio.checked) {
-                          //Validacion de si se ha seleccionado un asesor, se verifica si es igual a 0 se mostrara un modal de error
-                          if (this.#asesor.value === '0') {
-                            const modal = document.querySelector('modal-warning')
-                            modal.message = 'Debe seleccionar un asesor para poder agregar un usuario.'
-                            modal.title = 'Error de validación'
-                            modal.open = true
-                          }
+                      else {
+                        //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                        if (this.#distrito2.value === '0') {
+                          const modal = document.querySelector('modal-warning')
+                          modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
+                          modal.title = 'Error de validación'
+                          modal.open = true
+                          this.resetRadioAndSelect();
 
-                          else {
-                            //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                            if (this.#distrito2.value === '0') {
-                              const modal = document.querySelector('modal-warning')
-                              modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
-                              modal.title = 'Error de validación'
-                              modal.open = true
-                              this.resetRadioAndSelect();
+                        } else {
 
-                            } else {
-
-                              const nombre_asesor_select = await this.#api.getAsesorID(JSON.parse(this.#asesor.value).id_asesor);
-                              // Construye la expresión regular para el nombre completo del asesor
-                              const nombreCompletoRegex = new RegExp(
-                                `${nombreInput}\\s*${apellidoMaternoInput}\\s*${apellidoPaternoInput}`
-                              );
-                              //El nombre del asesor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
-                              if (!nombreCompletoRegex.test(nombre_asesor_select.asesor.nombre_asesor)) {
-                                const modal = document.querySelector('modal-warning');
-                                modal.message = 'El nombre del asesor seleccionado no coincide con el nombre ingresado.';
-                                modal.title = 'Error de validación';
-                                modal.open = true;
-                              } else {
-                                // Resto del código si la validación pasa
-                                const usuario = {
-                                  nombre: nombreInput,
-                                  paterno: apellidoPaternoInput,
-                                  materno: apellidoMaternoInput,
-                                  correo: correoInput,
-                                  password: passwordInput,
-                                  id_distrito_judicial: this.#distrito2.value,
-                                  id_empleado: JSON.parse(this.#asesor.value).id_asesor,
-                                  estatus_general: estatusUsuarioInput.toUpperCase(),
-                                  id_tipouser: 2
-                                };
-                                try {
-                                  const response = await this.#api.postUsuario(usuario);
-                                  if (response) {
-                                    this.#nombre.value = '';
-                                    this.#apellidoPaterno.value = '';
-                                    this.#apellidoMaterno.value = '';
-                                    this.#correo.value = '';
-                                    this.#password.value = '';
-                                    this.#estatusUsuario.value = '0';
-                                    //Llamada a la función de mostrar usuarios
-                                    this.mostrarUsuarios();
-                                    //Llamada a la función de reseteo de radio y select
-                                    this.resetRadioAndSelect();
-                                  }
-                                } catch (error) {
-                                  console.error('Error al agregar un nuevo usuario:', error);
-                                  const modal = document.querySelector('modal-warning')
-                                  modal.setOnCloseCallback(() => {
-                                    if (modal.open === 'false') {
-                                      window.location = '/index.html'
-                                    }
-
-                                  })
-                                  modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
-                                  modal.title = 'Error de conexión'
-                                  modal.open = true
-                                }
-                              }
-                            }
-                          }
-                        }
-                        //En caso de que se haya seleccionado la opcion de defensor
-                        else if (this.#defensorRadio.checked) {
-                          //Validacion de si se ha seleccionado un defensor, se verifica si es igual a 0 se mostrara un modal de error
-                          if (this.#defensor.value === '0') {
-                            const modal = document.querySelector('modal-warning')
-                            modal.message = 'Debe seleccionar un defensor para poder agregar un usuario.'
-                            modal.title = 'Error de validación'
-                            modal.open = true
+                          const nombre_asesor_select = await this.#api.getAsesorID(JSON.parse(this.#asesor.value).id_asesor);
+                          // Construye la expresión regular para el nombre completo del asesor
+                          const nombreCompletoRegex = new RegExp(
+                            `${nombreInput}`
+                          );
+                          //El nombre del asesor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
+                          if (!nombreCompletoRegex.test(nombre_asesor_select.asesor.nombre_asesor)) {
+                            const modal = document.querySelector('modal-warning');
+                            modal.message = 'El nombre del asesor seleccionado no coincide con el nombre ingresado.';
+                            modal.title = 'Error de validación';
+                            modal.open = true;
                           } else {
-                            //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                            if (this.#distrito2.value === '0') {
-                              const modal = document.querySelector('modal-warning')
-                              modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
-                              modal.title = 'Error de validación'
-                              modal.open = true
-                              //Se llama a la funcion de reseteo de radio y select
-                              this.resetRadioAndSelect();
-                            } else {
-                              const nombre_defensor_select = await this.#api.getDefensorID(JSON.parse(this.#defensor.value).id_defensor);
+                            // Resto del código si la validación pasa
+                            const permisos = await this.obtenerCheckboxesSeleccionados();
 
-
-                              const nombreCompletoRegex = new RegExp(
-                                `${nombreInput}\\s*${apellidoMaternoInput}\\s*${apellidoPaternoInput}`
-                              );
-
-                              // Se verifica si el nombre del defensor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
-                              if (!nombreCompletoRegex.test(nombre_defensor_select.defensor.nombre_defensor)) {
-                                const modal = document.querySelector('modal-warning');
-                                modal.message = 'El nombre del defensor seleccionado no coincide con el nombre ingresado.';
-                                modal.title = 'Error de validación';
-                                modal.open = true;
-                              } else {
-                                // Resto del código si la validación pasa
-                                const usuario = {
-                                  nombre: nombreInput,
-                                  paterno: apellidoPaternoInput,
-                                  materno: apellidoMaternoInput,
-                                  correo: correoInput,
-                                  password: passwordInput,
-                                  id_distrito_judicial: this.#distrito2.value,
-                                  id_empleado: JSON.parse(this.#defensor.value).id_defensor,
-                                  estatus_general: estatusUsuarioInput.toUpperCase(),
-                                  id_tipouser: 3
-                                };
-                                try {
-                                  const response = await this.#api.postUsuario(usuario);
-                                  if (response) {
-                                    this.#nombre.value = '';
-                                    this.#apellidoPaterno.value = '';
-                                    this.#apellidoMaterno.value = '';
-                                    this.#correo.value = '';
-                                    this.#password.value = '';
-                                    this.#estatusUsuario.value = '0';
-                                    this.mostrarUsuarios();
-                                    this.resetRadioAndSelect();
-
-                                  }
-                                } catch (error) {
-                                  console.error('Error al agregar un nuevo usuario:', error);
-                                  const modal = document.querySelector('modal-warning')
-                                  modal.setOnCloseCallback(() => {
-                                    if (modal.open === 'false') {
-                                      window.location = '/index.html'
-                                    }
-                                  })
-                                  modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
-                                  modal.title = 'Error de conexión'
-                                  modal.open = true
-
-                                }
+                            const usuario = {
+                              nombre: nombreInput,
+                              correo: correoInput,
+                              password: passwordInput,
+                              id_distrito_judicial: this.#distrito2.value,
+                              id_empleado: JSON.parse(this.#asesor.value).id_asesor,
+                              estatus_general: estatusUsuarioInput.toUpperCase(),
+                              id_tipouser: 2,
+                              permisos: permisos
+                            };
+                            try {
+                              // const response = await this.#api.postUsuario(usuario);
+                              console.log(usuario)
+                              const response = false;
+                              if (response) {
+                                this.#nombre.value = '';
+                                this.#correo.value = '';
+                                this.#password.value = '';
+                                this.#estatusUsuario.value = '0';
+                                //Llamada a la función de mostrar usuarios
+                                this.mostrarUsuarios();
+                                //Llamada a la función de reseteo de radio y select
+                                this.resetRadioAndSelect();
                               }
+                            } catch (error) {
+                              console.error('Error al agregar un nuevo usuario:', error);
+                              const modal = document.querySelector('modal-warning')
+                              modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
+                              modal.title = 'Error de conexión'
+                              modal.open = true
                             }
                           }
                         }
                       }
-                      //En caso de que se haya seleccionado la opcion de distrito judicial 
-                      else if (this.#distritoRadio.checked) {
-                        //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                        if (this.#distrito.value === '0') {
+                    }
+                    //En caso de que se haya seleccionado la opcion de defensor
+                    else if (this.#defensorRadio.checked) {
+                      //Validacion de si se ha seleccionado un defensor, se verifica si es igual a 0 se mostrara un modal de error
+                      if (this.#defensor.value === '0') {
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Debe seleccionar un defensor para poder agregar un usuario.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      } else {
+                        //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                        if (this.#distrito2.value === '0') {
                           const modal = document.querySelector('modal-warning')
                           modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
                           modal.title = 'Error de validación'
@@ -608,44 +813,149 @@ class UsuariosTab extends HTMLElement {
                           //Se llama a la funcion de reseteo de radio y select
                           this.resetRadioAndSelect();
                         } else {
-                          //Resto del código si la validación pasa
-                          const usuario = {
-                            nombre: nombreInput,
-                            paterno: apellidoPaternoInput,
-                            materno: apellidoMaternoInput,
-                            correo: correoInput,
-                            password: passwordInput,
-                            id_distrito_judicial: this.#distrito.value,
-                            estatus_general: estatusUsuarioInput.toUpperCase(),
-                            id_tipouser: 1
-                          };
-                          try {
-                            const response = await this.#api.postUsuario(usuario);
-                            if (response) {
-                              this.#nombre.value = '';
-                              this.#apellidoPaterno.value = '';
-                              this.#apellidoMaterno.value = '';
-                              this.#correo.value = '';
-                              this.#password.value = '';
-                              this.#estatusUsuario.value = '0';
-                              this.mostrarUsuarios();
-                              this.resetRadioAndSelect();
-                            }
-                          } catch (error) {
-                            console.error('Error al agregar un nuevo usuario:', error);
-                            const modal = document.querySelector('modal-warning')
-                            modal.setOnCloseCallback(() => {
-                              if (modal.open === 'false') {
-                                window.location = '/index.html'
+                          const nombre_defensor_select = await this.#api.getDefensorID(JSON.parse(this.#defensor.value).id_defensor);
+
+
+                          const nombreCompletoRegex = new RegExp(
+                            `${nombreInput}`
+                          );
+
+                          // Se verifica si el nombre del defensor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
+                          if (!nombreCompletoRegex.test(nombre_defensor_select.defensor.nombre_defensor)) {
+                            const modal = document.querySelector('modal-warning');
+                            modal.message = 'El nombre del defensor seleccionado no coincide con el nombre ingresado.';
+                            modal.title = 'Error de validación';
+                            modal.open = true;
+                          } else {
+                            // Resto del código si la validación pasa
+                            const permisos = await this.obtenerCheckboxesSeleccionados();
+
+                            const usuario = {
+                              nombre: nombreInput,
+                              correo: correoInput,
+                              password: passwordInput,
+                              id_distrito_judicial: this.#distrito2.value,
+                              id_empleado: JSON.parse(this.#defensor.value).id_defensor,
+                              estatus_general: estatusUsuarioInput.toUpperCase(),
+                              id_tipouser: 3,
+                              permisos: permisos
+                            };
+                            try {
+                              //  const response = await this.#api.postUsuario(usuario);
+                              console.log(usuario)
+                              const response = false;
+                              if (response) {
+                                this.#nombre.value = '';
+                                this.#correo.value = '';
+                                this.#password.value = '';
+                                this.#estatusUsuario.value = '0';
+                                this.mostrarUsuarios();
+                                this.resetRadioAndSelect();
+
                               }
-                            })
-                            modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
-                            modal.title = 'Error de conexión'
-                            modal.open = true
+                            } catch (error) {
+                              console.error('Error al agregar un nuevo usuario:', error);
+                              const modal = document.querySelector('modal-warning')
+
+                              modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
+                              modal.title = 'Error de conexión'
+                              modal.open = true
+
+                            }
                           }
                         }
                       }
                     }
+                  }
+                  //En caso de que se haya seleccionado la opcion de distrito judicial 
+                  else if (this.#empleadoTipo.value === '1') {
+                    //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                    if (this.#distrito.value === '0') {
+                      const modal = document.querySelector('modal-warning')
+                      modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                      //Se llama a la funcion de reseteo de radio y select
+                      this.resetRadioAndSelect();
+                    } else {
+                      //Resto del código si la validación pasa
+                      const permisos = await this.obtenerCheckboxesSeleccionados();
+
+                      const usuario = {
+                        nombre: nombreInput,
+                        correo: correoInput,
+                        password: passwordInput,
+                        id_distrito_judicial: this.#distrito.value,
+                        estatus_general: estatusUsuarioInput.toUpperCase(),
+                        id_tipouser: 1,
+                        permisos: permisos
+                      };
+                      try {
+                        // const response = await this.#api.postUsuario(usuario);
+                        console.log(usuario)
+                        const response = false;
+                        if (response) {
+                          this.#nombre.value = '';
+                          this.#correo.value = '';
+                          this.#password.value = '';
+                          this.#estatusUsuario.value = '0';
+                          this.mostrarUsuarios();
+                          this.resetRadioAndSelect();
+                        }
+                      } catch (error) {
+                        console.error('Error al agregar un nuevo usuario:', error);
+                        const modal = document.querySelector('modal-warning')
+
+                        modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
+                        modal.title = 'Error de conexión'
+                        modal.open = true
+                      }
+                    }
+                  }
+                  else if (this.#empleadoTipo.value === '4') {
+                    //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                    if (this.#distrito3.value === '0') {
+                      const modal = document.querySelector('modal-warning')
+                      modal.message = 'Debe seleccionar un distrito judicial para poder agregar un usuario.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                      //Se llama a la funcion de reseteo de radio y select
+                      this.resetRadioAndSelect();
+                    } else {
+                      //Resto del código si la validación pasa
+                      const permisos = await this.obtenerCheckboxesSeleccionados();
+                      const usuario = {
+                        nombre: nombreInput,
+                        correo: correoInput,
+                        password: passwordInput,
+                        id_distrito_judicial: this.#distrito3.value,
+                        estatus_general: estatusUsuarioInput.toUpperCase(),
+                        id_tipouser: 4,
+                        permisos: permisos
+                      };
+                      try {
+                        //  const response = await this.#api.postUsuario(usuario);
+                        console.log(usuario)
+                        const response = false;
+                        if (response) {
+                          this.#nombre.value = '';
+                          this.#correo.value = '';
+                          this.#password.value = '';
+                          this.#estatusUsuario.value = '0';
+                          this.mostrarUsuarios();
+                          this.resetRadioAndSelect();
+                        }
+                      } catch (error) {
+                        console.error('Error al agregar un nuevo usuario:', error);
+                        const modal = document.querySelector('modal-warning')
+
+                        modal.message = 'No se pudo agregar el usuario, por favor intente más tarde o verifique el status del servidor'
+                        modal.title = 'Error de conexión'
+                        modal.open = true
+                      }
+                    }
+                  }
+                }
 
         }
 
@@ -659,8 +969,6 @@ class UsuariosTab extends HTMLElement {
       modal.title = 'Error de validación'
       modal.open = true
       this.#nombre.value = '';
-      this.#apellidoPaterno.value = '';
-      this.#apellidoMaterno.value = '';
       this.#correo.value = '';
       this.#password.value = '';
       this.#estatusUsuario.value = '0';
@@ -674,31 +982,32 @@ class UsuariosTab extends HTMLElement {
 
   // Metodo que se encarga de bloquear los radio select y listas con el fin de que no se puedan modificar cuando estos se editen
   bloquearRadioAndSelect = () => {
-    this.#empleadoRadio.disabled = true;
-    this.#distritoRadio.disabled = true;
+    this.#empleadoTipo.disabled = true;
     this.#asesorRadio.disabled = true;
     this.#defensorRadio.disabled = true;
     this.#distrito.disabled = true;
     this.#asesor.disabled = true;
     this.#defensor.disabled = true;
     this.#distrito2.disabled = true;
+    this.#distrito3.disabled = true;
+
   }
   // Metodo que se encarga de liberar los radio select y listas con el fin de que se puedan modificar cuando estos se editen
   liberarRadioAndSelect = () => {
-    this.#empleadoRadio.disabled = false;
-    this.#distritoRadio.disabled = false;
+    this.#empleadoTipo.disabled = false;
     this.#asesorRadio.disabled = false;
     this.#defensorRadio.disabled = false;
     this.#distrito.disabled = false;
     this.#asesor.disabled = false;
     this.#defensor.disabled = false;
     this.#distrito2.disabled = false;
+    this.#distrito3.disabled = false;
+
   }
 
   //Funcion encargada de activar a su estado los radio y select cuando se agrega o actualiza un usuario
   resetRadioAndSelect = () => {
-    this.#empleadoRadio.checked = false;
-    this.#distritoRadio.checked = false;
+    this.#empleadoTipo.value = '1';
     this.#asesorRadio.checked = false;
     this.#defensorRadio.checked = false;
     this.#distrito.value = '0';
@@ -711,17 +1020,45 @@ class UsuariosTab extends HTMLElement {
     this.#bloqueAsesor.classList.add('hidden');
     this.#bloqueDefensor.classList.add('hidden');
 
-    this.#empleadoRadio.checked = true;
+    this.#empleadoTipo.value = '1';
     this.#asesorRadio.checked = true;
     this.#bloqueOpciones.classList.remove('hidden');
     this.#bloqueAsesor.classList.remove('hidden');
 
+    this.habilitarPermiso1();
+    this.habilitarPermiso13();
+    this.#permiso_1.checked = true;
+    this.#permiso_13.checked = true;
+    this.deshabilitarPermisosDemandas();
+    this.deshabilitarPermisosAsesorias();
+    
   }
 
   //Metodo encargado de editar un usuario 
   editarUsuario = async () => {
     //Variable que contiene el id de seleccion de usuario y que nos sirve para verificar si previamente se ha seleccionado un usuario
     const usuarioID = this.#idSeleccion;
+    const  validarPermisosIguales= async (permisos_usuario, permisos_seleccionados) => {
+      // Verifica si ambas listas tienen la misma longitud
+      if (permisos_usuario.length !== permisos_seleccionados.length) {
+        return false;
+      }
+  
+      // Ordena ambas listas
+      permisos_usuario.sort();
+      permisos_seleccionados.sort();
+  
+      // Compara los elementos de las listas ordenadas
+      for (let i = 0; i < permisos_usuario.length; i++) {
+        if (permisos_usuario[i] !== permisos_seleccionados[i]) {
+          return false;
+        }
+      }
+  
+      // Si todos los elementos son iguales, retorna true
+      return true;
+    }
+  
     if (usuarioID === null) {
       //Mensaje de error en caso de que no se haya seleccionado un usuario previamente
       const modal = document.querySelector('modal-warning')
@@ -733,8 +1070,6 @@ class UsuariosTab extends HTMLElement {
       //  console.log("Paso validaciones 1")
       //Variables que contienen los valores de los campos del formulario
       const nombreInput = this.#nombre.value;
-      const apellidoPaternoInput = this.#apellidoPaterno.value;
-      const apellidoMaternoInput = this.#apellidoMaterno.value;
       const correoInput = this.#correo.value;
       const passwordInput = this.#password.value;
       const estatusUsuarioInput = this.#estatusUsuario.value;
@@ -748,21 +1083,6 @@ class UsuariosTab extends HTMLElement {
           modal.open = true
         }
 
-        //Validacion del apellido paterno del usuario si esta vacio se mostrara un modal de error
-        if (apellidoPaternoInput === '') {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de apellido paterno es obligatorio.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
-
-        //Validacion del apellido materno del usuario si esta vacio se mostrara un modal de error
-        if (apellidoMaternoInput === '') {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de apellido materno es obligatorio.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
 
         //Validacion del correo del usuario si esta vacio se mostrara un modal de error
         if (correoInput === '') {
@@ -783,7 +1103,7 @@ class UsuariosTab extends HTMLElement {
         //   console.log("Paso validaciones 2")
 
         //En caso de que los campos no esten vacios se procede a realizar las validaciones de longitud y formato
-        if (nombreInput !== '' && apellidoPaternoInput !== '' && apellidoMaternoInput !== '' && correoInput !== '' && estatusUsuarioInput !== '0') {
+        if (nombreInput !== '' && correoInput !== '' && estatusUsuarioInput !== '0') {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           //    console.log("Paso validaciones 3")
           //Validacion de la longitud del nombre del usuario si es mayor a 45 caracteres se mostrara un modal de error
@@ -793,292 +1113,109 @@ class UsuariosTab extends HTMLElement {
             modal.title = 'Error de validación'
             modal.open = true
           } else
-            //Validacion de la longitud del apellido paterno del usuario si es mayor a 45 caracteres se mostrara un modal de error
-            if (apellidoPaternoInput.length > 45) {
+
+            //Validacion de la longitud del correo del usuario si es mayor a 45 caracteres se mostrara un modal de error
+            if (correoInput.length > 45) {
               const modal = document.querySelector('modal-warning')
-              modal.message = 'El campo de apellido paterno no puede contener más de 45 caracteres.'
+              modal.message = 'El campo de correo electrónico no puede contener más de 45 caracteres.'
               modal.title = 'Error de validación'
               modal.open = true
-
-            } else
-              // Validacion de la longitud del apellido materno del usuario si es mayor a 45 caracteres se mostrara un modal de error
-              if (apellidoMaternoInput.length > 45) {
+            }
+            else
+              //Validacion del formato del correo del usuario si no cumple con el formato se mostrara un modal de error
+              if (!emailRegex.test(correoInput)) {
                 const modal = document.querySelector('modal-warning')
-                modal.message = 'El campo de apellido materno no puede contener más de 45 caracteres.'
+                modal.message = 'El correo electrónico no es válido.'
                 modal.title = 'Error de validación'
                 modal.open = true
+
               }
-              else
-                //Validacion de la longitud del correo del usuario si es mayor a 45 caracteres se mostrara un modal de error
-                if (correoInput.length > 45) {
-                  const modal = document.querySelector('modal-warning')
-                  modal.message = 'El campo de correo electrónico no puede contener más de 45 caracteres.'
-                  modal.title = 'Error de validación'
-                  modal.open = true
-                }
-                else
-                  //Validacion del formato del correo del usuario si no cumple con el formato se mostrara un modal de error
-                  if (!emailRegex.test(correoInput)) {
-                    const modal = document.querySelector('modal-warning')
-                    modal.message = 'El correo electrónico no es válido.'
-                    modal.title = 'Error de validación'
-                    modal.open = true
+              else {
+                // console.log("Paso validaciones 4")
+                //En caso de que se haya seleccionado la opcion de empleado se procedara a realizar las validaciones correspondientes
+                if (this.#empleadoTipo.value === '2' || this.#empleadoTipo.value === '3') {
+                  //En caso de que se haya seleccionado la opcion de asesor
+                  if (this.#asesorRadio.checked) {
 
-                  }
-                  else {
-                    // console.log("Paso validaciones 4")
-                    //En caso de que se haya seleccionado la opcion de empleado se procedara a realizar las validaciones correspondientes
-                    if (this.#empleadoRadio.checked) {
-                      //En caso de que se haya seleccionado la opcion de asesor
-                      if (this.#asesorRadio.checked) {
+                    //Validacion de si se ha seleccionado un asesor, se verifica si es igual a 0 se mostrara un modal de error
+                    if (this.#asesor.value === '0') {
+                      const modal = document.querySelector('modal-warning')
+                      modal.message = 'Debe seleccionar un asesor para poder editar un usuario.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    }
 
-                        //Validacion de si se ha seleccionado un asesor, se verifica si es igual a 0 se mostrara un modal de error
-                        if (this.#asesor.value === '0') {
-                          const modal = document.querySelector('modal-warning')
-                          modal.message = 'Debe seleccionar un asesor para poder editar un usuario.'
-                          modal.title = 'Error de validación'
-                          modal.open = true
-                        }
+                    else {
+                      //  console.log("Paso validaciones 5")
+                      //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                      if (this.#distrito2.value === '0') {
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
 
-                        else {
-                          //  console.log("Paso validaciones 5")
-                          //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                          if (this.#distrito2.value === '0') {
-                            const modal = document.querySelector('modal-warning')
-                            modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
-                            modal.title = 'Error de validación'
-                            modal.open = true
+                      } else {
+                        //Datos del usuario a editar
+                        const permisos = await this.obtenerCheckboxesSeleccionados();
 
-                          } else {
-                            //Datos del usuario a editar
-                            const usuario = {
-                              id_usuario: usuarioID,
-                              nombre: nombreInput,
-                              paterno: apellidoPaternoInput,
-                              materno: apellidoMaternoInput,
-                              correo: correoInput,
-                              id_distrito_judicial: parseInt(this.#distrito2.value),
-                              id_empleado: JSON.parse(this.#asesor.value).id_asesor,
-                              estatus_general: estatusUsuarioInput.toUpperCase(),
-                              id_tipouser: 2
-                            };
-                            const nombre_asesor_select = await this.#api.getAsesorID(JSON.parse(this.#asesor.value).id_asesor);
-                            // Construye la expresión regular para el nombre completo del asesor
-                            const nombreCompletoRegex = new RegExp(
-                              `${nombreInput}\\s*${apellidoMaternoInput}\\s*${apellidoPaternoInput}`
-                            );
+                        const usuario = {
+                          id_usuario: usuarioID,
+                          nombre: nombreInput,
+                          correo: correoInput,
+                          id_distrito_judicial: parseInt(this.#distrito2.value),
+                          id_empleado: JSON.parse(this.#asesor.value).id_asesor,
+                          estatus_general: estatusUsuarioInput.toUpperCase(),
+                          id_tipouser: 2,
+                          permisos: permisos
+                        };
+                        const nombre_asesor_select = await this.#api.getAsesorID(JSON.parse(this.#asesor.value).id_asesor);
+                        // Construye la expresión regular para el nombre completo del asesor
+                        const nombreCompletoRegex = new RegExp(
+                          `${nombreInput}`
+                        );
 
-                            //El nombre del asesor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
-                            if (!nombreCompletoRegex.test(nombre_asesor_select.asesor.nombre_asesor)) {
-                              const modal = document.querySelector('modal-warning');
-                              modal.message = 'El nombre del asesor seleccionado no coincide con el nombre ingresado.';
-                              modal.title = 'Error de validación';
-                              modal.open = true;
-                            } else {
-                              //   console.log("Paso validaciones 6")
-                              const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
-                              const usuario_objet_find = usuario_pre.usuario;
-
-                              //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
-                              if (usuario.nombre === usuario_objet_find.nombre && usuario.paterno === usuario_objet_find.paterno && usuario.materno === usuario_objet_find.materno && usuario.correo === usuario_objet_find.correo && usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && usuario.id_empleado === usuario_objet_find.id_empleado && usuario.estatus_general === usuario_objet_find.estatus_general && usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser) {
-
-                                const modal = document.querySelector('modal-warning')
-                                modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
-                                modal.title = 'Error de validación'
-                                modal.open = true
-                                this.#nombre.value = '';
-                                this.#apellidoPaterno.value = '';
-                                this.#apellidoMaterno.value = '';
-                                this.#correo.value = '';
-                                this.#password.value = '';
-                                this.#estatusUsuario.value = '0';
-                                this.liberarRadioAndSelect();
-                                this.resetRadioAndSelect();
-
-                              }
-                              else {
-
-                                //   console.log("Paso validaciones 7")
-                                try {
-                                  const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
-                                  if (response) {
-                                    this.#nombre.value = '';
-                                    this.#apellidoPaterno.value = '';
-                                    this.#apellidoMaterno.value = '';
-                                    this.#correo.value = '';
-                                    this.#password.value = '';
-                                    this.#estatusUsuario.value = '0';
-                                    this.mostrarUsuarios();
-                                    this.liberarRadioAndSelect();
-                                    this.resetRadioAndSelect();
-                                  }
-                                } catch (error) {
-                                  console.error('Error al editar un usuario:', error);
-                                  const modal = document.querySelector('modal-warning')
-                                  modal.setOnCloseCallback(() => {
-                                    if (modal.open === 'false') {
-                                      window.location = '/index.html'
-                                    }
-                                  })
-                                  modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
-                                  modal.title = 'Error de conexión'
-                                  modal.open = true
-
-                                }
-                              }
-                            }
-
-                          }
-
-                        }
-                      }
-                      else
-                        //En caso de que se haya seleccionado la opcion de defensor
-                        if (this.#defensorRadio.checked) {
-                          //Validacion de si se ha seleccionado un defensor, se verifica si es igual a 0 se mostrara un modal de error
-                          if (this.#defensor.value === '0') {
-                            const modal = document.querySelector('modal-warning')
-                            modal.message = 'Debe seleccionar un defensor para poder editar un usuario.'
-                            modal.title = 'Error de validación'
-                            modal.open = true
-                          } else {
-                            //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                            if (this.#distrito2.value === '0') {
-                              //Mensaje de error
-                              const modal = document.querySelector('modal-warning')
-                              modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
-                              modal.title = 'Error de validación'
-                              modal.open = true
-                            } else {
-                              //Datos del usuario a editar
-                              const usuario = {
-                                id_usuario: usuarioID,
-                                nombre: nombreInput,
-                                paterno: apellidoPaternoInput,
-                                materno: apellidoMaternoInput,
-                                correo: correoInput,
-                                id_distrito_judicial: parseInt(this.#distrito2.value),
-                                id_empleado: JSON.parse(this.#defensor.value).id_defensor,
-                                estatus_general: estatusUsuarioInput.toUpperCase(),
-                                id_tipouser: 3
-                              };
-
-                              const nombre_defensor_select = await this.#api.getDefensorID(JSON.parse(this.#defensor.value).id_defensor);
-
-
-                              const nombreCompletoRegex = new RegExp(
-                                `${nombreInput}\\s*${apellidoMaternoInput}\\s*${apellidoPaternoInput}`
-                              );
-
-                              //El nombre del defensor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
-                              if (!nombreCompletoRegex.test(nombre_defensor_select.defensor.nombre_defensor)) {
-                                const modal = document.querySelector('modal-warning');
-                                modal.message = 'El nombre del defensor seleccionado no coincide con el nombre ingresado.';
-                                modal.title = 'Error de validación';
-                                modal.open = true;
-                              } else {
-                                const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
-                                const usuario_objet_find = usuario_pre.usuario;
-
-                                //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
-                                if (usuario.nombre === usuario_objet_find.nombre && usuario.paterno === usuario_objet_find.paterno && usuario.materno === usuario_objet_find.materno && usuario.correo === usuario_objet_find.correo && usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && usuario.id_empleado === usuario_objet_find.id_empleado && usuario.estatus_general === usuario_objet_find.estatus_general && usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser) {
-                                  const modal = document.querySelector('modal-warning')
-                                  modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
-                                  modal.title = 'Error de validación'
-                                  modal.open = true
-                                  this.#nombre.value = '';
-                                  this.#apellidoPaterno.value = '';
-                                  this.#apellidoMaterno.value = '';
-                                  this.#correo.value = '';
-                                  this.#password.value = '';
-                                  this.#estatusUsuario.value = '0';
-                                  this.liberarRadioAndSelect();
-                                  this.resetRadioAndSelect();
-                                }
-                                else {
-                                  try {
-                                    //Llamada a la funcion de editar usuario del api
-                                    const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
-                                    if (response) {
-                                      this.#nombre.value = '';
-                                      this.#apellidoPaterno.value = '';
-                                      this.#apellidoMaterno.value = '';
-                                      this.#correo.value = '';
-                                      this.#password.value = '';
-                                      this.#estatusUsuario.value = '0';
-                                      this.mostrarUsuarios();
-                                      this.liberarRadioAndSelect();
-                                      this.resetRadioAndSelect();
-
-                                    }
-                                  } catch (error) {
-                                    console.error('Error al editar un usuario:', error);
-                                    const modal = document.querySelector('modal-warning')
-                                    modal.setOnCloseCallback(() => {
-                                      if (modal.open === 'false') {
-                                        window.location = '/index.html'
-                                      }
-                                    })
-                                    modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
-                                    modal.title = 'Error de conexión'
-                                    modal.open = true
-
-
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-
-                    } else
-                      //En caso de que se haya seleccionado la opcion de distrito judicial
-                      if (this.#distritoRadio.checked) {
-                        //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
-                        if (this.#distrito.value === '0') {
-                          const modal = document.querySelector('modal-warning')
-                          modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
-                          modal.title = 'Error de validación'
-                          modal.open = true
-                          this.liberarRadioAndSelect();
-                          this.resetRadioAndSelect();
+                        //El nombre del asesor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
+                        if (!nombreCompletoRegex.test(nombre_asesor_select.asesor.nombre_asesor)) {
+                          const modal = document.querySelector('modal-warning');
+                          modal.message = 'El nombre del asesor seleccionado no coincide con el nombre ingresado.';
+                          modal.title = 'Error de validación';
+                          modal.open = true;
                         } else {
-                          //Datos del usuario a editar
-                          const usuario = {
-                            id_usuario: usuarioID,
-                            nombre: nombreInput,
-                            paterno: apellidoPaternoInput,
-                            materno: apellidoMaternoInput,
-                            correo: correoInput,
-                            id_distrito_judicial: parseInt(this.#distrito.value),
-                            estatus_general: estatusUsuarioInput.toUpperCase(),
-                            id_tipouser: 1
-                          };
+                          //   console.log("Paso validaciones 6")
                           const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
                           const usuario_objet_find = usuario_pre.usuario;
 
                           //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
-                          if (usuario.nombre === usuario_objet_find.nombre && usuario.paterno === usuario_objet_find.paterno && usuario.materno === usuario_objet_find.materno && usuario.correo === usuario_objet_find.correo && usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && usuario.estatus_general === usuario_objet_find.estatus_general && usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser) {
+                          if (usuario.nombre === usuario_objet_find.nombre && 
+                            usuario.correo === usuario_objet_find.correo && 
+                            usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && 
+                            usuario.id_empleado === usuario_objet_find.id_empleado
+                             && usuario.estatus_general === usuario_objet_find.estatus_general 
+                             && usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser 
+                            &&  await validarPermisosIguales(usuario.permisos, usuario_objet_find.permisos)===true)   {
+
                             const modal = document.querySelector('modal-warning')
                             modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
                             modal.title = 'Error de validación'
                             modal.open = true
                             this.#nombre.value = '';
-                            this.#apellidoPaterno.value = '';
-                            this.#apellidoMaterno.value = '';
                             this.#correo.value = '';
                             this.#password.value = '';
                             this.#estatusUsuario.value = '0';
                             this.liberarRadioAndSelect();
-                            this.resetRadioAndSelect();
+                            this.resetRadioAndSelect(); 
+                   
+
                           }
                           else {
+
+                            //   console.log("Paso validaciones 7")
                             try {
-                              const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
+                              //  const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
+                              console.log(usuario)
+                              const response = false;
                               if (response) {
                                 this.#nombre.value = '';
-                                this.#apellidoPaterno.value = '';
-                                this.#apellidoMaterno.value = '';
                                 this.#correo.value = '';
                                 this.#password.value = '';
                                 this.#estatusUsuario.value = '0';
@@ -1089,20 +1226,259 @@ class UsuariosTab extends HTMLElement {
                             } catch (error) {
                               console.error('Error al editar un usuario:', error);
                               const modal = document.querySelector('modal-warning')
-                              modal.setOnCloseCallback(() => {
-                                if (modal.open === 'false') {
-                                  window.location = '/index.html'
-                                }
-                              })
+
                               modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
                               modal.title = 'Error de conexión'
                               modal.open = true
+
+                            }
+                          }
+                        }
+
+                      }
+
+                    }
+                  }
+                  else
+                    //En caso de que se haya seleccionado la opcion de defensor
+                    if (this.#defensorRadio.checked) {
+                      //Validacion de si se ha seleccionado un defensor, se verifica si es igual a 0 se mostrara un modal de error
+                      if (this.#defensor.value === '0') {
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Debe seleccionar un defensor para poder editar un usuario.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      } else {
+                        //Ahora se verifica si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                        if (this.#distrito2.value === '0') {
+                          //Mensaje de error
+                          const modal = document.querySelector('modal-warning')
+                          modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
+                          modal.title = 'Error de validación'
+                          modal.open = true
+                        } else {
+                          //Datos del usuario a editar
+                          const permisos = await this.obtenerCheckboxesSeleccionados();
+
+                          const usuario = {
+                            id_usuario: usuarioID,
+                            nombre: nombreInput,
+                            correo: correoInput,
+                            id_distrito_judicial: parseInt(this.#distrito2.value),
+                            id_empleado: JSON.parse(this.#defensor.value).id_defensor,
+                            estatus_general: estatusUsuarioInput.toUpperCase(),
+                            id_tipouser: 3,
+                            permisos: permisos
+                          };
+
+                          const nombre_defensor_select = await this.#api.getDefensorID(JSON.parse(this.#defensor.value).id_defensor);
+
+
+                          const nombreCompletoRegex = new RegExp(
+                            `${nombreInput}`
+                          );
+
+                          //El nombre del defensor seleccionado no coincide con el nombre ingresado se mostrara un modal de error
+                          if (!nombreCompletoRegex.test(nombre_defensor_select.defensor.nombre_defensor)) {
+                            const modal = document.querySelector('modal-warning');
+                            modal.message = 'El nombre del defensor seleccionado no coincide con el nombre ingresado.';
+                            modal.title = 'Error de validación';
+                            modal.open = true;
+                          } else {
+                            const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
+                            const usuario_objet_find = usuario_pre.usuario;
+
+                            //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
+                            if (usuario.nombre === usuario_objet_find.nombre && usuario.correo === usuario_objet_find.correo
+                               && usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial 
+                               && usuario.id_empleado === usuario_objet_find.id_empleado 
+                               && usuario.estatus_general === usuario_objet_find.estatus_general 
+                               && usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser
+                               &&  await validarPermisosIguales(usuario.permisos, usuario_objet_find.permisos)===true)   {
+                                const modal = document.querySelector('modal-warning')
+                              modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
+                              modal.title = 'Error de validación'
+                              modal.open = true
+                              this.#nombre.value = '';
+                              this.#correo.value = '';
+                              this.#password.value = '';
+                              this.#estatusUsuario.value = '0';
+                              this.liberarRadioAndSelect();
+                              this.resetRadioAndSelect();
+                            }
+                            else {
+                              try {
+                                //Llamada a la funcion de editar usuario del api
+                                //  const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
+                                console.log(usuario)
+                                const response = false;
+                                if (response) {
+                                  this.#nombre.value = '';
+                                  this.#correo.value = '';
+                                  this.#password.value = '';
+                                  this.#estatusUsuario.value = '0';
+                                  this.mostrarUsuarios();
+                                  this.liberarRadioAndSelect();
+                                  this.resetRadioAndSelect();
+
+                                }
+                              } catch (error) {
+                                console.error('Error al editar un usuario:', error);
+                                const modal = document.querySelector('modal-warning')
+
+                                modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
+                                modal.title = 'Error de conexión'
+                                modal.open = true
+
+
+                              }
                             }
                           }
                         }
                       }
+                    }
 
+                } else
+                  //En caso de que se haya seleccionado la opcion de distrito judicial
+                  if (this.#empleadoTipo.value === '1') {
+                    //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                    if (this.#distrito.value === '0') {
+                      const modal = document.querySelector('modal-warning')
+                      modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                      this.liberarRadioAndSelect();
+                      this.resetRadioAndSelect();
+                    } else {
+                      //Datos del usuario a editar
+                      const permisos = await this.obtenerCheckboxesSeleccionados();
+
+                      const usuario = {
+                        id_usuario: usuarioID,
+                        nombre: nombreInput,
+                        correo: correoInput,
+                        id_distrito_judicial: parseInt(this.#distrito.value),
+                        estatus_general: estatusUsuarioInput.toUpperCase(),
+                        id_tipouser: 1,
+                        permisos: permisos
+                      };
+                      const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
+                      const usuario_objet_find = usuario_pre.usuario;
+
+                      //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
+                      if (usuario.nombre === usuario_objet_find.nombre && usuario.correo === usuario_objet_find.correo && 
+                        usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && 
+                        usuario.estatus_general === usuario_objet_find.estatus_general &&
+                         usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser
+                         &&  await validarPermisosIguales(usuario.permisos, usuario_objet_find.permisos)===true)   {
+
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                        this.#nombre.value = '';
+                        this.#correo.value = '';
+                        this.#password.value = '';
+                        this.#estatusUsuario.value = '0';
+                        this.liberarRadioAndSelect();
+                        this.resetRadioAndSelect();
+                      }
+                      else {
+                        try {
+                          //  const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
+                          console.log(usuario)
+                          const response = false;
+
+                          if (response) {
+                            this.#nombre.value = '';
+                            this.#correo.value = '';
+                            this.#password.value = '';
+                            this.#estatusUsuario.value = '0';
+                            this.mostrarUsuarios();
+                            this.liberarRadioAndSelect();
+                            this.resetRadioAndSelect();
+                          }
+                        } catch (error) {
+                          console.error('Error al editar un usuario:', error);
+                          const modal = document.querySelector('modal-warning')
+                          modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
+                          modal.title = 'Error de conexión'
+                          modal.open = true
+                        }
+                      }
+                    }
                   }
+                  else
+                    //En caso de que se haya seleccionado la opcion de distrito judicial
+                    if (this.#empleadoTipo.value === '4') {
+                      //Validacion de si se ha seleccionado un distrito judicial, se verifica si es igual a 0 se mostrara un modal de error
+                      if (this.#distrito3.value === '0') {
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Debe seleccionar un distrito judicial para poder editar un usuario.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                        this.liberarRadioAndSelect();
+                        this.resetRadioAndSelect();
+                      } else {
+                        //Datos del usuario a editar
+                        const permisos = await this.obtenerCheckboxesSeleccionados();
+
+                        const usuario = {
+                          id_usuario: usuarioID,
+                          nombre: nombreInput,
+                          correo: correoInput,
+                          id_distrito_judicial: parseInt(this.#distrito3.value),
+                          estatus_general: estatusUsuarioInput.toUpperCase(),
+                          id_tipouser: 4,
+                          permisos: permisos
+                        };
+
+                        const usuario_pre = await this.#api.getUsuarioByID(usuarioID);
+                        const usuario_objet_find = usuario_pre.usuario;
+
+                        //Validacion de si los datos del usuario son iguales a los actuales se mostrara un modal de error
+                        if (usuario.nombre === usuario_objet_find.nombre && usuario.correo === usuario_objet_find.correo &&
+                           usuario.id_distrito_judicial === usuario_objet_find.id_distrito_judicial && 
+                           usuario.estatus_general === usuario_objet_find.estatus_general &&
+                            usuario.id_tipouser === usuario_objet_find.tipo_user.id_tipouser
+                            &&  await validarPermisosIguales(usuario.permisos, usuario_objet_find.permisos)===true)   {
+                          const modal = document.querySelector('modal-warning')
+                          modal.message = 'No se ha realizado ningún cambio en el usuario,. ya que los datos son iguales a los actuales, se eliminaran los campos.'
+                          modal.title = 'Error de validación'
+                          modal.open = true
+                          this.#nombre.value = '';
+                          this.#correo.value = '';
+                          this.#password.value = '';
+                          this.#estatusUsuario.value = '0';
+                          this.liberarRadioAndSelect();
+                          this.resetRadioAndSelect();
+                        }
+                        else {
+                          try {
+                            //  const response = await this.#api.putUsuario(this.#idSeleccion, usuario);
+                            console.log(usuario)
+                            const response = false;
+
+                            if (response) {
+                              this.#nombre.value = '';
+                              this.#correo.value = '';
+                              this.#password.value = '';
+                              this.#estatusUsuario.value = '0';
+                              this.mostrarUsuarios();
+                              this.liberarRadioAndSelect();
+                              this.resetRadioAndSelect();
+                            }
+                          } catch (error) {
+                            console.error('Error al editar un usuario:', error);
+                            const modal = document.querySelector('modal-warning')
+                            modal.message = 'No se pudo editar el usuario, por favor intente más tarde o verifique el status del servidor'
+                            modal.title = 'Error de conexión'
+                            modal.open = true
+                          }
+                        }
+                      }
+                    }
+              }
 
         }
 
@@ -1110,13 +1486,15 @@ class UsuariosTab extends HTMLElement {
         console.error('Error al editar un usuario:', error);
       }
     }
-
+    
   }
+
+  
 
   //Metodo encargado de mostrar los usuarios en la tabla
   mostrarUsuarios = async () => {
 
-    try { 
+    try {
       //LLamada a la funcion de obtener usuarios del api 
       const usuarios = await this.#api.getUsuarios();
       const tableBody = this.#usuarios;
@@ -1130,8 +1508,6 @@ class UsuariosTab extends HTMLElement {
               <tr id="usuario-${usuario.id_usuario}">
               <td class="px-6 py-4 whitespace-nowrap">${usuario.id_usuario}</td>
               <td class="px-6 py-4 whitespace-nowrap">${usuario.nombre}</td>
-              <td class="px-6 py-4 whitespace-nowrap">${usuario.paterno}</td>
-              <td class="px-6 py-4 whitespace-nowrap">${usuario.materno}</td>
               <td class="px-6 py-4 whitespace-nowrap">${usuario.tipo_user.tipo_usuario}</td>
               <td class="px-6 py-4 whitespace-nowrap">${usuario.id_distrito_judicial}</td>
               <td class="px-6 py-4 whitespace-nowrap">${usuario.estatus_general}</td>
@@ -1160,22 +1536,51 @@ class UsuariosTab extends HTMLElement {
       //Llamada a la funcion de obtener usuario por id del api
       const usuarioID = await this.#api.getUsuarioByID(usuarioId);
 
+      let permisos = usuarioID.usuario.permisos;
+
+      let verificar_sa = 0;
+      let verificar_sd = 0;
+
+      for (let i = 0; i < permisos.length; i++) {
+        let permiso = permisos[i].slice((permisos[i].length - 2), permisos[i].length);
+        if (permiso === 'SA') {
+          verificar_sa++;
+        }
+        if (permiso === 'SD') {
+          verificar_sd++;
+        }
+      }
+      if (verificar_sa > 2) {
+        this.habilitarPermisosAsesorias();
+        this.desabilitarPermiso1();
+      }
+      if (verificar_sd > 2) {
+        this.habilitarPermisosDemandas();
+        this.desabilitarPermiso13();
+      }
+      if (usuarioID.usuario.permisos.length === 0) {
+        this.habilitarPermisosAsesorias();
+        this.desabilitarPermiso1();
+        this.habilitarPermisosDemandas();
+        this.desabilitarPermiso13();
+      }
+
+      await this.marcarCheckboxes(usuarioID.usuario.permisos);
+
       if (usuarioID) {
-         
+
         //Se asigna el id de seleccion de usuario
         this.#idSeleccion = usuarioID.usuario.id_usuario;
         this.#nombre.value = usuarioID.usuario.nombre;
-        this.#apellidoPaterno.value = usuarioID.usuario.paterno;
-        this.#apellidoMaterno.value = usuarioID.usuario.materno;
         this.#correo.value = usuarioID.usuario.correo;
         this.#estatusUsuario.value = usuarioID.usuario.estatus_general;
         //Se verifica el tipo de usuario para activar los radio y select correspondientes con respecto al asesor
-        if (usuarioID.usuario.tipo_user.tipo_usuario === 'ASESOR') {
+        if (usuarioID.usuario.tipo_user.tipo_usuario === 'asesor') {
           this.#asesorRadio.checked = true;
-          this.#empleadoRadio.checked = true;
+          this.#empleadoTipo.value = '2';
           this.#distrito2.value = usuarioID.usuario.id_distrito_judicial;
           const options = this.#asesor.options;
-         //Esto con el fin de obtener o verificar el asesor seleccionado previamente
+          //Esto con el fin de obtener o verificar el asesor seleccionado previamente
           for (let i = 0; i < options.length; i++) {
             if (i !== 0) {
               const optionValue = JSON.parse(options[i].value);
@@ -1189,41 +1594,52 @@ class UsuariosTab extends HTMLElement {
           this.#bloqueDistrito.classList.add('hidden');
           this.#bloqueAsesor.classList.remove('hidden');
           this.#bloqueDefensor.classList.add('hidden');
-
+          this.#bloqueGeneral.classList.add('hidden');
         } else
-         //Se verifica el tipo de usuario para activar los radio y select correspondientes con respecto al defensor
-        if (usuarioID.usuario.tipo_user.tipo_usuario === 'DEFENSOR') {
-          this.#defensorRadio.checked = true;
-          this.#empleadoRadio.checked = true;
-          this.#distrito2.value = usuarioID.usuario.id_distrito_judicial;
-          const options = this.#defensor.options;
-          //Esto con el fin de obtener o verificar el defensor seleccionado previamente
-          for (let i = 0; i < options.length; i++) {
-            if (i !== 0) {
-              const optionValue = JSON.parse(options[i].value);
-              if (optionValue.id_defensor === usuarioID.usuario.id_empleado) {
-                this.#defensor.selectedIndex = i;
-                break;
+          //Se verifica el tipo de usuario para activar los radio y select correspondientes con respecto al defensor
+          if (usuarioID.usuario.tipo_user.tipo_usuario === 'defensor') {
+            this.#defensorRadio.checked = true;
+            this.#empleadoTipo.value = '3';
+            this.#distrito2.value = usuarioID.usuario.id_distrito_judicial;
+            const options = this.#defensor.options;
+            //Esto con el fin de obtener o verificar el defensor seleccionado previamente
+            for (let i = 0; i < options.length; i++) {
+              if (i !== 0) {
+                const optionValue = JSON.parse(options[i].value);
+                if (optionValue.id_defensor === usuarioID.usuario.id_empleado) {
+                  this.#defensor.selectedIndex = i;
+                  break;
+                }
               }
             }
-          }
-          this.#bloqueOpciones.classList.remove('hidden');
-          this.#bloqueDistrito.classList.add('hidden');
-          this.#bloqueAsesor.classList.add('hidden');
-          this.#bloqueDefensor.classList.remove('hidden');
+            this.#bloqueOpciones.classList.remove('hidden');
+            this.#bloqueDistrito.classList.add('hidden');
+            this.#bloqueAsesor.classList.add('hidden');
+            this.#bloqueDefensor.classList.remove('hidden');
+            this.#bloqueGeneral.classList.add('hidden');
 
 
-        } else 
-        //Se verifica el tipo de usuario para activar los radio y select correspondientes con respecto al distrito judicial
-        if (usuarioID.usuario.tipo_user.tipo_usuario === 'SUPERVISOR') {
-          this.#distritoRadio.checked = true;
-          this.#distrito.value = usuarioID.usuario.id_distrito_judicial;
-          this.#bloqueOpciones.classList.add('hidden');
-          this.#bloqueDistrito.classList.remove('hidden');
-          this.#bloqueAsesor.classList.add('hidden');
-          this.#bloqueDefensor.classList.add('hidden');
+          } else
+            //Se verifica el tipo de usuario para activar los radio y select correspondientes con respecto al distrito judicial
+            if (usuarioID.usuario.tipo_user.tipo_usuario === 'supervisor') {
+              this.#empleadoTipo.value = '1';
+              this.#distrito.value = usuarioID.usuario.id_distrito_judicial;
+              this.#bloqueOpciones.classList.add('hidden');
+              this.#bloqueDistrito.classList.remove('hidden');
+              this.#bloqueAsesor.classList.add('hidden');
+              this.#bloqueDefensor.classList.add('hidden');
+              this.#bloqueGeneral.classList.add('hidden');
 
-        }
+
+            } else if (usuarioID.usuario.tipo_user.tipo_usuario === 'general') {
+              this.#empleadoTipo.value = '4';
+              this.#distrito3.value = usuarioID.usuario.id_distrito_judicial;
+              this.#bloqueOpciones.classList.add('hidden');
+              this.#bloqueDistrito.classList.add('hidden');
+              this.#bloqueAsesor.classList.add('hidden');
+              this.#bloqueDefensor.classList.add('hidden');
+              this.#bloqueGeneral.classList.remove('hidden');
+            }
         //Se bloquean los radio y select para que no se puedan modificar
         this.bloquearRadioAndSelect();
 
@@ -1235,6 +1651,12 @@ class UsuariosTab extends HTMLElement {
     }
   }
 
+  async marcarCheckboxes(permisos) {
+    const checkboxes = this.shadowRoot.querySelectorAll('input[name="permisos"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = permisos.includes(checkbox.value);
+    });
+  }
 
 
 

@@ -7,7 +7,7 @@ service UsuarioService {
 }
 
 service TokenService {
-  rpc validarToken(ValidacionTokenRequest) returns (ValidacionResponse) {}
+  rpc validarToken(ValidacionTokenRequest) returns (ValidacionResponseToken) {}
 }
 
 message ValidacionUsuarioRequest {
@@ -21,4 +21,10 @@ message ValidacionTokenRequest {
 
 message ValidacionResponse {
   string message = 1;
+}
+
+message ValidacionResponseToken {
+  repeated string permisos = 1;
+  string id_distrito_judicial = 2;
+  string id_usuario = 3;
 }

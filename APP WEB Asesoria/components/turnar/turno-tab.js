@@ -1,12 +1,8 @@
 /* eslint-disable indent */
-import { ValidationError } from '../../lib/errors'
-import { getDate, validateNonEmptyFields } from '../../lib/utils'
-import { APIModel } from '../../models/api.model'
-
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/turnar/turno-tab.html')).text()
-template.innerHTML = html
+import { ValidationError } from '../../lib/errors.js'
+import { getDate, validateNonEmptyFields } from '../../lib/utils.js'
+import { APIModel } from '../../models/api.model.js'
+ 
 
 export class TurnoTab extends HTMLElement {
 
@@ -41,11 +37,7 @@ export class TurnoTab extends HTMLElement {
 
   //Metodo que se encarga de obtener los datos
   get data() {
-    const idEmpelado = this.#asesoria.asesor
-      ? this.#asesores.find(
-        asesor => asesor.id_asesor === Number(this.#nombreAsesor.value)
-      )
-      : this.#defensores.find(
+    const idEmpelado =  this.#defensores.find(
         defensor =>
           defensor.id_defensor === Number(this.#nombreDefensor.value)
       )
@@ -63,26 +55,37 @@ export class TurnoTab extends HTMLElement {
   set data(value) {
     this.setAttribute('data', value)
   }
-
-  //Constructor de la clase
-  constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
-    //Este id es con respecto a la pestaña actual
-    this.id = 'turno'
-    //Se esconde el tab
-    this.style.display = 'none'
-
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    
     //Se obtiene la asesoria de la sesion esto es con respecto a la busqueda
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
     this.#usuario = JSON.parse(sessionStorage.getItem('user'))
 
     //Se inicializan las variables en este caso API
-    this.#api = new APIModel()
+    this.#api = new APIModel() 
+    await this.campos()
     //Se inicializa la clase
     this.#initialize()
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/turnar/turno-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+
+    //Este id es con respecto a la pestaña actual
+    this.id = 'turno'
+    //Se esconde el tab
+    this.style.display = 'none'
+    this.init2()
+
   }
 
 
@@ -96,6 +99,7 @@ export class TurnoTab extends HTMLElement {
   }
 
   async #fetchEmpleados() {
+    /*
     try {
       const data = await this.#api.getAsesores2()
       this.#asesores = data.asesores
@@ -110,6 +114,7 @@ export class TurnoTab extends HTMLElement {
       modal.title = 'Error'
       modal.open = true
     }
+    */
 
     try {
       const data = await this.#api.getDefensores2()
@@ -167,29 +172,70 @@ export class TurnoTab extends HTMLElement {
     // Validar la hora del turno y que cumpla con el formato de 24 horas
     horaTurnoInput.addEventListener('input', function () {
 
-      // Expresión regular para validar horas en formato de 12 o 24 horas
-      var horaRegex = /^(0?[1-9]|1[0-2]|2[0-3])$/;
-      if (!horaRegex.test(horaTurnoInput.value)) {
+      //validar horas entre 0 y 23 sin regex valida que la entrada sea un numero
+         if (horaTurnoInput.value ===  "e") {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'La hora del turno solo permite números, verifique su respuesta.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+
+      if (isNaN(horaTurnoInput.value)) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'La hora del turno solo permite números, verifique su respuesta.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+    
+       
+      if (horaTurnoInput.value > 23) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else if (horaTurnoInput.value < 0) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
       }
+     
 
     });
 
+
+
+
     // Validar los minutos del turno y que cumpla con el formato de minutos (0 a 59)
     minutoTurnoInput.addEventListener('input', function () {
+    if (minutoTurnoInput.value ===  "e") {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El minuto del turno solo permite números, verifique su respuesta.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else
+      
+ if(isNaN(minutoTurnoInput.value)){
 
-
-      // Expresión regular para validar minutos (0 a 59)
-      var minutoRegex = /^([0-5]?[0-9])$/;
-      if (!minutoRegex.test(minutoTurnoInput.value)) {
+  const modal = document.querySelector('modal-warning')
+  modal.message = 'Los minutos del turno solo permite números, verifique su respuesta.'
+  modal.title = 'Error de validación'
+  modal.open = true
+  }
+  else 
+      //   validar minutos (0 a 59) sin regex 
+      if (minutoTurnoInput.value > 59) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      } else  if (minutoTurnoInput.value < 0) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
       }
+            
     });
   }
 
@@ -198,7 +244,7 @@ export class TurnoTab extends HTMLElement {
   //Encargado de llenar los inputs y select
   #fillInputs() {
     this.#resumen.value = this.#asesoria.datos_asesoria.resumen_asesoria
-
+/*
     // fill select
     this.#asesores.forEach(asesor => {
       const option = document.createElement('option')
@@ -206,6 +252,8 @@ export class TurnoTab extends HTMLElement {
       option.textContent = `${asesor.nombre_asesor}`
       this.#nombreAsesor.appendChild(option)
     })
+
+    */
     this.#defensores.forEach(defensor => {
       const option = document.createElement('option')
       option.value = defensor.id_defensor
@@ -221,7 +269,7 @@ export class TurnoTab extends HTMLElement {
     this.#minutoTurno.value = minuto ?? ''
   }
 
-  connectedCallback() {
+ async campos() {
     //Asignacion de las variables de los botones
     this.btnTurnar = this.shadowRoot.getElementById('btn-registrar-turno')
     //Obtencion de los datos de los tabs
@@ -358,25 +406,30 @@ export class TurnoTab extends HTMLElement {
         if (this.#nombreDefensor.value === '') {
           throw new ValidationError('Debe de seleccionar un defensor, por favor seleccione uno.')
         }
-
+       
         // Validar la hora del turno
         if (turnoData.horaTurno === '') {
           throw new ValidationError('La hora del turno no puede estar vacía, por favor ingrésela.');
-        } else {
-          // Expresión regular para validar horas en formato de 24 horas
-          var horaRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-          if (!horaRegex.test(turnoData.horaTurno)) {
+        } else { 
+         //Validar que la hora sea un valor entre 0 y 23 sin regex  porfavor
+          if (turnoData.horaTurno > 23) {
             throw new ValidationError('La hora del turno no es válida, por favor ingrese un valor válido.');
           }
+          else if (turnoData.horaTurno < 0) {
+            throw new ValidationError('La hora del turno no es válida, por favor ingrese un valor válido.');
+          }
+       
         }
 
         // Validar los minutos del turno
         if (turnoData.minutoTurno === '') {
           throw new ValidationError('Los minutos del turno no pueden estar vacíos, por favor ingréselos.');
         } else {
-          // Expresión regular para validar minutos (0 a 59)
-          var minutoRegex = /^([0-5]?[0-9])$/;
-          if (!minutoRegex.test(turnoData.minutoTurno)) {
+          // validar que los minutos sean un valor entre 0 y 59
+          if (turnoData.minutoTurno > 59) {
+            throw new ValidationError('Los minutos del turno no son válidos, por favor ingrese un valor válido.');
+          }
+          else if (turnoData.minutoTurno < 0) {
             throw new ValidationError('Los minutos del turno no son válidos, por favor ingrese un valor válido.');
           }
         }

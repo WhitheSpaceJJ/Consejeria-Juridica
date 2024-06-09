@@ -1,5 +1,5 @@
-import { ControllerUtils } from '../lib/controllerUtils'
-import { DataAsesoria } from '../components/asesoria/data-asesoria'
+import { ControllerUtils } from '../lib/controllerUtils.js'
+import { DataAsesoria } from '../components/asesoria/data-asesoria.js'
 
 class ConsultaController {
   //Variables de la clase privada

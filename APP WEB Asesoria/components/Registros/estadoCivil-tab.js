@@ -1,17 +1,10 @@
 //const template = document.createElement('template');
 //import { ControllerUtils } from '......./lib/controllerUtils';
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
 
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/estadoCivil-tab.html')
-).text()
-template.innerHTML = html
-
+ 
 class EstadoTab extends HTMLElement {
   //Variables privadas de la clase
   #api
@@ -23,16 +16,23 @@ class EstadoTab extends HTMLElement {
   //Constructor de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
     //Esto con el fin de las vairable sea inicializada en null
     this.#idSeleccion = null;
     //Llamado a la función init
     this.init();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/estadoCivil-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Funcion que inicializa las variables y funciones de la clase como lo son lo de los campos de texto y datos
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Se inicializa la variable de la clase APIModel
     this.#api = new APIModel();
     //Llamada a la función que maneja los campos de texto

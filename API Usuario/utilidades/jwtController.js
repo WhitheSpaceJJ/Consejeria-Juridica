@@ -1,5 +1,16 @@
 const secreto = 'osos-carinosos';
 const jwt = require('jsonwebtoken');
+const controlDetallePermisoUsuario = require('../controles/controlDetallePermisoUsuario');
+const controlUsuario = require('../controles/controlUsuario');
+
+
+async function obtenerPermisosUsuaris(permisos) {
+  let permisosUsuario = [];
+  for (let i = 0; i < permisos.length; i++) {
+    permisosUsuario.push(permisos[i].permiso.nombre_permiso);
+  }
+  return permisosUsuario;
+}
 /**
  *  @description Función que genera un token
  * @param {Object} payload Objeto con la información del usuario
@@ -22,15 +33,29 @@ const generateToken = async (payload) => {
 /**
  * @description Función que verifica un token
  * @param {String} token Token a verificar
- * @returns {Object} payload
+ * @returns {Promise<Object>} Promise que resuelve con el payload de los permisos
  */
 const verifyToken = async (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secreto, (err, decoded) => {
+    jwt.verify(token, secreto, async (err, decoded) => {
       if (err) {
-        reject();
+        return reject(err);  // Es recomendable pasar el error para tener más información
       } else {
-        resolve(decoded);
+        try {
+           const usuario = await controlUsuario.obtenerUsuarioCorreoPasswordEncriptada(decoded.correo, decoded.password);
+          if (!usuario) {
+            reject({ message: 'No se encontro el usuario del token' });
+          }
+          const permisos_pre = await controlDetallePermisoUsuario.obtenerPermisosUsuario(usuario.id_usuario);
+          const permisos = await obtenerPermisosUsuaris(permisos_pre);
+          if (permisos.length === 0) {
+            reject({ message: 'No tiene permisos' });
+          }else{
+            resolve({permisos:permisos, id_distrito_judicial:usuario.id_distrito_judicial});
+          }
+        } catch (error) {
+          reject(error);  // Rechaza la promesa en caso de errores en las llamadas asíncronas
+        }
       }
     });
   });

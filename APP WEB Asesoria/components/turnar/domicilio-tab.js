@@ -1,10 +1,6 @@
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 
 
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/turnar/domicilio-tab.html')).text()
-template.innerHTML = html
 
 export class DomicilioTab extends HTMLElement {
 
@@ -56,24 +52,14 @@ export class DomicilioTab extends HTMLElement {
   set data(value) {
     this.setAttribute('data', value)
   }
-
-  //Constructor de la clase
-  constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-    //Esto es con respecto al manejo de pestanas
-    this.id = 'domicilio'
-    this.style.display = 'none'
-
-    //Se obtienen los datos de la asesoria y del domicilio con respecto a la sesion storage 
-    this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
-    this.#domicilio = JSON.parse(sessionStorage.getItem('colonia'))
-
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Se crea una instancia de la clase APIModel
     this.#API = new APIModel()
-
-    //Llamado al metodo que se encarga de manejar los campos del formulario
+    await this.campos();
+    //Llamado al me todo que se encarga de manejar los campos del formulario
     this.manageFormFields()
     //Llamado al metodo que se encarga de manejar los datos requeridos en el formulario
     this.fillInputs()
@@ -97,6 +83,26 @@ export class DomicilioTab extends HTMLElement {
       //Busqueda del codigo Postal
       this.searchCP()
     })
+
+
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/turnar/domicilio-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    //Esto es con respecto al manejo de pestanas
+    this.id = 'domicilio'
+    this.style.display = 'none'
+
+    //Se obtienen los datos de la asesoria y del domicilio con respecto a la sesion storage 
+    this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
+    this.#domicilio = JSON.parse(sessionStorage.getItem('colonia'))
+    this.init2()
 
 
   }
@@ -230,7 +236,7 @@ export class DomicilioTab extends HTMLElement {
 
 
   //Conección con el callback de la clase y que se encarga de administrar los cambios en los atributos del componente
-  connectedCallback() {
+  async campos() {
     //Sboton de siguiente, y que se encarga de cambiar de pestaña
     this.btnNext = this.shadowRoot.getElementById('btn-domicilio-next')
 

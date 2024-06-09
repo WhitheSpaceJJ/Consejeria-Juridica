@@ -51,29 +51,14 @@ const Usuario = sequelize.define("usuarios", {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [0, 45]
+      len: [0, 100]
     }
   },
-  materno: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      len: [0, 45]
-    }
-  },
-  paterno: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      len: [0, 45]
-    }
-  }
-  ,
   correo: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [0, 45]
+      len: [0, 200]
     }
   }
   ,

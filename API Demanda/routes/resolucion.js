@@ -15,27 +15,33 @@ const {
         existeProcesoJudicial
      }
     = require('../middlewares/middlewareResolucion')
-const e = require('express')
-
+    const validarPermisos = require("../utilidades/validadorPermisos");
+    const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
+    const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
     // Se crea una instancia de Router
     const router = Router()
 
 // Ruta para obtener todas las resoluciones
 router.get('/proceso-judicial/:id',
+validarPermisos(permisosAceptables2),
  existeProcesoJudicial,
 obtenerResolucionesPorProcesoJudicial)
 
 // Ruta para obtener una resolucion por su id
-router.get('/:id', obtenerResolucion)
+router.get('/:id',
+validarPermisos(permisosAceptables2),
+obtenerResolucion)
 
 // Ruta para crear una resolucion
 router.post('/', 
+validarPermisos(permisosAceptables1),
 validarJSONResolucionPOST,
 existeProcesoJudicial,
 crearResolucion)
 
 // Ruta para actualizar una resolucion por su id
 router.put('/:id',
+validarPermisos(permisosAceptables2),
 existeResolucion,
 validarJSONResolucionPUT,
 existeProcesoJudicial,

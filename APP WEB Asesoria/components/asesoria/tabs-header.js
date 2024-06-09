@@ -1,29 +1,37 @@
-const template = document.createElement('template')
 
 class AsesoriaTabs extends HTMLElement {
   // Datos privados de la clase AsesoriaTabs que nos ayudarán a controlar el estado de las pestañas
   #activeTab
   #tabs = ['asesorado', 'asesoria', 'detalles']
-
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' }).appendChild(
-      template.content.cloneNode(true)
-    )
-
-    // Se obtienen los elementos del DOM que representan las pestañas
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     this.btnAsesorado = this.shadowRoot.getElementById('btn-asesorado')
     this.btnAsesoria = this.shadowRoot.getElementById('btn-asesoria')
     this.btnDetalles = this.shadowRoot.getElementById('btn-detalles')
+    await this.campos();
+    await this.addClickEventListeners()
+  }
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/asesoria/tabs.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  constructor() {
+    super()
+    // Se obtienen los elementos del DOM que representan las pestañas
+
 
     // Se inicializa la pestaña activa
     this.#activeTab = 'asesorado'
-    // Se agregan los eventos de click a los botones de las pestañas
-    this.addClickEventListeners()
+    this.init2()
+
   }
-  
+
   //Metodo que se ejecuta cuando el componente es agregado al DOM, y se encarga de escuchar el evento 'next' que se dispara cuando se quiere cambiar de pestaña
-  connectedCallback() {
+  async campos() {
     document.addEventListener('next', event => {
       const tabId = event.detail.tabId
       this.handleTabClick(tabId)
@@ -31,7 +39,7 @@ class AsesoriaTabs extends HTMLElement {
   }
 
   // Metodo que se encarga de agregar los eventos de click a los botones de las pestañas
-  addClickEventListeners() {
+  async addClickEventListeners() {
     //Se agregan evento de click al boton de asesorado y se llama al metodo handleTabClick con el parametro 'asesorado'
     this.btnAsesorado.addEventListener('click', () =>
       this.handleTabClick('asesorado')
@@ -45,7 +53,7 @@ class AsesoriaTabs extends HTMLElement {
       this.handleTabClick('detalles')
     )
   }
-  
+
   //Metodo que se encarga de manejar el evento de click en los botones de las pestañas
   handleTabClick(tabId) {
     try {
@@ -55,12 +63,12 @@ class AsesoriaTabs extends HTMLElement {
       this.showTabSection(tabId)
       // Se llama al metodo updateAriaAttributes con el parametro tabId
       this.updateAriaAttributes(tabId)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   //Metodo que se encarga de mostrar la seccion de la pestaña que se le pase como parametro
   showTabSection(tabId) {
-     // Se obtienen todas las secciones de las pestañas
+    // Se obtienen todas las secciones de las pestañas
     const tabSections = document.querySelectorAll(
       'asesorado-full-tab, asesoria-tab, detalles-tab'
     )
@@ -90,9 +98,9 @@ class AsesoriaTabs extends HTMLElement {
     //Asigna a la constante asesoradoTab la seccion de la pestaña asesorado
     const asesoradoTab = document.querySelector('asesorado-full-tab')
     const asesoriaTab = document.querySelector('asesoria-tab')
-   
+
     //Verifica si la pestaña a la que se quiere cambiar es la pestaña asesorado y si la seccion de la pestaña asesorado no esta completa
-   
+
     if (
       tabId === this.#tabs[1] &&
       (!asesoradoTab.isComplete)
@@ -104,14 +112,14 @@ class AsesoriaTabs extends HTMLElement {
       (!asesoradoTab.isComplete || !asesoriaTab.isComplete)
     ) {
       return 'No se puede cambiar de pestaña si no se han completado los datos'
-    }  
-       
+    }
+
 
   }
 
   //Metodo que se encarga de despachar el evento de cambio de pestaña
   dispatchEventTabChangeEvent(tabId) {
-     // Se llama al metodo verifyChange con el parametro tabId
+    // Se llama al metodo verifyChange con el parametro tabId
     const msg = this.verifyChange(tabId)
     if (msg) throw new Error(msg)
 
@@ -141,7 +149,5 @@ class AsesoriaTabs extends HTMLElement {
   }
 }
 
-const html = await (await fetch('./components/asesoria/tabs.html')).text()
-template.innerHTML = html
 
 customElements.define('asesoria-tabs', AsesoriaTabs)

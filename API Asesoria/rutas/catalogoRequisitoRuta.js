@@ -4,6 +4,12 @@ const servicioCatalogoRequisitos = require('../servicios/servicioCatalogoRequisi
 
 const { validarJSONCatalogoRequisitosPOST, validarJSONCatalogoRequisitosPUT, existeCatalogoRequisitos } = require('../middlewares/middlewareCatalogoRequisitos');
 
+
+
+const validarPermisos = require("../utilidades/validadorPermisos");
+const permisosAceptables = ["AD_CATALOGOREQUISITOS_SA","ALL_SA"]
+
+
 // Creamos un nuevo router
 const router = express.Router();
 
@@ -11,17 +17,23 @@ const router = express.Router();
 
 router.route('/')
   // Obtener todos los requisitos del catálogo
-  .get(servicioCatalogoRequisitos.obtenerCatalogoRequisitos)
+  .get(
+    validarPermisos(["AD_CATALOGOREQUISITOS_SA","ALL_SA","REGISTRO_ASESORIA_SA"]),
+    servicioCatalogoRequisitos.obtenerCatalogoRequisitos)
   // Agregar un nuevo requisito al catálogo
   .post(
+    validarPermisos(permisosAceptables),
     validarJSONCatalogoRequisitosPOST,
     servicioCatalogoRequisitos.agregarCatalogoRequisito);
 
 router.route('/:id')
   // Obtener un requisito del catálogo por su ID
-  .get(servicioCatalogoRequisitos.obtenerCatalogoRequisitoPorId)
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioCatalogoRequisitos.obtenerCatalogoRequisitoPorId)
   // Actualizar un requisito del catálogo por su ID
   .put(
+    validarPermisos(permisosAceptables),
     existeCatalogoRequisitos,
     validarJSONCatalogoRequisitosPUT,
     servicioCatalogoRequisitos.actualizarCatalogoRequisito);

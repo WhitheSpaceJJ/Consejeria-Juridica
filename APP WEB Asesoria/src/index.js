@@ -1,6 +1,6 @@
-import { IndexController } from '../controllers/index.controller'
-import { APIModel } from '../models/api.model'
-import { IndexView } from '../views/index.view'
+import { IndexController } from '../controllers/index.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { IndexView } from '../views/index.view.js'
 
 function main() {
   const model = new APIModel()

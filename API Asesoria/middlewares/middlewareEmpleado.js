@@ -12,6 +12,7 @@ async function existeDistritoJudicial(req, res, next) {
 
     next()
 }
+const controlDistrito = require('../controles/controlDistritosJudiciales.js');
 
 async function existeEmpleado(req, res, next) {
     const empleado = await controlEmpleado.obtenerEmpleadoPorId(Number(req.params.id))
@@ -54,7 +55,7 @@ async function validarJSONEmpleadoPOST(req, res, next) {
         });
     }
 
-    if (estatus_general !== 'ACTIVO' ) {
+    if (estatus_general !== 'ACTIVO') {
         return res.status(400).json({
             message: 'El campo "estatus_general" solo acepta los valores "ACTIVO".'
         });
@@ -65,6 +66,18 @@ async function validarJSONEmpleadoPOST(req, res, next) {
             message: 'El campo "id_distrito_judicial" debe ser de tipo numérico.'
         });
     }
+
+    //Valida que el id de distrito judicial exista
+    try {
+        const distrito = await controlDistrito.obtenerDistritoPorPorIdMiddleware(id_distrito_judicial);
+        if (!distrito) {
+            return res.status(400).json({ message: "El id de distrito judicial no existe" });
+        }
+    } catch (error) {
+        return res.status(400).json({ message: "El id de distrito judicial no existe" });
+    }
+
+
 
     next()
 }

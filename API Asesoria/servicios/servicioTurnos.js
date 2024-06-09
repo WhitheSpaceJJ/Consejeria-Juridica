@@ -2,26 +2,7 @@ const controlTurnos = require('../controles/controlTurno');
 const asyncError = require("../utilidades/asyncError");
 const CustomeError = require("../utilidades/customeError");
 
-/**
- * @abstract Servicio  que permite agregar un turno
- * @param {Object} req Request
- * @param {Object} res Response
- * @param {Object} next Next
- * @returns {Object} turno agregado a la base de datos
- * */
 
-const agregarTurno = asyncError(async (req, res, next) => {
-  const result = await controlTurnos.agregarTurno(req.body);
-  if (result === false) {
-    const error = new CustomeError('Error al agregar un turno', 400);
-    return next(error);
-  } else {
-
-    res.status(201).json({
-        turno:result
-    });
-  }
-});
 
 /**
  *   
@@ -104,7 +85,6 @@ const obtenerTurnoPorDefensorId = asyncError(async (req, res, next) => {
 
 //Module exports
 module.exports = {
-  agregarTurno,
   obtenerTurnos,
   actualizarTurno,
   obtenerTurnoPorId,

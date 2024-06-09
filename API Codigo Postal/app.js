@@ -1,7 +1,7 @@
 // Variable express que maneja las rutas de la API
 const express = require("express");
 // Variable que manda a llamar las variables de entorno, en este caso el puerto y el host del token
-const {PORT,HOSTTOKEN,HOSTTOKENGRPCPORT} = require("./config/default.js");
+const { PORT, HOSTTOKENUSUARIOS, GRPCPORTCODIGOSPOSTALES } = require("./config/default.js");
 // Constantes que representa las rutas de la API
 // Rutas del serrvicio de estados
 const estadosRoutes = require('./routes/estados.routes.js');
@@ -16,7 +16,7 @@ const CustomeError = require("./utilities/customeError.js");
 //Variable que manda a llamar el servicio de GRPC de usuarios
 const grpc = require('@grpc/grpc-js');
 // Variable que manda a llamar el paquete de definiciones de los servicios GRPC
-const {packageDefinition}=require("./clienteUsuarios/cliente.js")
+const { packageDefinition } = require("./clienteUsuarios/cliente.js")
 // Constante que maneja los  de errores
 const errorController = require("./utilities/errrorController.js")
 
@@ -44,7 +44,7 @@ const jwtMiddleware = async (req, res, next) => {
   const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
   const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
 
-  const tokenClient = new serviciosProto.TokenService(HOSTTOKEN, grpc.credentials.createInsecure());
+  const tokenClient = new serviciosProto.TokenService(HOSTTOKENUSUARIOS, grpc.credentials.createInsecure());
 
   tokenClient.validarToken({ token: token }, (err, response) => {
     if (err) {
@@ -53,10 +53,17 @@ const jwtMiddleware = async (req, res, next) => {
       return;
     }
 
-    if (response.message === "Token inválido") {
-      const customeError = new CustomeError('Token inválido, no ha iniciado sesión.', 401);
+    //se supone response.permisos es un array, no hay metodo que lo trate como arreglo
+    const permisos = response.permisos;
+    const id_distrito_judicial = response.id_distrito_judicial;
+    const id_usuario = response.id_usuario;
+    if (permisos === 0) {
+      const customeError = new CustomeError('Token inválido, no ha iniciado sesión o no cuenta con permisos.', 401);
       next(customeError);
-    } else if (response.message === "Token válido") {
+    } else {
+      req.id_usuario = id_usuario;
+      req.id_distrito_judicial = id_distrito_judicial;
+      req.permisos = response.permisos;
       next();
     }
   });
@@ -64,16 +71,16 @@ const jwtMiddleware = async (req, res, next) => {
 
 // Middleware para manejar las rutas de la API de colonias
 app.use('/colonias',
-//jwtMiddleware, 
-coloniasRoutes);
+  jwtMiddleware,
+  coloniasRoutes);
 // Middleware para manejar las rutas de la API de codigos postales
 app.use('/codigospostales',
-//jwtMiddleware,
- codigosPostalesRoutes);
+  jwtMiddleware,
+  codigosPostalesRoutes);
 // Middleware para manejar las rutas de la API de estados
 app.use('/estados',
-//jwtMiddleware,
-estadosRoutes);
+  jwtMiddleware,
+  estadosRoutes);
 
 // Middleware para manejar las rutas no encontradas
 app.all("*", (req, res, next) => {
@@ -127,14 +134,14 @@ function getServer() {
 //Inicializamos el servidor GRPC en el puerto 161
 var server2 = getServer();
 server2.bindAsync(
-  `localhost:${HOSTTOKENGRPCPORT}`,
+  `localhost:${GRPCPORTCODIGOSPOSTALES}`,
   grpc2.ServerCredentials.createInsecure(),
   (err, port) => {
     if (err != null) {
       return console.error(err);
     }
     console.log("")
-    console.log(`gRPC listening on ${HOSTTOKENGRPCPORT}`)
+    console.log(`gRPC listening on ${GRPCPORTCODIGOSPOSTALES}`)
     server2.start();
   }
 );

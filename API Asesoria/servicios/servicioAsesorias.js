@@ -70,7 +70,7 @@ const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
  * @returns {Object} asesoria de la base de datos
  * */
 const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
-
+   
   const filtros = req.query.filtros;
 
 
@@ -108,10 +108,11 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     return next(error);
   }
 
+
   const verificadorCampos = req.query.campos;
 
   if (verificadorCampos === null || verificadorCampos === undefined || verificadorCampos === '' || verificadorCampos === 'null') {
-
+   try{
 
     const campos = ['nombre-asesorado', 'nombre-usuario', 'nombre-empleado', 'genero', 'colonia', 'trabaja', 'ingreso_mensual', 'motivo', 'estado_civil', 'telefono', 'numero_hijos', 'fecha_registro', 'tipo_juicio', 'conclusion', 'documentos-recibidos', 'resumen'];
 
@@ -206,6 +207,8 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
             break;
           case 'colonia':
             // Verifica si hay un número exterior antes de concatenar
+
+
             let direccion = persona.domicilio.calle_domicilio;
 
             if (persona.domicilio.numero_exterior_domicilio) {
@@ -306,7 +309,11 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     res.end();
 
 
-
+  } catch (error) {
+    console.log('error', error);
+    const error2 = new CustomeError('Error al obtener las asesorías', 404);
+    return next(error2);
+  }
 
 
 

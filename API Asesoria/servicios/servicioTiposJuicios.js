@@ -4,6 +4,7 @@ const asyncError = require("../utilidades/asyncError");
 const CustomeError = require("../utilidades/customeError");
 
 
+
 /**
  * @abstract Servicio  que permite agregar un tipo de juicio
  * @param {Object} req Request
@@ -36,6 +37,7 @@ const agregarTipoDeJuicio = asyncError(async (req, res, next) => {
  */
 
 const obtenerTiposDeJuicio = asyncError(async (req, res, next) => {
+
   const activo = req.query.activo;
   if (activo !== undefined && activo !== null && activo !== "") {
     const result = await controlTiposDeJuicio.obtenerTiposDeJuicio(activo);

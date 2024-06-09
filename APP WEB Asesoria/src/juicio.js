@@ -1,6 +1,6 @@
-import {  JuicioController } from '../controllers/juicio.controller'
-import { APIModel } from '../models/api.model'
-import { JuicioView } from '../views/juicio.view'
+import {  JuicioController } from '../controllers/juicio.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { JuicioView } from '../views/juicio.view.js'
 
 const main = () => {
   const model = new APIModel()

@@ -1,12 +1,7 @@
-import { APIModel } from '../../models/api.model'
+import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
-const template = document.createElement('template');
-const html = await (
-  await fetch('./components/Registros/generos-tab.html')
-).text()
-template.innerHTML = html
-
+ 
 
 class GenerosTab extends HTMLElement {
   //Atributos privados de la clase GenerosTab
@@ -19,14 +14,20 @@ class GenerosTab extends HTMLElement {
   // Constructor de la clase GenerosTab
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-    //Llamada a la función init
     this.init();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/generos-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   // Función de inicialización de la clase GenerosTab
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Inicialización de la variable de APIModel
     this.#api = new APIModel();
     //LLamada a la función manageFormFields

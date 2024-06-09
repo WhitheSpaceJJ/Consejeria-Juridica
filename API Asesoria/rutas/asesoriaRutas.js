@@ -12,28 +12,40 @@ const { validarPeticionPOST,
    validarPeticionDescargarExcel } = require('../middlewares/middlewareAsesoria');
 
 
+   const validarPermisos = require("../utilidades/validadorPermisos");
+   const permisosAceptables = ["CONSULTA_ASESORIA_SA","ALL_SA"]
+   
+
+
+
  router.route('/paginacion')  //
 .get(
+   validarPermisos(permisosAceptables),
   validarPeticionPaginacion,
   servicioAsesorias.obtenerAsesoriasPagina);
 
 //Listp
 router.route('/paginacion-filtro') //
 .get(
+   validarPermisos(permisosAceptables), 
   validarPaginaFiltro,
   validarFiltros, 
   servicioAsesorias.obtenerAsesoriasPaginaFiltro);
  
 router.route('/buscar') //
   .get(
+    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","TURNAR_ASESORIA_SA"]),
      validarPeticionBuscarNombre,
     servicioAsesorias.obtenerAsesoriaNombre);
   router.route('/total-asesorias') //
-  .get(servicioAsesorias.obtenerAsesoriaTotal);
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioAsesorias.obtenerAsesoriaTotal);
 
   router.route('/total-asesorias-filtro'). //
    //Listo
-  get(
+  get( 
+    validarPermisos(permisosAceptables),
     validarFiltros,
     servicioAsesorias.obtenerAsesoriaFiltroTotal);
   
@@ -41,6 +53,7 @@ router.route('/buscar') //
     router.route('/filtro') //
     //Listo
   .get(
+    validarPermisos(permisosAceptables),
     validarFiltros,
     servicioAsesorias.obtenerAsesoriaFiltro);
 
@@ -48,18 +61,23 @@ router.route('/buscar') //
    //Si requeirdo
   router.route('/descargar-excel') //
   .get(
+    validarPermisos(permisosAceptables),
     validarPeticionDescargarExcel,
     servicioAsesorias.obtenerAsesoriaFiltroExcel);
 router.route('/')
 //Si requerido
   .post(
+    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","REGISTRO_ASESORIA_SA"]),
      validarPeticionPOST,
     servicioAsesorias.agregarAsesoria); //
 router.route('/:id')
 //No requerido
-  .get(servicioAsesorias.obtenerAsesoriaPorId)
+  .get(
+    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","CONSULTA_PROCESO_JUDICIAL_SD","ALL_SD"]),
+    servicioAsesorias.obtenerAsesoriaPorId)
    // Si requerido
   .put(
+    validarPermisos(["ALL_SA","TURNAR_ASESORIA_SA"]),
     validarPeticionPUT,
     servicioAsesorias.actualizarAsesoria) //
 ;

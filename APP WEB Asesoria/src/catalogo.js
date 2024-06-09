@@ -1,6 +1,6 @@
-import { CatalogoController   } from '../controllers/catalogo.controller'
-import { APIModel } from '../models/api.model'
-import { CatalogoView } from '../views/catalogo.view'
+import { CatalogoController   } from '../controllers/catalogo.controller.js'
+import { APIModel } from '../models/api.model.js'
+import { CatalogoView } from '../views/catalogo.view.js'
 
 const main = () => {
   const model = new APIModel()

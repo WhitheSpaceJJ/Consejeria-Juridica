@@ -1,41 +1,39 @@
-// Esto es con el fin  de crear un template, donde se almacena el html del componente
 
-const template = document.createElement('template')
-const html = await (
-  await fetch('../assets/data-asesoria.html')
-).text()
-template.innerHTML = html
 
 export class DataAsesoria extends HTMLElement {
    
   // Se crea el constructor de la clase
   constructor(asesoria, domicilio) {
     super()
-    this.init()
-    //Se inicializan las variables que representan los datos de la asesoria y el domicilio
     this.asesoria = asesoria
     this.domicilio = domicilio
+    this.init(asesoria, domicilio)
+    //Se inicializan las variables que representan los datos de la asesoria y el domicilio
+  
     //Se llama a la función fillData para llenar los datos de la asesoria
-    this.fillData(this.asesoria, this.domicilio)
   }
   //Se crea la función init para inicializar el shadowRoot
-  async init() {
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+  async init(asesoria, domicilio) {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    await this.fillData(asesoria, domicilio);
   }
- 
-  //Función connectedCallback para conectar el componente
-  connectedCallback() {
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/data-asesoria.html')).text();
+    template.innerHTML = html;
+    return template;
   }
 
   //Función fillData para llenar los datos de la asesoria
-  fillData = async () => {
+  fillData = async (asesoria, domicilio) => {
     //Se obtienen los datos de la asesoria y el domicilio
-    const persona = this.asesoria.asesoria.persona
-    const asesorado = this.asesoria.asesoria.asesorado
-    const datosAsesoria = this.asesoria.asesoria.datos_asesoria
-    const recibidos = this.asesoria.asesoria.recibidos
-    const domicilioData = this.domicilio.colonia
+    const persona = asesoria.asesoria.persona
+    const asesorado = asesoria.asesoria.asesorado
+    const datosAsesoria = asesoria.asesoria.datos_asesoria
+    const recibidos = asesoria.asesoria.recibidos
+    const domicilioData = domicilio.colonia
      
         //Se llenan los datos de la asesoria en este caso el nombre
     this.shadowRoot.getElementById(
