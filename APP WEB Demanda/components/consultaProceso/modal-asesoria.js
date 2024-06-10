@@ -1,7 +1,4 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/modal-asesoria.html')).text()
-template.innerHTML = html
+ 
 
 export class ModalAsesoria extends HTMLElement {
 
@@ -31,12 +28,21 @@ export class ModalAsesoria extends HTMLElement {
   static get observedAttributes() {
     return ['open', 'title', 'onClose']
   }
-
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/modal-asesoria.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     this.onClose = () => {
       const modal = this.shadowRoot.getElementById('modal')
       modal.style.display = 'none'

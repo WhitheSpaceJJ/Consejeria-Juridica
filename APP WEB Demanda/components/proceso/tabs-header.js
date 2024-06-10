@@ -1,16 +1,24 @@
-const template = document.createElement('template')
-
+ 
 class ProcesoTabs extends HTMLElement {
   //Variables privadas de la clase
   #activeTab
   #tabs = ['registro', 'promovente','demandado',  'proceso', 'detalles']
 
-  //Constructor de la clase ProcesoTabs
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/proceso/tabs.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
+  //Constructor de la clase
   constructor() {
     super()
-    this.attachShadow({ mode: 'open' }).appendChild(
-      template.content.cloneNode(true)
-    )
+    this.init2()
  
     //Aqui se obtienen los botones correspondientes a las pestañas
     this.btnRegistro = this.shadowRoot.getElementById('btn-registro')
@@ -195,8 +203,6 @@ class ProcesoTabs extends HTMLElement {
     })
   }
 }
-
-const html = await (await fetch('./components/proceso/tabs.html')).text()
-template.innerHTML = html
+ 
 
 customElements.define('proceso-tabs', ProcesoTabs)

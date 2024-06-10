@@ -7,16 +7,7 @@ import '../registroProceso/observacion.js'
 import '../registroProceso/prueba.js'
 import '../registroProceso/familiar.js'
 import '../registroProceso/resolucion.js'
-
-
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/proceso/proceso-tab.html')
-).text()
-template.innerHTML = html
-
+ 
 export class ProcesoTab extends HTMLElement {
   #estadosProcesales
   #familiares
@@ -112,11 +103,21 @@ export class ProcesoTab extends HTMLElement {
     return ['id', 'data']
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/proceso/proceso-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     //ID del componente este nos ayuda con el manejo de los tabs
     this.id = 'proceso'
     this.style.display = 'none'

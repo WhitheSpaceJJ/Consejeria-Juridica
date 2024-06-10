@@ -5,12 +5,6 @@ import { ValidationError } from '../../lib/errors.js'
 
 
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/juzgado-tab.html')
-).text()
-template.innerHTML = html
 
 class JuzgadoTab extends HTMLElement {
   
@@ -21,18 +15,25 @@ class JuzgadoTab extends HTMLElement {
   #juzgado
   #estatusJuzgado
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/juzgado-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+
   //Constructro de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
     //Llamada a la función init para inicializar las variables
     this.init();
   }
 
   //Función para inicializar las variables, manejador de eventos y campos del formulario
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     //Inicializacion de la variable de la clase APIModel
     this.#api = new APIModel();
     //Inicializacion de la variable de idSeleccion en null
@@ -41,7 +42,6 @@ class JuzgadoTab extends HTMLElement {
     this.manageFormFields();
     //Llamada a la función fillInputs para llenar los campos del formulario
     this.fillInputs();
-
   }
   
 //Función para manejar los campos del formulario

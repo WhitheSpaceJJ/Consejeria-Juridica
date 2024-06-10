@@ -1,7 +1,3 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/modal-warning.html')).text()
-template.innerHTML = html
 
 export class Modal extends HTMLElement {
   //Variable auxiliar para almacenar la respuesta
@@ -48,13 +44,29 @@ export class Modal extends HTMLElement {
   set title(value) {
     this.shadowRoot.getElementById('title-alerta').innerHTML = value
   }
-
-  //Constructor de la clase
+  // Método para inicializar el componente
+  async init() {
+    const templateContent = await this.fetchTemplate()
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.appendChild(templateContent.content.cloneNode(true))
+    this.campos()
+  }
+  // Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
+    this.init()
+  }
+  // Método para obtener la plantilla
+  async fetchTemplate() {
+    const template = document.createElement('template')
+    const html = await (await fetch('../assets/modal-warning.html')).text()
+    template.innerHTML = html
+    return template
+  }
+  
+  //Callback que se ejecuta cuando el componente es agregado al DOM
+  campos() {
+    
     //Se establece la variable de cierre en null
     this._onCloseCallback = null
 
@@ -71,11 +83,6 @@ export class Modal extends HTMLElement {
         this._onCloseCallback()
       }
     }
-  }
-
-  
-  //Callback que se ejecuta cuando el componente es agregado al DOM
-  connectedCallback() {
     // Se obtienen los elementos del DOM que se van a utilizar en este caso los botones de cerrar y aceptar
     this.btnCloseAlerta = this.shadowRoot.getElementById('btn-close-alerta')
     this.idAlerta = this.shadowRoot.getElementById('alerta')

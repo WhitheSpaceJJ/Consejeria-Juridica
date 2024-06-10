@@ -1,11 +1,6 @@
 import { APIModel } from '../../models/api.model'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('/components/registroProceso/familiar.html')
-).text()
-template.innerHTML = html
+ 
 
 export class FamiliarPromovente extends HTMLElement {
 
@@ -59,11 +54,21 @@ export class FamiliarPromovente extends HTMLElement {
     this.setAttribute('data', value)
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('/components/registroProceso/familiar.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     //Se inicializan los atributos de la clase
     this.#api = new APIModel()
     //Se inicializa el id del familiar en null

@@ -3,12 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model'
 //import '../codigo-postal/codigo-postal.js'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/seguimiento/registro-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 export class RegistroTab extends HTMLElement {
 
@@ -102,11 +97,21 @@ export class RegistroTab extends HTMLElement {
     this.setAttribute('data', value)
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/seguimiento/registro-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     //Variable que determina que esta es la pestaña actual
     this.id = 'registro'
     this.style.display = 'block'

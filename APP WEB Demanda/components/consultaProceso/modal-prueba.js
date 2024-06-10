@@ -1,7 +1,4 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/modal-prueba.html')).text()
-template.innerHTML = html
+ 
 
 export class ModalPrueba extends HTMLElement {
   // Atributos que se observarán
@@ -28,12 +25,21 @@ export class ModalPrueba extends HTMLElement {
   set title(value) {
     this.shadowRoot.getElementById('title-alerta').innerHTML = value
   }
-
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/modal-prueba.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     this.onClose = () => {
       const modal = this.shadowRoot.getElementById('modal')
       modal.style.display = 'none'

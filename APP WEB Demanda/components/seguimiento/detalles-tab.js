@@ -3,12 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model.js'
 //import '../codigo-postal/codigo-postal.js'
 
-const template = document.createElement('template')
-
-const html = await (
-    await fetch('./components/seguimiento/detalles-tab.html')
-).text()
-template.innerHTML = html
+ 
 
 export class DetallesTab extends HTMLElement {
 
@@ -95,11 +90,22 @@ export class DetallesTab extends HTMLElement {
     }
 
 
-    //Constructor de la clase
-    constructor() {
+ 
+    async fetchTemplate() {
+        const template = document.createElement('template');
+        const html = await (await fetch('./components/seguimiento/detalles-tab.html')).text();
+        template.innerHTML = html;
+        return template;
+      }
+      async init2() {
+        const templateContent = await this.fetchTemplate();
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.appendChild(templateContent.content.cloneNode(true));
+      }
+      //Constructor de la clase
+      constructor() {
         super()
-        const shadow = this.attachShadow({ mode: 'open' })
-        shadow.appendChild(template.content.cloneNode(true))
+        this.init2()
         //ID que nos ayuda para el cambio de tabs
         this.id = 'detalles'
         this.style.display = 'none'

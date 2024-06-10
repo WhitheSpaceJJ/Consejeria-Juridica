@@ -5,13 +5,6 @@ import { ValidationError } from '../../lib/errors.js'
 
 
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/etnia-tab.html')
-).text()
-template.innerHTML = html
-
 class EtniaTab extends HTMLElement {
   //Variables privadas de la clase
   #api
@@ -20,29 +13,34 @@ class EtniaTab extends HTMLElement {
   #etnia
   #estatusEtnia
 
-  //Constructor de la clase
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/etnia-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+
+  //Constructro de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
-    //Llamado a la función init para inicializar las variables privadas, eventos y funciones
+    //Llamada a la función init para inicializar las variables
     this.init();
   }
 
-  //Metodo para inicializar las variables privadas
+  //Función para inicializar las variables, manejador de eventos y campos del formulario
   async init() {
-    //Se inicializan las variables privadas
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    //Inicializacion de la variable de la clase APIModel
     this.#api = new APIModel();
+    //Inicializacion de la variable de idSeleccion en null
     this.#idSeleccion = null;
-
-    //Se inicializan los eventos y funciones , campos y llenado de inputs
-    //Llamado a la función manageFormFields para manejar los campos del formulario
+    //Llamada a la función manageFormFields para manejar los campos del formulario
     this.manageFormFields();
-    //Llamado a la función fillInputs para llenar los inputs
+    //Llamada a la función fillInputs para llenar los campos del formulario
     this.fillInputs();
   }
-
 //Función para manejar los campos del formulario 
   manageFormFields() {
     this.#etnias = this.shadowRoot.getElementById('table-etnia');

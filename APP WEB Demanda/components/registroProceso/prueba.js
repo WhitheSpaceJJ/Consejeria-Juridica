@@ -1,12 +1,6 @@
 import { APIModel } from '../../models/api.model'
 
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('/components/registroProceso/prueba.html')
-).text()
-template.innerHTML = html
-
+ 
 export class Prueba extends HTMLElement {
 
   // Atributos de la clase variables privadas
@@ -50,11 +44,21 @@ export class Prueba extends HTMLElement {
     this.setAttribute('data', value)
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('/components/registroProceso/prueba.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   //Constructor de la clase
   constructor() {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
 
     //Inicialización de las variables privadas en este caso se inicializa el modelo de la API
     this.#api = new APIModel()

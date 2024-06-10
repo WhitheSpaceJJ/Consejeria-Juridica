@@ -1,18 +1,23 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/data-demandado.html')).text()
-template.innerHTML = html
-
+ 
 export class DataDemandado extends HTMLElement {
   //Constructor de la clase
   constructor(demandado) {
     super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    this.init2()
     this.demandado = demandado
     this.fillData(this.demandado)
   }
-
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/data-demandado.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+  async init2() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+  }
   connectedCallback() {
   }
  

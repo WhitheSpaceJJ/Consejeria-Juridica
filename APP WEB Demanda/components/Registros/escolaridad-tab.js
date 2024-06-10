@@ -3,15 +3,7 @@
 import { APIModel } from '../../models/api.model'
 import { ValidationError } from '../../lib/errors.js'
 
-
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/escolaridad-tab.html')
-).text()
-template.innerHTML = html
-
+ 
 class EscolaridadTab extends HTMLElement {
   //Variables privadas de la API
   #api
@@ -20,28 +12,34 @@ class EscolaridadTab extends HTMLElement {
   #escolaridad
   #estatusEscolaridad
 
-  //Constructor de la clase
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/escolaridad-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
+
+  //Constructro de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
- 
-    //Llamada a la función init para inicializar las variables privadas etc
+    //Llamada a la función init para inicializar las variables
     this.init();
   }
 
-  //Metodo que inicializa las variables privadas de la clase y llama a las funciones de llenado de campos y manejo de campos
+  //Función para inicializar las variables, manejador de eventos y campos del formulario
   async init() {
-    //Inicialización de las variables privadas 
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    //Inicializacion de la variable de la clase APIModel
     this.#api = new APIModel();
+    //Inicializacion de la variable de idSeleccion en null
     this.#idSeleccion = null;
-
-    //Llamada a las funciones de llenado de campos y manejo de campos
+    //Llamada a la función manageFormFields para manejar los campos del formulario
     this.manageFormFields();
+    //Llamada a la función fillInputs para llenar los campos del formulario
     this.fillInputs();
-
   }
-
   //Función que maneja los campos del formulario
   manageFormFields() {
     this.#escolaridades = this.shadowRoot.getElementById('table-escolaridad');

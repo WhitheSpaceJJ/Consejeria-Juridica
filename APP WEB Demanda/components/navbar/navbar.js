@@ -1,18 +1,25 @@
-const template = document.createElement('template')
-
-const html = await (await fetch('../assets/navbar.html')).text()
-template.innerHTML = html
 
 export class Navbar extends HTMLElement {
   //Constructor de la clase
   constructor() {
-    super()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
+    super();
+    this.init();
+  }
+  async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    this.campos();
   }
 
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/navbar.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
   //Callback que se ejecuta cuando el componente es agregado al DOM
-  connectedCallback() {
+  campos() {
     // Obtener los elementos relevantes por su ID
     const dropdownServicioLink = this.shadowRoot.getElementById(
       'dropdownServicioLink'

@@ -4,13 +4,6 @@ import { APIModel } from '../../models/api.model'
 import { ValidationError } from '../../lib/errors.js'
 
 
-
-const template = document.createElement('template')
-
-const html = await (
-  await fetch('./components/Registros/ocupacion-tab.html')
-).text()
-template.innerHTML = html
 class OcupacionTab extends HTMLElement {
   // Variables de clase privadas
   #api
@@ -18,25 +11,32 @@ class OcupacionTab extends HTMLElement {
   #ocupaciones
   #ocupacion
   #estatusOcupacion
+  async fetchTemplate() {
+    const template = document.createElement('template');
+    const html = await (await fetch('./components/Registros/ocupacion-tab.html')).text();
+    template.innerHTML = html;
+    return template;
+  }
 
-  //Constructor de la clase
+  //Constructro de la clase
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(template.content.cloneNode(true))
-
-     //Llamado a la función init que inicializa las variables de la clase, campos del formulario y eventos de los botones
+    //Llamada a la función init para inicializar las variables
     this.init();
   }
 
-  //Metodo que inicializa las variables de la clase, campos del formulario y eventos de los botones
+  //Función para inicializar las variables, manejador de eventos y campos del formulario
   async init() {
-    //Inicialización de las variables de la clase
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    //Inicializacion de la variable de la clase APIModel
     this.#api = new APIModel();
+    //Inicializacion de la variable de idSeleccion en null
     this.#idSeleccion = null;
-    //Llamada al metodo que inicializa los campos del formulario
+    //Llamada a la función manageFormFields para manejar los campos del formulario
     this.manageFormFields();
-    //Llamada al metodo que llena los campos del formulario
+    //Llamada a la función fillInputs para llenar los campos del formulario
     this.fillInputs();
   }
 
