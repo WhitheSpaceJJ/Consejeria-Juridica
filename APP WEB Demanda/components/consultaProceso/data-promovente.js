@@ -7,9 +7,9 @@ export class DataPromovente extends HTMLElement {
   //Constructor de la clase
   constructor(promovente) {
     super()
-    this.init2()
     this.promovente = promovente
-    this.fillData(this.promovente)
+    this.init2(promovente)
+
   }
   async fetchTemplate() {
     const template = document.createElement('template');
@@ -17,52 +17,53 @@ export class DataPromovente extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-  async init2() {
+  async init2(promovente) {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+    this.fillData(promovente)
   }
   connectedCallback() {
   }
 
   //Metodo para llenar los datos del promovente
-  fillData = async () => {
+  fillData = async (promovente) => {
 
     //Promovente
-    this.shadowRoot.getElementById('nombre').textContent = this.promovente.nombre
-    this.shadowRoot.getElementById('apellido-paterno').textContent = this.promovente.apellido_paterno
-    this.shadowRoot.getElementById('apellido-materno').textContent = this.promovente.apellido_materno
-    this.shadowRoot.getElementById('telefono').textContent = this.promovente.telefono
-    if(this.promovente.promovente.español){
+    this.shadowRoot.getElementById('nombre').textContent = promovente.nombre
+    this.shadowRoot.getElementById('apellido-paterno').textContent = promovente.apellido_paterno
+    this.shadowRoot.getElementById('apellido-materno').textContent = promovente.apellido_materno
+    this.shadowRoot.getElementById('telefono').textContent = promovente.telefono
+    if(promovente.promovente.español){
       this.shadowRoot.getElementById('espanol').textContent = "Si"
     }
     else{
       this.shadowRoot.getElementById('espanol').textContent = "No"
     }
 
-    if(this.promovente.promovente.escolaridad){
-      this.shadowRoot.getElementById('escolaridad').textContent = this.promovente.promovente.escolaridad.descripcion
+    if(promovente.promovente.escolaridad){
+      this.shadowRoot.getElementById('escolaridad').textContent = promovente.promovente.escolaridad.descripcion
     }
     else{
-      this.shadowRoot.getElementById('escolaridad').textContent = this.promovente.promovente.escolaridad.estatus_general
+      this.shadowRoot.getElementById('escolaridad').textContent = promovente.promovente.escolaridad.estatus_general
     }
 
-    if(this.promovente.promovente.etnia){
-      this.shadowRoot.getElementById('etnia').textContent = this.promovente.promovente.etnia.nombre
+    if(promovente.promovente.etnia){
+      this.shadowRoot.getElementById('etnia').textContent = promovente.promovente.etnia.nombre
     }
     else{
       this.shadowRoot.getElementById('etnia').textContent = "No"
     }
 
-    if(this.promovente.promovente.ocupacion){
-      this.shadowRoot.getElementById('ocupacion').textContent = this.promovente.promovente.ocupacion.descripcion_ocupacion
+    if(promovente.promovente.ocupacion){
+      this.shadowRoot.getElementById('ocupacion').textContent = promovente.promovente.ocupacion.descripcion_ocupacion
     }
     else{
       this.shadowRoot.getElementById('ocupacion').textContent = "Ninguna"
     }
 
     //Familiar
-    this.shadowRoot.getElementById('familiares').textContent = this.promovente.promovente.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} , Nacionalidad: ${familiar.nacionalidad}
+    this.shadowRoot.getElementById('familiares').textContent = promovente.promovente.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} , Nacionalidad: ${familiar.nacionalidad}
     , Parentesco: ${familiar.parentesco} , Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT===true?'Si':'No'} , Adulto Mayor: ${familiar.adultaMayor===true? 'Si': 'No'} , Salud Precaria: ${familiar.saludPrecaria===true?'Si': 'No'} , Pobreza Extrema: ${familiar.pobrezaExtrema ===true?'Si': 'No'}`).join(', ')
   }
 }

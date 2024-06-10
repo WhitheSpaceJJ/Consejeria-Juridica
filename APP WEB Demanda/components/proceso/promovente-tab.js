@@ -117,37 +117,40 @@ export class PromoventeTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+     //Componentes 
+     this.registroTab = document.querySelector('registro-full-tab')
+
+     //Variable que se encarga de buscar el codigo postal o que almacena el html con el id buscar-cp
+     this.formCP = this.shadowRoot.getElementById('buscar-cp')
+ 
+     //Asignacion de eventos a la variable formCP para la busqueda del codigo postal y la informacion del mismo
+     this.formCP.addEventListener('click', (event) => {
+       event.preventDefault();
+       if (
+         !this.#cp.value ||
+         this.#cp.value.length !== 5 ||
+         //Validacion de que el codigo postal sea un numero
+         isNaN(this.#cp.value)
+       ) {
+         //Mensaje de advertencia si el codigo postal no es valido
+         this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+         return
+       }
+       //Llamado al metodo searchCP
+       this.searchCP()
+     })
+     await this.campos()
+
   }
   //Constructor de la clase
   constructor() {
     super()
-    this.init2()
     //ID con respecto al manejo de las tabs
     this.id = 'promovente'
     this.style.display = 'none'
+    this.init2()
 
-    //Componentes 
-    this.registroTab = document.querySelector('registro-full-tab')
-
-    //Variable que se encarga de buscar el codigo postal o que almacena el html con el id buscar-cp
-    this.formCP = this.shadowRoot.getElementById('buscar-cp')
-
-    //Asignacion de eventos a la variable formCP para la busqueda del codigo postal y la informacion del mismo
-    this.formCP.addEventListener('click', (event) => {
-      event.preventDefault();
-      if (
-        !this.#cp.value ||
-        this.#cp.value.length !== 5 ||
-        //Validacion de que el codigo postal sea un numero
-        isNaN(this.#cp.value)
-      ) {
-        //Mensaje de advertencia si el codigo postal no es valido
-        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-        return
-      }
-      //Llamado al metodo searchCP
-      this.searchCP()
-    })
+   
   }
 
 
@@ -797,7 +800,7 @@ export class PromoventeTab extends HTMLElement {
   }
 
   //Se conecta el componente
-  connectedCallback() {
+  async campos() {
     //Asignacion del boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-promovente-next')
 

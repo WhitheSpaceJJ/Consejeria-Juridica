@@ -68,19 +68,23 @@ export class DetallesTab extends HTMLElement {
         const templateContent = await this.fetchTemplate();
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(templateContent.content.cloneNode(true));
-      }
-      //Constructor de la clase
-      constructor() {
-        super()
-        this.init2()
-        this.id = 'detalles'
-        this.style.display = 'none'
-        //Aqui se obtienen los web components que se van a utilizar en el componente de los demas
+             //Aqui se obtienen los web components que se van a utilizar en el componente de los demas
         //tabs en este caso se obtienen los datos de los tabs de registro, promovente, demandado y proceso
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
         this.#demandadoTab = document.querySelector('demandado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
+        await this.campos()
+
+      }
+      //Constructor de la clase
+      constructor() {
+        super()
+        this.id = 'detalles'
+        this.style.display = 'none'
+        this.init2()
+
+   
     }
 
     //Metodo que se encarga de inicializar el componente
@@ -211,7 +215,7 @@ export class DetallesTab extends HTMLElement {
     }
 
     //Callback que se ejecuta cuando el componente es agregado al DOM
-    connectedCallback() {
+    async campos() {
         //Asignacion de eventos a los botones
 
         this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-proceso')

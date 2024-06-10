@@ -13,6 +13,17 @@ export default defineConfig({
         {
           src: 'assets/turnar/**/*',
           dest: 'assets/turnar'      
+        },   {
+          src: 'img/*.jpg', 
+          dest: 'img'      
+        },
+        {
+          src: 'img/*.png', 
+          dest: 'img'      
+        },
+        {
+          src: 'img/*.jpeg', 
+          dest: 'img'      
         },
         {
           src: 'assets/*.html', 

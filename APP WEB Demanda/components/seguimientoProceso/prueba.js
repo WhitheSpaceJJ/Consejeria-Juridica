@@ -53,13 +53,7 @@ export class Prueba extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-
-
+    
     //Inicialización de las variables privadas
     this.#api = new APIModel()
     this.#idPrueba = null
@@ -68,6 +62,13 @@ export class Prueba extends HTMLElement {
     this.manageFormFields()
     //LLamado al metodo que se encarga de llenar los campos del formulario
     this.fillInputs()
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    this.init2()
+
+
   }
 
 //Metodo que se encarga de llamar al metodo que se encarga de llenar los eventos de los botones

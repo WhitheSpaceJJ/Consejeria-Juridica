@@ -9,7 +9,7 @@ import '../seguimientoProceso/familiar.js'
 import '../seguimientoProceso/resolucion.js'
 
 
- 
+
 export class ProcesoTab extends HTMLElement {
 
   //Variables de la clase
@@ -89,16 +89,16 @@ export class ProcesoTab extends HTMLElement {
 
   //Metodo set que establece el valor del atributo data
   get data() {
-    const estatusProceso = this.#estatusProceso.value  === '1' ? 'BAJA' : 'CONCLUIDO'
+    const estatusProceso = this.#estatusProceso.value === '1' ? 'BAJA' : 'CONCLUIDO'
     const proceso = {
       fecha_inicio: this.#fechaInicio.value,
-      fecha_estatus:this.#estatusProceso.value === '0' ? null : new Date().toISOString().split('T')[0],
+      fecha_estatus: this.#estatusProceso.value === '0' ? null : new Date().toISOString().split('T')[0],
       id_juzgado: this.#juzgado.value,
       juzgado: this.#juzgado.options[this.#juzgado.selectedIndex].text,
       numero_expediente: this.#numeroExpediente.value,
       control_interno: this.#controlInterno.value,
       id_defensor: this.#id_defensor,
-       estatus_proceso: this.#estatusProceso.value === '0' ? 'EN_TRAMITE' : estatusProceso,
+      estatus_proceso: this.#estatusProceso.value === '0' ? 'EN_TRAMITE' : estatusProceso,
       defensor: this.registroTab.data.defensor,
       id_distrito_judicial: this.#distritoJudicial.value,
       id_municipio_distrito: this.#municipio.value,
@@ -120,7 +120,7 @@ export class ProcesoTab extends HTMLElement {
     this.setAttribute('data', value)
   }
 
- 
+
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('./components/seguimiento/proceso-tab.html')).text();
@@ -131,26 +131,29 @@ export class ProcesoTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-    //Variables que nos ayudan a determinar la pestaña actual
-    this.id = 'proceso'
-    this.style.display = 'none'
     //Componentes de las demas pestañas requeridas previamente
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
     this.demandadoTab = document.querySelector('demandado-full-tab')
+    await this.campos()
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    //Variables que nos ayudan a determinar la pestaña actual
+    this.id = 'proceso'
+    this.style.display = 'none'
+    this.init2()
+
+
   }
 
-//Metodo que inicializa las variables de la clase, datos, etc
+  //Metodo que inicializa las variables de la clase, datos, etc
   async init() {
     //Inicializacion de la api
     this.#api = new APIModel()
 
-//Obtencion de los juzgados
+    //Obtencion de los juzgados
     const juzgados = await this.#api.getJuzgados()
     this.#juzgados = juzgados
 
@@ -175,7 +178,7 @@ export class ProcesoTab extends HTMLElement {
     this.#tiposDeJuicio = tiposDeJuicio
 
 
-  //Obtencion de los municipios
+    //Obtencion de los municipios
     const municipios = await this.#api.getMunicipiosByDistrito(id_distrito_judicial)
     this.#municipios = municipios
 
@@ -184,7 +187,7 @@ export class ProcesoTab extends HTMLElement {
     //Llenado de los campos de los componentes de las demas pestañas
     this.fillInputs()
   }
-  
+
 
   //Mensaje de advertencia al cambiar de estatus es decir de EN TRAMITE a BAJA o CONCLUIDO
   cambioEstatus() {
@@ -199,7 +202,7 @@ export class ProcesoTab extends HTMLElement {
 
 
 
- //Metodo que se encarga de llenar los campos del formulario
+  //Metodo que se encarga de llenar los campos del formulario
   manageFormFields() {
     this.#fecha_estatus = this.shadowRoot.getElementById('fecha-estatus')
     this.#fechaInicio = this.shadowRoot.getElementById('fecha-inicio')
@@ -241,7 +244,7 @@ export class ProcesoTab extends HTMLElement {
     } else {
       console.error('No se encontró el componente web "estado-procesal" en el DOM.');
     }
- 
+
     //Se obteiene el componente web de familiar y se le asigna la data
 
     const familiarWC = this.#familiaresWC
@@ -253,10 +256,10 @@ export class ProcesoTab extends HTMLElement {
     } else {
       console.error('No se encontró el componente web "familiar" en el DOM.');
     }
-   
+
     //Se obteiene el componente web de observacion y se le asigna la data
 
-     
+
     const observacionWC = this.#observacionesWC
 
     // Verificar si el componente fue encontrado
@@ -268,7 +271,7 @@ export class ProcesoTab extends HTMLElement {
       console.error('No se encontró el componente web "observacion" en el DOM.');
     }
 
-//Se obteiene el componente web de prueba y se le asigna la data
+    //Se obteiene el componente web de prueba y se le asigna la data
 
     const pruebaWC = this.#pruebasWC
 
@@ -290,36 +293,36 @@ export class ProcesoTab extends HTMLElement {
     } else {
       console.error('No se encontró el componente web "resolucion" en el DOM.');
     }
-      
+
     //LLamda al metodo de manejo de entrada de texto
     this.manejadorEntradaTexto()
 
   }
 
   //Metodo que se encarga de manejar la entrada de texto agregando eventos a los campos de texto
-  manejadorEntradaTexto(){
-        //Se le asigna el evento input a los campos de fecha de inicio, numero de expediente, control interno
+  manejadorEntradaTexto() {
+    //Se le asigna el evento input a los campos de fecha de inicio, numero de expediente, control interno
 
-        var numeroExpedienteInput = this.#numeroExpediente
-        numeroExpedienteInput.addEventListener('input', function () {
-         
-            if (numeroExpedienteInput.value.length > 20) {
-              const modal = document.querySelector('modal-warning')
-              modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
-              modal.title = 'Error de validación'
-              modal.open = true
-            }
-        });
-    
-        var controlInternoInput = this.#controlInterno
-        controlInternoInput.addEventListener('input', function () {
+    var numeroExpedienteInput = this.#numeroExpediente
+    numeroExpedienteInput.addEventListener('input', function () {
+
+      if (numeroExpedienteInput.value.length > 20) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+    });
+
+    var controlInternoInput = this.#controlInterno
+    controlInternoInput.addEventListener('input', function () {
       if (controlInternoInput.value.length > 20) {
-            const modal = document.querySelector('modal-warning')
-            modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
-            modal.title = 'Error de validación'
-            modal.open = true
-          } 
-        });
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
+    });
   }
 
   //LLenado de los campos del formulario select
@@ -327,7 +330,7 @@ export class ProcesoTab extends HTMLElement {
     //Se limpian los campos de los select
     this.#juzgado.innerHTML = ''
 
-     //Se crea un option por defecto
+    //Se crea un option por defecto
     const optionDefault = document.createElement('option')
     optionDefault.value = '0'
     optionDefault.text = 'Seleccione un juzgado'
@@ -339,18 +342,18 @@ export class ProcesoTab extends HTMLElement {
       option.value = juzgado.id_juzgado
       option.text = juzgado.nombre_juzgado
       this.#juzgado.appendChild(option)
-    }) 
+    })
 
     //Se limpian los campos de los select del distrito judicial
     this.#distritoJudicial.innerHTML = ''
-    
+
     //Se crea un option por defecto
     const optionDefaultDistrito = document.createElement('option')
     optionDefaultDistrito.value = '0'
     optionDefaultDistrito.text = 'Seleccione un distrito judicial'
     this.#distritoJudicial.appendChild(optionDefaultDistrito)
 
-    
+
     //Se llena el select de distritos judiciales
     this.#distritosJudiciales.forEach(distrito => {
       const option = document.createElement('option')
@@ -358,17 +361,17 @@ export class ProcesoTab extends HTMLElement {
       option.textContent = distrito.nombre_distrito_judicial
       this.#distritoJudicial.appendChild(option)
     })
-    
-    
+
+
     //Se limpian los campos de los select del municipio
     this.#municipio.innerHTML = ''
-    
+
     //Se crea un option por defecto
     const optionDefaultMunicipio = document.createElement('option')
     optionDefaultMunicipio.value = '0'
     optionDefaultMunicipio.text = 'Seleccione un municipio'
     this.#municipio.appendChild(optionDefaultMunicipio)
-    
+
     //Se llena el select de municipios
     this.#municipios.forEach(municipio => {
       const option = document.createElement('option')
@@ -380,13 +383,13 @@ export class ProcesoTab extends HTMLElement {
 
     //Se limpian los campos de los select del tipo de juicio
     this.#tipoJuicio.innerHTML = ''
-    
+
     //Se crea un option por defecto
     const optionDefaultTipoJuicio = document.createElement('option')
     optionDefaultTipoJuicio.value = '0'
     optionDefaultTipoJuicio.text = 'Seleccione un tipo de juicio'
     this.#tipoJuicio.appendChild(optionDefaultTipoJuicio)
-    
+
     //Se llena el select de tipos de juicio
     this.#tiposDeJuicio.forEach(tipoJuicio => {
       const option = document.createElement('option')
@@ -408,7 +411,7 @@ export class ProcesoTab extends HTMLElement {
   }
 
 
-  
+
   //Metodo encargado de validar los campos del formulario
   validateInputs() {
     try {
@@ -433,7 +436,7 @@ export class ProcesoTab extends HTMLElement {
       if (!fechaInicio) {
         throw new ValidationError('La fecha de inicio es requerida')
       }
-     
+
       //Se valida el estatus del proceso
       if (!estatusProceso) {
         throw new ValidationError('El estatus del proceso es requerido')
@@ -458,7 +461,7 @@ export class ProcesoTab extends HTMLElement {
       else if (controlInterno.length > 20) {
         throw new ValidationError('El número de control interno no debe ser mayor a 20 caracteres')
       }
-  
+
       //Se valida que el distrito judicial haya sido seleccionado
       if (distritoJudicial === '0') {
         throw new ValidationError('El distrito judicial es requerido')
@@ -493,7 +496,7 @@ export class ProcesoTab extends HTMLElement {
   }
 
   //Metodo que se encarga de inicializar los eventos del componente
-  connectedCallback() {
+  async campos() {
     //Se obtiene el boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-proceso-next')
 
@@ -516,7 +519,7 @@ export class ProcesoTab extends HTMLElement {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }
-      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+      if (this.#procesoSelecionado !== null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }
@@ -532,7 +535,7 @@ export class ProcesoTab extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
- 
+
 }
 
 customElements.define('proceso-full-tab', ProcesoTab)

@@ -55,12 +55,7 @@ export class Resolucion extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-//Asignación de variables privadas en este caso se asigna la variable api
+    //Asignación de variables privadas en este caso se asigna la variable api
     this.#api = new APIModel()
 
     //Se inicializa el valor de idResolucion en null 
@@ -71,6 +66,12 @@ export class Resolucion extends HTMLElement {
     this.manageFormFields()
     //Llamado a la función fillInputs
     this.fillInputs()
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    this.init2()
+
   }
   //Metodo que se encarga de mandar al metodo responsable de llenar los eventos de los botones
   fillInputs() {

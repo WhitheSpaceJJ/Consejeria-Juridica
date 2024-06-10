@@ -36,6 +36,8 @@ export class ModalDemandado extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+    await this.campos()
+
   }
   //Constructor de la clase
   constructor() {
@@ -56,7 +58,7 @@ export class ModalDemandado extends HTMLElement {
   }
   
   //Metodo para establecer los eventos
-  connectedCallback() {
+  async campos() {
     this.btnClose = this.shadowRoot.getElementById('btn-close')
     this.modal = this.shadowRoot.getElementById('modal')
     this.btnAceptar = this.shadowRoot.getElementById('btn-aceptar')

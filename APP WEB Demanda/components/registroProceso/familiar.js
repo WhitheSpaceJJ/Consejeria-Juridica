@@ -64,21 +64,22 @@ export class FamiliarPromovente extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+       //Se inicializan los atributos de la clase
+       this.#api = new APIModel()
+       //Se inicializa el id del familiar en null
+       this.#idFamiliar = null
+       //Se asigna un array vacio a la variable familiares
+       this.#familiares = []
+       //Lllamda al metodo que se encarga de manejar los campos del formulario
+       this.manageFormFields()
+       //Llamada al metodo que se encarga de llenar los campos del formulario
+       this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
     super()
     this.init2()
-    //Se inicializan los atributos de la clase
-    this.#api = new APIModel()
-    //Se inicializa el id del familiar en null
-    this.#idFamiliar = null
-    //Se asigna un array vacio a la variable familiares
-    this.#familiares = []
-    //Lllamda al metodo que se encarga de manejar los campos del formulario
-    this.manageFormFields()
-    //Llamada al metodo que se encarga de llenar los campos del formulario
-    this.fillInputs()
+ 
   }
 
   //Metodo que se encarga de manejar los campos del formulario

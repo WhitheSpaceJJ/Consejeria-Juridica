@@ -7,7 +7,7 @@ import '../registroProceso/observacion.js'
 import '../registroProceso/prueba.js'
 import '../registroProceso/familiar.js'
 import '../registroProceso/resolucion.js'
- 
+
 export class ProcesoTab extends HTMLElement {
   #estadosProcesales
   #familiares
@@ -113,28 +113,31 @@ export class ProcesoTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-    //ID del componente este nos ayuda con el manejo de los tabs
-    this.id = 'proceso'
-    this.style.display = 'none'
     //Obtenemos los componentes 
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
     this.demandadoTab = document.querySelector('demandado-full-tab')
+    await this.campos()
+
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    //ID del componente este nos ayuda con el manejo de los tabs
+    this.id = 'proceso'
+    this.style.display = 'none'
+    this.init2()
+
   }
 
   //Metodo para inicializar variables, obtener datos de la API y llenar los campos del formulario
   async init() {
     //Obtenemos los datos de la API
     this.#api = new APIModel()
- //Llamamos al metodo para la obtencion de los datos
-    await  this.obtencionDatos()
+    //Llamamos al metodo para la obtencion de los datos
+    await this.obtencionDatos()
 
- //Llamamos al metodo para la gestion de los campos del formulario
+    //Llamamos al metodo para la gestion de los campos del formulario
     this.manageFormFields()
     //Llamamos al metodo para llenar los campos del formulario
     this.fillInputs()
@@ -194,35 +197,35 @@ export class ProcesoTab extends HTMLElement {
     this.#observacionesWC = this.shadowRoot.querySelector('observacion-promovente')
     this.#resolucionesWC = this.shadowRoot.querySelector('resolucion-promovente')
     this.#estadosProcesalesWC = this.shadowRoot.querySelector('estado-procesal')
-   
-   //Llamamos al metodo para la gestion de los campos de texto
+
+    //Llamamos al metodo para la gestion de los campos de texto
     this.manejadorEntradaTexto()
 
   }
 
   //Metodo que asigna los eventos a los campos de texto de tipo input
-  manejadorEntradaTexto(){
+  manejadorEntradaTexto() {
     //Evento que se ejecuta cuando se ingresa un valor en el campo de texto    en el numero de expediente
     var numeroExpedienteInput = this.#numeroExpediente
     numeroExpedienteInput.addEventListener('input', function () {
-     
-        if (numeroExpedienteInput.value.length > 20) {
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
-          modal.title = 'Error de validación'
-          modal.open = true
-        } 
+
+      if (numeroExpedienteInput.value.length > 20) {
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
     });
 
     //Evento que se ejecuta cuando se ingresa un valor en el campo de texto en el control interno
     var controlInternoInput = this.#controlInterno
     controlInternoInput.addEventListener('input', function () {
-     if (controlInternoInput.value.length > 20) {
+      if (controlInternoInput.value.length > 20) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true
-      } 
+      }
     });
   }
 
@@ -296,7 +299,7 @@ export class ProcesoTab extends HTMLElement {
       option.textContent = tipoJuicio.tipo_juicio
       this.#tipoJuicio.appendChild(option)
     })
-     
+
     //Establecemos los valores por defecto de los campos del formulario
     this.#tipoJuicio.value = this.#idTipoJuicio
     this.#municipio.value = this.#idMunicipio
@@ -364,16 +367,16 @@ export class ProcesoTab extends HTMLElement {
       } else if (numeroExpediente.length > 20) {
         throw new ValidationError('El número de expediente no debe ser mayor a 20 caracteres')
       }
-      
 
-       //Se valida si el control interno esta vacio y si es mayor a 20 caracteres
+
+      //Se valida si el control interno esta vacio y si es mayor a 20 caracteres
       if (controlInterno === '') {
         throw new ValidationError('El número de control interno es requerido')
       }
       else if (controlInterno.length > 20) {
         throw new ValidationError('El número de control interno no debe ser mayor a 20 caracteres')
       }
-    
+
       //Se valida si el distrito judicial esta vacio
       if (distritoJudicial === '0') {
         throw new ValidationError('El distrito judicial es requerido')
@@ -407,7 +410,7 @@ export class ProcesoTab extends HTMLElement {
   }
 
   //Metodo que se llama o coneta el componente
-  connectedCallback() {
+  async campos() {
     //Se asignan los eventos a los botones del formulario
     this.btnNext = this.shadowRoot.getElementById('btn-proceso-next')
 
@@ -477,7 +480,7 @@ export class ProcesoTab extends HTMLElement {
   }
 
 
-//Metodo que se encarga de mostrar un mensaje de alerta o de error
+  //Metodo que se encarga de mostrar un mensaje de alerta o de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message

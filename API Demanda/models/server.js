@@ -56,38 +56,38 @@ class Server {
   routes() {
     // Definimos cada ruta y le asignamos su router correspondiente
    this.app.use(this.paths.ocupacion, 
-      //verify_jwt,
+    verify_jwt,
        routerOcupacion)
        this.app.use(this.paths.escolaridad, 
-        // verify_jwt, 
+       verify_jwt, 
          routerEscolaridad)
       this.app.use(this.paths.etnia,
     verify_jwt, 
           routerEtnia)
           this.app.use(this.paths.procesoJudicial, 
-            /*verify_jwt,*/
+           verify_jwt,
              routerProcesoJudicial)
           this.app.use(this.paths.juzgado, 
-            //verify_jwt,
+           verify_jwt,
            routerJuzgado)
       
 //A comentar ya que no se usan
     this.app.use(this.paths.estadoProcesal,
-      // verify_jwt,
+     verify_jwt,
       routerEstadoProcesal)
 
     this.app.use(this.paths.routerPrueba,
-      // verify_jwt,
+      verify_jwt,
        routerPrueba)
 
     this.app.use(this.paths.routerObservacion,
-      // verify_jwt,
+     verify_jwt,
        routerObservacion)
     this.app.use(this.paths.routerResolucion,
-      // verify_jwt,
+    verify_jwt,
        rouiterResolucion)
     this.app.use(this.paths.routerFamiliar,
-      // verify_jwt,
+     verify_jwt,
        routerFamiliar)
        
   }

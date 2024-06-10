@@ -15,23 +15,24 @@ class ProcesoTabs extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+      //Obtencion de los botones en este caso el de las pestañas
+
+      this.btnRegistro = this.shadowRoot.getElementById('btn-registro')
+      this.btnPromovente = this.shadowRoot.getElementById('btn-promovente')
+      this.btnDemandado = this.shadowRoot.getElementById('btn-demandado')
+      this.btnProceso = this.shadowRoot.getElementById('btn-proceso')
+      this.btnDetalles = this.shadowRoot.getElementById('btn-detalles')
+    
+      //Establece la pestaña activa
+      this.#activeTab = 'registro'
+  
+      this.addClickEventListeners()
   }
   //Constructor de la clase
   constructor() {
     super()
     this.init2()
-    //Obtencion de los botones en este caso el de las pestañas
-
-    this.btnRegistro = this.shadowRoot.getElementById('btn-registro')
-    this.btnPromovente = this.shadowRoot.getElementById('btn-promovente')
-    this.btnDemandado = this.shadowRoot.getElementById('btn-demandado')
-    this.btnProceso = this.shadowRoot.getElementById('btn-proceso')
-    this.btnDetalles = this.shadowRoot.getElementById('btn-detalles')
   
-    //Establece la pestaña activa
-    this.#activeTab = 'registro'
-
-    this.addClickEventListeners()
   }
    
   //Metodo que se ejecuta cuando el componente es agregado al DOM

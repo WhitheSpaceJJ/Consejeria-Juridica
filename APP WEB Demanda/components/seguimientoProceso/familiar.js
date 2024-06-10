@@ -64,12 +64,7 @@ export class FamiliarPromovente extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-
+    
     //Inicialización de atributos privados
     this.#api = new APIModel()
     this.#idFamiliar = null
@@ -78,6 +73,12 @@ export class FamiliarPromovente extends HTMLElement {
     this.manageFormFields()
     //Llamada al metodo que se encarga de llenar los campos del formulario
     this.fillInputs()
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    this.init2()
+
   }
 
   //Metodo que se encarga de manejar los cambios en los atributos del componente

@@ -53,22 +53,23 @@ export class ObservacionPromovente extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+    
+     //Inicialización de variables
+     this.#api = new APIModel()
+     //Se establece el valor del idObvervacion en null 
+     this.#idObservacion = null
+     //Se establece el valor de observaciones en un arreglo vacio
+     this.#observaciones = []
+     //Llamado de los metodos en este caso el de manageFormFields y fillInputs
+     this.manageFormFields()
+     //Llamado de los metodos en este caso el de fillInputs
+     this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
     super()
     this.init2()
 
-     //Inicialización de variables
-    this.#api = new APIModel()
-    //Se establece el valor del idObvervacion en null 
-    this.#idObservacion = null
-    //Se establece el valor de observaciones en un arreglo vacio
-    this.#observaciones = []
-    //Llamado de los metodos en este caso el de manageFormFields y fillInputs
-    this.manageFormFields()
-    //Llamado de los metodos en este caso el de fillInputs
-    this.fillInputs()
   }
 
   //Metodo que se encarga de asignar los valores a los campos del formulario

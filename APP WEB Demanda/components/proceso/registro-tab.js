@@ -60,15 +60,10 @@ export class RegistroTab extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-  async init2() {
-    const templateContent = await this.fetchTemplate();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(templateContent.content.cloneNode(true));
-  }
+
   //Constructor de la clase
   constructor() {
     super()
-    this.init2()
     //Id que nos ayuda a identificar el componente
     this.id = 'registro'
     this.style.display = 'block'
@@ -79,7 +74,11 @@ export class RegistroTab extends HTMLElement {
 
   //MEtodo que inicializa las variables de la clase etc
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     this.#api = new APIModel()
+    await this.campos()
   //Llamada al metodo que obtiene los datos de la API
     await this.obtencionDatos()
  //Llamada a los metodos que se encargan de agregar eventos a los botones, manejar los campos del formulario y llenar los inputs
@@ -292,7 +291,7 @@ export class RegistroTab extends HTMLElement {
 
 
   //Se conecta el callback de la clase e inicializa el boton de next
-  connectedCallback() {
+  async campos() {
     //Asignacon de la variable btnNext 
     this.btnNext = this.shadowRoot.getElementById('btn-registro-next')
 

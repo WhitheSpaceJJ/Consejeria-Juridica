@@ -3,9 +3,8 @@ export class DataDemandado extends HTMLElement {
   //Constructor de la clase
   constructor(demandado) {
     super()
-    this.init2()
     this.demandado = demandado
-    this.fillData(this.demandado)
+    this.init2(demandado)
   }
   async fetchTemplate() {
     const template = document.createElement('template');
@@ -13,25 +12,26 @@ export class DataDemandado extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-  async init2() {
+  async init2(demandado) {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+    this.fillData(demandado)
   }
   connectedCallback() {
   }
  
   //Metodo para llenar los datos del demandado
-  fillData = async () => {
-
+  fillData = async (demandado) => {
+     
     //demandado
-    this.shadowRoot.getElementById('nombre-demandado').textContent = this.demandado.nombre
-    this.shadowRoot.getElementById('apellido-paterno-demandado').textContent = this.demandado.apellido_paterno
-    this.shadowRoot.getElementById('apellido-materno-demandado').textContent = this.demandado.apellido_materno
-    this.shadowRoot.getElementById('telefono').textContent = this.demandado.telefono
-    this.shadowRoot.getElementById('edad').textContent = this.demandado.edad
-    this.shadowRoot.getElementById('calle-domicilio').textContent = this.demandado.domicilio.calle_domicilio
-    this.shadowRoot.getElementById('numero-domicilio').textContent = this.demandado.domicilio.numero_exterior_domicilio 
+    this.shadowRoot.getElementById('nombre-demandado').textContent = demandado.nombre
+    this.shadowRoot.getElementById('apellido-paterno-demandado').textContent = demandado.apellido_paterno
+    this.shadowRoot.getElementById('apellido-materno-demandado').textContent = demandado.apellido_materno
+    this.shadowRoot.getElementById('telefono').textContent = demandado.telefono
+    this.shadowRoot.getElementById('edad').textContent = demandado.edad
+    this.shadowRoot.getElementById('calle-domicilio').textContent = demandado.domicilio.calle_domicilio
+    this.shadowRoot.getElementById('numero-domicilio').textContent = demandado.domicilio.numero_exterior_domicilio 
 }
 }
 

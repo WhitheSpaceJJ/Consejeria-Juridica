@@ -4,10 +4,9 @@ export class DataAsesoria extends HTMLElement {
   //Contructor de la clase
   constructor(asesoria) {
      super()
-    this.init2()
+     this.asesoria = asesoria
+    this.init2(asesoria)
 
-    this.asesoria = asesoria
-    this.fillData(this.asesoria)
   }
   async fetchTemplate() {
     const template = document.createElement('template');
@@ -15,23 +14,25 @@ export class DataAsesoria extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-  async init2() {
+  async init2(asesoria) {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+    this.fillData(this.asesoria)
+
   }
  
   connectedCallback() {
   }
 
   //Metodo para llenar los datos de la asesoria
-  fillData = async () => {
-    const datosAsesoria = this.asesoria.asesoria.datos_asesoria
-    const recibidos = this.asesoria.asesoria.recibidos
+  fillData = async (asesoria) => {
+    const datosAsesoria = asesoria.asesoria.datos_asesoria
+    const recibidos = asesoria.asesoria.recibidos
 
     
-    if (this.asesoria.asesoria.empleado) {
-      const empleado = this.asesoria.asesoria.empleado
+    if (asesoria.asesoria.empleado) {
+      const empleado =asesoria.asesoria.empleado
       if (empleado.hasOwnProperty('nombre_asesor')) {
         this.shadowRoot.getElementById('nombre-asesor-defensor').textContent = "Nombre del asesor:"
         this.shadowRoot.getElementById('nombre-asesor').textContent = empleado.nombre_asesor;
@@ -41,16 +42,16 @@ export class DataAsesoria extends HTMLElement {
         this.shadowRoot.getElementById('nombre-asesor').textContent = empleado.nombre_defensor;
       }
     } else {
-      if (this.asesoria.asesoria.asesor) {
+      if (asesoria.asesoria.asesor) {
         this.shadowRoot.getElementById('nombre-asesor-defensor').textContent = "Nombre del asesor:"
-        this.shadowRoot.getElementById('nombre-asesor').textContent = this.asesoria.asesoria.asesor.nombre_asesor;
+        this.shadowRoot.getElementById('nombre-asesor').textContent = asesoria.asesoria.asesor.nombre_asesor;
       } else {
         this.shadowRoot.getElementById('nombre-asesor-defensor').textContent = "Nombre del defensor:"
-        this.shadowRoot.getElementById('nombre-asesor').textContent = this.asesoria.asesoria.defensor.nombre_defensor;
+        this.shadowRoot.getElementById('nombre-asesor').textContent = asesoria.asesoria.defensor.nombre_defensor;
       }
     }
 
-    this.shadowRoot.getElementById('tipo-juicio').textContent = this.asesoria.asesoria.tipos_juicio.tipo_juicio
+    this.shadowRoot.getElementById('tipo-juicio').textContent = asesoria.asesoria.tipos_juicio.tipo_juicio
 
     this.shadowRoot.getElementById('resumen').textContent = datosAsesoria.resumen_asesoria
     this.shadowRoot.getElementById('conclusion').textContent = datosAsesoria.conclusion_asesoria

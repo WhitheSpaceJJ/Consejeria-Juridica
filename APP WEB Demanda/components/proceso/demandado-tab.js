@@ -110,13 +110,6 @@ export class DemandadoTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-    this.id = 'demandado'
-    this.style.display = 'none'
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
 
@@ -135,6 +128,16 @@ export class DemandadoTab extends HTMLElement {
       }
       this.searchCP()
     })
+    await this.campos()
+
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    this.id = 'demandado'
+    this.style.display = 'none'
+    this.init2()
+    
   }
 
   //Metodo que inicializa las variables de la clase, se obtienen los datos de la API,etc
@@ -468,7 +471,7 @@ export class DemandadoTab extends HTMLElement {
   }
 
   //Metodo que se encarga de conectar el componente con el DOM
-  connectedCallback() {
+  async campos() {
     //Se asigna la variable del boton siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-demandado-next')
 

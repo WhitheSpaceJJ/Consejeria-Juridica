@@ -3,7 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model'
 //import '../codigo-postal/codigo-postal.js'
 
- 
+
 
 export class RegistroTab extends HTMLElement {
 
@@ -21,13 +21,13 @@ export class RegistroTab extends HTMLElement {
   #idProceso
 
   #proceso = null
-  
+
   //Metodo para obtener los atributos
   static get observedAttributes() {
     return ['id', 'data']
   }
 
-   //Metodo para obtener el id del proceso
+  //Metodo para obtener el id del proceso
   get id() {
     return this.getAttribute('id')
   }
@@ -51,7 +51,7 @@ export class RegistroTab extends HTMLElement {
   get proceso() {
     return this.#proceso
   }
-  
+
   //Metodo para obtener los datos 
   get data() {
     const promovente = this.#proceso.participantes.find(participante => participante.promovente !== null)
@@ -91,7 +91,7 @@ export class RegistroTab extends HTMLElement {
     }
 
   }
- 
+
   //Metodo para establecer los datos
   set data(value) {
     this.setAttribute('data', value)
@@ -103,15 +103,10 @@ export class RegistroTab extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-  async init2() {
-    const templateContent = await this.fetchTemplate();
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(templateContent.content.cloneNode(true));
-  }
+
   //Constructor de la clase
   constructor() {
     super()
-    this.init2()
     //Variable que determina que esta es la pestaña actual
     this.id = 'registro'
     this.style.display = 'block'
@@ -122,8 +117,11 @@ export class RegistroTab extends HTMLElement {
 
   //Metodo que inicializa las variables, etc
   async init() {
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
     this.#api = new APIModel()
-
+    await this.campos()
     //Obtener los defensores
     const { defensores } = await this.#api.getDefensores()
     this.#defensores = defensores
@@ -134,7 +132,7 @@ export class RegistroTab extends HTMLElement {
     this.manageFormFields()
     //Lllamada al metodo para llenar los campos
     this.fillInputs()
-     //Metodo para rellenar la tabla con los procesos
+    //Metodo para rellenar la tabla con los procesos
     this.rellenarTabla()
   }
 
@@ -146,9 +144,9 @@ export class RegistroTab extends HTMLElement {
     this.#idProceso = this.shadowRoot.getElementById('proceso-seleccionado')
     //Esto es con respecto al select del defensor y asi poder rellenar los procesos en base al defensor seleccionado
     this.#defensor.addEventListener('change', () => {
-        if (this.#defensor.value === '0') {
-  //Todos los procesos
-          this.rellenarTabla()
+      if (this.#defensor.value === '0') {
+        //Todos los procesos
+        this.rellenarTabla()
       }
       else {
         //Procesos por defensor
@@ -177,7 +175,7 @@ export class RegistroTab extends HTMLElement {
         this.#procesos = procesos
         this.fillTabla()
       }).catch(error => {
-         //En caso de que no haya procesos para el defensor seleccionado se muestra un modal de advertencia
+        //En caso de que no haya procesos para el defensor seleccionado se muestra un modal de advertencia
         const modal = document.querySelector('modal-warning')
         modal.message = 'No hay procesos para el defensor seleccionado.'
         modal.title = 'Sin procesos'
@@ -191,7 +189,7 @@ export class RegistroTab extends HTMLElement {
     }
   }
 
-// Metodo para rellenar la tabla con los procesos
+  // Metodo para rellenar la tabla con los procesos
   fillTabla() {
     try {
       const tableBody = this.#procesosTable;
@@ -247,7 +245,7 @@ export class RegistroTab extends HTMLElement {
 
   }
 
-//Metodo que agrega eventos a los botones de la tabla
+  //Metodo que agrega eventos a los botones de la tabla
   agregarEventosBotones = () => {
 
     // Seleccionar botones de la tabla
@@ -267,15 +265,15 @@ export class RegistroTab extends HTMLElement {
       this.activarBotonSeleccionar(procesoId);
     };
 
-     
+
     // Seleccionar botones de la tabla
     window.llamarActivarBotonSeleccionar = llamarActivarBotonSeleccionar;
   }
 
-//Metodo para activar el boton de seleccionar el cual se activa al seleccionar un proceso  
+  //Metodo para activar el boton de seleccionar el cual se activa al seleccionar un proceso  
   activarBotonSeleccionar = async procesoId => {
     try {
- 
+
       const proceso = await this.#api.getProcesoJudicialById(procesoId);
       //En caso de que el proceso sea diferente al proceso seleccionado se muestra un modal de advertencia
       if (this.#proceso !== null) {
@@ -297,7 +295,7 @@ export class RegistroTab extends HTMLElement {
 
       }
       else
-      //En caso de que el proceso sea igual al proceso seleccionado se muestra un modal de advertencia
+        //En caso de que el proceso sea igual al proceso seleccionado se muestra un modal de advertencia
         if (this.#proceso === null) {
           this.#proceso = proceso;
           this.#idProceso.innerHTML = proceso.id_proceso_judicial;
@@ -308,7 +306,7 @@ export class RegistroTab extends HTMLElement {
     }
   }
 
-//Metodo para validar los campos en este caso la seleccion del proceso
+  //Metodo para validar los campos en este caso la seleccion del proceso
   validateInputs() {
 
     try {
@@ -334,12 +332,12 @@ export class RegistroTab extends HTMLElement {
   }
 
 
-   //Metodo para manejar los eventos 
-  connectedCallback() {
+  //Metodo para manejar los eventos 
+  async campos() {
     //Obtencion del boton siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-registro-next')
     //Evento para el boton siguiente
-     this.btnNext.addEventListener('click', () => {
+    this.btnNext.addEventListener('click', () => {
       if (!this.validateInputs()) return
       const event = new CustomEvent('next', {
         bubbles: true,

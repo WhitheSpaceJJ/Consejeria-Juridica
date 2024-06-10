@@ -53,20 +53,21 @@ export class ObservacionPromovente extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+      //Inicialización de variables
+      this.#api = new APIModel()
+      this.#idObservacion = null
+      this.#observaciones = []
+      //Llamada al metodo encargado de gestionar los campos del formulario
+      this.manageFormFields()
+      //Llamada al metodo encargado de llenar los campos del formulario
+      this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
     super()
     this.init2()
 
-    //Inicialización de variables
-    this.#api = new APIModel()
-    this.#idObservacion = null
-    this.#observaciones = []
-    //Llamada al metodo encargado de gestionar los campos del formulario
-    this.manageFormFields()
-    //Llamada al metodo encargado de llenar los campos del formulario
-    this.fillInputs()
+  
   }
 
   //Metodo que se encarga de obtener los valores de los atributos del componente

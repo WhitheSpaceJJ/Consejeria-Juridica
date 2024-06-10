@@ -14,7 +14,18 @@ export default defineConfig({
           src: 'assets/*.html', 
           dest: 'assets'      
         },
-      
+        {
+          src: 'img/*.jpg', 
+          dest: 'img'      
+        },
+        {
+          src: 'img/*.png', 
+          dest: 'img'      
+        },
+        {
+          src: 'img/*.jpeg', 
+          dest: 'img'      
+        },
         {
           src: 'components/proceso/*.html', 
           dest: 'components/proceso'     

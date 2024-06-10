@@ -50,12 +50,7 @@ export class EstadoProcesal extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-  }
-  //Constructor de la clase
-  constructor() {
-    super()
-    this.init2()
-
+    
     //Se inicializa la variable de la API
     this.#api = new APIModel()
     //Se inicializan las variables privadas de la clase
@@ -66,6 +61,12 @@ export class EstadoProcesal extends HTMLElement {
     this.manageFormFields()
     //Llamado a la funcion que llena los campos del formulario
     this.fillInputs()
+  }
+  //Constructor de la clase
+  constructor() {
+    super()
+    this.init2()
+
 
   }
 

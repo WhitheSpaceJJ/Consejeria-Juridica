@@ -126,31 +126,34 @@ export class PromoventeTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+       //Componente de registro tab
+       this.registroTab = document.querySelector('registro-full-tab')
+       //Obtencion del formulario de codigo postal
+       this.formCP = this.shadowRoot.getElementById('buscar-cp')
+       //Asignacion de la funcion de busqueda de codigo postal
+       this.formCP.addEventListener('click', (event) => {
+         event.preventDefault();
+         if (
+           !this.#cp.value ||
+           this.#cp.value.length !== 5 ||
+           isNaN(this.#cp.value)
+         ) {
+           this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+           return
+         }
+         this.searchCP()
+       })
+       await this.campos()
   }
   //Constructor de la clase
   constructor() {
     super()
-    this.init2()
     //ID del promovente que nos ayuda con los tabs
     this.id = 'promovente'
     this.style.display = 'none'
-    //Componente de registro tab
-    this.registroTab = document.querySelector('registro-full-tab')
-    //Obtencion del formulario de codigo postal
-    this.formCP = this.shadowRoot.getElementById('buscar-cp')
-    //Asignacion de la funcion de busqueda de codigo postal
-    this.formCP.addEventListener('click', (event) => {
-      event.preventDefault();
-      if (
-        !this.#cp.value ||
-        this.#cp.value.length !== 5 ||
-        isNaN(this.#cp.value)
-      ) {
-        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-        return
-      }
-      this.searchCP()
-    })
+    this.init2()
+
+ 
   }
 
   //Metodo que inicializa los datos del promovente, select ,etc
@@ -832,7 +835,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
   }
 
   //Metodo que se encarga de observar los cambios en los atributos
-  connectedCallback() {
+  async campos() {
     //Obtencion del boton de siguiente
     this.btnNext = this.shadowRoot.getElementById('btn-promovente-next')
 

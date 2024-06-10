@@ -101,19 +101,22 @@ export class DetallesTab extends HTMLElement {
         const templateContent = await this.fetchTemplate();
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(templateContent.content.cloneNode(true));
-      }
-      //Constructor de la clase
-      constructor() {
-        super()
-        this.init2()
-        //ID que nos ayuda para el cambio de tabs
-        this.id = 'detalles'
-        this.style.display = 'none'
+        
         //Inicializamos las variables de los componentes
         this.#registroTab = document.querySelector('registro-full-tab')
         this.#promoventeTab = document.querySelector('promovente-full-tab')
         this.#demandadoTab = document.querySelector('demandado-full-tab')
         this.#procesoTab = document.querySelector('proceso-full-tab')
+         await this.campos()
+      }
+      //Constructor de la clase
+      constructor() {
+        super()
+        //ID que nos ayuda para el cambio de tabs
+        this.id = 'detalles'
+        this.style.display = 'none'
+        this.init2()
+
     }
 
     //Metodo que inicializa las variables de la clase, maneja los campos del formulario y llena los inputs
@@ -242,7 +245,7 @@ export class DetallesTab extends HTMLElement {
     }
 
     //Conector del componente que inicializa el componente
-    connectedCallback() {
+    async campos() {
         //Obtencion del boton de crear asesoria
         this.btnCrearAsesoria = this.shadowRoot.getElementById('btn-crear-proceso')
 

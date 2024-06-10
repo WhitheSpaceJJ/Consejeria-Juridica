@@ -50,21 +50,22 @@ export class Resolucion extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
+        //Inicialización de variables
+        this.#api = new APIModel()
+
+        this.#idResolucion = null
+        this.#resoluciones = []
+        //Llamado al metodo que se encarga de gestionar los campos del formulario
+        this.manageFormFields()
+        //Llamado al metodo que se encarga de llenar los campos del formulario
+        this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
     super()
     this.init2()
 
-    //Inicialización de variables
-    this.#api = new APIModel()
 
-    this.#idResolucion = null
-    this.#resoluciones = []
-    //Llamado al metodo que se encarga de gestionar los campos del formulario
-    this.manageFormFields()
-    //Llamado al metodo que se encarga de llenar los campos del formulario
-    this.fillInputs()
   }
   //Metodo encargado de mandar a llamar al metodo que llena los eventos de los botones
   fillInputs() {
