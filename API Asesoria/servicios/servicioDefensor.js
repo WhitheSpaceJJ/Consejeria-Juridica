@@ -10,34 +10,35 @@ const CustomeError = require("../utilidades/customeError");
  * @param {Object} next Next
  * */
 const obtenerDefensores = asyncError(async (req, res, next) => {
-    const activo = req.query.activo;
-    if (activo !== undefined && activo !== null && activo !== "") {
-        const result = await controlDefensores.obtenerDefensores(activo);
-        if (result === null || result === undefined || result.length === 0) {
-            const error = new CustomeError('No se encontraron defensores', 404);
-            return next(error);
-        } else {
-            res.status(200).json({
-                defensores: result
-            });
-        } 
-  
-    }else {
-        const result = await controlDefensores.obtenerDefensores();
-        if (result === null || result === undefined || result.length === 0) {
-            const error = new CustomeError('No se encontraron defensores', 404);
-            return next(error);
-        } else {
-            res.status(200).json({
-                defensores: result
-            });
-        } 
-      
+    const id_distrito_judicial = req.query.id_distrito_judicial;
+    const pagina = req.query.pagina;
+    const result = await controlDefensores.obtenerDefensores(id_distrito_judicial, pagina);
+    if (result === null || result === undefined || result.length === 0) {
+        const error = new CustomeError('No se encontraron defensores', 404);
+        return next(error);
+    } else {
+        res.status(200).json({
+            defensores: result
+        });
+    }
+});
+
+
+
+
+const obtenerDefensoresByDistrito = asyncError(async (req, res, next) => {
+    const id_distrito_judicial = req.params.id;
+    const result = await controlDefensores.obtenerDefensoresByDistrito(id_distrito_judicial);
+    if (result === null || result === undefined || result.length === 0) {
+        const error = new CustomeError('No se encontraron defensores', 404);
+        return next(error);
+    } else {
+        res.status(200).json({
+            defensores: result
+        });
     }
 
-  
-} );
-
+});
 /**
  * @abstract Servicio  que permite obtener un defensor por su id
  * @param {Object} req Request
@@ -58,7 +59,7 @@ const obtenerDefensorPorId = asyncError(async (req, res, next) => {
 );
 
 
-const obtenerDefensoresZona  = asyncError(async (req, res, next) => {
+const obtenerDefensoresZona = asyncError(async (req, res, next) => {
     const result = await controlDefensores.obtenerDefensoresZona(req.params.id);
     if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('Error al obtener el defensor', 404);
@@ -71,9 +72,11 @@ const obtenerDefensoresZona  = asyncError(async (req, res, next) => {
 }
 );
 
+
 //Module exports
 module.exports = {
     obtenerDefensores,
     obtenerDefensorPorId,
-    obtenerDefensoresZona
+    obtenerDefensoresZona,
+    obtenerDefensoresByDistrito
 };

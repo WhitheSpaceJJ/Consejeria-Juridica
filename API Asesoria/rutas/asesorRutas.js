@@ -16,20 +16,20 @@ router.route('/distrito/:id')
      validarPermisos(["AD_EMPLEADOS_SA","ALL_SA","REGISTRO_ASESORIA_SA",
           "AD_USUARIOS_SA"
      ]),
-     servicioAsesor.obtenerAsesores);
+     servicioAsesor.obtenerAsesoresByDistrito);
 
 /** Operaciones Básicas */
 
 // Definimos las rutas y sus manejadores de solicitudes
-router.route('/')
+//En esta se tiene que verificar el id del distrito judicial
+router.route('/busqueda')
 // Obtener todos los asesores
 .get(
-     validarPermisos(["AD_EMPLEADOS_SA","ALL_SA","REGISTRO_ASESORIA_SA",
-          "AD_USUARIOS_SA"
+     validarPermisos(["AD_EMPLEADOS_SA","ALL_SA"
      ]),
      servicioAsesor.obtenerAsesores);
 
-router.route('/zona/:id')
+     router.route('/zona/:id')
 .get(
      validarPermisos(["AD_EMPLEADOS_SA","ALL_SA","CONSULTA_ASESORIA_SA"]),
      servicioAsesor.obtenerAsesoresZona);

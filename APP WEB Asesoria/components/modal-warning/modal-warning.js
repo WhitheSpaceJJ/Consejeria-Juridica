@@ -1,117 +1,132 @@
 export class Modal extends HTMLElement {
+  // Variable auxiliar para almacenar la respuesta
+  #variableAxuliar = false;
 
-  // Función para observar los atributos de la clase modal
+  // Metodo encargado de definir los atributos que se observaran
   static get observedAttributes() {
-    return ['open', 'message', 'title']
+    return ['open', 'message', 'title', 'onClose'];
   }
 
-  // Método para obtener el mensaje
+  // Metodo que se obtiene el valor del atributo message
   get message() {
-    return this.getAttribute('message')
+    return this.getAttribute('message');
   }
 
-  // Método para asignar el mensaje
+  // Metodo que establece el valor del atributo message
   set message(value) {
-    this.shadowRoot.getElementById('mensaje-alerta').innerHTML = value
+    this.shadowRoot.getElementById('mensaje-alerta').innerHTML = value;
   }
 
-  // Método para obtener el atributo open
+  // Metodo que se obtiene el valor del atributo open
   get open() {
-    return this.getAttribute('open') === 'true'
+    return this.getAttribute('open');
   }
 
-  // Método para asignar el atributo open
+  // Metodo que establece el valor del atributo open
   set open(value) {
-    this.setAttribute('open', value ? 'true' : 'false')
+    this.setAttribute('open', value);
   }
 
-  // Método para obtener el título
+  // Metodo que se obtiene el valor del atributo respuesta
+  get respuesta() {
+    return this.#variableAxuliar;
+  }
+
+  // Metodo que establece el valor del atributo respuesta
+  set respuesta(value) {
+    this.#variableAxuliar = value;
+  }
+
+  // Metodo que se obtiene el valor del atributo title
   get title() {
-    return this.getAttribute('title')
+    return this.getAttribute('title');
   }
 
-  // Método para asignar el título
+  // Metodo que establece el valor del atributo title
   set title(value) {
-    this.shadowRoot.getElementById('title-alerta').innerHTML = value
-  }
-
-  // Constructor de la clase
-  constructor() {
-    super()
-    this.init()
+    this.shadowRoot.getElementById('title-alerta').innerHTML = value;
   }
 
   // Método para inicializar el componente
   async init() {
-    const templateContent = await this.fetchTemplate()
-    const shadow = this.attachShadow({ mode: 'open' })
-    shadow.appendChild(templateContent.content.cloneNode(true))
-    this.campos()
+    const templateContent = await this.fetchTemplate();
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(templateContent.content.cloneNode(true));
+    this.campos();
+  }
+
+  // Constructor de la clase
+  constructor() {
+    super();
+    this.init();
   }
 
   // Método para obtener la plantilla
   async fetchTemplate() {
-    const template = document.createElement('template')
-    const html = await (await fetch('../assets/modal-warning.html')).text()
-    template.innerHTML = html
-    return template
+    const template = document.createElement('template');
+    const html = await (await fetch('../assets/modal-warning.html')).text();
+    template.innerHTML = html;
+    return template;
   }
 
-  // Método para asignar los campos del componente
+  // Callback que se ejecuta cuando el componente es agregado al DOM
   campos() {
-    const shadowRoot = this.shadowRoot
+    // Se establece la variable de cierre en null
+    this._onCloseCallback = null;
 
-    // Asignación de los elementos del DOM a las variables
-    this.btnCloseAlerta = shadowRoot.getElementById('btn-close-alerta')
-    this.idAlerta = shadowRoot.getElementById('alerta')
-    this.btnAceptarAlerta = shadowRoot.getElementById('btn-aceptar-alerta')
+    // Se establece la función de cierre
+    this.onClose = () => {
+      // Se obtiene el elemento alerta
+      const alerta = this.shadowRoot.getElementById('alerta');
+      alerta.style.display = 'none';
+      // Se establece el valor del atributo open en false
+      this.setAttribute('open', 'false');
 
-    // Se asignan los eventos a los botones
-    this.btnCloseAlerta.addEventListener('click', () => this.onClose())
-    this.btnAceptarAlerta.addEventListener('click', () => this.onClose())
+      // Si hay una función de cierre configurada, llámala
+      if (typeof this._onCloseCallback === 'function') {
+        this._onCloseCallback();
+      }
+    };
 
-    // Se asigna el evento al modal para cerrar al dar click fuera del modal
+    // Se obtienen los elementos del DOM que se van a utilizar en este caso los botones de cerrar y aceptar
+    this.btnCloseAlerta = this.shadowRoot.getElementById('btn-close-alerta');
+    this.idAlerta = this.shadowRoot.getElementById('alerta');
+    this.btnAceptarAlerta = this.shadowRoot.getElementById('btn-aceptar-alerta');
+
+    // Se añaden los eventos a los botones
+    this.btnCloseAlerta.addEventListener('click', () => {
+      this.respuesta = false;
+      this.onClose();
+    });
+
+    // Se añade el evento para cerrar el modal al hacer click fuera de él
+    this.btnAceptarAlerta.addEventListener('click', () => {
+      this.respuesta = true;
+      this.onClose();
+    });
+
+    // Se añade el evento para cerrar el modal al hacer click fuera de él
     this.idAlerta.addEventListener('click', e => {
       if (e.target === this.idAlerta) {
-        this.onClose()
+        this.respuesta = false;
+        this.onClose();
       }
-    })
-
-    this._onCloseCallback = null
+    });
   }
 
-  // Función para cerrar el modal
-  onClose() {
-    const alerta = this.shadowRoot.getElementById('alerta')
-    alerta.style.display = 'none'
-    this.open = false
-
-    // Si hay una función de cierre configurada, llámala
-    if (typeof this._onCloseCallback === 'function') {
-      this._onCloseCallback()
-    }
-  }
-
-  // Función para configurar la función de cierre desde fuera de la clase
+  // Metodo que permite configurar la función de cierre desde fuera de la clase
   setOnCloseCallback(callback) {
-    this._onCloseCallback = callback
+    // Permite configurar la función de cierre desde fuera de la clase
+    this._onCloseCallback = callback;
   }
 
-  // Función para manejar los atributos de la clase
+  // Metodo que se ejecuta cuando se elimina el componente del DOM
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'open') {
-      const alerta = this.shadowRoot.getElementById('alerta')
-      if (newValue === 'true') {
-        alerta.style.display = 'flex'
-      } else {
-        alerta.style.display = 'none'
-      }
-    } else if (name === 'message') {
-      this.message = newValue
-    } else if (name === 'title') {
-      this.title = newValue
+    if (name === 'open' && newValue === 'true') {
+      const alerta = this.shadowRoot.getElementById('alerta');
+      alerta.style.display = 'flex';
     }
   }
 }
 
-customElements.define('modal-warning', Modal)
+customElements.define('modal-warning', Modal);

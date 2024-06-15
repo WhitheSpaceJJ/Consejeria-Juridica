@@ -7,6 +7,7 @@ const {
   obtenerJuzgado,
   crearJuzgado,
   actualizarJuzgado,
+  obtenerJuzgadosPaginacion
 } = require('../controllers/juzgado')
 
  
@@ -18,6 +19,14 @@ const { existeJuzgado, validarJSONJuzgadoPOST, validarJSONJuzgadoPUT }
 
 // Creamos una nueva instancia de Router
 const router = Router()
+
+
+router.route('/paginacion')
+  // Obtener todos los juzgados
+  .get(
+    validarPermisos(permisosAceptables),
+    obtenerJuzgadosPaginacion)
+
 
 // Definimos la ruta para obtener todos los juzgados
 router.get('/',

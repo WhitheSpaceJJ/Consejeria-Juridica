@@ -58,12 +58,12 @@ async function validarPaginaFiltro(req, res, next) {
 
 
 async function validarPeticionBuscarNombre(req, res, next) {
-  const { nombre, apellido_materno, apellido_paterno, ...extraData } = req.query;
+  const { nombre, apellido_materno, apellido_paterno,pagina, total, ...extraData } = req.query;
   //Evalua que solo esten los parametros requeridos nombre, appellido materno y paterno y que no haya mas parametros
 
   //Alguno de los tres debe de existir
-  if (!nombre && !apellido_materno && !apellido_paterno) {
-    return res.status(400).json({ message: "Al menos uno de los siguientes parámetros es requerido: nombre, apellido_materno, apellido_paterno." });
+  if (!nombre && !apellido_materno && !apellido_paterno ) {
+    return res.status(400).json({ message: "Al menos uno de los siguientes parámetros es requerido: nombre, apellido_materno, apellido_paterno, pagina." });
   }
 
 

@@ -360,70 +360,70 @@ const actualizarAsesoria = async (asesoria_pre) => {
   //Falta verificar
   try {
 
-/*
-{
-    "turno": {
-        "fecha_turno": "2024-05-20",
-        "hora_turno": "12:12",
-        "id_defensor": "10",
-        "id_asesoria": 31
-    },
-    "distrito_judicial": {
-        "id_distrito_judicial": 1,
-        "nombre_distrito_judicial": "Distrito Judicial de Alamos",
-        "municipio_distrito": {
+    /*
+    {
+        "turno": {
+            "fecha_turno": "2024-05-20",
+            "hora_turno": "12:12",
+            "id_defensor": "10",
+            "id_asesoria": 31
+        },
+        "distrito_judicial": {
+            "id_distrito_judicial": 1,
+            "nombre_distrito_judicial": "Distrito Judicial de Alamos",
+            "municipio_distrito": {
+                "id_municipio_distrito": 60,
+                "nombre_municipio": "Álamos",
+                "id_distrito_judicial": 1
+            },
+            "zona": {
+                "id_zona": 3,
+                "nombre_zona": "SUR"
+            }
+        },
+        "tipos_juicio": {
+            "id_tipo_juicio": 1,
+            "tipo_juicio": "Divorcio Incausado",
+            "estatus_general": "ACTIVO"
+        },
+        "persona": {
+            "id_persona": 31,
+            "nombre": "Martha",
+            "apellido_materno": "Gonzalez",
+            "apellido_paterno": "Lopez",
+            "edad": 20,
+            "telefono": "6442138093",
+            "domicilio": {
+                "id_domicilio": 31,
+                "calle_domicilio": "13 de octubre",
+                "numero_exterior_domicilio": "1130",
+                "numero_interior_domicilio": "",
+                "id_colonia": "197"
+            },
+            "genero": {
+                "id_genero": 2,
+                "descripcion_genero": "Femenino",
+                "estatus_general": "ACTIVO"
+            }
+        },
+        "municipio": {
             "id_municipio_distrito": 60,
             "nombre_municipio": "Álamos",
             "id_distrito_judicial": 1
         },
-        "zona": {
-            "id_zona": 3,
-            "nombre_zona": "SUR"
+        "datos_asesoria": {
+            "id_asesoria": 31,
+            "resumen_asesoria": "En resumen la asesoria trato de como resolver el divorcio en cuestion por inconformidad de la pareja",
+            "conclusion_asesoria": "Al final se pudo llegar a un acuerdo que era lo mejor se repartieron los vienes en cantidades equitativas",
+            "estatus_requisitos": true,
+            "fecha_registro": "2023-12-16",
+            "usuario": "DPS Usuario Nueve",
+            "id_usuario": 9,
+            "estatus_asesoria": "TURNADA",
+            "id_empleado": 17
         }
-    },
-    "tipos_juicio": {
-        "id_tipo_juicio": 1,
-        "tipo_juicio": "Divorcio Incausado",
-        "estatus_general": "ACTIVO"
-    },
-    "persona": {
-        "id_persona": 31,
-        "nombre": "Martha",
-        "apellido_materno": "Gonzalez",
-        "apellido_paterno": "Lopez",
-        "edad": 20,
-        "telefono": "6442138093",
-        "domicilio": {
-            "id_domicilio": 31,
-            "calle_domicilio": "13 de octubre",
-            "numero_exterior_domicilio": "1130",
-            "numero_interior_domicilio": "",
-            "id_colonia": "197"
-        },
-        "genero": {
-            "id_genero": 2,
-            "descripcion_genero": "Femenino",
-            "estatus_general": "ACTIVO"
-        }
-    },
-    "municipio": {
-        "id_municipio_distrito": 60,
-        "nombre_municipio": "Álamos",
-        "id_distrito_judicial": 1
-    },
-    "datos_asesoria": {
-        "id_asesoria": 31,
-        "resumen_asesoria": "En resumen la asesoria trato de como resolver el divorcio en cuestion por inconformidad de la pareja",
-        "conclusion_asesoria": "Al final se pudo llegar a un acuerdo que era lo mejor se repartieron los vienes en cantidades equitativas",
-        "estatus_requisitos": true,
-        "fecha_registro": "2023-12-16",
-        "usuario": "DPS Usuario Nueve",
-        "id_usuario": 9,
-        "estatus_asesoria": "TURNADA",
-        "id_empleado": 17
     }
-}
-*/
+    */
     const asesoria_str = JSON.stringify(asesoria_pre);
     const asesoria_obj = JSON.parse(asesoria_str);
 
@@ -434,7 +434,7 @@ const actualizarAsesoria = async (asesoria_pre) => {
     const municipio = asesoria_obj.municipio;
     const distrito_judicial = asesoria_obj.distrito_judicial;
     const tipos_juicio = asesoria_obj.tipos_juicio;
-     //Primero actualiza el domicilio
+    //Primero actualiza el domicilio
 
     const domicilio_actualizado = await controlDomicilios.actualizarDomicilio(domicilio);
     persona.id_domicilio = domicilio_actualizado.id_domicilio;
@@ -614,23 +614,22 @@ const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
     });
 
     const asesorias = [];
+    const pageSize = 10;
+    pageNumber = parseInt(pageNumber, 10);
+    const startIndex = (pageNumber - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
 
-    for (const asesoria_pre of asesorias_pre) {
+    // Obtener las asesorías según la página usando slice
+    const asesoriasOnPage = asesorias_pre.slice(startIndex, endIndex);
 
-      asesorias.push(await formarAseoria(asesoria_pre));
+    // Formar las asesorías usando async/await dentro de un bucle for
+    for (const asesoria of asesoriasOnPage) {
+      asesorias.push(await formarAseoria(asesoria));
     }
+
     if (asesorias.length > 0) {
-      //con el atributo de page number me vas a realizar un metodo que regrese las asesorias por pagina con un maximo de 10 elementos osea si de casualidad son 20 elementos y la pagina es 2 me vas a da del 11 al 20 y vicerversa
-      const pageSize = 10;
-      const startIndex = (pageNumber - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-
-      // Slice the array to get the elements for the specified page
-      const asesoriasOnPage = asesorias.slice(startIndex, endIndex);
-
-      return asesoriasOnPage;
-    }
-    else {
+      return asesorias;
+    } else {
       return null;
     }
   } catch (error) {
@@ -665,67 +664,128 @@ const obtenerAsesoriaPorIdAsesorados = async (ids_asesorados) => {
   }
 };
 
-
-const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno) => {
+const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno, pagina, total) => {
 
   try {
-    const whereClause = {};
-    whereClause.estatus_asesoria = "NO_TURNADA";
+    if (total === "true") {
+      const whereClause = {};
 
-    // Construir el whereClause para la tabla Persona
-    if (nombre || apellido_paterno || apellido_materno) {
-      whereClause['$asesorado.persona.nombre$'] = nombre ? { [Op.like]: `%${nombre}%` } : { [Op.not]: null };
-      whereClause['$asesorado.persona.apellido_paterno$'] = apellido_paterno ? { [Op.like]: `%${apellido_paterno}%` } : { [Op.not]: null };
-      whereClause['$asesorado.persona.apellido_materno$'] = apellido_materno ? { [Op.like]: `%${apellido_materno}%` } : { [Op.not]: null };
+      whereClause.estatus_asesoria = "NO_TURNADA";
+      if (nombre || apellido_paterno || apellido_materno) {
+        whereClause['$asesorado.persona.nombre$'] = nombre ? { [Op.like]: `%${nombre}%` } : { [Op.not]: null };
+        whereClause['$asesorado.persona.apellido_paterno$'] = apellido_paterno ? { [Op.like]: `%${apellido_paterno}%` } : { [Op.not]: null };
+        whereClause['$asesorado.persona.apellido_materno$'] = apellido_materno ? { [Op.like]: `%${apellido_materno}%` } : { [Op.not]: null };
+      }
+      const asesoria_pre = await modeloAsesoria.Asesoria.count({
+        raw: false,
+        nest: true,
+        attributes: {
+          exclude: ['id_asesorado',
+            'id_tipo_juicio']
+        },
+        include: [
+          {
+            model: modeloAsesoria.Asesorado,
+            include: [{
+              model: modeloAsesoria.Persona,
+            }]
+          }
+          ,
+          {
+            model: modeloAsesoria.DetalleAsesoriaCatalogo,
+          },
+          {
+            model: modeloAsesoria.Turno,
+          },
+          {
+            model: modeloAsesoria.DistritoJudicial,
+          },
+          {
+            model: modeloAsesoria.Empleado,
+          },
+          {
+            model: modeloAsesoria.TipoJuicio,
+          }
+
+        ],
+        where: whereClause
+      });
+      return asesoria_pre;
+    } else {
+
+      const whereClause = {};
+
+      whereClause.estatus_asesoria = "NO_TURNADA";
+
+      // Construir el whereClause para la tabla Persona
+      if (nombre || apellido_paterno || apellido_materno) {
+        whereClause['$asesorado.persona.nombre$'] = nombre ? { [Op.like]: `%${nombre}%` } : { [Op.not]: null };
+        whereClause['$asesorado.persona.apellido_paterno$'] = apellido_paterno ? { [Op.like]: `%${apellido_paterno}%` } : { [Op.not]: null };
+        whereClause['$asesorado.persona.apellido_materno$'] = apellido_materno ? { [Op.like]: `%${apellido_materno}%` } : { [Op.not]: null };
+      }
+
+
+      const asesoria_pre = await modeloAsesoria.Asesoria.findAll({
+        raw: false,
+        nest: true,
+        attributes: {
+          exclude: ['id_asesorado',
+            // 'id_turno',
+            'id_tipo_juicio']
+        },
+        include: [
+          {
+            model: modeloAsesoria.Asesorado,
+            include: [{
+              model: modeloAsesoria.Persona,
+            }]
+          }
+          ,
+          {
+            model: modeloAsesoria.DetalleAsesoriaCatalogo,
+          },
+          {
+            model: modeloAsesoria.Turno,
+          },
+          {
+            model: modeloAsesoria.DistritoJudicial,
+          },
+          {
+            model: modeloAsesoria.Empleado,
+          },
+          {
+            model: modeloAsesoria.TipoJuicio,
+          }
+
+        ],
+        where: whereClause
+      });
+      const asesorias = [];
+      const pageSize = 10;
+      pagina = parseInt(pagina, 10);
+      const startIndex = (pagina - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+
+      // Obtener las asesorías según la página usando slice
+      const asesoriasOnPage = asesoria_pre.slice(startIndex, endIndex);
+
+      // Formar las asesorías usando async/await dentro de un bucle for
+      for (const asesoria of asesoriasOnPage) {
+        asesorias.push(await formarAseoria(asesoria));
+      }
+
+      if (asesorias.length > 0) {
+        return asesorias;
+      } else {
+        return null;
+      }
     }
-
-
-    const asesoria_pre = await modeloAsesoria.Asesoria.findAll({
-      raw: false,
-      nest: true,
-      attributes: {
-        exclude: ['id_asesorado',
-          // 'id_turno',
-          'id_tipo_juicio']
-      },
-      include: [
-        {
-          model: modeloAsesoria.Asesorado,
-          include: [{
-            model: modeloAsesoria.Persona,
-          }]
-        }
-        ,
-        {
-          model: modeloAsesoria.DetalleAsesoriaCatalogo,
-        },
-        {
-          model: modeloAsesoria.Turno,
-        },
-        {
-          model: modeloAsesoria.DistritoJudicial,
-        },
-        {
-          model: modeloAsesoria.Empleado,
-        },
-        {
-          model: modeloAsesoria.TipoJuicio,
-        }
-
-      ],
-      where: whereClause
-    });
-    const asesorias = [];
-    for (const asesoria of asesoria_pre) {
-      asesorias.push(await formarAseoria(asesoria));
-    }
-
-    return asesorias;
   } catch (error) {
     console.log("Error Asesorias aqui:", error.message);
     return null;
   }
 };
+
 
 
 

@@ -5,6 +5,127 @@ class ConsultaController {
   //Variables de la clase privada
   #pagina = 1
   #numeroPaginas
+
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = document.getElementById('anterior')
+    const next = document.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.handleConsultarAsesorias()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.handleConsultarAsesorias()
+    }
+  }
+
+  //Metodo encargado de consultar el numero de paginas del sistema de asesorias 
+  getNumeroPaginas = async () => {
+    try {
+      //Obtención del total de asesorias
+      const numeroAsesorias = await this.model.getTotalAsesorias()
+      //Variable correspondiente al total de asesorias
+      const total = document.getElementById('total')
+      //Asignación del total de asesorias
+      total.innerHTML = ' :' + numeroAsesorias.totalAsesorias
+      //Variable correspondiente al total de paginas
+      this.#numeroPaginas = (numeroAsesorias.totalAsesorias) / 10
+    } catch (error) {
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al obtener el total de asesorias, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = document.getElementById('table-body')
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
+
+  //Metodo que se encarga de crear la row de la tabla de asesorias con respecto a cada asesoria
+  crearRow = asesoria => {
+
+    const row = document.createElement('tr')
+    row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
+    row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                ${asesoria.datos_asesoria.id_asesoria}
+            </td>
+            <td class="px-6 py-4">
+                ${asesoria.persona.nombre} ${asesoria.persona.apellido_paterno} ${asesoria.persona.apellido_materno}
+            </td>
+            <td class="px-6 py-4">
+                ${asesoria.tipos_juicio.tipo_juicio}
+            </td>
+            <td class="px-6 py-4">
+                ${asesoria.datos_asesoria.resumen_asesoria}
+            </td>
+            <td class="px-6 py-4">
+                ${asesoria.datos_asesoria.usuario}
+            </td>
+            <td class="px-6 py-4">
+            ${asesoria.datos_asesoria.fecha_registro}
+        </td>
+        <td class="px-6 py-4">
+        ${asesoria.hasOwnProperty("defensor") ? asesoria.defensor.nombre_defensor : asesoria.asesor.nombre_asesor}
+    </td>
+    <td class="px-6 py-4">
+    ${asesoria.distrito_judicial.nombre_distrito_judicial}
+</td>
+<td class="px-6 py-4">
+${asesoria.municipio.nombre_municipio}
+</td>
+<td class="px-6 py-4">
+${asesoria.datos_asesoria.estatus_asesoria}
+</td>
+<td class="px-6 py-4">
+${asesoria.datos_asesoria.estatus_asesoria === 'NO_TURNADA' ? '' : asesoria.turno.defensor.nombre_defensor}
+</td>
+            <td class="px-6 py-4 text-right">
+                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
+            </td>`
+
+    return row
+  }
+
   #busquedaExitosa = false
   #actualDistrito = ""
   #actualZona = ""
@@ -25,11 +146,21 @@ class ConsultaController {
     //Este metodo se encarga de gestionar los eventos de los botones
     this.buttonsEventListeners()
   }
-
+  #acceptablePermissions = ['ALL_SA', 'CONSULTA_ASESORIA_SA']
   // DOMContentLoaded
   handleDOMContentLoaded = () => {
     // add permissions
-    this.utils.validatePermissions({})
+    const permiso = this.utils.validatePermissions({})
+    if (permiso) {
+      const userPermissions = this.model.user.permisos;
+      const acceptablePermissions = this.#acceptablePermissions;
+      const hasPermission = (userPermissions, acceptablePermissions) => {
+        return userPermissions.some(permission => acceptablePermissions.includes(permission));
+      };
+      if (!hasPermission(userPermissions, acceptablePermissions)) {
+        window.location.href = 'login.html';
+      }
+    }
     //Se obtiene el total de asesorias
     this.getNumeroPaginas()
     //Se obtiene las asesorias
@@ -117,63 +248,6 @@ class ConsultaController {
     selectZona.addEventListener('change', this.handleSelectChange)
     selectDefensor.addEventListener('change', this.handleSelectChange)
     selectDistrito.addEventListener('change', this.handleSelectChange)
-  }
-
-  //Este metodo se encarga de gestionar la paginacion de las asesorias
-  buttonsEventListeners = () => {
-    //Asignación de las variables correspondientes a los botones
-    const prev = document.getElementById('anterior')
-    const next = document.getElementById('siguiente')
-    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
-    prev.addEventListener('click', this.handlePrevPage)
-    next.addEventListener('click', this.handleNextPage)
-  }
-
-  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
-  handlePrevPage = async () => {
-    //Validación de la pagina actual
-    if (this.#pagina > 1) {
-      //Decremento de la pagina
-      this.#pagina--
-      //Llamada al metodo de consultar asesorias
-      this.handleConsultarAsesorias()
-    }
-  }
-
-  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
-  handleNextPage = async () => {
-    //Validación de la pagina actual
-    if (this.#pagina < this.#numeroPaginas) {
-      //Incremento de la pagina
-      this.#pagina++
-      //Llamada al metodo de consultar asesorias
-      this.handleConsultarAsesorias()
-    }
-  }
-
-  //Metodo encargado de consultar el numero de paginas del sistema de asesorias 
-  getNumeroPaginas = async () => {
-    try {
-      //Obtención del total de asesorias
-      const numeroAsesorias = await this.model.getTotalAsesorias()
-      //Variable correspondiente al total de asesorias
-      const total = document.getElementById('total')
-      //Asignación del total de asesorias
-      total.innerHTML = ' :' + numeroAsesorias.totalAsesorias
-      //Variable correspondiente al total de paginas
-      this.#numeroPaginas = (numeroAsesorias.totalAsesorias) / 10
-    } catch (error) {
-      //Mensaje de error
-      const modal = document.querySelector('modal-warning');
-      modal.setOnCloseCallback(() => {
-        if (modal.open === 'false') {
-          window.location = '/index.html'
-        }
-      });
-      modal.message = 'Error al obtener el total de asesorias, intente de nuevo mas tarde o verifique el status del servidor';
-      modal.title = 'Error'
-      modal.open = 'true'
-    }
   }
 
   //Metodo que se encarga de gestionar los cambios con respecto a los select
@@ -1059,22 +1133,6 @@ class ConsultaController {
     }
   }
 
-  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
-  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
-  validateRows = rowsTable => {
-    if (rowsTable > 0) {
-      this.cleanTable(rowsTable);
-      return true
-    } else { return true }
-  }
-
-  //Este metodo se encarga de limpiar la tabla
-  cleanTable = rowsTable => {
-    const table = document.getElementById('table-body')
-    for (let i = rowsTable - 1; i >= 0; i--) {
-      table.deleteRow(i)
-    }
-  }
 
   //Metodo que se encarga de consultar una asesoria por id y mostrar los datos de la asesoria en  su respectivo modal
   handleConsultarAsesoriasById = async id => {
@@ -1444,51 +1502,6 @@ class ConsultaController {
         }
       }
     }
-  }
-
-  //Metodo que se encarga de crear la row de la tabla de asesorias con respecto a cada asesoria
-  crearRow = asesoria => {
-
-    const row = document.createElement('tr')
-    row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
-    row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                ${asesoria.datos_asesoria.id_asesoria}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.persona.nombre} ${asesoria.persona.apellido_paterno} ${asesoria.persona.apellido_materno}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.tipos_juicio.tipo_juicio}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.datos_asesoria.resumen_asesoria}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.datos_asesoria.usuario}
-            </td>
-            <td class="px-6 py-4">
-            ${asesoria.datos_asesoria.fecha_registro}
-        </td>
-        <td class="px-6 py-4">
-        ${asesoria.hasOwnProperty("defensor") ? asesoria.defensor.nombre_defensor : asesoria.asesor.nombre_asesor}
-    </td>
-    <td class="px-6 py-4">
-    ${asesoria.distrito_judicial.nombre_distrito_judicial}
-</td>
-<td class="px-6 py-4">
-${asesoria.municipio.nombre_municipio}
-</td>
-<td class="px-6 py-4">
-${asesoria.datos_asesoria.estatus_asesoria}
-</td>
-<td class="px-6 py-4">
-${asesoria.datos_asesoria.estatus_asesoria === 'NO_TURNADA' ? '' : asesoria.turno.defensor.nombre_defensor}
-</td>
-            <td class="px-6 py-4 text-right">
-                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
-            </td>`
-
-    return row
   }
 
   //Metodo que se encarga de bloquear los filtros para evitar problemas

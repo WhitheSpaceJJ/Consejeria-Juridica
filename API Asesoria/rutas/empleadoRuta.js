@@ -18,6 +18,14 @@ const { validarJSONEmpleadoPOST,
  
 
 
+ router.route('/busqueda')
+  .get(
+    validarPermisos(permisosAceptables),
+      servicioEmpleado.obtenerEmpleadosBusqueda
+      );
+
+
+
 router.route('/')
      /* .get(servicioEmpleado.obtenerEmpleados) */
 

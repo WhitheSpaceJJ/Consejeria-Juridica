@@ -3,7 +3,7 @@
 import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
- 
+
 
 class JuiciosTab extends HTMLElement {
 
@@ -13,6 +13,95 @@ class JuiciosTab extends HTMLElement {
   #juicios
   #api
   #idSeleccion
+
+  #pagina = 1
+  #numeroPaginas
+
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarTiposDeJuicio()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarTiposDeJuicio()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalTiposDeJuicio } = await this.#api.getTiposJuicioTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalTiposDeJuicio
+      this.#numeroPaginas = (totalTiposDeJuicio) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de tipos de juicios, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#juicios
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
+
+  //Metodo que se encarga de crear la row de la tabla de asesorias con respecto a cada asesoria
+  crearRow = tipo => {
+    const row = document.createElement('tr');
+    row.id = `tipo-juicio-${tipo.id_tipo_juicio}`;
+    row.innerHTML = `
+      <td class="px-6 py-4 whitespace-nowrap">${tipo.id_tipo_juicio}</td>
+      <td class="px-6 py-4 whitespace-nowrap">${tipo.tipo_juicio}</td>
+      <td class="px-6 py-4 whitespace-nowrap">${tipo.estatus_general}</td>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-tipo-juicio" onclick="llamarActivarBotonSeleccionar(this.value)" value="${tipo.id_tipo_juicio}">
+          Seleccionar
+        </button>
+      </td>
+    `;
+    return row;
+  };
 
 
   // Constructor
@@ -61,12 +150,14 @@ class JuiciosTab extends HTMLElement {
       if (tipoJuicioInput.value !== '') {
         if (tipoJuicioInput.value.length > 100) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de tipo de juicio no puede contener más de 100 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
         }
       }
-       
+
     });
 
 
@@ -77,7 +168,9 @@ class JuiciosTab extends HTMLElement {
     //Llamado a la funcion agregar eventos a los botones
     this.agregarEventosBotones();
     //Llamado a la funcion mostrar los tipos de juicio
+    this.getNumeroPaginas()
     this.mostrarTiposDeJuicio();
+    this.buttonsEventListeners()
   }
 
   //Metodo el cual agrega eventos a los botones
@@ -137,6 +230,8 @@ class JuiciosTab extends HTMLElement {
         //Validación del tipo de juicio si esta vacio o no, si esta vacio se muestra un mensaje de error
         if (tipoJuicioInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de tipo de juicio es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -145,6 +240,8 @@ class JuiciosTab extends HTMLElement {
         //Validación del estatus del tipo de juicio si esta vacio o no, si esta vacio se muestra un mensaje de error
         if (estatusJuicioInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de juicio es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -155,6 +252,8 @@ class JuiciosTab extends HTMLElement {
           // Validación de la longitud del tipo de juicio si es mayor a 100 caracteres se muestra un mensaje de error
           if (tipoJuicioInput.length > 100) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de tipo de juicio no puede contener más de 100 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -167,22 +266,40 @@ class JuiciosTab extends HTMLElement {
               estatus_general: estatusJuicioInput.toUpperCase()
             };
             try {
-              const response = await this.#api.postTiposJuicio(nuevoTipoJuicio);
+              const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el tipo de juicio presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar tipo de juicio?'
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.postTiposJuicio(nuevoTipoJuicio).then(response => {
+                 
+                      if (response) {
+                        this.#tipoJuicio.value = '';
+                        this.#estatusJuicio.value = '0';
+                        this.IdSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarTiposDeJuicio();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo tipo de juicio:', error);
+                      const modal = document.querySelector('modal-warning')
 
-              if (response) {
-                this.#tipoJuicio.value = '';
-                this.#estatusJuicio.value = '0';
-                this.IdSeleccion = null;
-                this.mostrarTiposDeJuicio();
-              }
+                      modal.message = 'Error al agregar un nuevo tipo de juicio, por favor intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error al agregar tipo de juicio'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+
             } catch (error) {
               console.error('Error al agregar un nuevo tipo de juicio:', error);
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              })
+
               modal.message = 'Error al agregar un nuevo tipo de juicio, por favor intente de nuevo o verifique el status del servidor.'
               modal.title = 'Error al agregar tipo de juicio'
               modal.open = true
@@ -222,6 +339,7 @@ class JuiciosTab extends HTMLElement {
       const modal = document.querySelector('modal-warning')
       modal.message = 'Debe seleccionar un tipo de juicio para poder editarlo.'
       modal.title = 'Error de validación'
+      modal.setOnCloseCallback(() => {});
       modal.open = true
     }
     else {
@@ -231,10 +349,11 @@ class JuiciosTab extends HTMLElement {
       const estatusJuicioInput = this.#estatusJuicio.value;
 
       try {
-         
+
         //Validación del tipo de juicio si esta vacio o no, si esta vacio se muestra un mensaje de error
         if (tipoJuicioInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de tipo de juicio es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -243,6 +362,7 @@ class JuiciosTab extends HTMLElement {
         //Validación del estatus del tipo de juicio si esta vacio o no, si esta vacio se muestra un mensaje de error
         if (estatusJuicioInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de juicio es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -254,6 +374,7 @@ class JuiciosTab extends HTMLElement {
           if (tipoJuicioInput.length > 100) {
             // Mensaje de error en caso de que el tipo de juicio contenga mas de 100 caracteres
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de tipo de juicio no puede contener más de 100 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -264,13 +385,15 @@ class JuiciosTab extends HTMLElement {
               tipo_juicio: tipoJuicioInput,
               estatus_general: estatusJuicioInput.toUpperCase()
             };
-           
 
-             const tipoJuicioObtenido = await this.#api.getTiposJuicioByID(tipoJuicioID);
+
+            const tipoJuicioObtenido = await this.#api.getTiposJuicioByID(tipoJuicioID);
             //Validacion de si se han realizado cambios en el tipo de juicio
             if (tipoJuicioObtenido.tipoDeJuicio.tipo_juicio === tipoDeJuicio.tipo_juicio && tipoJuicioObtenido.tipoDeJuicio.estatus_general === tipoDeJuicio.estatus_general) {
               //Mensaje de error en caso de que no se hayan realizado cambios en el tipo de juicio
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'No se han realizado cambios en el tipo de juicio, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -279,27 +402,47 @@ class JuiciosTab extends HTMLElement {
               this.#idSeleccion = null;
 
             } else {
-              try{     
-              const response = await this.#api.putTiposJuicio(tipoJuicioID, tipoDeJuicio);
+              try {
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el tipo de juicio presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar tipo de juicio?'
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+                      this.#api.putTiposJuicio(tipoJuicioID, tipoDeJuicio).then(response => {
+                        if (response) {
+                          this.#tipoJuicio.value = '';
+                          this.#estatusJuicio.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarTiposDeJuicio();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el tipo de juicio:', error.message);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
 
-              if (response) {
-                this.#tipoJuicio.value = '';
-                this.#estatusJuicio.value = '0';
-                this.#idSeleccion = null;
-                this.mostrarTiposDeJuicio();
+                        modal.message = 'Error al editar el tipo de juicio, por favor intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error al editar tipo de juicio'
+                        modal.open = true
+                      });
+                    }
+                  }
+                });
+                modal.open = true
+
+
+              } catch (error) {
+                console.error('Error al editar el tipo de juicio:', error);
+                const modal = document.querySelector('modal-warning')
+                modal.setOnCloseCallback(() => {});
+
+                modal.message = 'Error al editar el tipo de juicio, por favor intente de nuevo o verifique el status del servidor.'
+                modal.title = 'Error al editar tipo de juicio'
+                modal.open = true
               }
-            } catch (error) {
-              console.error('Error al editar el tipo de juicio:', error);
-              const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              })
-              modal.message = 'Error al editar el tipo de juicio, por favor intente de nuevo o verifique el status del servidor.'
-              modal.title = 'Error al editar tipo de juicio'
-              modal.open = true
-            }
 
             }
           }
@@ -317,45 +460,29 @@ class JuiciosTab extends HTMLElement {
   //Metodo el cual muestra los tipos de juicio
   mostrarTiposDeJuicio = async () => {
     try {
-      //Variable que almacena los tipos de juicio
-      const tiposJuicio = await this.#api.getTiposJuicio();
-      const tableBody = this.#juicios;
-      tableBody.innerHTML = '';
+      const tiposJuicio = await this.#api.getTiposJuicioPagina(this.#pagina)
       const lista = tiposJuicio.tiposDeJuicio;
-      //Recorrido de los tipos de juicio
-      const funcion =
+      const table = this.#juicios;
+      const rowsTable = this.#juicios.rows.length
+      if (this.validateRows(rowsTable)) {
         lista.forEach(tipo => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <tr id="tipo-juicio-${tipo.id_tipo_juicio}">
-            <td class="px-6 py-4 whitespace-nowrap">${tipo.id_tipo_juicio}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${tipo.tipo_juicio}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${tipo.estatus_general}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-tipo-juicio" onclick="llamarActivarBotonSeleccionar(this.value)" value="${tipo.id_tipo_juicio}">
-            Seleccionar
-          </button>
-        
-            </td>
-        </tr>
-            `;
-          tableBody.appendChild(row);
-        });
+          const row = this.crearRow(tipo);
+          table.appendChild(row);
+        })
+      }
+
     } catch (error) {
       console.error('Error al obtener los tipos de juicio:', error);
       const modal = document.querySelector('modal-warning')
-    //   modal.setOnCloseCallback(() => {
- //        if (modal.open === 'false') {
-    //       window.location = '/index.html'
-       //  }
-     //  })
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Error al obtener los tipos de juicio, por favor intente de nuevo o verifique el status del servidor.'
       modal.title = 'Error al obtener tipos de juicio'
       modal.open = true
 
     }
   }
-   
+
   //Metodo el cual activa el boton seleccionar y que muestra los datos del tipo de juicio seleccionado
   activarBotonSeleccionar = async tipoJuicioId => {
     try {

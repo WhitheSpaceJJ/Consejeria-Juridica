@@ -7,7 +7,6 @@ const {
   obtenerProcesosJudiciales,
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
-  eliminarProcesoJudicial,
   obtenerProcesosJudicialesPorDefensor,
   obtenerProcesosJudicialesPorTramite
   ,
@@ -38,7 +37,7 @@ obtenerProcesosJudiciales)
 
 // Definimos la ruta para obtener todos los procesos judiciales
 router.get('/defensor/',
-  validarPermisos(["CONSULTA_PROCESO_JUDICIAL_SD","ALL_SD"]),
+  validarPermisos(["CONSULTA_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]),
 obtenerProcesosJudicialesPorDefensor)
 
 

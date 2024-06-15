@@ -109,10 +109,41 @@ const obtenerTipoDeJuicioPorId = asyncError(async (req, res, next) => {
   }
 });
 
+
+const obtenerTiposDeJuicioPaginacion = asyncError(async (req, res, next) => {
+  const pagina = req.query.pagina;
+  const total = req.query.total;
+  if (total === "true") { 
+       const result = await controlTiposDeJuicio.obtenerTotalTiposDeJuicio();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('Error al obtener el total de tipos de juicio', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+        totalTiposDeJuicio: result
+      });
+    }
+
+  } else {
+    const result = await controlTiposDeJuicio.obtenerTiposDeJuicioPaginacion(pagina);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener los tipos de juicio', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        tiposDeJuicio: result
+      });
+    }
+  }
+}
+);
+
 //Module exports
 module.exports = {
   agregarTipoDeJuicio,
   obtenerTiposDeJuicio,
   actualizarTipoDeJuicio,
-  obtenerTipoDeJuicioPorId
+  obtenerTipoDeJuicioPorId,
+  obtenerTiposDeJuicioPaginacion
 };

@@ -595,8 +595,20 @@ const obtenerAsesoriaPorId = asyncError(async (req, res, next) => {
  */
 
 const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
-  const { nombre, apellido_materno, apellido_paterno } = req.query;
-    const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno);
+  const { nombre, apellido_materno, apellido_paterno,pagina,total } = req.query;
+  if(total !==undefined && total !==null && total === 'true'){
+    const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno,null, total); 
+    if (result === null || result === undefined ) {
+      const error = new CustomeError('Error al obtener las asesorías', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        totalAsesorias: result
+      });
+    }
+  }else {
+    const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno,pagina, null); 
     if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('Error al obtener las asesorías', 404);
       return next(error);
@@ -606,6 +618,7 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
         asesorias: result
       });
     }
+  }
 
 });
 

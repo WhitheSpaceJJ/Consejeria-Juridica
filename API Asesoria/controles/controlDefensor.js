@@ -7,33 +7,65 @@ const controlEmpleado = require('./controlEmpleados.js');
  * @returns  defensores
  * */
 
-const obtenerDefensores = async (activo) => {
+const obtenerDefensores = async (id_distrito_judicial,pagina) => {
     try {
-        if (activo !== undefined && activo !== null && activo !== "") {
-            const whereClause = {};
-            whereClause['$empleado.estatus_general$'] = "ACTIVO";
-            return await modeloDefensor.Defensor.findAll({
-                raw: false,
-                nest: true,
-                include: [{
-                    model: modeloDefensor.Empleado
-                }
-                ],
-                where: whereClause
-            });
-        } else {
-            return await modeloDefensor.Defensor.findAll({
-                raw: false,
-                nest: true,
-                include: [{
-                    model: modeloDefensor.Empleado
-                }
-                ]
-            });
-        }
+        /*
+        pagina = parseInt(pagina,10);
+        const offset = (pagina - 1) * 10;   
+        const limit = 10;   
+        const whereClause = {};
+        whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+        return await modeloDefensor.Defensor.findAll({
+            raw: false,
+            nest: true,
+            include: [{
+                model: modeloDefensor.Empleado
+            }
+            ],
+            where: whereClause,
+            limit: limit,
+            offset: offset
+        });
+        Perdon no es un limite de 10 es de 5
+        */
+
+           pagina = parseInt(pagina,10);
+        const offset = (pagina - 1) * 5;
+        const limit = 5;
+
+        return await modeloDefensor.Defensor.findAll({  
+            raw: false,
+            nest: true,
+            include: [{
+                model: modeloDefensor.Empleado,
+                where: { id_distrito_judicial: id_distrito_judicial }
+            }
+            ]
+             ,limit: limit,
+            offset: offset
+        });
 
 
+    } catch (error) {
+        console.log("Error defensor:", error.message);
+        return null;
+    }
+};
 
+const obtenerDefensoresByDistrito = async (id_distrito_judicial) => {
+    try {
+        const whereClause = {};
+        whereClause['$empleado.estatus_general$'] = "ACTIVO";
+        whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+        return await modeloDefensor.Defensor.findAll({
+            raw: false,
+            nest: true,
+            include: [{
+                model: modeloDefensor.Empleado
+            }
+            ],
+            where: whereClause
+        });
     } catch (error) {
         console.log("Error defensor:", error.message);
         return null;
@@ -110,9 +142,9 @@ const obtenerDefensoresZona = async (id) => {
         return null;
     }
 };
-const  obtenerDefensorIDSimpleMiddleware  = async (id) => {
+const obtenerDefensorIDSimpleMiddleware = async (id) => {
     try {
-        const defensor= await modeloDefensor.Defensor.findByPk(id);
+        const defensor = await modeloDefensor.Defensor.findByPk(id);
         return defensor;
     } catch (error) {
         console.log("Error defensor:", error.message);
@@ -148,5 +180,6 @@ module.exports = {
     agregarDefensor,
     actualizarDefensor,
     obtenerDefensoresZona,
-    obtenerDefensorIDSimpleMiddleware
+    obtenerDefensorIDSimpleMiddleware,
+    obtenerDefensoresByDistrito
 };

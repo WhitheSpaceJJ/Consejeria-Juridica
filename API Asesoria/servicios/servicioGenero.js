@@ -104,12 +104,45 @@ const obtenerGeneroPorId = asyncError(async (req, res, next) => {
     });
   }
 });
+  
 
+  
+const obtenerGenerosPaginacion = asyncError(async (req, res, next) => {
+  const pagina = req.query.pagina;
+  const total = req.query.total;
+  if (total === "true") {
+        const result = await controlGeneros.obtenerTotalGeneros();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('Error al obtener el total de géneros', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+        totalGeneros: result
+      });
+    }
+
+  } else {
+    const result = await controlGeneros.obtenerGenerosPaginacion(pagina);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener los géneros', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        generos: result
+      });
+    }
+  }
+}
+);
+
+ 
 
 //Module exports 
 module.exports = {
   agregarGenero,
   obtenerGeneros,
   actualizarGenero,
-  obtenerGeneroPorId
+  obtenerGeneroPorId,
+  obtenerGenerosPaginacion
 };

@@ -39,7 +39,7 @@ const obtenerUsuarios = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-      usuarios: result 
+      usuarios: result
     });
   }
 });
@@ -103,23 +103,25 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
     const error = new CustomeError('El usuario esta desabilitado.', 404); // Cambio de zona a usuario
     return next(error);
   } else if (usuarioObj.estatus_general === 'ACTIVO') {
-    
-    const payload = JSON.parse(JSON.stringify(usuarioObj));
-    delete payload.tipo_user;
-    const token = await jwtController.generateToken(payload);
-
-    
-    res.status(200).json({
-      token: token,
-   //   role: usuarioObj.tipo_user.tipo_usuario,
-      name: usuarioObj.nombre ,
-      id_distrito_judicial: usuarioObj.id_distrito_judicial,
-    //  id_tipouser: usuarioObj.id_tipouser,
-   //   estatus_general: usuarioObj.estatus_general,
-   //   id_empleado: usuarioObj.id_empleado,  
-      id_usuario: usuarioObj.id_usuario,
-      permisos : usuarioObj.permisos  
-    });
+    if (usuarioObj.permisos.length === 0) {
+      const error = new CustomeError('El usuario no tiene permisos.', 404); // Cambio de zona a usuario
+      return next(error);
+    } else {
+      const payload = JSON.parse(JSON.stringify(usuarioObj));
+      delete payload.tipo_user;
+      const token = await jwtController.generateToken(payload);
+      res.status(200).json({
+        token: token,
+        //   role: usuarioObj.tipo_user.tipo_usuario,
+        name: usuarioObj.nombre,
+        id_distrito_judicial: usuarioObj.id_distrito_judicial,
+        //  id_tipouser: usuarioObj.id_tipouser,
+        //   estatus_general: usuarioObj.estatus_general,
+        //   id_empleado: usuarioObj.id_empleado,  
+        id_usuario: usuarioObj.id_usuario,
+        permisos: usuarioObj.permisos
+      });
+    }
   }
 });
 
@@ -212,6 +214,23 @@ const recuperarContraseña = asyncError(async (req, res, next) => {
 
 
 });
+const obtenerUsuariosBusqueda = asyncError(async (req, res, next) => {
+  const { correo, id_distrito_judicial, total, pagina } = req.query;
+  const totalBool = total === 'true';
+
+  try {
+    const result = await controlUsuarios.obtenerUsuariosBusqueda(correo || null, id_distrito_judicial || null, totalBool, pagina);
+
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      return next(new CustomeError('No se encontraron usuarios', 404));
+    }
+
+    const responseKey = totalBool ? 'totalUsuarios' : 'usuarios';
+    res.status(200).json({ [responseKey]: result });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 // Exportamos las funciones definidas
 module.exports = {
@@ -220,5 +239,6 @@ module.exports = {
   obtenerUsuarios,
   actualizarUsuario,
   obtenerUsuarioPorId,
-  obtenerUsuarioCorreoPassword
+  obtenerUsuarioCorreoPassword,
+  obtenerUsuariosBusqueda
 };

@@ -9,10 +9,10 @@ class BusquedaTurnarView {
     this.searchForm = document.getElementById('registrar-turno')
 
     // Agrega manejadores de eventos
-    document.addEventListener(
-      'DOMContentLoaded',
-      this.controller.handleDOMContentLoaded()
-    )
+    document.addEventListener('DOMContentLoaded', () => {
+      this.controller.handleDOMContentLoaded();
+      this.initNavbar();
+    });
 
     this.searchForm.addEventListener('submit', e => {
       e.preventDefault()
@@ -25,6 +25,12 @@ class BusquedaTurnarView {
       // Enviar los datos al controlador
       this.controller.handleSearch(inputsArray)
     })
+  }
+  initNavbar() {
+    const navbar = document.querySelector('navbar-comp');
+    if (navbar) {
+      navbar.permisos = this.controller.model.user.permisos;
+    }
   }
 }
 

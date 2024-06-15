@@ -91,12 +91,39 @@ const actualizarGenero = async (genero) => {
 };
 
 
-/** Operaciones Requeridas */
+const obtenerGenerosPaginacion = async (pagina) => { 
+  try {
+    pagina = parseInt(pagina, 10);
+    const offset = (pagina - 1) * 10;
+    const resultados = await modeloGenero.Genero.findAll({
+      raw: false,
+      nest: true,
+      offset: offset,
+      limit: 10
+    });
+    return resultados;
+  } catch (error) {
+    return null;
+  }
+}
 
+
+const obtenerTotalGeneros = async () => {
+  try {
+    return await modeloGenero.Genero.count();
+  } catch (error) {
+    console.log("Error generos:", error.message);
+    return null;
+  }
+}
+
+ 
 module.exports = {
   obtenerGeneros,
   obtenerGeneroPorId,
   agregarGenero,
   actualizarGenero,
   obtenerGeneroPorPorIdMiddleware
+  , obtenerGenerosPaginacion,
+  obtenerTotalGeneros
 };

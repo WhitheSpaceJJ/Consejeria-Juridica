@@ -5,6 +5,7 @@ class LoginController {
   constructor(model) {
     this.model = model
   }
+  #acceptablePermissions =  ['ALL_SA','AD_USUARIOS_SA','AD_EMPLEADOS_SA','AD_JUICIOS_SA','AD_GENEROS_SA','AD_ESTADOSCIVILES_SA','AD_MOTIVOS_SA','AD_CATALOGOREQUISITOS_SA','CONSULTA_ASESORIA_SA','REGISTRO_ASESORIA_SA','TURNAR_ASESORIA_SA']
 
   // Metodo que se enc arga de manejar el login
   handleLogin = async () => {
@@ -18,6 +19,14 @@ class LoginController {
       }
       //Aqui en este caso se procedera a cambiar el assets del navbar con respecto a los permisos del usuario
       const user = await this.model.login({ correo, password })
+      const userPermissions = user.permisos;
+      const acceptablePermissions = this.#acceptablePermissions;
+      const hasPermission = (userPermissions, acceptablePermissions) => {
+        return userPermissions.some(permission => acceptablePermissions.includes(permission));
+      };
+      if (!hasPermission(userPermissions, acceptablePermissions)) {
+        window.location.href = 'login.html';
+      }
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')
     } catch (error) { 

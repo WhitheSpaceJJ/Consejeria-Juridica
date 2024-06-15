@@ -104,9 +104,46 @@ const actualizarOcupacion = async (req, res) => {
 
 
 
+const obtenerOcupacionesPaginacion = async (req, res) => {
+  try {
+    const pagina = req.query.pagina;
+    const total = req.query.total;
+    if (total === "true") {      const result = await ocupacionDAO.obtenerTotalOcupaciones();
+      if (result === null || result === undefined) {
+        return res.status(404).json({
+          message: 'Error al obtener el total de ocupaciones'
+        });
+      } else {
+        res.status(200).json({
+          totalOcupaciones: result
+        });
+      }
+
+    } else {
+      const result = await ocupacionDAO.obtenerOcupacionesPaginacion(pagina);
+      if (result === null || result === undefined || result.length === 0) {
+        return res.status(404).json({
+          message: 'Error al obtener las ocupaciones'
+        });
+      } else {
+
+        res.status(200).json({
+          ocupaciones: result
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error al realizar la consulta con bd'
+    })
+  }
+}
+
+
 module.exports = {
   obtenerOcupaciones,
   crearOcupacion,
   obtenerOcupacion,
   actualizarOcupacion,
+  obtenerOcupacionesPaginacion
 }

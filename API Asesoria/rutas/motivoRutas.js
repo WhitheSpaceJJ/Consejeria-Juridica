@@ -12,10 +12,17 @@ const permisosAceptables = ["AD_MOTIVOS_SA","ALL_SA"]
 // Creamos un nuevo router
 const router = express.Router();
 
+
+router.route('/paginacion')
+  // Obtener todos los motivos
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioMotivos.obtenerMotivosPaginacion) 
+
 router.route('/')
   // Obtener todos los motivos
   .get(
-    validarPermisos(["AD_MOTIVOS_SA","ALL_SA","REGISTRO_ASESORIA_SA"]),
+    validarPermisos(["ALL_SA","REGISTRO_ASESORIA_SA"]),
     servicioMotivos.obtenerMotivos)
   // Agregar un nuevo motivo
   .post(

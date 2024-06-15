@@ -11,6 +11,78 @@ class GenerosTab extends HTMLElement {
   #idSeleccion
   #api
 
+
+  
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarGeneros()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarGeneros()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalGeneros } = await this.#api.getGenerosTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalGeneros
+      this.#numeroPaginas = (totalGeneros) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de generos, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#generos
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
   // Constructor de la clase GenerosTab
   constructor() {
     super();
@@ -30,6 +102,7 @@ class GenerosTab extends HTMLElement {
     shadow.appendChild(templateContent.content.cloneNode(true));
     //Inicialización de la variable de APIModel
     this.#api = new APIModel();
+    this.#idSeleccion = null;
     //LLamada a la función manageFormFields
     this.manageFormFields();
     //LLamada a la función fillInputs
@@ -54,6 +127,8 @@ class GenerosTab extends HTMLElement {
       if (generoInput.value !== '') {
         if (generoInput.value.length > 25) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de género no puede contener más de 100 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -67,6 +142,8 @@ class GenerosTab extends HTMLElement {
   fillInputs() {
     //Llamada a la función mostrarGeneros
     this.mostrarGeneros();
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     //Llamada a la función agregarEventosBotones
     this.agregarEventosBotones();
   }
@@ -120,6 +197,8 @@ class GenerosTab extends HTMLElement {
         //Verificación que si el genero ingresado por el usuario está vacío se muestre un mensaje de error
         if (generoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de género es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -128,6 +207,8 @@ class GenerosTab extends HTMLElement {
         //Verificación que si el estatus del genero ingresado por el usuario está vacío se muestre un mensaje de error
         if (estatusGeneroInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de género es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -137,6 +218,8 @@ class GenerosTab extends HTMLElement {
           //Verificación que si el genero ingresado por el usuario tiene más de 25 caracteres se muestre un mensaje de error
           if (generoInput.length > 25) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de género no puede contener más de 25 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -147,7 +230,9 @@ class GenerosTab extends HTMLElement {
               descripcion_genero: generoInput,
               estatus_general: estatusGeneroInput.toUpperCase()
             };
-            try {
+            try { 
+              console.log(nuevoGenero)
+              /*
               const response = await this.#api.postGenero(nuevoGenero);
 
               if (response) {
@@ -156,15 +241,76 @@ class GenerosTab extends HTMLElement {
                 this.#idSeleccion = null;
                 this.mostrarGeneros();
               }
+                     const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar catalogo?'
+
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    this.#api.postCatalogos(nuevoCatalogo).then(response => {
+                      if (response) {
+                        this.#catalogo.value = '';
+                        this.#estatusCatalogo.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarCatalogos();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo catalogo:', error);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo catalogo, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+                */
+              const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el genero presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar genero?'
+              
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.postGenero(nuevoGenero).then(response => {
+                      if (response) {
+                        console.log(response)
+                        this.#genero.value = '';
+                        this.#estatusGenero.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarGeneros();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo genero:', error.message);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo genero, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+
             } catch (error) {
               //Mensaje de error al agregar un nuevo género en caso de error y que el servidor no responda, posteriormente se redirige a la página de inicio
               console.error('Error al agregar un nuevo género:', error);
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              });
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'Error al agregar un nuevo género, por favor intente de nuevo o verifique el status del servidor.'
               modal.title = 'Error al agregar género'
               modal.open = true
@@ -178,6 +324,8 @@ class GenerosTab extends HTMLElement {
     } else {
       //Mensaje de error al agregar un nuevo género en caso de que ya se haya seleccionado un género
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'No se puede agregar un nuevo género si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -197,6 +345,8 @@ class GenerosTab extends HTMLElement {
     if (generoID === null) {
       //Mensaje de error al editar un género en caso de que no se haya seleccionado un género
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Debe seleccionar un género para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -211,6 +361,8 @@ class GenerosTab extends HTMLElement {
         //Verificación que si el genero ingresado por el usuario está vacío se muestre un mensaje de error
         if (generoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de género es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -219,6 +371,8 @@ class GenerosTab extends HTMLElement {
         //Verificación que si el estatus del genero ingresado por el usuario está vacío se muestre un mensaje de error
         if (estatusGeneroInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de género es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -229,6 +383,8 @@ class GenerosTab extends HTMLElement {
           //Verificación que si el genero ingresado por el usuario tiene más de 25 caracteres se muestre un mensaje de error
           if (generoInput.length > 25) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de género no puede contener más de 25 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -246,6 +402,8 @@ class GenerosTab extends HTMLElement {
             if (generoObtenido.genero.descripcion_genero === genero.descripcion_genero && generoObtenido.genero.estatus_general === genero.estatus_general) {
 
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'No se han realizado cambios en el género, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -255,23 +413,54 @@ class GenerosTab extends HTMLElement {
 
             } else {
               try {
+                /*
                 const response = await this.#api.putGenero(generoID, genero);
 
                 if (response) {
                   this.#genero.value = '';
                   this.#estatusGenero.value = '0';
                   this.#idSeleccion = null;
+                   
                   this.mostrarGeneros();
+                } */
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el genero presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar genero?'
+
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+                      this.#api.putGenero(generoID, genero).then(response => {
+                        if (response) {
+                          this.#genero.value = '';
+                          this.#estatusGenero.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarGeneros();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el género:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el género, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error al editar género'
+                        modal.open = true
+                      });
+                    }
+                  }
                 }
+                ); 
+                modal.open = true
+
               } catch (error) {
                 //Mensaje de error al editar un género en caso de error y que el servidor no responda, posteriormente se redirige a la página de inicio
                 console.error('Error al editar el género:', error);
                 const modal = document.querySelector('modal-warning')
-                modal.setOnCloseCallback(() => {
-                  if (modal.open === 'false') {
-                    window.location = '/index.html'
-                  }
-                });
+                modal.setOnCloseCallback(() => {});
+
                 modal.message = 'Error al editar el género, por favor intente de nuevo o verifique el status del servidor.'
                 modal.title = 'Error al editar género'
                 modal.open = true
@@ -289,42 +478,41 @@ class GenerosTab extends HTMLElement {
   mostrarGeneros = async () => {
 
     try {
-      //Obtención de los géneros
-      const generos = await this.#api.getGeneros();
-      const generosTable = this.#generos;
-      generosTable.innerHTML = '';
+      const generos = await this.#api.getGenerosPagina(this.#pagina);
       const lista = generos.generos;
-      //Función para recorrer la lista de géneros
-      const funcion =
+      const table = this.#generos;
+      const rowsTable = this.#generos.rows.length
+      if (this.validateRows(rowsTable)) {
         lista.forEach(genero => {
           const row = document.createElement('tr');
           row.innerHTML = `
-            <tr id="genero-${genero.id_genero}">
-            <td class="px-6 py-4 whitespace-nowrap">${genero.id_genero}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${genero.descripcion_genero}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${genero.estatus_general}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-genero" onclick="llamarActivarBotonSeleccionar(this.value)" value="${genero.id_genero}">
-            Seleccionar
-          </button>
-        
-            </td>
-        </tr>
-            `;
-          generosTable.appendChild(row);
-        });
+          <tr id="genero-${genero.id_genero}">
+          <td class="px-6 py-4 whitespace-nowrap">${genero.id_genero}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${genero.descripcion_genero}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${genero.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-genero" onclick="llamarActivarBotonSeleccionar(this.value)" value="${genero.id_genero}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          
+          `;
+          table.appendChild(row);
+        })
+
+      }
 
     } catch (error) {
       console.error('Error al obtener los generos:', error);
       const modal = document.querySelector('modal-warning')
-    //   modal.setOnCloseCallback(() => {
-     //    if (modal.open === 'false') {
-   //        window.location = '/index.html'
-     //    }
-     //  });
-      modal.message = 'Error al obtener los géneros, por favor intente de nuevo o verifique el status del servidor.'
-      modal.title = 'Error al obtener géneros'
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener los generos, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
       modal.open = true
+
     }
 
   }

@@ -64,6 +64,28 @@ class EtniaDAO {
   }
 
 
+
+  async obtenerEtniasPaginacion(pagina) {
+    try {
+      pagina = parseInt(pagina, 10)
+      const offset = (pagina - 1) * 10
+      const resultados = await Etnia.findAll({ offset: offset, limit: 10 })
+      return resultados
+    } catch (err) {
+      throw err
+    }
+  }
+
+
+  async obtenerTotalEtnias() {
+    try {
+      return await Etnia.count()
+    } catch (err) {
+      throw err
+    }
+
+  }
+
 }
 
 module.exports = new EtniaDAO()

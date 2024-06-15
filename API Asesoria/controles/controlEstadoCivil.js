@@ -87,12 +87,45 @@ const actualizarEstadoCivil = async (estadoCivil) => {
   }
 };
 
+
+
+const obtenerEstadosCivilesPaginacion = async (pagina) => {
+  try {
+    pagina = parseInt(pagina, 10);
+    const offset = (pagina - 1) * 10;
+    const resultados = await modeloEstadoCivil.EstadoCivil.findAll({
+      raw: false,
+      nest: true,
+      offset: offset,
+      limit: 10
+    });
+    return resultados;
+  } catch (error) {
+    return null;
+  }
+
+}
+
+const obtenerTotalEstadosCiviles = async () => {
+  try {
+    return await modeloEstadoCivil.EstadoCivil.count();
+  } catch (error) {
+    console.log("Error estados civiles:", error.message);
+    return null;
+  }
+
+}
+
+
   // Module exports:
 module.exports = {
   obtenerEstadosCiviles,
   obtenerEstadoCivilPorId,
   agregarEstadoCivil,
   actualizarEstadoCivil, 
-  obtenerEstadoCivilPorPorIdMiddleware
+  obtenerEstadoCivilPorPorIdMiddleware, 
+  obtenerEstadosCivilesPaginacion,
+  obtenerTotalEstadosCiviles
+
 
 };

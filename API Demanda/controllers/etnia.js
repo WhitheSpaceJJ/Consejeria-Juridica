@@ -97,10 +97,48 @@ const actualizarEtnia = async (req, res) => {
   }
 }
 
+const obtenerEtniasPaginacion = async (req, res) => {
+  try {
+    const pagina = req.query.pagina;
+    const total = req.query.total;
+    if (total === "true") {      const result = await etniaDAO.obtenerTotalEtnias();
+      if (result === null || result === undefined) {
+        return res.status(404).json({
+          message: 'Error al obtener el total de etnias'
+        });
+      } else {
+        res.status(200).json({
+          totalEtnias: result
+        });
+      }
+
+    } else {
+      const result = await etniaDAO.obtenerEtniasPaginacion(pagina);
+      if (result === null || result === undefined || result.length === 0) {
+        return res.status(404).json({
+          message: 'Error al obtener las etnias'
+        });
+      } else {
+
+        res.status(200).json({
+          etnias: result
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
+
+
 
 module.exports = {
   obtenerEtnias,
   obtenerEtnia,
   crearEtnia,
   actualizarEtnia,
+  obtenerEtniasPaginacion
 }

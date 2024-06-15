@@ -11,10 +11,17 @@ const permisosAceptables = ["AD_ESTADOSCIVILES_SA","ALL_SA"]
 // Creamos un nuevo router
 const router = express.Router();
 
+ router.route('/paginacion')
+    // Obtener todos los estados civiles
+    .get(
+      validarPermisos(permisosAceptables),
+      servicioEstados.obtenerEstadosCivilesPaginacion)
+
+
 router.route('/')
   // Obtener todos los estados civiles
   .get(
-    validarPermisos(["REGISTRO_ASESORIA_SA","AD_ESTADOSCIVILES_SA","ALL_SA"]),
+    validarPermisos(["REGISTRO_ASESORIA_SA","ALL_SA"]),
     servicioEstados.obtenerEstadosCiviles)
   // Agregar un nuevo estado civil
   .post(

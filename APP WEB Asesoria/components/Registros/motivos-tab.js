@@ -13,6 +13,118 @@ class MotivosTab extends HTMLElement {
   #idSeleccion
   #api
 
+  #pagina = 1
+  #numeroPaginas
+
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarMotivos()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarMotivos()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalMotivos } = await this.#api.getMotivosTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalMotivos
+      this.#numeroPaginas = (totalMotivos) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de motivos, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#motivos
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
+  //Función que muestra los motivos en la tabla
+  mostrarMotivos = async () => {
+    try {
+
+        const motivos = await this.#api.getMotivosPagina(this.#pagina)
+        const lista = motivos.motivos;
+        const table = this.#motivos;
+        const rowsTable = this.#motivos.rows.length
+
+         if (this.validateRows(rowsTable)) {
+          lista.forEach(motivo => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <tr id="motivo-${motivo.id_motivo}">
+            <td class="px-6 py-4 whitespace-nowrap">${motivo.id_motivo}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${motivo.descripcion_motivo}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${motivo.estatus_general}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-motivo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${motivo.id_motivo}">
+            Seleccionar
+          </button>
+        
+            </td>
+        </tr>
+            `;
+            table.appendChild(row);
+          })
+        }
+
+    } catch (error) {
+      console.error('Error al obtener los motivos:', error);
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener los motivos, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+    }
+
+  }
+
   //Constructor de la clase
   constructor() {
     super();
@@ -59,6 +171,8 @@ class MotivosTab extends HTMLElement {
       if (motivoInput.value !== '') {
         if (motivoInput.value.length > 75) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de motivo no puede contener más de 75 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -73,6 +187,8 @@ class MotivosTab extends HTMLElement {
     //Llamada a la función manejadorEventosEntrada
     this.agregarEventosBotones();
     //Llamada a la función mostrarMotivos
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     this.mostrarMotivos();
   }
 
@@ -129,6 +245,8 @@ class MotivosTab extends HTMLElement {
         //Validación del campo de motivo en caso de que este vacío se muestra un modal de advertencia
         if (motivoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de motivo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -137,6 +255,8 @@ class MotivosTab extends HTMLElement {
         //Validación del campo de estatus de motivo en caso de que este vacío se muestra un modal de advertencia
         if (estatusMotivoInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de motivo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -148,6 +268,8 @@ class MotivosTab extends HTMLElement {
           //Validación de la longitud del campo de motivo en caso de que sea mayor a 75 se muestra un modal de advertencia
           if (motivoInput.length > 75) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de motivo no puede contener más de 75 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -162,23 +284,44 @@ class MotivosTab extends HTMLElement {
 
             //Se obtiene el motivo por descripción de motivo
             try {
-              const response = await this.#api.postMotivo(nuevoMotivo);
+            
+             const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el motivo presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar motivo?'
 
-              if (response) {
-                this.#motivo.value = '';
-                this.#estatusMotivo.value = '0';
-                this.#idSeleccion = null;
-                this.mostrarMotivos();
-              }
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    this.#api.postMotivo(nuevoMotivo).then(response => {
+                      if (response) {
+                        this.#motivo.value = '';
+                        this.#estatusMotivo.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarMotivos();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo motivo:', error);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo motivo, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
             } catch (error) {
               //Se muestra un modal de advertencia en caso de que haya un error al agregar un nuevo motivo en caso de error en el servidor
               console.error('Error al agregar un nuevo motivo:', error);
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              })
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'Error al agregar un nuevo motivo, intente de nuevo o verifique el status del servidor.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -192,6 +335,8 @@ class MotivosTab extends HTMLElement {
     } else {
       // Se muestra un modal de advertencia en caso de que ya se haya seleccionado un motivo
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'No se puede agregar un nuevo motivo si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -210,6 +355,9 @@ class MotivosTab extends HTMLElement {
     if (motivoID === null) {
       //Se muestra un modal de advertencia en caso de que no se haya seleccionado un motivo
       const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Debe seleccionar un motivo para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -225,6 +373,8 @@ class MotivosTab extends HTMLElement {
         if (motivoInput === '') {
           //Se muestra un modal de advertencia en caso de que el campo de motivo esté vacío
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de motivo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -233,6 +383,8 @@ class MotivosTab extends HTMLElement {
         //Validación del campo de estatus de motivo en caso de que este vacío se muestra un modal de advertencia
         if (estatusMotivoInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de motivo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -243,6 +395,8 @@ class MotivosTab extends HTMLElement {
           //Validación de la longitud del campo de motivo en caso de que sea mayor a 75 se muestra un modal de advertencia
           if (motivoInput.length > 75) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de motivo no puede contener más de 75 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -261,6 +415,8 @@ class MotivosTab extends HTMLElement {
             if (motivoObtenido.motivo.descripcion_motivo === motivo.descripcion_motivo && motivoObtenido.motivo.estatus_general === motivo.estatus_general) {
               //Se muestra un modal de advertencia en caso de que no se hayan realizado cambios en el motivo
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'No se han realizado cambios en el motivo, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -270,7 +426,7 @@ class MotivosTab extends HTMLElement {
 
             } else {
               try {
-
+                  /*
                 const response = await this.#api.putMotivo(motivoID, motivo);
 
                 if (response) {
@@ -278,16 +434,41 @@ class MotivosTab extends HTMLElement {
                   this.#estatusMotivo.value = '0';
                   this.#idSeleccion = null;
                   this.mostrarMotivos();
-                }
+                } */ 
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el motivo presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar motivo?'
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+
+                      this.#api.putMotivo(motivoID, motivo).then(response => {
+                        if (response) {
+                          this.#motivo.value = '';
+                          this.#estatusMotivo.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarMotivos();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el motivo:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.message = 'Error al editar el motivo, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                });
+                modal.open = true 
+
               } catch (error) {
                 //Se muestra un modal de advertencia en caso de que haya un error al editar un motivo en caso de error en el servidor
                 console.error('Error al editar el motivo:', error);
                 const modal = document.querySelector('modal-warning')
-                modal.setOnCloseCallback(() => {
-                  if (modal.open === 'false') {
-                    window.location = '/index.html'
-                  }
-                })
+              
                 modal.message = 'Error al editar el motivo, intente de nuevo o verifique el status del servidor.'
                 modal.title = 'Error de validación'
                 modal.open = true
@@ -304,53 +485,7 @@ class MotivosTab extends HTMLElement {
 
   }
 
-  //Función que muestra los motivos en la tabla
-  mostrarMotivos = async () => {
-    try {
-      //Se obtienen los motivos
-      const motivos = await this.#api.getMotivos();
-      //Se obtiene la tabla de motivos
-      const motivosTable = this.#motivos;
-      motivosTable.innerHTML = '';
-      //Se obtiene la lista de motivos
-      const lista = motivos.motivos;
-      //Se recorre la lista de motivos
-      const funcion =
-        lista.forEach(motivo => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <tr id="motivo-${motivo.id_motivo}">
-            <td class="px-6 py-4 whitespace-nowrap">${motivo.id_motivo}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${motivo.descripcion_motivo}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${motivo.estatus_general}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-motivo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${motivo.id_motivo}">
-            Seleccionar
-          </button>
-        
-            </td>
-        </tr>
-            `;
-          motivosTable.appendChild(row);
-        });
 
-    } catch (error) {
-      console.error('Error al obtener los motivos:', error);
-      const modal = document.querySelector('modal-warning')
-      // modal.setOnCloseCallback(() => {
-      //    if (modal.open === 'false') {
-      //      window.location = '/index.html'
-      //    }
-      //  })
-      modal.message = 'Error al obtener los motivos, intente de nuevo o verifique el status del servidor.'
-      modal.title = 'Error de validación'
-      modal.open = true
-
-    }
-
-  }
-
-  //Función que activa el botón de seleccionar el cual se encarga de rellenar los campos de motivo y estatus de motivo
   activarBotonSeleccionar = async motivoId => {
 
     try {

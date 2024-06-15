@@ -7,7 +7,7 @@ const modeloTipoJuicio = require('../modelos/modeloTipoJuicio');
  * @abstract Función que permite obtener todos los tipos de juicio
  * @returns tipos de juicio
  */
-const obtenerTiposDeJuicio = async (activo) => {
+const obtenerTiposDeJuicio = async (activo,pagina) => {
   try {
     if(activo !== undefined && activo !== null && activo !== ""){
       return await modeloTipoJuicio.TipoJuicio.findAll({
@@ -16,7 +16,7 @@ const obtenerTiposDeJuicio = async (activo) => {
         where: { estatus_general: "ACTIVO" }
       });
     }else {
-      return await modeloTipoJuicio.TipoJuicio.findAll({
+       return await modeloTipoJuicio.TipoJuicio.findAll({
         raw: false,
         nest: true
       });
@@ -90,12 +90,38 @@ const actualizarTipoDeJuicio = async (tipoDeJuicio) => {
     return false;
   }
 };
+const obtenerTiposDeJuicioPaginacion = async (pagina) => {
+  try {
+    pagina = parseInt(pagina, 10);
+    const offset = (pagina - 1) * 10;
+    const resultados = await modeloTipoJuicio.TipoJuicio.findAll({
+      raw: false,
+      nest: true,
+      offset: offset,
+      limit: 10
+    });
+    return resultados;
+  } catch (error) {
+    return null;
+  }
+};
 
+
+const obtenerTotalTiposDeJuicio = async () => {
+  try {
+    return await modeloTipoJuicio.TipoJuicio.count();
+  } catch (error) {
+    console.log("Error tipo juicios:", error.message);
+    return null;
+  }
+}
 // Module exports
 module.exports = {
   obtenerTiposDeJuicio,
   obtenerTipoDeJuicioPorId,
   agregarTipoDeJuicio,
   actualizarTipoDeJuicio,
-  obtenerTipoJuicioPorPorIdMiddleware
+  obtenerTipoJuicioPorPorIdMiddleware,
+  obtenerTotalTiposDeJuicio,obtenerTiposDeJuicioPaginacion
+
 };

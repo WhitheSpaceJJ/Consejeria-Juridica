@@ -99,10 +99,47 @@ const actualizarJuzgado = async (req, res) => {
 }
 
 
+const obtenerJuzgadosPaginacion = async (req, res) => {
+  try {
+    const pagina = req.query.pagina;
+    const total = req.query.total;
+    if (total === "true") {      const result = await juzgadoDAO.obtenerTotalJuzgados();
+      if (result === null || result === undefined) {
+        return res.status(404).json({
+          message: 'Error al obtener el total de juzgados'
+        });
+      } else {
+        res.status(200).json({
+          totalJuzgados: result
+        });
+      }
+
+    } else {
+      const result = await juzgadoDAO.obtenerJuzgadosPaginacion(pagina);
+      if (result === null || result === undefined || result.length === 0) {
+        return res.status(404).json({
+          message: 'Error al obtener los juzgados'
+        });
+      } else {
+
+        res.status(200).json({
+          juzgados: result
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
+
 
 module.exports = {
   obtenerJuzgados,
   obtenerJuzgado,
   crearJuzgado,
   actualizarJuzgado,
+  obtenerJuzgadosPaginacion
 }

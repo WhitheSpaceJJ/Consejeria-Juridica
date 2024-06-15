@@ -35,7 +35,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  
+
   //Metodo para actualizar un turno existente por su id y los datos a modificar
   async putTurno(id, turno) {
     const url = `${this.ASESORIAS_API_URL}/turnos/${id}`
@@ -60,7 +60,7 @@ class APIModel {
 
 
 
-   // ---------------------- Usuarios ----------------------
+  // ---------------------- Usuarios ----------------------
 
   //Metodo para iniciar sesion con un usuario y contraseña
   async login({ correo, password }) {
@@ -78,7 +78,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
- 
+
   //Metodo para recuperar la contraseña de un usuario
   async recover(correo) {
     const url = `${this.USERS_API_URL}/usuarios/recuperacion?correo=${correo}`
@@ -112,7 +112,31 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
+  async  getUsuariosBusqueda( correo, id_distrito_judicial, total, pagina ) {
+    const url = new URL(`${this.USERS_API_URL}/usuarios/busqueda`);
+    const params = new URLSearchParams();
+  
+    if (correo) params.append('correo', correo);
+    if (id_distrito_judicial) params.append('id_distrito_judicial', id_distrito_judicial);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+  
+    url.search = params.toString();
 
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error('Error en la petición');
+    }
+  }
   //Metodo para obtener un usuario por su id
   async getUsuarioByID(id) {
     const url = `${this.USERS_API_URL}/usuarios/${id}`
@@ -131,7 +155,6 @@ class APIModel {
   //Metodo para agregar un nuevo usuario
   async postUsuario(data) {
     const url = `${this.USERS_API_URL}/usuarios`
-    console.log(data)
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -151,7 +174,6 @@ class APIModel {
   //Metodo para actualizar un usuario existente por su id y los datos a modificar
   async putUsuario(id, data) {
     const url = `${this.USERS_API_URL}/usuarios/${id}`
-    console.log(data)
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -168,10 +190,10 @@ class APIModel {
     }
 
   }
- 
-   // ---------------------- Permisos ----------------------
 
- async getPermisos() {
+  // ---------------------- Permisos ----------------------
+
+  async getPermisos() {
     const url = `${this.USERS_API_URL}/permisos`
     const response = await fetch(url, {
       method: 'GET',
@@ -187,13 +209,13 @@ class APIModel {
     }
   }
 
-  
 
 
 
-   // ---------------------- Tipo Usuarios ----------------------
-    
-   async getTipoUsuarios() {
+
+  // ---------------------- Tipo Usuarios ----------------------
+
+  async getTipoUsuarios() {
     const url = `${this.USERS_API_URL}/tipo-usuario`
     const response = await fetch(url, {
       method: 'GET',
@@ -206,11 +228,11 @@ class APIModel {
       return data
     } else {
       throw new Error('Error en la petición')
-    } 
-    
+    }
+
   }
-    
- 
+
+
   // ---------------------- Asesorias ----------------------
   //Metodo para obtener todas las asesorias deacurdos a la pagina
   async getAsesorias(pagina) {
@@ -229,7 +251,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  
+
   //Metodo para obtener el total de asesorias del sistema
   async getTotalAsesorias() {
     const url = `${this.ASESORIAS_API_URL}/asesorias/total-asesorias`
@@ -249,17 +271,23 @@ class APIModel {
   }
 
   //Metodo para obtener una asesoria por el nombre completo de la persona, es decir, nombre, apellido paterno y apellido materno
-  async getAsesoriaByFullName({ nombre, apellidoMaterno, apellidoPaterno }) {
-    const url = new URL(`${this.ASESORIAS_API_URL}/asesorias/buscar`)
-    const params = {
-      nombre,
-      apellido_paterno: apellidoPaterno,
-      apellido_materno: apellidoMaterno,
+  async getAsesoriaByFullName(nombre, apellidoMaterno, apellidoPaterno, pagina) {
+    const url = `${this.ASESORIAS_API_URL}/asesorias/buscar?nombre=${nombre}&apellido_paterno=${apellidoPaterno}&apellido_materno=${apellidoMaterno}&pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
     }
-    url.search = new URLSearchParams(params).toString()
-
-
-
+  }
+  async getAsesoriaByFullNameTotal(nombre, apellidoMaterno, apellidoPaterno) {
+    const url = `${this.ASESORIAS_API_URL}/asesorias/buscar?nombre=${nombre}&apellido_paterno=${apellidoPaterno}&apellido_materno=${apellidoMaterno}&total=true`
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -383,7 +411,6 @@ class APIModel {
         Authorization: `Bearer ${this.user.token}`,
       },
     })
-
     if (response.ok) {
       let data = await response.json()
       data = data.asesorias
@@ -442,7 +469,7 @@ class APIModel {
     }
   }
 
-   
+
   // ---------------------- Municipios Distritos ----------------------
   //Metodo para obtener los municipios asociados a un distrito judicial por su id
   async getMunicipiosByDistrito(idDistro) {
@@ -501,7 +528,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  
+
   //Metodo para obtener los datos de la colonia, estado, municipio, ciudad, codigo postal esto a traves del codigo postal
   async getDomicilioByCP(cp) {
     const url = `${this.CP_API_URL}/codigospostales/cp/${cp}`
@@ -520,8 +547,8 @@ class APIModel {
   }
   //---------------------- Asesores ----------------------
   //Metodo para obtener todos los asesores
-  async getAsesores() {
-    const url = `${this.ASESORIAS_API_URL}/asesores`
+  async getAsesores(id_distrito_judicial, pagina) {
+    const url = `${this.ASESORIAS_API_URL}/asesores/busqueda?pagina=${pagina}&id_distrito_judicial=${id_distrito_judicial}`
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -554,6 +581,7 @@ class APIModel {
     }
   }
 
+  //Metodo para obtener asesores por distrito    
   async getAsesoresByDistrito(id) {
     const url = `${this.ASESORIAS_API_URL}/asesores/distrito/${id}`
     const response = await fetch(url, {
@@ -567,6 +595,25 @@ class APIModel {
     if (response.ok) {
       let data = await response.json()
       data = data.asesores
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  //Metodo para obtener asesores por distrito    
+  async getDefensoresByDistrito(id) {
+    const url = `${this.ASESORIAS_API_URL}/defensores/distrito/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      let data = await response.json()
+      data = data.defensores
       return data
     } else {
       throw new Error('Error en la petición')
@@ -591,7 +638,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  
+
   //Metodo para obtener los asesores por zona 
   async getAsesoresByZona(id) {
     const url = `${this.ASESORIAS_API_URL}/asesores/zona/${id}`
@@ -651,8 +698,8 @@ class APIModel {
     }
   }
 
-//---------------------- Defensores ----------------------
-//Metodo para obtener a un defensor por su id
+  //---------------------- Defensores ----------------------
+  //Metodo para obtener a un defensor por su id
   async getDefensorID(id_defensor) {
     const url = `${this.ASESORIAS_API_URL}/defensores/${id_defensor}`
 
@@ -691,10 +738,10 @@ class APIModel {
     }
   }
 
-   
-   //Metodo para obtener todos los defensores 
-  async getDefensores() {
-    const url = `${this.ASESORIAS_API_URL}/defensores`
+
+  //Metodo para obtener todos los defensores 
+  async getDefensores(id_distrito_judicial, pagina) {
+    const url = `${this.ASESORIAS_API_URL}/defensores/busqueda?pagina=${pagina}&id_distrito_judicial=${id_distrito_judicial}`
 
     const response = await fetch(url, {
       method: 'GET',
@@ -711,8 +758,39 @@ class APIModel {
     }
   }
 
+  async getTotalEmpleadoDistrito(id_distrito_judicial) {
+    const url = `${this.ASESORIAS_API_URL}/empleados/busqueda?total=true&id_distrito_judicial=${id_distrito_judicial}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+  async getEmpleadosDistrito(id_distrito_judicial, pagina) {
+    const url = `${this.ASESORIAS_API_URL}/empleados/busqueda?pagina=${pagina}&id_distrito_judicial=${id_distrito_judicial}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
   //Metodo para obtener todos los defensores activos del sistema
-   async getDefensores2() {
+  async getDefensores2() {
     const url = `${this.ASESORIAS_API_URL}/defensores?activo=true`
 
     const response = await fetch(url, {
@@ -729,8 +807,8 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-// ---------------------- Estados ----------------------
-//Metodo para obtener los municipios relacionados al estado numero 26 en este caso sonora
+  // ---------------------- Estados ----------------------
+  //Metodo para obtener los municipios relacionados al estado numero 26 en este caso sonora
   async getMunicipios() {
     const url = `${this.CP_API_URL}/estados/26`
     const response = await fetch(url, {
@@ -770,7 +848,7 @@ class APIModel {
     }
   }
 
-   // ---------------------- Tipos de Juicio ----------------------
+  // ---------------------- Tipos de Juicio ----------------------
   //Metodo para agregar un nuevo tipo de juicio
   async postTiposJuicio(tipoDeJuicio) {
     const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio`;
@@ -796,7 +874,7 @@ class APIModel {
       return null;
     }
   }
-   
+
   //Metodo para actualizar un tipo de juicio existente por su id y los datos a modificar
   async putTiposJuicio(id, tipoDeJuicio) {
     const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/${id}`;
@@ -865,6 +943,191 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
+
+  async getTiposJuicioPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/paginacion?pagina=${pagina}`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getTiposJuicioTotal() {
+    const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio/paginacion?total=${true}`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+
+
+  async getEstadosCivilesTotal() {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getEstadosCivilesPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+
+  async getGenerosTotal() {
+    const url = `${this.ASESORIAS_API_URL}/generos/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getGenerosPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/generos/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+  async getCatalogosTotal() {
+    const url = `${this.ASESORIAS_API_URL}/catalogo-requisitos/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getCatalogosPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/catalogo-requisitos/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+  async getMotivosTotal() {
+    const url = `${this.ASESORIAS_API_URL}/motivos/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getMotivosPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/motivos/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+
   //Metodo para obtener todos los tipos de juicio activos del sistema
   async getTiposJuicio2() {
     const url = `${this.ASESORIAS_API_URL}/tipos-de-juicio?activo=true`;
@@ -1056,7 +1319,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-//Metodo para actualizar un genero existente por su id y los datos a modificar
+  //Metodo para actualizar un genero existente por su id y los datos a modificar
   async putGenero(id, data) {
     const url = `${this.ASESORIAS_API_URL}/generos/${id}`
     const response = await fetch(url, {
@@ -1074,7 +1337,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-//Metodo para agregar un nuevo genero
+  //Metodo para agregar un nuevo genero
   async postGenero(data) {
     const url = `${this.ASESORIAS_API_URL}/generos`
     const response = await fetch(url, {
@@ -1147,7 +1410,7 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-   //Metodo para obtener un catalogo por su id
+  //Metodo para obtener un catalogo por su id
   async getCatalogosByID(id) {
     const url = `${this.ASESORIAS_API_URL}/catalogo-requisitos/${id}`
     const response = await fetch(url, {
@@ -1182,119 +1445,119 @@ class APIModel {
     }
   }
 
-  
 
 
 
-//---------------------- Estados Civiles ----------------------
- //Metodo para obtener todos los estados civiles por su id
- async getEstadosCivilByID(id) {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${this.user.token}`,
-    },
-  })
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+
+  //---------------------- Estados Civiles ----------------------
+  //Metodo para obtener todos los estados civiles por su id
+  async getEstadosCivilByID(id) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
-//Metodo para actualizar un estado civil existente por su id y los datos a modificar
-async putEstadosCivil(id, data) {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.user.token}`,
-    },
-    body: JSON.stringify(data),
-  })
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+  //Metodo para actualizar un estado civil existente por su id y los datos a modificar
+  async putEstadosCivil(id, data) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/${id}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
-//Metodo para agregar un nuevo estado civil
-async postEstadosCivil(estadoCivil) {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.user.token}`,
-    },
-    body: JSON.stringify(estadoCivil),
-  })
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+  //Metodo para agregar un nuevo estado civil
+  async postEstadosCivil(estadoCivil) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(estadoCivil),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
 
- //Metodo para agregar un nuevo estado civil
-async postEstadosCivil(estadoCivil) {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.user.token}`,
-    },
-    body: JSON.stringify(estadoCivil),
-  })
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+  //Metodo para agregar un nuevo estado civil
+  async postEstadosCivil(estadoCivil) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.user.token}`,
+      },
+      body: JSON.stringify(estadoCivil),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
 
-//Metodo para obtener todos los estados civiles
-async getEstadosCiviles() {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles`
+  //Metodo para obtener todos los estados civiles
+  async getEstadosCiviles() {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles`
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${this.user.token}`,
-    },
-  })
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
 
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
-//Metodo para obtener todos los estados civiles activos del sistema
-async getEstadosCiviles2() {
-  const url = `${this.ASESORIAS_API_URL}/estados-civiles?activo=true`
+  //Metodo para obtener todos los estados civiles activos del sistema
+  async getEstadosCiviles2() {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles?activo=true`
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${this.user.token}`,
-    },
-  })
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
 
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  } else {
-    throw new Error('Error en la petición')
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    } else {
+      throw new Error('Error en la petición')
+    }
   }
-}
 
 }
 

@@ -7,6 +7,7 @@ const {
     obtenerEtnia,
     crearEtnia,
     actualizarEtnia,
+    obtenerEtniasPaginacion
 } = require('../controllers/etnia')
 
 const {
@@ -22,9 +23,16 @@ const permisosAceptables = ["AD_ETNIA_SD","ALL_SD"]
 // Creamos una nueva instancia de Router
 const router = Router()
 
+router.route('/paginacion')
+    // Obtener todas las etnias
+    .get(
+        validarPermisos(permisosAceptables),
+        obtenerEtniasPaginacion)  
+
+
 // Definimos la ruta para obtener todas las etnias
 router.get('/',
-validarPermisos(["AD_ETNIA_SD","ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD"]),
+validarPermisos(["ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD"]),
 obtenerEtnias)
 
 // Definimos la ruta para obtener una etnia por su id

@@ -34,7 +34,7 @@ router.route('/paginacion-filtro') //
  
 router.route('/buscar') //
   .get(
-    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","TURNAR_ASESORIA_SA"]),
+    validarPermisos(["ALL_SA","TURNAR_ASESORIA_SA"]),
      validarPeticionBuscarNombre,
     servicioAsesorias.obtenerAsesoriaNombre);
   router.route('/total-asesorias') //
@@ -67,13 +67,13 @@ router.route('/buscar') //
 router.route('/')
 //Si requerido
   .post(
-    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","REGISTRO_ASESORIA_SA"]),
+    validarPermisos(["ALL_SA","REGISTRO_ASESORIA_SA"]),
      validarPeticionPOST,
     servicioAsesorias.agregarAsesoria); //
 router.route('/:id')
 //No requerido
   .get(
-    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","CONSULTA_PROCESO_JUDICIAL_SD","ALL_SD"]),
+    validarPermisos(["CONSULTA_ASESORIA_SA","ALL_SA","TURNAR_ASESORIA_SA","CONSULTA_PROCESO_JUDICIAL_SD","ALL_SD"]),
     servicioAsesorias.obtenerAsesoriaPorId)
    // Si requerido
   .put(

@@ -20,6 +20,75 @@ class EtniaTab extends HTMLElement {
     return template;
   }
 
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEtnias()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEtnias()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalEtnias } = await this.#api.getEtniasTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalEtnias
+      this.#numeroPaginas = (totalEtnias) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de etnias, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#etnias
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
   //Constructro de la clase
   constructor() {
     super();
@@ -57,6 +126,7 @@ class EtniaTab extends HTMLElement {
     etniaInput.addEventListener('input', function () {
    if (etniaInput.value.length > 50) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
         modal.message = 'El campo de etnia no puede contener más de 50 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -68,6 +138,8 @@ class EtniaTab extends HTMLElement {
   fillInputs() {
     //Llamado a la función mostrarEtnias para mostrar las etnias en la tabla
     this.mostrarEtnias();
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     //Llamado a la función agregarEventosBotones para agregar los eventos a los botones
     this.agregarEventosBotones();
   }
@@ -129,6 +201,7 @@ class EtniaTab extends HTMLElement {
         //Se valida que el campo de etnia no este vacio
         if (etniaInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de etnia es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -137,6 +210,7 @@ class EtniaTab extends HTMLElement {
         //Se valida que el campo de estatus de etnia no este vacio
         if (estatusEtniaInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de etnia es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -147,6 +221,7 @@ class EtniaTab extends HTMLElement {
           //Se valida que el campo de etnia no contenga mas de 50 caracteres
           if (etniaInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de etnia no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -159,7 +234,7 @@ class EtniaTab extends HTMLElement {
               estatus_general: estatusEtniaInput.toUpperCase()
             };
 
-             //Se manda a llamar a la funcion postEtnia de la clase APIModel para agregar una nueva etnia
+             /*/Se manda a llamar a la funcion postEtnia de la clase APIModel para agregar una nueva etnia
             const response = await this.#api.postEtnia(nuevaEtnia);
 
             //En caso de que se haya agregado la etnia se procede a limpiar los campos y mostrar las etnias
@@ -168,7 +243,41 @@ class EtniaTab extends HTMLElement {
               this.#estatusEtnia.value = '0';
               this.IdSeleccion = null;
               this.mostrarEtnias();
+            } 
+            */
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.postEtnia(nuevaEtnia).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#etnia.value = '';
+                      this.#estatusEtnia.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarEtnias();
+                    }
+                  }).catch(error => {
+                    console.error('Error al agregar una nueva etnia:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al agregar una nueva etnia, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
+              }
             }
+            );
+
+            modal.message = 'Si esta seguro de agregar la etnia presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar etnia?'
+
+            modal.open = true
+
           }
         }
       } catch (error) {
@@ -177,6 +286,7 @@ class EtniaTab extends HTMLElement {
     } else {
       //Si ya se ha seleccionado una etnia se muestra un mensaje de error y se limpian los campos
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'No se puede agregar una nueva etnia si ya se ha seleccionado una, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -196,6 +306,7 @@ class EtniaTab extends HTMLElement {
     if (this.#idSeleccion === null) {
       //Se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'Debe seleccionar una etnia para poder editarla.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -209,6 +320,7 @@ class EtniaTab extends HTMLElement {
         //Se valida que el campo de etnia no este vacio
         if (etniaInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de etnia es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -217,6 +329,7 @@ class EtniaTab extends HTMLElement {
         //Se valida que el campo de estatus de etnia no este vacio
         if (estatusEtniaInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de etnia es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -226,6 +339,7 @@ class EtniaTab extends HTMLElement {
         if (etniaInput !== '' && estatusEtniaInput !== '0') {
           if (etniaInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de etnia no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -246,6 +360,7 @@ class EtniaTab extends HTMLElement {
             if (etniaObtenida.nombre === etnia.nombre && etniaObtenida.estatus_general === etnia.estatus_general) {
               //Se muestra un mensaje de error
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
               modal.message = 'No se han realizado cambios en la etnia, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -255,7 +370,7 @@ class EtniaTab extends HTMLElement {
 
             }
             else {
-           //En caso de que los datos sean diferentes se procede a editar la etnia
+           /*/En caso de que los datos sean diferentes se procede a editar la etnia
               const response = await this.#api.putEtnia(etniaID, etnia);
             // En caso de que se haya editado la etnia se procede a limpiar los campos y mostrar las etnias
               if (response) {
@@ -265,8 +380,73 @@ class EtniaTab extends HTMLElement {
                 this.#idSeleccion = null;                         
                 //Se muestran las etnias
                   this.mostrarEtnias();
+              }  
+              */
+   /*
+         const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.postEscolaridad(nuevaEscolaridad).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#escolaridad.value = '';
+                      this.#estatusEscolaridad.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarEscolaridades();
+                    }
+                  }).catch(error => {
+                    console.error('Error al agregar una nueva escolaridad:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al agregar una nueva escolaridad, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
               }
+            });
 
+            modal.message = 'Si esta seguro de agregar la escolaridad presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar escolaridad?'
+
+            modal.open = true
+   */
+
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.putEtnia(etniaID, etnia).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#etnia.value = '';
+                      this.#estatusEtnia.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarEtnias();
+                    }
+                  }).catch(error => {
+                    console.error('Error al editar la etnia:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al editar la etnia, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
+              }
+            });
+
+            modal.message = 'Si esta seguro de editar la etnia presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de editar etnia?'
+
+            modal.open = true
             }
 
           }
@@ -282,7 +462,8 @@ class EtniaTab extends HTMLElement {
 
   //Metodo para mostrar las etnias en la tabla
   mostrarEtnias = async () => {
-
+   
+/*
     try {
       //Se obtienen las etnias
       const etnias = await this.#api.getEtnias();
@@ -312,6 +493,84 @@ class EtniaTab extends HTMLElement {
         });
     } catch (error) {
       console.error('Error al obtener las etnias:', error);
+    }
+    */
+   /*
+  try {
+      const escolaridades = await this.#api.getEscolaridadesPagina(this.#pagina);
+      const lista = escolaridades.escolaridades;
+      const table = this.#escolaridades;
+      const rowsTable = this.#escolaridades.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(escolaridad => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="escolaridad-${escolaridad.id_escolaridad}">
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.id_escolaridad}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.descripcion}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-escolaridad" onclick="llamarActivarBotonSeleccionar(this.value)" value="${escolaridad.id_escolaridad}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    }
+    catch (error) {
+      console.error('Error al obtener las escolaridades:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener las escolaridades, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
+    }
+   */
+
+    try {
+      const etnias = await this.#api.getEtniasPagina(this.#pagina);
+      const lista = etnias.etnias;
+      const table = this.#etnias;
+      const rowsTable = this.#etnias.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(etnia => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="etnia-${etnia.id_etnia}">
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.id_etnia}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.nombre}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-etnia" onclick="llamarActivarBotonSeleccionar(this.value)" value="${etnia.id_etnia}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    }
+    catch (error) {
+      console.error('Error al obtener las etnias:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener las etnias, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
     }
   }
 

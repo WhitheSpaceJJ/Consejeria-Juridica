@@ -61,6 +61,29 @@ class EscolaridadDAO {
       throw err
     }
   }
+  
+
+
+
+  async obtenerEscolaridadesPaginacion(pagina) {
+    try {
+      pagina = parseInt(pagina, 10)
+      const offset = (pagina - 1) * 10
+      const resultados = await Escolaridad.findAll({ offset: offset, limit: 10 })
+      return resultados
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async obtenerTotalEscolaridades() {
+    try {
+      return await Escolaridad.count()
+    } catch (err) {
+      throw err
+    }
+
+  }
 
  
 }

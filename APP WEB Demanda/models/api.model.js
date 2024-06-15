@@ -90,6 +90,196 @@ class APIModel {
     }
 
   }
+  /*
+
+
+  async getEstadosCivilesTotal() {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getEstadosCivilesPagina(pagina) {
+    const url = `${this.ASESORIAS_API_URL}/estados-civiles/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+  Realiza metodos similares para escolaridad,ocupacion,etnia, juzgados; 
+
+  */
+ async getEscolaridadesTotal() {
+   const url = `${this.DEMANDAS_API_URL}/escolaridad/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+
+ }
+  async getEscolaridadesPagina(pagina) {
+    const url = `${this.DEMANDAS_API_URL}/escolaridad/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+  async getOcupacionesTotal() {
+      const url = `${this.DEMANDAS_API_URL}/ocupacion/paginacion?total=${true}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        return data
+      }
+      else {
+        throw new Error('Error en la petición')
+      }
+
+  }
+
+  async getOcupacionesPagina(pagina) {
+    const url = `${this.DEMANDAS_API_URL}/ocupacion/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+  async getEtniasTotal() {
+    const url = `${this.DEMANDAS_API_URL}/etnia/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  
+  }
+
+  async getEtniasPagina(pagina) {
+    const url = `${this.DEMANDAS_API_URL}/etnia/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+
+  async getJuzgadosTotal() {
+
+    const url = `${this.DEMANDAS_API_URL}/juzgado/paginacion?total=${true}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+    else {
+      throw new Error('Error en la petición')
+    }
+  }
+
+  async getJuzgadosPagina(pagina) { 
+    const url = `${this.DEMANDAS_API_URL}/juzgado/paginacion?pagina=${pagina}`
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.user.token}`,
+      },
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data
+    }
+
+    else {
+      throw new Error('Error en la petición')
+
+    }
+  }
+
+
 
   async getProcesosJudicialesByDefensor(id, estatus) {
     const url = `${this.DEMANDAS_API_URL}/proceso-judicial/defensor?id_defensor=${id}&estatus_proceso=${estatus}`

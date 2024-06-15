@@ -15,6 +15,78 @@ class CatalogosTab extends HTMLElement {
   #estatusCatalogo
   #catalogos
 
+
+
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarCatalogos()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarCatalogos()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalCatalogoRequisitos } = await this.#api.getCatalogosTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalCatalogoRequisitos
+      this.#numeroPaginas = (totalCatalogoRequisitos) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de catalogos, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#catalogos
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
   //Constructor de la clase
   constructor() {
     super();
@@ -60,6 +132,8 @@ class CatalogosTab extends HTMLElement {
       if (catalogoInput.value !== '') {
         if (catalogoInput.value.length > 75) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de catalogo no puede contener más de 75 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -71,6 +145,8 @@ class CatalogosTab extends HTMLElement {
   //Función fillInputs que se encarga de llenar los campos del formulario, agregar eventos a los botones y mostrar los catalogos
   fillInputs() {
     this.agregarEventosBotones();
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     this.mostrarCatalogos();
   }
 
@@ -122,13 +198,17 @@ class CatalogosTab extends HTMLElement {
         //Mensaje de error si el campo de catalogo esta vacio
         if (catalogoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de catalogo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
         }
         //Mensaje de error si el campo de estatus de catalogo esta vacio
         if (estatusCatalogoInput === '0') {
-          const modal = document.querySelector('modal-warning')
+          const modal = document.querySelector('modal-warning') 
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de catalogo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -138,6 +218,8 @@ class CatalogosTab extends HTMLElement {
           //Mensaje de error si el campo de catalogo tiene más de 75 caracteres
           if (catalogoInput.length > 75) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de catalogo no puede contener más de 75 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -150,24 +232,85 @@ class CatalogosTab extends HTMLElement {
             };
 
             try {
-              //Llamada a la función postCatalogos de la clase APIModel para agregar un nuevo catalogo
+              /*
+ const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el motivo presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar motivo?'
+
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    this.#api.postMotivo(nuevoMotivo).then(response => {
+                      if (response) {
+                        this.#motivo.value = '';
+                        this.#estatusMotivo.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarMotivos();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo motivo:', error);
+                      const modal = document.querySelector('modal-warning')
+                      modal.message = 'Error al agregar un nuevo motivo, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+              */
+                /*
               const response = await this.#api.postCatalogos(nuevoCatalogo);
-              //En caso de que se haya agregado un nuevo catalogo se limpian los campos del formulario y se muestran los catalogos
               if (response) {
                 this.#catalogo.value = '';
                 this.#estatusCatalogo.value = '0';
                 this.#idSeleccion = null;
                 this.mostrarCatalogos();
               }
+              */ 
+
+              const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar catalogo?'
+
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    this.#api.postCatalogos(nuevoCatalogo).then(response => {
+                      if (response) {
+                        this.#catalogo.value = '';
+                        this.#estatusCatalogo.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarCatalogos();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo catalogo:', error);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo catalogo, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+
             } catch (error) {
               //Se muestra un mensaje de error en caso de que no se haya podido agregar un nuevo catalogo y redirige a la página principal
               console.error('Error al agregar un nuevo catalogo:', error);
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              });
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'Error al agregar un nuevo catalogo, intente nuevamente o verifique el estatus del servidor.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -181,6 +324,8 @@ class CatalogosTab extends HTMLElement {
     } else {
       //Mensaje de error si ya se ha seleccionado un catalogo
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'No se puede agregar un nuevo catalogo si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -198,6 +343,8 @@ class CatalogosTab extends HTMLElement {
     //Mensaje de error si no se ha seleccionado un catalogo
     if (catalogoID === null) {
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Debe seleccionar un catalogo para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -212,6 +359,8 @@ class CatalogosTab extends HTMLElement {
         //Mensaje de error si el campo de catalogo esta vacio
         if (catalogoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de catalogo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -220,6 +369,8 @@ class CatalogosTab extends HTMLElement {
         //Mensaje de error si el campo de estatus de catalogo esta vacio
         if (estatusCatalogoInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de estatus de catalogo es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -230,6 +381,8 @@ class CatalogosTab extends HTMLElement {
           //Mensaje de error si el campo de catalogo tiene más de 75 caracteres
           if (catalogoInput.length > 75) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de catalogo no puede contener más de 75 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -246,6 +399,8 @@ class CatalogosTab extends HTMLElement {
               const catalogoObtenido = await this.#api.getCatalogosByID(catalogoID);
               if (catalogoObtenido.requisitoCatalogo.descripcion_catalogo === catalogo.descripcion_catalogo && catalogoObtenido.requisitoCatalogo.estatus_general === catalogo.estatus_general) {
                 const modal = document.querySelector('modal-warning')
+                modal.setOnCloseCallback(() => {});
+
                 modal.message = 'No se han realizado cambios en el catalogo, ya que los datos son iguales a los actuales, se eliminaran los campos.'
                 modal.title = 'Error de validación'
                 modal.open = true
@@ -254,24 +409,47 @@ class CatalogosTab extends HTMLElement {
                 this.#idSeleccion = null;
               }
               else {
-                const response = await this.#api.putCatalogos(catalogoID, catalogo);
-                if (response) {
-                  this.#catalogo.value = '';
-                  this.#estatusCatalogo.value = '0';
-                  this.#idSeleccion = null;
-                  this.mostrarCatalogos();
+             
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar catalogo?'
+                
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+
+                      this.#api.putCatalogos(catalogoID, catalogo).then(response => {
+                        if (response) {
+                          this.#catalogo.value = '';
+                          this.#estatusCatalogo.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarCatalogos();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el catalogo:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el catalogo, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
                 }
+                );
+                modal.open = true
 
               }
             } catch (error) {
               //Se muestra un mensaje de error en caso de que no se haya podido editar el catalogo y redirige a la página principal
               console.error('Error al editar el catalogo:', error);
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              });
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'Error al editar el catalogo, intente nuevamente o verifique el estatus del servidor.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -291,42 +469,43 @@ class CatalogosTab extends HTMLElement {
   //Función mostrarCatalogos que se encarga de mostrar los catalogos en una tabla
   mostrarCatalogos = async () => {
     try {
-
-      const catalogos = await this.#api.getCatalogos();
-      const tableBody = this.#catalogos;
-      tableBody.innerHTML = '';
+      const catalogos = await this.#api.getCatalogosPagina(this.#pagina);
       const lista = catalogos.requisitosCatalogo;
-      //Iteración de los catalogos para mostrarlos en la tabla
-      const funcion =
+      const table = this.#catalogos;
+      const rowsTable = this.#catalogos.rows.length
+      if (this.validateRows(rowsTable)) {
         lista.forEach(catalogo => {
           const row = document.createElement('tr');
           row.innerHTML = `
-              <tr id="catalogo-${catalogo.id_catalogo}">
-              <td class="px-6 py-4 whitespace-nowrap">${catalogo.id_catalogo}</td>
-              <td class="px-6 py-4 whitespace-nowrap">${catalogo.descripcion_catalogo}</td>
-              <td class="px-6 py-4 whitespace-nowrap">${catalogo.estatus_general}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-              <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-catalogo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${catalogo.id_catalogo}">
-              Seleccionar
-            </button>          
-              </td>
-          </tr>
-              `;
-          tableBody.appendChild(row);
-        });
+          <tr id="catalogo-${catalogo.id_catalogo}">
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.id_catalogo}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.descripcion_catalogo}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-catalogo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${catalogo.id_catalogo}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
     } catch (error) {
-      //Se muestra un mensaje de error en caso de que no se hayan podido obtener los catalogos y redirige a la página principal
       console.error('Error al obtener los catalogos:', error);
       const modal = document.querySelector('modal-warning')
-      //    modal.setOnCloseCallback(() => {
-      //      if (modal.open === 'false') {
-      //       window.location = '/index.html'
-      //      }
-      //   });
-      modal.message = 'Error al obtener los catalogos, intente nuevamente o verifique el estatus del servidor.'
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener los catalogos, intente de nuevo o verifique el status del servidor.'
       modal.title = 'Error de validación'
       modal.open = true
+
     }
+
 
   }
 
@@ -347,11 +526,8 @@ class CatalogosTab extends HTMLElement {
       //Se muestra un mensaje de error en caso de que no se haya podido obtener el catalogo por ID y redirige a la página principal
       console.error('Error al obtener el catalogo por ID:', error);
       const modal = document.querySelector('modal-warning')
-      modal.setOnCloseCallback(() => {
-        if (modal.open === 'false') {
-          window.location = '/index.html'
-        }
-      });
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Error al obtener el catalogo por ID, intente nuevamente o verifique el estatus del servidor.'
       modal.title = 'Error de validación'
       modal.open = true

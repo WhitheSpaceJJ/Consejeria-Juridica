@@ -6,6 +6,7 @@ class LoginController {
   constructor(model) {
     this.model = model
   }
+  #acceptablePermissions = ['ALL_SD', 'AD_ESCOLARIDAD_SD', 'AD_ETNIA_SD', 'AD_JUZGADO_SD', 'AD_OCUPACION_SD', 'CONSULTA_PROCESO_JUDICIAL_SD', 'SEGUIMIENTO_PROCESO_JUDICIAL_SD', 'REGISTRO_PROCESO_JUDICIAL_SD']
 
   // Metodo que se encarga de hacer el login
   handleLogin = async () => {
@@ -22,6 +23,17 @@ class LoginController {
 
       //Llamamos a la función login del modelo
       const user = await this.model.login({ correo, password })
+      const permiso = this.utils.validatePermissions({})
+      if (permiso) {
+        const userPermissions = user.permisos;
+        const acceptablePermissions = this.#acceptablePermissions;
+        const hasPermission = (userPermissions, acceptablePermissions) => {
+          return userPermissions.some(permission => acceptablePermissions.includes(permission));
+        };
+        if (!hasPermission(userPermissions, acceptablePermissions)) {
+          window.location.href = 'login.html';
+        }
+      }
       //En caso de que el login sea exitoso, almacenamos el usuario en el sessionStorage
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')

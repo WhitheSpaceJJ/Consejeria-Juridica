@@ -2,129 +2,205 @@ import { DataAsesoria } from '../components/asesoria/data-asesoria.js'
 import { ControllerUtils } from '../lib/controllerUtils.js'
 
 class AsesoriasTurnarController {
+  #acceptablePermissions = ['ALL_SA', 'TURNAR_ASESORIA_SA']
+  #pagina = 1
+  #numeroPaginas
+  #asesorias
+
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
   }
 
-  //Metodo que nos ayuda a cargar las asesorias en la tabla
+  buttonsEventListeners = async  () => {
+    const prev = document.getElementById('anterior')
+    const next = document.getElementById('siguiente')
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage) 
+  }
+
+  handlePrevPage = async () => {
+    if (this.#pagina > 1) {
+      this.#pagina--
+      this.mostrarAsesorias()
+    }
+  }
+
+  handleNextPage = async () => {
+    if (this.#pagina < this.#numeroPaginas) {
+      this.#pagina++
+      this.mostrarAsesorias()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const nombre_pre = JSON.parse(sessionStorage.getItem('nombre'))
+      const apellido_paterno_pre = JSON.parse(sessionStorage.getItem('apellido_paterno'))
+      const apellido_materno_pre = JSON.parse(sessionStorage.getItem('apellido_materno')) 
+       
+     const nombre= nombre_pre.nombre
+      const apellido_paterno= apellido_paterno_pre.apellido_paterno
+      const apellido_materno= apellido_materno_pre.apellido_materno 
+      const {totalAsesorias} = await this.model.getAsesoriaByFullNameTotal(
+          nombre,
+          apellido_materno,
+          apellido_paterno
+      ) 
+      const total = document.getElementById('total')
+      total.innerHTML = `Total: ${totalAsesorias}`
+      this.#numeroPaginas = Math.ceil(totalAsesorias / 10)
+    } catch (error) {
+      console.error('Error:', error.message)
+      this.showErrorModal('Error al obtener el total de asesorias, intente de nuevo mas tarde o verifique el status del servidor')
+    }
+  }
+
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable)
+    }
+    return true
+  }
+
+  cleanTable = rowsTable => {
+    const table = this.#asesorias
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
   handleDOMContentLoaded = () => {
-    this.utils.validatePermissions({})
-    //Llamada a la funcion que se encarga de cargar las asesorias
-    this.handleAgregarAsesorias()
-    //Se agregan las funciones al window para poder ser llamadas desde el html
+    const permiso = this.utils.validatePermissions({})
+    if (permiso) {
+      const userPermissions = this.model.user.permisos
+      const acceptablePermissions = this.#acceptablePermissions
+      const hasPermission = userPermissions.some(permission => acceptablePermissions.includes(permission))
+      if (!hasPermission) {
+        window.location.href = 'login.html'
+        return
+      }
+    }
+    this.#asesorias = document.getElementById('table-body')
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
+    this.mostrarAsesorias()
     window.handleConsultarAsesoriasById = this.handleConsultarAsesoriasById
     window.handleTurnarAsesoriasById = this.handleTurnarAsesoriasById
   }
-  //Metodo que se encarga de agregar las asesorias a la tabla
-  handleAgregarAsesorias = async () => {
-    const table = document.getElementById('table-body')
-    const asesorias = JSON.parse(sessionStorage.getItem('asesorias'))
-    //Caso contrario se procedera a agregar las asesorias a la tabla
-    asesorias.forEach(asesoria => {
-      if (asesoria === null) return
-      table.appendChild(this.crearRow(asesoria))
-    })
-  }
 
-  //Este metodo se encarga de consultar una asesoria por su id y se procede a mostrar en un modal de los datos de la asesoria 
-  //esto con el fin de que el usuario pueda ver los datos de la asesoria antes de pasar a turnar la asesoria
+  mostrarAsesorias = async () => {
+    try {
+      const table = document.getElementById('table-body')
+      const nombre_pre = JSON.parse(sessionStorage.getItem('nombre'))
+      const apellido_paterno_pre = JSON.parse(sessionStorage.getItem('apellido_paterno'))
+      const apellido_materno_pre = JSON.parse(sessionStorage.getItem('apellido_materno')) 
+       
+     const nombre= nombre_pre.nombre
+      const apellido_paterno= apellido_paterno_pre.apellido_paterno
+      const apellido_materno= apellido_materno_pre.apellido_materno 
+       
+      const asesorias = await this.model.getAsesoriaByFullName(
+        nombre,
+        apellido_materno,
+        apellido_paterno,
+        this.#pagina
+      )
+
+      const rowsTable = table.rows.length
+      if (this.validateRows(rowsTable)) {
+        asesorias.asesorias.forEach(asesoria => {
+          if (asesoria === null) return
+          table.appendChild(this.crearRow(asesoria))
+        })
+      }
+    } catch (error) {
+      console.error('Error:', error.message)
+      this.showErrorModal('Error al obtener las asesorias, intente de nuevo mas tarde o verifique el status del servidor')
+    }
+  }
 
   handleConsultarAsesoriasById = async id => {
     try {
+      console.log('id:', id)
       const button = document.querySelector('.consulta-button')
       button.disabled = true
-      //Se obtiene la asesoria por su id
       const asesoria = await this.model.getAsesoriaById(id)
       const persona = asesoria.asesoria.persona
-      //Se obtiene la colonia por su id
-      const domicilio = await this.model.getColoniaById(
-        persona.domicilio.id_colonia
-      )
-      //Se procede a guardar en el sessionStorage los datos de la asesoria y la colonia
+      const domicilio = await this.model.getColoniaById(persona.domicilio.id_colonia)
       const modal = document.querySelector('modal-asesoria')
-      //Se crea un componente de asesoria con los datos de la asesoria y la colonia
       const dataAsesoria = new DataAsesoria(asesoria, domicilio)
 
-      //Se procede a mostrar el modal con los datos de la asesoria
       const handleModalClose = () => {
         const modalContent = modal.shadowRoot.getElementById('modal-content')
         modalContent.innerHTML = ''
         button.disabled = false
       }
 
-      //Se agrega el evento onClose al modal
       modal.addEventListener('onClose', handleModalClose)
 
-      //Se procede a agregar los datos de la asesoria al modal
       const modalContent = modal.shadowRoot.getElementById('modal-content')
-      //Se agrega el componente de asesoria al modal
       modalContent.appendChild(dataAsesoria)
 
-      //Se procede a abrir el modal
       modal.title = 'Datos Asesoría'
       modal.open = true
     } catch (error) {
       console.error('Error:', error.message)
     }
   }
-  //Metodo que se encarga de redirigir a la pagina de turnar
+
   handleTurnarAsesoriasById = async id => {
     try {
-      const asesorias = JSON.parse(sessionStorage.getItem('asesorias'))
-      //Se obtiene la asesoria por su id
-      const asesoria = asesorias.find(asesoria => {
-        if (asesoria === null) return false
-        return asesoria.datos_asesoria.id_asesoria === Number(id)
-      })
-      //Se obtiene la colonia por su id
-      const dataColonia = await this.model.getColoniaById(
-        asesoria.persona.domicilio.id_colonia
-      )
+      const asesoria_pre = await this.model.getAsesoriaById(id)
+      const asesoria = JSON.parse(JSON.stringify(asesoria_pre.asesoria))
+      const dataColonia = await this.model.getColoniaById(asesoria.persona.domicilio.id_colonia)
 
-      //Se procede a guardar en el sessionStorage los datos de la asesoria y la colonia
       sessionStorage.setItem('asesoria', JSON.stringify(asesoria))
       sessionStorage.setItem('colonia', JSON.stringify(dataColonia.colonia))
-      //Se redirige a la pagina de turnar
       location.href = 'turnar.html'
     } catch (error) {
       console.error('Error:', error.message)
     }
   }
 
-  //Metodo que se encarga de crear una fila en la tabla de asesorias
   crearRow = asesoria => {
     const row = document.createElement('tr')
     row.classList.add('bg-white', 'border-b', 'hover:bg-gray-50')
-    row.innerHTML = `<td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                ${asesoria.datos_asesoria.id_asesoria}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.persona.nombre} ${asesoria.persona.apellido_paterno} ${asesoria.persona.apellido_materno}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.tipos_juicio.tipo_juicio}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.datos_asesoria.resumen_asesoria}
-            </td>
-            <td class="px-6 py-4">
-                ${asesoria.datos_asesoria.usuario}
-            </td>
-            <td class="px-6 py-4">
-            ${asesoria.datos_asesoria.estatus_asesoria}
-        </td>
-     
-            <td class="px-6 py-4 text-right">
-                <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
-            </td>
-            <td class="px-6 py-4 text-right">
-                <button href="#" class="turnar-button font-medium text-[#db2424] hover:underline" onclick="handleTurnarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Turnar</button>
-            </td>`
-
+    row.innerHTML = `
+      <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+        ${asesoria.datos_asesoria.id_asesoria}
+      </td>
+      <td class="px-6 py-4">
+        ${asesoria.persona.nombre} ${asesoria.persona.apellido_paterno} ${asesoria.persona.apellido_materno}
+      </td>
+      <td class="px-6 py-4">
+        ${asesoria.tipos_juicio.tipo_juicio}
+      </td>
+      <td class="px-6 py-4">
+        ${asesoria.datos_asesoria.resumen_asesoria}
+      </td>
+      <td class="px-6 py-4">
+        ${asesoria.datos_asesoria.usuario}
+      </td>
+      <td class="px-6 py-4">
+        ${asesoria.datos_asesoria.estatus_asesoria}
+      </td>
+      <td class="px-6 py-4 text-right">
+        <button href="#" class="consulta-button font-medium text-[#db2424] hover:underline" onclick="handleConsultarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Consultar</button>
+      </td>
+      <td class="px-6 py-4 text-right">
+        <button href="#" class="turnar-button font-medium text-[#db2424] hover:underline" onclick="handleTurnarAsesoriasById(this.value)" value="${asesoria.datos_asesoria.id_asesoria}">Turnar</button>
+      </td>
+    `
     return row
   }
 
+  showErrorModal = (message) => {
+    const modal = document.querySelector('modal-warning')
+    modal.message = message
+    modal.title = 'Error'
+    modal.open = true
+  }
 }
 
 export { AsesoriasTurnarController }

@@ -102,10 +102,41 @@ const obtenerCatalogoRequisitoPorId = asyncError(async (req, res, next) => {
   }
 });
 
+
+const obtenerCatalogoRequisitosPaginacion = asyncError(async (req, res, next) => {
+  const pagina = req.query.pagina;
+  const total = req.query.total;
+  if (total === "true") {
+        const result = await controlCatalogoRequisitos.obtenerTotalCatalogoRequisitos();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('Error al obtener el total de requisitos del catálogo', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+        totalCatalogoRequisitos: result
+      });
+    }
+
+  } else {
+    const result = await controlCatalogoRequisitos.obtenerCatalogoRequisitosPaginacion(pagina);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener los requisitos del catálogo', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        requisitosCatalogo: result
+      });
+    }
+  }
+}
+);
+
   //Module exports   
 module.exports = {
   agregarCatalogoRequisito,
   obtenerCatalogoRequisitos,
   actualizarCatalogoRequisito,
-  obtenerCatalogoRequisitoPorId
+  obtenerCatalogoRequisitoPorId,
+  obtenerCatalogoRequisitosPaginacion
 };

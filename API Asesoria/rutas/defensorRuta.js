@@ -8,14 +8,22 @@ const router = express.Router();
 
 const validarPermisos = require("../utilidades/validadorPermisos");
 
+router.route('/distrito/:id') 
+// Obtener todos los asesores
+.get(
+     validarPermisos(["AD_EMPLEADOS_SA","ALL_SA","REGISTRO_ASESORIA_SA",
+          "AD_USUARIOS_SA" ,"CONSULTA_PROCESO_JUDICIAL_SD","REGISTRO_PROCESO_JUDICIAL_SD","TURNAR_ASESORIA_SA"
+          ,"ALL_SD", "SEGUIMIENTO_PROCESO_JUDICIAL_SD"
+     ]),
+     servicioDefensor.obtenerDefensoresByDistrito);
 
-router.route('/')
+
+router.route('/busqueda')
     // Obtener todos los defensores
     .get(
-        validarPermisos(["AD_EMPLEADOS_SA","ALL_SA",
-        "REGISTRO_ASESORIA_SA","TURNAR_ASESORIA_SA","REGISTRO_PROCESO_JUDICIAL_SD",
-        "SEGUIMIENTO_PROCESO_JUDICIAL_SD","AD_USUARIOS_SA","ALL_SD","CONSULTA_PROCESO_JUDICIAL_SD"]),
+        validarPermisos(["AD_EMPLEADOS_SA","ALL_SA"]),
          servicioDefensor.obtenerDefensores)
+
   
 
     router.route('/zona/:id').get(

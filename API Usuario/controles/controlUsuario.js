@@ -92,7 +92,7 @@ const obtenerUsuarioCorreoPassword = async (correo, password) => {
       ],
     });
 
-    
+
     if (!usuario) {
       return null;
     }
@@ -165,7 +165,7 @@ const agregarUsuario = async (usuario) => {
     const hashedPassword = await bcrypt.hash(usuario.password, 10);
     delete usuario.password;
     usuario.password = hashedPassword;
-    let permisosID =await controlPermisos.obtenerIDPermisos(usuario.permisos);
+    let permisosID = await controlPermisos.obtenerIDPermisos(usuario.permisos);
     const usuarioCreado = (await modelUsuario.Usuario.create(usuario, { raw: true, nest: true })).dataValues;
     if (permisosID !== null && permisosID !== undefined && permisosID.length > 0) {
       for (let i = 0; i < permisosID.length; i++) {
@@ -195,30 +195,24 @@ const actualizarUsuario = async (usuario) => {
   try {
 
     const result = await modelUsuario.Usuario.update(usuario, { where: { id_usuario: usuario.id_usuario } });
-    
+
     const permisosID = await controlDetallePermisos.obtenerPermisosUsuario(usuario.id_usuario);
-    console.log("PermisosID", permisosID);
     let permisos = await obtenerPermisosUsuaris(permisosID);
-    console.log("Permisos", permisos);
     let permisosPeticion = usuario.permisos;
 
     let permisosEliminar = permisos.filter(x => !permisosPeticion.includes(x));
     let permisosAgregar = permisosPeticion.filter(x => !permisos.includes(x));
-     console.log("Permisos Eliminar", permisosEliminar)
-    console.log("Permisos Agregar", permisosAgregar)
-     
-    let verifiicarCambiosPermisos =false;
+
+    let verifiicarCambiosPermisos = false;
 
     if (permisosEliminar !== null && permisosEliminar !== undefined && permisosEliminar.length > 0) {
-      console.log("Eliminar", permisosEliminar);
-       verifiicarCambiosPermisos = true;  
+      verifiicarCambiosPermisos = true;
       for (let i = 0; i < permisosEliminar.length; i++) {
         const id_permiso = await controlPermisos.obtenerIDPermiso(permisosEliminar[i]);
         await controlDetallePermisos.eliminarDetallePermisoUsuario(usuario.id_usuario, id_permiso);
       }
     }
     if (permisosAgregar !== null && permisosAgregar !== undefined && permisosAgregar.length > 0) {
-      console.log("Agregar", permisosAgregar);
       verifiicarCambiosPermisos = true;
       for (let i = 0; i < permisosAgregar.length; i++) {
         const id_permiso = await controlPermisos.obtenerIDPermiso(permisosAgregar[i]);
@@ -231,7 +225,7 @@ const actualizarUsuario = async (usuario) => {
     }
     if (verifiicarCambiosPermisos) {
       return true;
-    }  
+    }
 
     return result[0] === 1;
   } catch (error) {
@@ -291,7 +285,7 @@ const obtenerUsuarioCorreoPasswordEncriptada = async (correo, password) => {
       ],
     });
 
-    
+
     if (!usuario) {
       return null;
     }
@@ -311,7 +305,42 @@ const obtenerUsuarioCorreoPasswordEncriptada = async (correo, password) => {
     return null;
   }
 };
+const { Op, literal } = require("sequelize");
+const obtenerUsuariosBusqueda = async (correo, id_distrito_judicial, total, pagina) => {
+  try {
+    const limite = 10;
+    const offset = (parseInt(pagina, 10) - 1) * limite;
 
+    const whereClause = {};
+    if (correo) whereClause.correo = { [Op.like]: `%${correo}%` };
+    if (id_distrito_judicial) whereClause.id_distrito_judicial = id_distrito_judicial;
+
+    if (total) {
+      return await modelUsuario.Usuario.count({ where: whereClause });
+    } else {
+      const usuarios_pre = await modelUsuario.Usuario.findAll({
+        attributes: { exclude: ['id_tipouser', 'password'] },
+        raw: false,
+        nest: true,
+        include: [{ model: modelUsuario.TipoUser }],
+        where: whereClause,
+        limit: limite,
+        offset: offset
+      });
+      
+      const usuarios = JSON.parse(JSON.stringify(usuarios_pre));
+
+      for (let usuario of usuarios) {
+        const permisos = await controlDetallePermisos.obtenerPermisosUsuario(usuario.id_usuario);
+        usuario.permisos = await obtenerPermisosUsuaris(permisos);
+      }
+      return usuarios;
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+};
 
 module.exports = {
   obtenerUsuarios,
@@ -321,5 +350,6 @@ module.exports = {
   obtenerUsuarioCorreoPassword,
   obtenerUsuarioCorreo,
   obtenerUsuarioByIDAndNameGrpc,
-  obtenerUsuarioCorreoPasswordEncriptada
+  obtenerUsuarioCorreoPasswordEncriptada,
+  obtenerUsuariosBusqueda
 };

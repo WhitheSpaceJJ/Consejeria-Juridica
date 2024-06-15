@@ -236,7 +236,7 @@ const obtenerEmpleadoIDAndDistrito = async (req) => {
             where: { id_empleado: req_objeto.id_empleado, id_distrito_judicial: req_objeto.id_distrito_judicial }
         });
         const pre_objeto = JSON.parse(JSON.stringify(objeto_encontrado));
-        
+
         if (pre_objeto.tipo_empleado === "asesor" && req_objeto.id_tipouser === "2") {
             return pre_objeto;
         }
@@ -250,6 +250,55 @@ const obtenerEmpleadoIDAndDistrito = async (req) => {
     }
 }
 
+const obtenerEmpleadosBusqueda = async (id_distrito_judicial, pagina, total) => {
+    try {
+        if (total === true) {
+            return await modeloEmpleado.Empleado.count({
+                where: { id_distrito_judicial: id_distrito_judicial }
+            });
+        } else {
+            pagina = parseInt(pagina, 10);
+            const limite = 10;
+            const offset = (pagina - 1) * 10;
+            const empleados_pre = await modeloEmpleado.Empleado.findAll({
+                raw: false,
+                nest: true,
+                include: [{
+                    model: modeloEmpleado.DistritoJudicial
+                }
+
+                ], where: { id_distrito_judicial: id_distrito_judicial }
+                , limit: limite,
+                offset: offset
+            });
+            //obtenerDefensorPorId
+            //obtenerAsesorPorId
+            //recorre ciclo for y dependiendo del tipo de empleado se obtiene el empleado
+            const empleados = [];
+            const controlAsesor = require('./controlAsesor.js');
+            const controlDefensor = require('./controlDefensor.js');
+            for (let i = 0; i < empleados_pre.length; i++) {
+                const empleado = JSON.parse(JSON.stringify(empleados_pre[i]));
+                if (empleado.tipo_empleado === "asesor") {
+                    const asesor = await controlAsesor.obtenerAsesorPorId(empleado.id_empleado);
+                    empleados.push(asesor);
+                }
+                if (empleado.tipo_empleado === "defensor") {
+                    const defensor = await controlDefensor.obtenerDefensorPorId(empleado.id_empleado);
+                    empleados.push(defensor);
+                }
+            }
+            return empleados;
+
+        }
+
+    } catch (error) {
+        console.log("Error empleados:", error.message);
+        return null;
+    }
+}
+
+
 
 module.exports = {
     obtenerEmpleados,
@@ -257,6 +306,6 @@ module.exports = {
     agregarEmpleado,
     actualizarEmpleado,
     obtenerEmpleadosAsesoresPorZona, obtenerEmpleadosDefensoresPorZona,
-    obtenerEmpleadoPorPorIdMiddleware, obtenerEmpleadoIDAndDistrito
+    obtenerEmpleadoPorPorIdMiddleware, obtenerEmpleadoIDAndDistrito, obtenerEmpleadosBusqueda
 
 };

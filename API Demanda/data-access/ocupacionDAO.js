@@ -64,6 +64,30 @@ class OcupacionDAO {
   }
 
 
+
+  async obtenerOcupacionesPaginacion(pagina) {
+    try {
+      pagina = parseInt(pagina, 10)
+      const offset = (pagina - 1) * 10
+      const resultados = await Ocupacion.findAll({ offset: offset, limit: 10 })
+      return resultados
+    } catch (err) {
+      throw err
+    }
+  }
+
+
+  async obtenerTotalOcupaciones() {
+    try {
+      return await Ocupacion.count()
+    } catch (err) {
+      throw err
+    }
+
+  }
+
+
+   
 }
 
 module.exports = new OcupacionDAO()

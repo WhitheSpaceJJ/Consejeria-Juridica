@@ -17,8 +17,15 @@ class ConsultaView {
       'DOMContentLoaded',
       this.controller.handleDOMContentLoaded(),
       this.controller.handleCheckboxChange(),
-      this.controller.handleSelectChange()
+      this.controller.handleSelectChange(),
+      this.initNavbar()
     )
+  }
+  initNavbar() {
+    const navbar = document.querySelector('navbar-comp');
+    if (navbar) {
+      navbar.permisos = this.controller.model.user.permisos;
+    }
   }
 }
 

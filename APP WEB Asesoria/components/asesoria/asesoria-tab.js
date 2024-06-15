@@ -170,7 +170,7 @@ export class AsesoriaTab extends HTMLElement {
     await this.campos()
 
     //Llamada a la funcion que obtiene los datos y los asigna a las variables
-   await this.manageFormFields()
+    await this.manageFormFields()
     //Llamada a la funcion que obtiene los datos de los asesores, defensores, tipos de juicio y distritos
     await this.busquedaDatosYAsignaicon()
     //Llamada a la funcion que llena los inputs con los valores obtenidos
@@ -188,15 +188,10 @@ export class AsesoriaTab extends HTMLElement {
   async busquedaDatosYAsignaicon() {
 
 
-
     // Llamada a la funcion que obtiene los datos de los asesores, defensores, tipos de juicio y distritos, los metodos de getAsesores2, getDefensores2 y getTiposJuicio2 
     // son medotos que solicitan solo aquellos datos que esten activos
     try {
-
-      console.log("id distrito judicial:")
-      console.log(this.#api.user.id_distrito_judicial)
-
-      const { asesores } = await this.#api.getAsesores2()
+      const asesores = await this.#api.getAsesoresByDistrito(this.#api.user.id_distrito_judicial)
       this.#asesores = asesores
     }
     catch (error) {
@@ -204,7 +199,7 @@ export class AsesoriaTab extends HTMLElement {
     }
 
     try {
-      const { defensores } = await this.#api.getDefensores2()
+      const defensores = await this.#api.getDefensoresByDistrito(this.#api.user.id_distrito_judicial)
       this.#defensores = defensores
     }
     catch (error) {
@@ -217,7 +212,7 @@ export class AsesoriaTab extends HTMLElement {
           window.location = '/index.html'
         }
       })
-      modal.message = 'Error al cargar los defensores y asesores, ninguno se encuentra activ. Por favor intenta de nuevo o verifique en el respectivo seccion administritiva.'
+      modal.message = 'Error al cargar los defensores  o asesores, ninguno se encuentra activ. Por favor intenta de nuevo o verifique en el respectivo seccion administritiva.'
       modal.title = 'Error'
       modal.open = true
     }
@@ -285,7 +280,7 @@ export class AsesoriaTab extends HTMLElement {
 
 
   //Metodo que maneja los eventos de los inputs
- async manejadorDeEntrada() {
+  async manejadorDeEntrada() {
     // Asignacion de la variable asesor al input con id asesor 
     var resumenInput = this.#resumen;
     // Evento que se dispara cuando se escribe en el input resumen
@@ -293,6 +288,7 @@ export class AsesoriaTab extends HTMLElement {
       if (resumenInput.value !== '') {
         if (resumenInput.value.length > 500) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => { });
           modal.message = 'El resumen no puede tener más de 500 caracteres, por favor revisa.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -307,6 +303,7 @@ export class AsesoriaTab extends HTMLElement {
       if (conclusionInput.value !== '') {
         if (conclusionInput.value.length > 250) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => { });
           modal.message = 'La conclusión no puede tener más de 250 caracteres, por favor revisa.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -317,7 +314,7 @@ export class AsesoriaTab extends HTMLElement {
   }
 
   //Metodo que maneja los campos del formulario y la asignacion de los valores a las variables
- async  manageFormFields() {
+  async manageFormFields() {
     //Asignacion de las variables a los inputs
     this.#asesor = this.shadowRoot.getElementById('asesor')
     this.#defensor = this.shadowRoot.getElementById('defensor')

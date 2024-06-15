@@ -14,11 +14,17 @@ const permisosAceptables = ["AD_CATALOGOREQUISITOS_SA","ALL_SA"]
 const router = express.Router();
 
 /** Operaciones Básicas */
+router.route('/paginacion')
+  // Obtener todos los requisitos del catálogo
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioCatalogoRequisitos.obtenerCatalogoRequisitosPaginacion)
+
 
 router.route('/')
   // Obtener todos los requisitos del catálogo
   .get(
-    validarPermisos(["AD_CATALOGOREQUISITOS_SA","ALL_SA","REGISTRO_ASESORIA_SA"]),
+    validarPermisos(["ALL_SA","REGISTRO_ASESORIA_SA"]),
     servicioCatalogoRequisitos.obtenerCatalogoRequisitos)
   // Agregar un nuevo requisito al catálogo
   .post(

@@ -103,9 +103,46 @@ const actualizarEscolaridad = async (req, res) => {
 
 
 
+const obtenerEscolaridadesPaginacion = async (req, res) => {
+  try {
+    const pagina = req.query.pagina;
+    const total = req.query.total;
+    if (total === "true") {      const result = await escolaridadDAO.obtenerTotalEscolaridades();
+      if (result === null || result === undefined) {
+        return res.status(404).json({
+          message: 'Error al obtener el total de escolaridades'
+        });
+      } else {
+        res.status(200).json({
+          totalEscolaridades: result
+        });
+      }
+
+    } else {
+      const result = await escolaridadDAO.obtenerEscolaridadesPaginacion(pagina);
+      if (result === null || result === undefined || result.length === 0) {
+        return res.status(404).json({
+          message: 'Error al obtener las escolaridades'
+        });
+      } else {
+
+        res.status(200).json({
+          escolaridades: result
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
+
+
 module.exports = {
   obtenerEscolaridades,
   crearEscolaridad,
   obtenerEscolaridad,
   actualizarEscolaridad,
+  obtenerEscolaridadesPaginacion
 }

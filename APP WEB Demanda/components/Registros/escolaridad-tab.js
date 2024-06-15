@@ -12,6 +12,75 @@ class EscolaridadTab extends HTMLElement {
   #escolaridad
   #estatusEscolaridad
 
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEscolaridades()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEscolaridades()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalEscolaridades } = await this.#api.getEscolaridadesTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalEscolaridades
+      this.#numeroPaginas = (totalEscolaridades) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de escolaridades, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#escolaridades
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('./components/Registros/escolaridad-tab.html')).text();
@@ -57,6 +126,7 @@ manejadorEntradaTexto() {
   escolaridadInput.addEventListener('input', function () {
     if (escolaridadInput.value.length > 50) {
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'El campo de escolaridad no puede contener más de 50 caracteres.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -66,7 +136,9 @@ manejadorEntradaTexto() {
 
 //MEtodo que manda a llamar a las funciones correspondientes de agregar eventos a los botones y mostrar las escolaridades
   fillInputs() {
-    this.mostrarEscolaridades();
+    this.mostrarEscolaridades(); 
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     this.agregarEventosBotones();
   }
 
@@ -126,6 +198,7 @@ manejadorEntradaTexto() {
         //Validación de si el campo de escolaridad está vacío
         if (escolaridadInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de escolaridad es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -134,6 +207,7 @@ manejadorEntradaTexto() {
         //Validación de si el campo de estatus de escolaridad está vacío
         if (estatusEscolaridadInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de escolaridad es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -144,6 +218,7 @@ manejadorEntradaTexto() {
           //Se prpcede a validar que el campo de escolaridad no contenga más de 50 caracteres
           if (escolaridadInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de escolaridad no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -155,7 +230,7 @@ manejadorEntradaTexto() {
               descripcion: escolaridadInput,
               estatus_general: estatusEscolaridadInput.toUpperCase()
             };
-
+/*
             //Llamada a la función de postEscolaridad de la API para agregar una nueva escolaridad
             const response = await this.#api.postEscolaridad(nuevaEscolaridad);
             //En caso de que la respuesta sea exitosa se limpian los campos y se muestra la tabla de escolaridades
@@ -164,7 +239,38 @@ manejadorEntradaTexto() {
               this.#estatusEscolaridad.value = '0';
               this.IdSeleccion = null;
               this.mostrarEscolaridades();
-            }
+            } */
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.postEscolaridad(nuevaEscolaridad).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#escolaridad.value = '';
+                      this.#estatusEscolaridad.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarEscolaridades();
+                    }
+                  }).catch(error => {
+                    console.error('Error al agregar una nueva escolaridad:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al agregar una nueva escolaridad, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
+              }
+            });
+
+            modal.message = 'Si esta seguro de agregar la escolaridad presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar escolaridad?'
+
+            modal.open = true
           }
         }
       } catch (error) {
@@ -174,6 +280,7 @@ manejadorEntradaTexto() {
     else {
       //En caso de que ya se haya seleccionado una escolaridad se muestra un mensaje de error y se limpian los campos
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'No se puede agregar un nuevo escolaridad si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -195,6 +302,7 @@ manejadorEntradaTexto() {
     if (this.#idSeleccion === null) {
       //Muetsra un mensaje de error en caso de que no se haya seleccionado una escolaridad
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'Debe seleccionar un escolaridad para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -209,6 +317,7 @@ manejadorEntradaTexto() {
         //Validación de si el campo de escolaridad está vacío
         if (escolaridadInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de escolaridad es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -217,6 +326,7 @@ manejadorEntradaTexto() {
         //Validación de si el campo de estatus de escolaridad está vacío
         if (estatusEscolaridadInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de escolaridad es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -227,6 +337,7 @@ manejadorEntradaTexto() {
           //Se procede a validar que el campo de escolaridad no contenga más de 50 caracteres
           if (escolaridadInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de escolaridad no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -245,6 +356,7 @@ manejadorEntradaTexto() {
             if (escolaridadObtenida.descripcion === escolaridad.descripcion && escolaridadObtenida.estatus_general === escolaridad.estatus_general) {
               //En caso de que no se hayan realizado cambios se muestra un mensaje de error y se limpian los campos
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
               modal.message = 'No se han realizado cambios en la escolaridad, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -254,6 +366,7 @@ manejadorEntradaTexto() {
 
             }
             else {
+              /*
               //Llamada a la función de putEscolaridad de la API para editar la escolaridad
               const response = await this.#api.putEscolaridad(escolaridadID, escolaridad);
 
@@ -264,6 +377,73 @@ manejadorEntradaTexto() {
                 this.#idSeleccion = null;
                 this.mostrarEscolaridades();
               }
+              */
+             /*
+ const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.postEstadosCivil(nuevoEstadoCivil).then(response => {
+                      if (response) {
+                        console.log(response)
+                        this.#estadoCivil.value = '';
+                        this.#estatusEstadoCivil.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarEstadosCiviles();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo estado civil:', error.message);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo estado civil, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+
+              modal.message = 'Si esta seguro de agregar el estado civil presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar estado civil?'
+              modal.open = true
+             */
+                   
+               
+               const modal = document.querySelector('modal-warning')
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+                      this.#api.putEscolaridad(escolaridadID, escolaridad).then(response => {
+                        if (response) {
+                          console.log(response)
+                          this.#escolaridad.value = '';
+                          this.#estatusEscolaridad.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarEscolaridades();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar la escolaridad:', error.message);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+                        modal.message = 'Error al editar la escolaridad, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                });
+
+                modal.message = 'Si esta seguro de editar la escolaridad presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar escolaridad?'
+
+                modal.open = true
 
             }
 
@@ -279,7 +459,8 @@ manejadorEntradaTexto() {
   }
   //Metodo que muestra las escolaridades en la tabla de escolaridades
   mostrarEscolaridades = async () => {
- 
+
+  /*
     try {
       //Llamada a la función de getEscolaridades de la API para obtener todas las escolaridades
       const escolaridades = await this.#api.getEscolaridades();
@@ -309,6 +490,85 @@ manejadorEntradaTexto() {
         });
     } catch (error) {
       console.error('Error al obtener las escolaridades:', error);
+    }
+      */
+
+        /*
+
+    try {
+      const estadosCivil = await this.#api.getEstadosCivilesPagina(this.#pagina);
+      const lista = estadosCivil.estadosCiviles;
+      const table = this.#estadoCiviles;
+      const rowsTable = this.#estadoCiviles.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(estado => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="estado-civil-${estado.id_estado_civil}">
+          <td class="px-6 py-4 whitespace-nowrap">${estado.id_estado_civil}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${estado.estado_civil}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${estado.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-estado-civil" onclick="llamarActivarBotonSeleccionar(this.value)" value="${estado.id_estado_civil}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    } catch (error) {
+      console.error('Error al obtener los estados civil:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener los estados civil, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
+    }
+    */ 
+
+    try {
+      const escolaridades = await this.#api.getEscolaridadesPagina(this.#pagina);
+      const lista = escolaridades.escolaridades;
+      const table = this.#escolaridades;
+      const rowsTable = this.#escolaridades.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(escolaridad => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="escolaridad-${escolaridad.id_escolaridad}">
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.id_escolaridad}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.descripcion}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${escolaridad.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-escolaridad" onclick="llamarActivarBotonSeleccionar(this.value)" value="${escolaridad.id_escolaridad}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    }
+    catch (error) {
+      console.error('Error al obtener las escolaridades:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener las escolaridades, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
     }
 
   }

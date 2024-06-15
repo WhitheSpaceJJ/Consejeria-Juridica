@@ -89,6 +89,36 @@ const actualizarMotivo = async (motivo) => {
     return false;
   }
 };
+ 
+
+
+const obtenerMotivosPaginacion = async (pagina) => {
+  try {
+    pagina = parseInt(pagina, 10);
+    const offset = (pagina - 1) * 10;
+    const resultados = await modeloMotivo.Motivo.findAll({
+      raw: false,
+      nest: true,
+      offset: offset,
+      limit: 10
+    });
+    return resultados;
+  } catch (error) {
+    return null;
+  }
+}
+
+
+const obtenerTotalMotivos = async () => {
+  try {
+    return await modeloMotivo.Motivo.count();
+  } catch (error) {
+    console.log("Error motivos:", error.message);
+    return null;
+  }
+}
+
+
 
 //Module exports:
 module.exports = {
@@ -96,5 +126,7 @@ module.exports = {
   obtenerMotivoPorId,
   agregarMotivo,
   actualizarMotivo,
-  obtenerMotivoPorPorIdMiddleware
+  obtenerMotivoPorPorIdMiddleware ,
+  obtenerMotivosPaginacion,
+  obtenerTotalMotivos
 };

@@ -1,7 +1,7 @@
 import { APIModel } from '../../models/api.model.js'
 import { ValidationError } from '../../lib/errors.js'
 
- 
+
 
 class EmpleadosTab extends HTMLElement {
 
@@ -16,7 +16,75 @@ class EmpleadosTab extends HTMLElement {
   #api
   #idSeleccion
   #distritos
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
 
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEmpleados()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEmpleados()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalEmpleados } = await this.#api.getTotalEmpleadoDistrito(this.#api.user.id_distrito_judicial)
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalEmpleados
+      this.#numeroPaginas = (totalEmpleados) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de empleados, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#empleados
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('/components/Registros/empleados-tab.html')).text();
@@ -61,6 +129,8 @@ class EmpleadosTab extends HTMLElement {
           // Si el campo contiene caracteres no válidos, lanzar una excepción
 
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El nombre solo permite letras, verifique su respuesta.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -68,12 +138,14 @@ class EmpleadosTab extends HTMLElement {
         } else if (nombreInput.value.length > 100) {
           // Si el campo tiene más de 50 caracteres, lanzar una excepción
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El nombre no puede tener más de 100 caracteres, por favor ingréselo correctamente.'
           modal.title = 'Error de validación'
           modal.open = true
         }
-      } 
-        
+      }
+
     });
 
 
@@ -94,6 +166,8 @@ class EmpleadosTab extends HTMLElement {
   //Metodo que mandara a llamar a las funciones para agregar eventos a los botones, mostrar empleados y rellenar distritos judiciales
   fillInputs() {
     this.agregarEventosBotones();
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()
     this.mostrarEmpleados();
     this.rellenarDistritosJudiciales();
   }
@@ -106,6 +180,10 @@ class EmpleadosTab extends HTMLElement {
       option.textContent = distrito.nombre_distrito_judicial
       this.#distritoJudicial.appendChild(option)
     })
+    const id_distrito_judicial = this.#api.user.id_distrito_judicial
+    this.#distritoJudicial.value = id_distrito_judicial
+    //Que no se pueda cambiar el distrito judicial
+    this.bloquearDistritoJudicial()
   }
 
   //Metodo para agregar eventos a los botones
@@ -212,23 +290,55 @@ class EmpleadosTab extends HTMLElement {
             };
             //    console.log(nuevoEmpleado);
             try {
-             const response = await this.#api.postEmpleado(nuevoEmpleado);
+              /*
+              const response = await this.#api.postEmpleado(nuevoEmpleado);
               if (response) {
                 this.#nombre.value = '';
                 this.#tipoUsuario.value = '0';
                 this.#estatusUsuario.value = '0';
                 this.#distritoJudicial.value = '0';
                 this.#idSeleccion = null;
+                this.#distritoJudicial.value = this.#api.user.id_distrito_judicial;
                 this.mostrarEmpleados();
               }
-            } catch (error) {
-              console.error('Error al agregar un nuevo empleado:', error);
-              const modal = document.querySelector('modal-warning');
+              */
+              const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el empleado presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar empleado?'
+
               modal.setOnCloseCallback(() => {
                 if (modal.open === 'false') {
-                  window.location = '/index.html'
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    this.#api.postEmpleado(nuevoEmpleado).then(response => {
+                      if (response) {
+                        this.#nombre.value = '';
+                        this.#tipoUsuario.value = '0';
+                        this.#estatusUsuario.value = '0';
+                        this.#distritoJudicial.value = '0';
+                        this.#idSeleccion = null;
+                        this.#distritoJudicial.value = this.#api.user.id_distrito_judicial;
+                        this.mostrarEmpleados();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo empleado:', error);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo empleado, por favor intente de nuevo, o verifique el status del servidor.'
+                      modal.title = 'Error al agregar empleado'
+                      modal.open = true
+                    });
+                  }
                 }
-              });
+              }
+              );
+
+              modal.open = true
+            } catch (error) {
+              console.error('Error al agregar un nuevo empleado:', error);
+                
               modal.message = 'Error al agregar un nuevo empleado, por favor intente de nuevo, o verifique el status del servidor';
               modal.title = 'Error al agregar empleado';
               modal.open = true;
@@ -350,7 +460,7 @@ class EmpleadosTab extends HTMLElement {
                 this.#distritoJudicial.value = '0';
                 this.#idSeleccion = null;
                 this.liberarTipoEmpleado();
-                this.liberarDistritoJudicial();
+                //   this.liberarDistritoJudicial();
               }
               else {
                 //Validar si el tipo de empleado es diferente
@@ -361,8 +471,44 @@ class EmpleadosTab extends HTMLElement {
                   modal.open = true;
                 } else {
                   try {
-           const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-                 if (response) {
+                    /*
+    
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar catalogo?'
+                
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+
+                      this.#api.putCatalogos(catalogoID, catalogo).then(response => {
+                        if (response) {
+                          this.#catalogo.value = '';
+                          this.#estatusCatalogo.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarCatalogos();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el catalogo:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el catalogo, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                }
+                );
+                modal.open = true
+                    */
+                   /*
+                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+                    if (response) {
                       this.#nombre.value = '';
                       this.#tipoUsuario.value = '0';
                       this.#estatusUsuario.value = '0';
@@ -370,16 +516,49 @@ class EmpleadosTab extends HTMLElement {
                       this.#idSeleccion = null;
                       this.mostrarEmpleados();
                       this.liberarTipoEmpleado();
-                      this.liberarDistritoJudicial();
+                      //   this.liberarDistritoJudicial();
                     }
+                      */
+                    const modal = document.querySelector('modal-warning')
+                    modal.message = 'Si esta seguro de editar el empleado presione aceptar, de lo contrario presione x para cancelar.'
+                    modal.title = '¿Confirmacion de editar empleado?'
+
+                    modal.setOnCloseCallback(() => {
+                      if (modal.open === 'false') {
+                        if (modal.respuesta === true) {
+                          modal.respuesta = false
+
+                          this.#api.putEmpleado(this.#idSeleccion, empleado).then(response => {
+                            if (response) {
+                              this.#nombre.value = '';
+                              this.#tipoUsuario.value = '0';
+                              this.#estatusUsuario.value = '0';
+                              this.#distritoJudicial.value = '0';
+                              this.#idSeleccion = null;
+                              this.mostrarEmpleados();
+                              this.liberarTipoEmpleado();
+                              //    this.liberarDistritoJudicial();
+                            }
+                          }).catch(error => {
+                            console.error('Error al editar el empleado:', error);
+                            const modal = document.querySelector('modal-warning')
+                            modal.setOnCloseCallback(() => {});
+
+                            modal.message = 'Error al editar el empleado, por favor intente de nuevo, o verifique el status del servidor'
+                            modal.title = 'Error al editar empleado'
+                            modal.open = true
+                          });
+                        }
+                      }
+                    }
+                    );
+
+                    modal.open = true
                   } catch (error) {
                     console.error('Error al editar el empleado:', error);
                     const modal = document.querySelector('modal-warning');
-                    modal.setOnCloseCallback(() => {
-                      if (modal.open === 'false') {
-                        window.location = '/index.html'
-                      }
-                    });
+                    modal.setOnCloseCallback(() => {});
+
                     modal.message = 'Error al editar el empleado, por favor intente de nuevo, o verifique el status del servidor';
                     modal.title = 'Error al editar empleado';
                     modal.open = true;
@@ -401,7 +580,7 @@ class EmpleadosTab extends HTMLElement {
                 this.#distritoJudicial.value = '0';
                 this.#idSeleccion = null;
                 this.liberarTipoEmpleado();
-                this.liberarDistritoJudicial();
+                //    this.liberarDistritoJudicial();
               }
               else {
                 //Validar si el tipo de empleado es diferente
@@ -414,9 +593,9 @@ class EmpleadosTab extends HTMLElement {
                 else {
                   //Si el tipo de empleado es igual se procede a editar el empleado
                   try {
-         const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
-            
-          if (response) {
+                    const response = await this.#api.putEmpleado(this.#idSeleccion, empleado);
+
+                    if (response) {
                       this.#nombre.value = '';
                       this.#tipoUsuario.value = '0';
                       this.#estatusUsuario.value = '0';
@@ -424,17 +603,14 @@ class EmpleadosTab extends HTMLElement {
                       this.#idSeleccion = null;
                       this.mostrarEmpleados();
                       this.liberarTipoEmpleado();
-                      this.liberarDistritoJudicial();
+                      //    this.liberarDistritoJudicial();
                     }
                   } catch (error) {
                     //Mensaje de advertencia en caso de error
                     console.error('Error al editar el empleado:', error);
                     const modal = document.querySelector('modal-warning');
-                    modal.setOnCloseCallback(() => {
-                      if (modal.open === 'false') {
-                        window.location = '/index.html'
-                      }
-                    });
+                    modal.setOnCloseCallback(() => {});
+
                     modal.message = 'Error al editar el empleado, por favor intente de nuevo, o verifique el status del servidor';
                     modal.title = 'Error al editar empleado';
                     modal.open = true;
@@ -454,11 +630,53 @@ class EmpleadosTab extends HTMLElement {
 
   //Metodo para mostrar los empleados
   mostrarEmpleados = async () => {
+    /*
+try {
+      const catalogos = await this.#api.getCatalogosPagina(this.#pagina);
+      const lista = catalogos.requisitosCatalogo;
+      const table = this.#catalogos;
+      const rowsTable = this.#catalogos.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(catalogo => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="catalogo-${catalogo.id_catalogo}">
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.id_catalogo}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.descripcion_catalogo}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${catalogo.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-catalogo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${catalogo.id_catalogo}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    } catch (error) {
+      console.error('Error al obtener los catalogos:', error);
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener los catalogos, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
+    }
+      Esta es la manera que se espera cuando es solo una consulta pero aca son dos tablas como le harias
+    */
+   /*
     let validar = 0;
     const tableBody = this.#empleados;
     tableBody.innerHTML = '';
+
     try {
-      const asesores = await this.#api.getAsesores();
+      const asesores = await this.#api.getAsesores(this.#api.user.id_distrito_judicial,this.#pagina);
 
 
       const asesoresArray = Object.values(asesores.asesores);
@@ -498,7 +716,7 @@ class EmpleadosTab extends HTMLElement {
     }
     try {
 
-      const defensores = await this.#api.getDefensores();
+      const defensores = await this.#api.getDefensores(this.#api.user.id_distrito_judicial,this.#pagina);
 
       const defensoresArray = Object.values(defensores.defensores);
 
@@ -513,7 +731,7 @@ class EmpleadosTab extends HTMLElement {
         <td class="px-6 py-4 whitespace-nowrap">${defensor.empleado.estatus_general}</td>
         <td class="px-6 py-4 whitespace-nowrap">${defensor.empleado.id_distrito_judicial}</td>
         <td class="px-6 py-4 whitespace-nowrap">
-        <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-empleado" onclick="llamarActivarBotonSeleccionar(this.value)" value='{"id_asesor":${defensor.id_defensor},"tipo":"defensor"}'>
+        <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-empleado" onclick="llamarActivarBotonSeleccionar(this.value)" value=''>
         Seleccionar
       </button>
     
@@ -533,17 +751,54 @@ class EmpleadosTab extends HTMLElement {
 
     if (validar === 2) {
       const modal = document.querySelector('modal-warning');
-     //  modal.setOnCloseCallback(() => {
-   //      if (modal.open === 'false') {
-     //      window.location = '/index.html'
-   //      }
-    //   }
-    //   );
+      //  modal.setOnCloseCallback(() => {
+      //      if (modal.open === 'false') {
+      //      window.location = '/index.html'
+      //      }
+      //   }
+      //   );
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Error al obtener los empleados, por favor verifique el status del servidor.';
       modal.title = 'Error al obtener empleados';
       modal.open = true;
     }
+      */
+    try {
+      const empleados = await this.#api.getEmpleadosDistrito(this.#api.user.id_distrito_judicial, this.#pagina);
+      const tableBody = this.#empleados;
+      tableBody.innerHTML = '';
+      const empleadosArray = Object.values(empleados.empleados);
+      empleadosArray.forEach(empleado => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <tr id="empleado-${empleado.empleado.id_empleado}">
+        <td class="px-6 py-4 whitespace-nowrap">${empleado.empleado.id_empleado}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${empleado.empleado.tipo_empleado === "defensor" ? empleado.nombre_defensor :empleado.nombre_asesor}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${empleado.empleado.tipo_empleado}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${empleado.empleado.estatus_general}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${empleado.empleado.id_distrito_judicial}</td>
+        <td class="px-6 py-4 whitespace-nowrap">
+<button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-empleado" onclick="llamarActivarBotonSeleccionar(this.value)" value='{"tipo":"${empleado.empleado.tipo_empleado}","id":"${empleado.empleado.id_empleado}"}'>
+        Seleccionar
+      </button>
+    
+        </td>
+    </tr>
+        `;
+        tableBody.appendChild(row);
 
+      });
+
+    } catch (error) {
+      console.error('Error al obtener los empleados:', error);
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener los empleados, por favor verifique el status del servidor.';
+      modal.title = 'Error al obtener empleados';
+      modal.open = true;
+    }
   }
 
   //Metodo para bloquear el campo de tipo de empleado esto con el fin de cuando se seleccione un empleado no se pueda cambiar el tipo de empleado
@@ -554,6 +809,7 @@ class EmpleadosTab extends HTMLElement {
   //Metodo para liberar el campo de tipo de empleado esto con el fin de cuando se seleccione un empleado se pueda cambiar el tipo de empleado
   liberarTipoEmpleado = () => {
     this.#tipoUsuario.disabled = false;
+    this.#distritoJudicial.value = this.#api.user.id_distrito_judicial;
   }
 
   bloquearDistritoJudicial = () => {
@@ -568,12 +824,11 @@ class EmpleadosTab extends HTMLElement {
   //Metodo para activar el boton seleccionar
   activarBotonSeleccionar = async (empleado) => {
     try {
-      const tipoEmpleado = JSON.parse(empleado).tipo;
+      const {tipo,id} = JSON.parse(empleado);
 
       //Si el tipo de empleado es asesor se obtiene el asesor por id y se rellenan los campos del formulario, caso contrario se obtiene el defensor por id y se rellenan los campos del formulario
-      if (tipoEmpleado === 'asesor') {
-        const asesorID = JSON.parse(empleado).id_asesor;
-        const { asesor } = await this.#api.getAsesorID(asesorID);
+      if (tipo === 'asesor') {
+        const { asesor } = await this.#api.getAsesorID(id);
         //        console.log(asesor)
         this.#nombre.value = asesor.nombre_asesor;
         this.#tipoUsuario.value = asesor.empleado.tipo_empleado;
@@ -582,8 +837,7 @@ class EmpleadosTab extends HTMLElement {
         this.#idSeleccion = asesor.id_asesor;
       }
       else {
-        const defensorID = JSON.parse(empleado).id_asesor;
-        const { defensor } = await this.#api.getDefensorID(defensorID);
+        const { defensor } = await this.#api.getDefensorID(id);
         // console.log(defensor)
         this.#nombre.value = defensor.nombre_defensor;
         this.#tipoUsuario.value = defensor.empleado.tipo_empleado;

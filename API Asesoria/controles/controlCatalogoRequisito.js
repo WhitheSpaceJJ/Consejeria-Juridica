@@ -89,11 +89,45 @@ const actualizarCatalogoRequisito = async (catalogoRequisito) => {
   }
 };
 
+
+const obtenerCatalogoRequisitosPaginacion = async (pagina) => {
+  try {
+    pagina = parseInt(pagina, 10);
+    const offset = (pagina - 1) * 10;
+    const resultados = await modeloCatalogoRequisito.CatalogoRequisito.findAll({
+      raw: false,
+      nest: true,
+      offset: offset,
+      limit: 10
+    });
+    return resultados;
+  } catch (error) {
+    return null;
+  }
+}
+
+const obtenerTotalCatalogoRequisitos = async () => {
+  try {
+    return await modeloCatalogoRequisito.CatalogoRequisito.count();
+  } catch (error) {
+    console.log("Error de catalogo requisito:", error.message);
+    return null;
+  }
+}
+
+
+
+
+
+
+
   // Modulos exportados 
 module.exports = {
   obtenerCatalogoRequisitos,
   obtenerCatalogoRequisitoPorId,
   agregarCatalogoRequisito,
   actualizarCatalogoRequisito,
-  obtenerDocumentoPorPorIdMiddleware
+  obtenerDocumentoPorPorIdMiddleware,
+  obtenerCatalogoRequisitosPaginacion,
+  obtenerTotalCatalogoRequisitos
 };

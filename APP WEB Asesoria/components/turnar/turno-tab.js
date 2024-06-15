@@ -117,8 +117,8 @@ export class TurnoTab extends HTMLElement {
     */
 
     try {
-      const data = await this.#api.getDefensores2()
-      this.#defensores = data.defensores
+      const defensores = await this.#api.getDefensoresByDistrito(this.#api.user.id_distrito_judicial)
+      this.#defensores = defensores
     } catch (error) {
       const modal = document.querySelector('modal-warning')
       modal.setOnCloseCallback(() => {
@@ -157,6 +157,7 @@ export class TurnoTab extends HTMLElement {
     resumenInput.addEventListener('input', function () {
       if (resumenInput.value.length > 250) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'El resumen no puede tener más de 250 caracteres, por favor revisa.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -175,6 +176,7 @@ export class TurnoTab extends HTMLElement {
       //validar horas entre 0 y 23 sin regex valida que la entrada sea un numero
          if (horaTurnoInput.value ===  "e") {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'La hora del turno solo permite números, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -182,6 +184,7 @@ export class TurnoTab extends HTMLElement {
 
       if (isNaN(horaTurnoInput.value)) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'La hora del turno solo permite números, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -190,11 +193,13 @@ export class TurnoTab extends HTMLElement {
        
       if (horaTurnoInput.value > 23) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (horaTurnoInput.value < 0) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'La hora del turno no es válida, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -210,6 +215,7 @@ export class TurnoTab extends HTMLElement {
     minutoTurnoInput.addEventListener('input', function () {
     if (minutoTurnoInput.value ===  "e") {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'El minuto del turno solo permite números, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -218,6 +224,7 @@ export class TurnoTab extends HTMLElement {
  if(isNaN(minutoTurnoInput.value)){
 
   const modal = document.querySelector('modal-warning')
+  modal.setOnCloseCallback(() => { });
   modal.message = 'Los minutos del turno solo permite números, verifique su respuesta.'
   modal.title = 'Error de validación'
   modal.open = true
@@ -226,11 +233,13 @@ export class TurnoTab extends HTMLElement {
       //   validar minutos (0 a 59) sin regex 
       if (minutoTurnoInput.value > 59) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
       } else  if (minutoTurnoInput.value < 0) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
         modal.message = 'Los minutos del turno no son válidos, por favor ingrese un valor válido.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -482,8 +491,41 @@ export class TurnoTab extends HTMLElement {
         } catch (error) {
           console.error(error)
         }
-    
+    /*
+ const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar catalogo?'
+                
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
 
+                      this.#api.putCatalogos(catalogoID, catalogo).then(response => {
+                        if (response) {
+                          this.#catalogo.value = '';
+                          this.#estatusCatalogo.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarCatalogos();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el catalogo:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el catalogo, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                }
+                );
+                modal.open = true
+    */
+/*
         //Registro del turno
         await this.#api.putAsesoria({
           id: this.#asesoria.datos_asesoria.id_asesoria,
@@ -495,6 +537,38 @@ export class TurnoTab extends HTMLElement {
         this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
           location.href = '/'
         })
+        */
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'Si esta seguro de registrar el turno presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de registrar turno?'
+
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+                //Registro del turno
+                this.#api.putAsesoria({
+                  id: this.#asesoria.datos_asesoria.id_asesoria,
+                  data: this.#asesoria,
+                }).then(response => {
+                  if (response) {
+                    this.#showModal('Turno registrado con éxito', 'Registrar turno', () => {
+                      location.href = '/'
+                    })
+                  }
+                }).catch(error => {
+                  console.error('Error al registrar el turno:', error)
+                  this.#showModal(
+                    'Error al registrar el turno, por favor intenta de nuevo',
+                    'Error'
+                  )
+                })
+              }
+            }
+          });
+
+          modal.open = true
+         
       } catch (error) {
         //mensaje de error
         if (error instanceof ValidationError) {

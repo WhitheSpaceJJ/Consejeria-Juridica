@@ -21,7 +21,75 @@ class JuzgadoTab extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
 
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarJuzgados()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarJuzgados()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalJuzgados } = await this.#api.getJuzgadosTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalJuzgados
+      this.#numeroPaginas = (totalJuzgados) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de juzgados, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#juzgados
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
   //Constructro de la clase
   constructor() {
     super();
@@ -63,6 +131,7 @@ class JuzgadoTab extends HTMLElement {
     juzgadoInput.addEventListener('input', function () {
       if (juzgadoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
         modal.message = 'El campo de juzgado no puede contener más de 50 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -74,6 +143,9 @@ class JuzgadoTab extends HTMLElement {
   fillInputs() {
     //Llamada a la función mostrarJuzgados para mostrar los juzgados
     this.mostrarJuzgados();
+     this.getNumeroPaginas()
+    //Llamada a la función buttonsEventListeners para agregar eventos a los botones
+    this.buttonsEventListeners();
     //Llamada a la función agregarEventosBotones para agregar eventos a los botones
     this.agregarEventosBotones();
   }
@@ -133,6 +205,7 @@ class JuzgadoTab extends HTMLElement {
         //Validar si el campo de juzgado está vacío
         if (juzgadoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de juzgado es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -141,6 +214,7 @@ class JuzgadoTab extends HTMLElement {
         //Validar si el campo de estatus de juzgado está vacío
         if (estatusJuzgadoInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de juzgado es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -150,19 +224,20 @@ class JuzgadoTab extends HTMLElement {
         if (juzgadoInput !== '' && estatusJuzgadoInput !== '0') {
           if (juzgadoInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de juzgado no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
           }
           else {
-            
+             
             //Crear un nuevo juzgado con los valores de los campos de juzgado y estatus de juzgado
             const nuevoJuzgado = {
               nombre_juzgado: juzgadoInput,
               estatus_general: estatusJuzgadoInput.toUpperCase()
             };
-
-            //Llamada al método postJuzgado de la clase APIModel para agregar un nuevo juzgado
+              
+            /*Llamada al método postJuzgado de la clase APIModel para agregar un nuevo juzgado
             const response = await this.#api.postJuzgado(nuevoJuzgado);
 
             //Validar si se ha agregado el nuevo juzgado
@@ -174,6 +249,74 @@ class JuzgadoTab extends HTMLElement {
               //Llamada a la función mostrarJuzgados para mostrar los juzgados
               this.mostrarJuzgados();
             }
+              */
+             /*
+    const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.postEtnia(nuevaEtnia).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#etnia.value = '';
+                      this.#estatusEtnia.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarEtnias();
+                    }
+                  }).catch(error => {
+                    console.error('Error al agregar una nueva etnia:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al agregar una nueva etnia, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
+              }
+            }
+            );
+
+            modal.message = 'Si esta seguro de agregar la etnia presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar etnia?'
+
+            modal.open = true
+
+             */ 
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  this.#api.postJuzgado(nuevoJuzgado).then(response => {
+                    if (response) {
+                      console.log(response)
+                      this.#juzgado.value = '';
+                      this.#estatusJuzgado.value = '0';
+                      this.#idSeleccion = null;
+                      this.#pagina = 1
+                      this.getNumeroPaginas()
+                      this.mostrarJuzgados();
+                    }
+                  }).catch(error => {
+                    console.error('Error al agregar un nuevo juzgado:', error.message);
+                    const modal = document.querySelector('modal-warning')
+                    modal.setOnCloseCallback(() => {});
+                    modal.message = 'Error al agregar un nuevo juzgado, intente de nuevo o verifique el status del servidor.'
+                    modal.title = 'Error de validación'
+                    modal.open = true
+                  });
+                }
+              }
+            }
+            );
+
+            modal.message = 'Si esta seguro de agregar el juzgado presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar juzgado?'
+
+            modal.open = true
           }
         }
       } catch (error) {
@@ -182,6 +325,7 @@ class JuzgadoTab extends HTMLElement {
     } else {
       //En caso de que se haya seleccionado un juzgado
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'No se puede agregar un nuevo juzgado si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -203,6 +347,7 @@ class JuzgadoTab extends HTMLElement {
     if (this.#idSeleccion === null) {
       //Mensaje de error en caso de que no se haya seleccionado un juzgado
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'Debe seleccionar un juzgado para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -217,6 +362,7 @@ class JuzgadoTab extends HTMLElement {
         //Validar si el campo de juzgado está vacío
         if (juzgadoInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de juzgado es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -225,6 +371,7 @@ class JuzgadoTab extends HTMLElement {
         //Validar si el campo de estatus de juzgado está vacío
         if (estatusJuzgadoInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de juzgado es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -235,6 +382,7 @@ class JuzgadoTab extends HTMLElement {
           //Validar si el campo de juzgado no contiene más de 50 caracteres
           if (juzgadoInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de juzgado no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -254,6 +402,7 @@ class JuzgadoTab extends HTMLElement {
 
               //Mensaje de error en caso de que no se haya realizado ningún cambio en el juzgado
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
               modal.message = 'No se han realizado cambios en el juzgado, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -263,7 +412,7 @@ class JuzgadoTab extends HTMLElement {
 
             }
             else {
-             //Llamada al método putJuzgado de la clase APIModel para editar un juzgado
+             /*Llamada al método putJuzgado de la clase APIModel para editar un juzgado
               const response = await this.#api.putJuzgado(juzgadoID, juzgado);
 
               //Validar si se ha editado el juzgado
@@ -275,6 +424,39 @@ class JuzgadoTab extends HTMLElement {
                 //Mostrar los juzgados
                 this.mostrarJuzgados();
               }
+                */
+              const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.putJuzgado(juzgadoID, juzgado).then(response => {
+                      if (response) {
+                        console.log(response)
+                        this.#juzgado.value = '';
+                        this.#estatusJuzgado.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarJuzgados();
+                      }
+                    }).catch(error => {
+                      console.error('Error al editar el juzgado:', error.message);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+                      modal.message = 'Error al editar el juzgado, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              }
+              );
+
+              modal.message = 'Si esta seguro de editar el juzgado presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de editar juzgado?'
+
+              modal.open = true
 
             }
           }
@@ -288,7 +470,7 @@ class JuzgadoTab extends HTMLElement {
 
   //Función para mostrar los juzgados
   mostrarJuzgados = async () => {
-  
+    /*
     try {
       //Llamada al método getJuzgados de la clase APIModel para obtener los juzgados
       const juzgados = await this.#api.getJuzgados();
@@ -319,6 +501,84 @@ class JuzgadoTab extends HTMLElement {
     } catch (error) {
       console.error('Error al obtener los juzgados:', error);
     }
+      */
+     /*
+  try {
+      const etnias = await this.#api.getEtniasPagina(this.#pagina);
+      const lista = etnias.etnias;
+      const table = this.#etnias;
+      const rowsTable = this.#etnias.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(etnia => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="etnia-${etnia.id_etnia}">
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.id_etnia}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.nombre}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${etnia.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-etnia" onclick="llamarActivarBotonSeleccionar(this.value)" value="${etnia.id_etnia}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+
+    }
+    catch (error) {
+      console.error('Error al obtener las etnias:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener las etnias, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
+    }
+     */
+    try {
+      const juzgados = await this.#api.getJuzgadosPagina(this.#pagina);
+      const lista = juzgados.juzgados;
+      const table = this.#juzgados;
+      const rowsTable = this.#juzgados.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(juzgado => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <tr id="juzgado-${juzgado.id_juzgado}">
+          <td class="px-6 py-4 whitespace-nowrap">${juzgado.id_juzgado}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${juzgado.nombre_juzgado}</td>
+          <td class="px-6 py-4 whitespace-nowrap">${juzgado.estatus_general}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-juzgado" onclick="llamarActivarBotonSeleccionar(this.value)" value="${juzgado.id_juzgado}">
+          Seleccionar
+        </button>
+      
+          </td>
+      </tr>
+          `;
+          table.appendChild(row);
+        })
+
+      }
+    }
+    catch (error) {
+      console.error('Error al obtener los juzgados:', error);
+      const modal = document.querySelector('modal-warning')
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener los juzgados, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
+      modal.open = true
+
+    }
+
+
   }
 
   // Metodo para activar el boton de seleccionar y que se muestren los datos en los campos de juzgado y estatus de juzgado

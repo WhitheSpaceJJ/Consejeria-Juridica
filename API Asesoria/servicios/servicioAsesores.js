@@ -12,61 +12,36 @@ const CustomeError = require("../utilidades/customeError");
  * @returns {Object} asesores   de la base de datos
  */
 const obtenerAsesores = asyncError(async (req, res, next) => {
-  
-  const activo = req.query.activo;
-  if (activo !== undefined && activo !== null && activo !== "") {
-    const result = await controlAsesores.obtenerAsesores(activo);
+  const id_distrito_judicial = req.query.id_distrito_judicial;
+    const pagina = req.query.pagina;
+    const result = await controlAsesores.obtenerAsesores(id_distrito_judicial,pagina);
     if (result === null || result === undefined || result.length === 0) {
       const error = new CustomeError('No se encontraron asesores', 404);
       return next(error);
     } else {
       res.status(200).json({
-       
-          asesores: result
+
+        asesores: result
       });
     }
-  }else {
-    const result = await controlAsesores.obtenerAsesores();
-    if (result === null || result === undefined || result.length === 0) {
-      const error = new CustomeError('No se encontraron asesores', 404);
-      return next(error);
-    } else {
-      res.status(200).json({
-       
-          asesores: result
-      });
-    }
-    
-  }
+
 
 });
 const obtenerAsesoresByDistrito = asyncError(async (req, res, next) => {
-  
-  const activo = req.query.activo;
-  if (activo !== undefined && activo !== null && activo !== "") {
-    const result = await controlAsesores.obtenerAsesores(activo);
-    if (result === null || result === undefined || result.length === 0) {
-      const error = new CustomeError('No se encontraron asesores', 404);
-      return next(error);
-    } else {
-      res.status(200).json({
-       
-          asesores: result
-      });
-    }
-  }else {
-    const result = await controlAsesores.obtenerAsesores();
-    if (result === null || result === undefined || result.length === 0) {
-      const error = new CustomeError('No se encontraron asesores', 404);
-      return next(error);
-    } else {
-      res.status(200).json({
-       
-          asesores: result
-      });
-    }
-    
+
+  const id_distrito_judicial = req.params.id
+
+  const result = await controlAsesores.obtenerAsesoresByDistrito(id_distrito_judicial);
+  if (result === null || result === undefined || result.length === 0) {
+    const error = new CustomeError('No se encontraron asesores', 404);
+    return next(error);
+  } else {
+    res.status(200).json({
+
+      asesores: result
+    });
   }
+
 
 });
 
@@ -86,9 +61,9 @@ const obtenerAsesorPorId = asyncError(async (req, res, next) => {
     const error = new CustomeError('Error al obtener el asesor', 404);
     return next(error);
   } else {
- 
+
     res.status(200).json({
-        asesor: result
+      asesor: result
     });
   }
 });
@@ -99,9 +74,9 @@ const obtenerAsesoresZona = asyncError(async (req, res, next) => {
     const error = new CustomeError('Error al obtener el asesor', 404);
     return next(error);
   } else {
- 
+
     res.status(200).json({
-        asesores: result
+      asesores: result
     });
   }
 }
@@ -110,5 +85,6 @@ const obtenerAsesoresZona = asyncError(async (req, res, next) => {
 module.exports = {
   obtenerAsesores,
   obtenerAsesorPorId,
-  obtenerAsesoresZona
+  obtenerAsesoresZona,
+  obtenerAsesoresByDistrito
 };

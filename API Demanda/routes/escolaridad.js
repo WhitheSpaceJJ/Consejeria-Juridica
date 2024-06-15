@@ -7,6 +7,7 @@ const {
   obtenerEscolaridad,
   crearEscolaridad,
   actualizarEscolaridad,
+  obtenerEscolaridadesPaginacion
 } = require('../controllers/escolaridad')
 
 const { existeEscolaridad, validarJSONEscolaridadPOST, validarJSONEscolaridadPUT }
@@ -19,10 +20,17 @@ const { existeEscolaridad, validarJSONEscolaridadPOST, validarJSONEscolaridadPUT
 
 // Creamos una nueva instancia de Router
 const router = Router()
+ 
+ 
+router.route('/paginacion')
+  // Obtener todas las escolaridades
+  .get(
+    validarPermisos(permisosAceptables),
+    obtenerEscolaridadesPaginacion)
 
 // Definimos la ruta para obtener todas las escolaridades
 router.get('/',
-validarPermisos(["AD_ESCOLARIDAD_SD","ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD"]),
+validarPermisos(["ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD"]),
 obtenerEscolaridades)
 
 // Definimos la ruta para obtener una escolaridad por su id

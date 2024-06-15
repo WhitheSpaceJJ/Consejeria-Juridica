@@ -13,6 +13,76 @@ class EstadoTab extends HTMLElement {
   #estadoCiviles
   #idSeleccion
 
+  
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior')
+    const next = this.shadowRoot.getElementById('siguiente')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEstadosCiviles()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.mostrarEstadosCiviles()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalEstadosCiviles } = await this.#api.getEstadosCivilesTotal()
+      const total = this.shadowRoot.getElementById('total')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalEstadosCiviles
+      this.#numeroPaginas = (totalEstadosCiviles) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => {});
+
+      modal.message = 'Error al obtener el total de estados civiles, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#estadoCiviles
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
   //Constructor de la clase
   constructor() {
     super();
@@ -47,6 +117,8 @@ class EstadoTab extends HTMLElement {
     //Llamada a la funcion que agrega eventos a los botones
     this.agregarEventosBotones();
     //Llamada a la funcion que muestra los estados civiles
+    this.getNumeroPaginas()
+    this.buttonsEventListeners()  
     this.mostrarEstadosCiviles();
   }
 
@@ -70,6 +142,7 @@ class EstadoTab extends HTMLElement {
       if (estadoCivilInput.value !== '') {
         if (estadoCivilInput.value.length > 50) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estado civil no puede contener más de 50 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -133,6 +206,7 @@ class EstadoTab extends HTMLElement {
         //Validacion de campos vacios en este caso el campo de estado civil y que no este vacio
         if (estadoCivilInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estado civil es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -141,6 +215,7 @@ class EstadoTab extends HTMLElement {
         //Validacion de campos vacios en este caso el campo de estatus de estado civil y que no este vacio
         if (estatusEstadoCivilInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de estado civil es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -151,6 +226,7 @@ class EstadoTab extends HTMLElement {
           //Validacion de que el campo de estado civil no contenga mas de 50 caracteres
           if (estadoCivilInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de estado civil no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -162,6 +238,7 @@ class EstadoTab extends HTMLElement {
               estatus_general: estatusEstadoCivilInput.toUpperCase()
             };
             try {
+              /*
               const response = await this.#api.postEstadosCivil(nuevoEstadoCivil);
 
               if (response) {
@@ -170,15 +247,78 @@ class EstadoTab extends HTMLElement {
                 this.IdSeleccion = null;
                 this.mostrarEstadosCiviles();
               }
+                */
+
+              /*
+                 const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar el genero presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar genero?'
+              
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.postGenero(nuevoGenero).then(response => {
+                      if (response) {
+                        console.log(response)
+                        this.#genero.value = '';
+                        this.#estatusGenero.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarGeneros();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo genero:', error.message);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo genero, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+              modal.open = true
+              */
+              const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+                    this.#api.postEstadosCivil(nuevoEstadoCivil).then(response => {
+                      if (response) {
+                        console.log(response)
+                        this.#estadoCivil.value = '';
+                        this.#estatusEstadoCivil.value = '0';
+                        this.#idSeleccion = null;
+                        this.#pagina = 1
+                        this.getNumeroPaginas()
+                        this.mostrarEstadosCiviles();
+                      }
+                    }).catch(error => {
+                      console.error('Error al agregar un nuevo estado civil:', error.message);
+                      const modal = document.querySelector('modal-warning')
+                      modal.setOnCloseCallback(() => {});
+
+                      modal.message = 'Error al agregar un nuevo estado civil, intente de nuevo o verifique el status del servidor.'
+                      modal.title = 'Error de validación'
+                      modal.open = true
+                    });
+                  }
+                }
+              });
+
+              modal.message = 'Si esta seguro de agregar el estado civil presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar estado civil?'
+              modal.open = true
+
             } catch (error) {
               console.error('Error al agregar un nuevo estado civil:', error);
 
               const modal = document.querySelector('modal-warning')
-              modal.setOnCloseCallback(() => {
-                if (modal.open === 'false') {
-                  window.location = '/index.html'
-                }
-              });
+              modal.setOnCloseCallback(() => {});
               modal.message = 'Error al agregar un nuevo estado civil, por favor intente más tarde o verifique el status del servidor.'
               modal.title = 'Error al agregar estado civil'
               modal.open = true
@@ -193,6 +333,7 @@ class EstadoTab extends HTMLElement {
     } else {
       //En caso de que ya se haya seleccionado un estado civil se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'No se puede agregar un nuevo estado civil si ya se ha seleccionado uno, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -210,6 +351,7 @@ class EstadoTab extends HTMLElement {
     if (estadoCivilID === null) {
       //En caso de que no se haya seleccionado un estado civil se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
       modal.message = 'Debe seleccionar un estado civil para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -225,6 +367,7 @@ class EstadoTab extends HTMLElement {
         //Validacion de campos vacios en este caso el campo de estado civil y que no este vacio
         if (estadoCivilInput === '') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estado civil es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -232,6 +375,7 @@ class EstadoTab extends HTMLElement {
         //Validacion de que el estatus de estado civil no este vacio
         if (estatusEstadoCivilInput === '0') {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
           modal.message = 'El campo de estatus de estado civil es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -242,6 +386,7 @@ class EstadoTab extends HTMLElement {
           // Validacion de que el campo de estado civil no contenga mas de 50 caracteres
           if (estadoCivilInput.length > 50) {
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
             modal.message = 'El campo de estado civil no puede contener más de 50 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -258,6 +403,7 @@ class EstadoTab extends HTMLElement {
             //Aqui se valida si el estado civil que se quiere editar es igual al que ya esta registrado
             if (estadoCivilObtenido.estadoCivil.estado_civil === estadoCivil.estado_civil && estadoCivilObtenido.estadoCivil.estatus_general === estadoCivil.estatus_general) {
               const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => {});
               modal.message = 'No se han realizado cambios en el estado civil, ya que los datos son iguales a los actuales, se eliminaran los campos.'
               modal.title = 'Error de validación'
               modal.open = true
@@ -267,7 +413,7 @@ class EstadoTab extends HTMLElement {
             }
             else {
               try {
-                //Llamada a la funcion que edita el estado civil
+                /*Llamada a la funcion que edita el estado civil
                 const response = await this.#api.putEstadosCivil(estadoCivilID, estadoCivil);
                 if (response) {
                   this.#estadoCivil.value = '';
@@ -275,15 +421,44 @@ class EstadoTab extends HTMLElement {
                   this.#idSeleccion = null;
                   this.mostrarEstadosCiviles();
                 }
+                */
+                const modal = document.querySelector('modal-warning')
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+                      this.#api.putEstadosCivil(estadoCivilID, estadoCivil).then(response => {
+                        if (response) {
+                          console.log(response)
+                          this.#estadoCivil.value = '';
+                          this.#estatusEstadoCivil.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarEstadosCiviles();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el estado civil:', error.message);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el estado civil, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                });
+
+                modal.message = 'Si esta seguro de editar el estado civil presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar estado civil?'
+                modal.open = true
+
               } catch (error) {
                 console.error('Error al editar el estado civil:', error);
 
                 const modal = document.querySelector('modal-warning')
-                modal.setOnCloseCallback(() => {
-                  if (modal.open === 'false') {
-                    window.location = '/index.html'
-                  }
-                });
+                modal.setOnCloseCallback(() => {});
                 modal.message = 'Error al editar el estado civil, por favor intente más tarde o verifique el status del servidor.'
                 modal.title = 'Error al editar estado civil'
                 modal.open = true
@@ -307,16 +482,14 @@ class EstadoTab extends HTMLElement {
   mostrarEstadosCiviles = async () => {
 
     try {
-      //Llamada a la funcion que obtiene los estados civiles
-      const estadosCivil = await this.#api.getEstadosCiviles();
-      const tableBody = this.#estadoCiviles;
-      tableBody.innerHTML = '';
-      //Variable que guarda la lista de estados civiles
+      const estadosCivil = await this.#api.getEstadosCivilesPagina(this.#pagina);
       const lista = estadosCivil.estadosCiviles;
-      //Recorrido de la lista de estados civiles
-      lista.forEach(estado => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+      const table = this.#estadoCiviles;
+      const rowsTable = this.#estadoCiviles.rows.length
+      if (this.validateRows(rowsTable)) {
+        lista.forEach(estado => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
           <tr id="estado-civil-${estado.id_estado_civil}">
           <td class="px-6 py-4 whitespace-nowrap">${estado.id_estado_civil}</td>
           <td class="px-6 py-4 whitespace-nowrap">${estado.estado_civil}</td>
@@ -329,18 +502,18 @@ class EstadoTab extends HTMLElement {
           </td>
       </tr>
           `;
-        tableBody.appendChild(row);
-      });
+          table.appendChild(row);
+        })
+
+      }
+
     } catch (error) {
       console.error('Error al obtener los estados civil:', error);
       const modal = document.querySelector('modal-warning')
-     //  modal.setOnCloseCallback(() => {
-   //      if (modal.open === 'false') {
-     //      window.location = '/index.html'
- //        }
-    //   });
-      modal.message = 'Error al obtener los estados civil, por favor intente más tarde o verifique el status del servidor.'
-      modal.title = 'Error al obtener estados civil'
+
+      modal.setOnCloseCallback(() => {});
+      modal.message = 'Error al obtener los estados civil, intente de nuevo o verifique el status del servidor.'
+      modal.title = 'Error de validación'
       modal.open = true
 
     }

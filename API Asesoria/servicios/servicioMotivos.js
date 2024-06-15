@@ -106,10 +106,42 @@ const obtenerMotivoPorId = asyncError(async (req, res, next) => {
   }
 });
 
+
+
+const obtenerMotivosPaginacion = asyncError(async (req, res, next) => {
+  const pagina = req.query.pagina;
+  const total = req.query.total;
+  if (total === "true") {
+    const result = await controlMotivos.obtenerTotalMotivos();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('Error al obtener el total de motivos', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+        totalMotivos: result
+      });
+    }
+
+  } else {
+    const result = await controlMotivos.obtenerMotivosPaginacion(pagina);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener los motivos', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        motivos: result
+      });
+    }
+  }
+} );
+
+
 //Module exports
 module.exports = {
   agregarMotivo,
   obtenerMotivos,
   actualizarMotivo,
-  obtenerMotivoPorId
+  obtenerMotivoPorId,
+  obtenerMotivosPaginacion
 };

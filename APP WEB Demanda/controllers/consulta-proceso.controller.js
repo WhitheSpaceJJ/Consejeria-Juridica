@@ -18,11 +18,21 @@ class ConsultaProcesoController {
     this.utils = new ControllerUtils(model.user)
     // this.buttonsEventListeners()
   }
-
+ #acceptablePermissions = ['ALL_SD','CONSULTA_PROCESO_JUDICIAL_SD']
   // DOMContentLoaded
   handleDOMContentLoaded = () => {
     // add permissions
-    this.utils.validatePermissions({})
+    const permiso = this.utils.validatePermissions({})
+    if (permiso) {
+      const userPermissions = this.model.user.permisos;
+      const acceptablePermissions = this.#acceptablePermissions;
+      const hasPermission = (userPermissions, acceptablePermissions) => {
+        return userPermissions.some(permission => acceptablePermissions.includes(permission));
+      };
+      if (!hasPermission(userPermissions, acceptablePermissions)) {
+        window.location.href = 'login.html';
+      }
+    }
     //this.getNumeroPaginas()
     // this.handleConsultarDemanda()
     //Se consulta los procesos judiciales

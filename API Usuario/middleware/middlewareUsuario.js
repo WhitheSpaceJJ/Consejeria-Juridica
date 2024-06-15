@@ -87,34 +87,7 @@ async function validarJSONUsuarioPOST(req, res, next) {
   if (!tipoUsuario) {
     return res.status(400).json({ message: "El tipo de usuario no es válido" });
   }
-  /*
-  
-{
-    "nombre": "aaaaaaaaa",
-    "correo": "aaaaaa@gmail.com",
-    "password": "aaaaaaaaa",
-    "id_distrito_judicial": "10",
-    "estatus_general": "ACTIVO",
-    "id_tipouser": 1,
-    "permisos": [
-        "AD_USUARIOS_SA",
-        "AD_EMPLEADOS_SA",
-        "AD_JUICIOS_SA",
-        "AD_GENEROS_SA",
-        "AD_MOTIVOS_SA",
-        "AD_CATALOGOREQUISITOS_SA",
-        "CONSULTA_ASESORIA_SA",
-        "REGISTRO_ASESORIA_SA",
-        "TURNAR_ASESORIA_SA",
-        "AD_ESCOLARIDAD_SD",
-        "AD_ETNIA",
-        "AD_JUZGADO",
-        "AD_OCUPACION",
-        "REGISTRO_PROCESO_JUDICIAL_SD",
-        "SEGUIMIENTO_PROCESO_JUDICIAL_SD"
-    ]
-}
-  */
+
 
   const permisos_lista = ["ALL_SA", "AD_USUARIOS_SA", "AD_EMPLEADOS_SA",
     "AD_JUICIOS_SA", "AD_GENEROS_SA",

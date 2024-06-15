@@ -133,6 +133,7 @@ export class DomicilioTab extends HTMLElement {
         if (calleInput.value !== '') {
           if (calleInput.value.length > 75) {
             const modal = document.querySelector('modal-warning');
+            modal.setOnCloseCallback(() => {});
             modal.message = 'La calle no puede tener más de 75 caracteres, por favor ingresela correctamente.';
             modal.title = 'Error de validación';
             modal.open = true;
@@ -157,11 +158,15 @@ export class DomicilioTab extends HTMLElement {
 
           if (!enterosPattern.test(numeroExteriorInput.value)) {
             const modal = document.querySelector('modal-warning');
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El número exterior solo permite números, verifique su respuesta.';
             modal.title = 'Error de validación';
             modal.open = true;
           } else if (numeroExteriorInput.value.length > 10) {
             const modal = document.querySelector('modal-warning');
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El número exterior no debe tener más de 10 dígitos, por favor ingreselo correctamente.';
             modal.title = 'Error de validación';
             modal.open = true;
@@ -177,12 +182,16 @@ export class DomicilioTab extends HTMLElement {
         if (numeroInteriorInput.value !== '') {
           if (!enterosPattern.test(numeroInteriorInput.value)) {
             const modal = document.querySelector('modal-warning');
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El número interior solo permite números, verifique su respuesta.';
             modal.title = 'Error de validación';
             modal.open = true;
           } else
             if (numeroInteriorInput.length > 10) {
               const modal = document.querySelector('modal-warning');
+              modal.setOnCloseCallback(() => {});
+
               modal.message = 'El número interior no puede tener más de 10 caracteres, por favor ingreselo correctamente.';
               modal.title = 'Error de validación';
               modal.open = true;

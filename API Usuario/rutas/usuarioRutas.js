@@ -34,12 +34,19 @@ router.route('/usuario')
   .get(
     servicioUsuarios.obtenerUsuarioCorreoPassword);
 
+
+    
+
 // Definimos la ruta '/recuperacion' que responde a una petición GET
 // Esta ruta utiliza el método recuperarContraseña del servicio de usuarios
 router.route('/recuperacion')
   .get(
     servicioUsuarios.recuperarContraseña);
 
+    router.route('/busqueda')
+    .get(
+      validarPermisos(["ALL_SA","AD_USUARIOS_SA"]),
+      servicioUsuarios.obtenerUsuariosBusqueda);
 // Definimos la ruta '/' que responde a una petición GET y POST
 // La petición GET utiliza el método obtenerUsuarioPorId del servicio de usuarios
 // La petición POST utiliza el método agregarUsuario del servicio de usuarios

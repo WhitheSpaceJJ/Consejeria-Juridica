@@ -7,6 +7,7 @@ const {
   crearOcupacion,
   obtenerOcupacion,
   actualizarOcupacion,
+   obtenerOcupacionesPaginacion
 } = require('../controllers/ocupacion')
 
 
@@ -20,6 +21,12 @@ const permisosAceptables = ["AD_OCUPACION_SD","ALL_SD"]
 // Creamos una nueva instancia de Router
 const router = Router()
 
+router.route('/paginacion')
+  // Obtener todas las ocupaciones
+  .get(
+    validarPermisos(permisosAceptables),
+    obtenerOcupacionesPaginacion)
+ 
 // Definimos la ruta para obtener todas las ocupaciones
 router.get('/',
 validarPermisos(["AD_OCUPACION_SD","ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD"]),

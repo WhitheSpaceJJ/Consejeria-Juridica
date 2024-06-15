@@ -5,36 +5,40 @@ const controlEmpleado = require('./controlEmpleados.js');
  * @abstract Función que permite obtener todos los asesores
  * @returns  asesores
  * */
-const obtenerAsesores = async (activo) => {
+const obtenerAsesores = async (id_distrito_judicial,pagina) => {
   try {
-    if (activo !== undefined && activo !== null && activo !== "") {
-      const whereClause = {};
-      whereClause['$empleado.estatus_general$'] = "ACTIVO";
-      return await modeloAsesor.Asesor.findAll({
+/*
+    const whereClause = {};
+    whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+    return await modeloAsesor.Asesor.findAll({
+      raw: false,
+      nest: true,
+      include: [{
+        model: modeloAsesor.Empleado
+      }
+      ]
+      ,
+      where: whereClause
+    });
+    */
+
+
+    pagina = parseInt(pagina,10);
+    const offset = (pagina - 1) * 5;
+    const limit = 5;
+
+    return await modeloAsesor.Asesor.findAll({  
         raw: false,
         nest: true,
         include: [{
-          model: modeloAsesor.Empleado
+            model: modeloAsesor.Empleado,
+            where: { id_distrito_judicial: id_distrito_judicial }
         }
         ]
-        ,
-        where: whereClause
-      });
-  
-    }else {
-      return await modeloAsesor.Asesor.findAll({
-        raw: false,
-        nest: true,
-        include: [{
-          model: modeloAsesor.Empleado
-        }
-        ]
-      });
-      
-    }
+         ,limit: limit,
+        offset: offset
+    });
 
-
-  
   } catch (error) {
     console.log("Error de asesores:", error.message);
     return null;
@@ -87,7 +91,7 @@ const agregarAsesor = async (asesor) => {
 const actualizarAsesor = async (asesor) => {
   try {
     const result = await modeloAsesor.Asesor.update(asesor, { where: { id_asesor: asesor.id_asesor } });
-    return result[0] === 1; 
+    return result[0] === 1;
   } catch (error) {
     console.log("Error de asesores:", error.message);
     return false;
@@ -111,11 +115,33 @@ const obtenerAsesoresZona = async (id) => {
     return null;
   }
 }
+const obtenerAsesoresByDistrito = async (id_distrito_judicial) => {
+  try {
+    const whereClause = {};
+    whereClause['$empleado.estatus_general$'] = "ACTIVO";
+    whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+    return await modeloAsesor.Asesor.findAll({
+      raw: false,
+      nest: true,
+      include: [{
+        model: modeloAsesor.Empleado
+      }
+      ]
+      ,
+      where: whereClause
+    });
+
+  } catch (error) {
+    console.log("Error de asesores:", error.message);
+    return null;
+  }
+};
 
 //  Exportar los módulos    
 module.exports = {
   obtenerAsesores,
   obtenerAsesorPorId,
   agregarAsesor,
-  actualizarAsesor, obtenerAsesoresZona
+  actualizarAsesor, obtenerAsesoresZona,
+  obtenerAsesoresByDistrito
 };

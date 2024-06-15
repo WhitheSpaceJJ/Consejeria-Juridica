@@ -106,10 +106,42 @@ const obtenerEstadoCivilPorId = asyncError(async (req, res, next) => {
   }
 });
 
+
+ 
+const obtenerEstadosCivilesPaginacion = asyncError(async (req, res, next) => {
+  const pagina = req.query.pagina;
+  const total = req.query.total;
+  if (total === "true") {  
+      const result = await controlEstados.obtenerTotalEstadosCiviles();
+    if (result === null || result === undefined) {
+      const error = new CustomeError('Error al obtener el total de estados civiles', 404);
+      return next(error);
+    } else {
+      res.status(200).json({
+        totalEstadosCiviles: result
+      });
+    }
+
+  } else {
+    const result = await controlEstados.obtenerEstadosCivilesPaginacion(pagina);
+    if (result === null || result === undefined || result.length === 0) {
+      const error = new CustomeError('Error al obtener los estados civiles', 404);
+      return next(error);
+    } else {
+
+      res.status(200).json({
+        estadosCiviles: result
+      });
+    }
+  }
+} 
+);
+
 //Module exports
 module.exports = {
   agregarEstadoCivil,
   obtenerEstadosCiviles,
   actualizarEstadoCivil,
-  obtenerEstadoCivilPorId
+  obtenerEstadoCivilPorId,
+  obtenerEstadosCivilesPaginacion
 };

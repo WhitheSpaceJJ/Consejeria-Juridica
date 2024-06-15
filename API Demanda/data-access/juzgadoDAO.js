@@ -63,6 +63,27 @@ class JuzgadoDAO {
     }
   }
 
+    
+   async obtenerJuzgadosPaginacion(pagina) {
+    try {
+      pagina = parseInt(pagina, 10)
+      const offset = (pagina - 1) * 10
+      const resultados = await Juzgado.findAll({ offset: offset, limit: 10 })
+      return resultados
+    } catch (err) {
+      throw err
+    }
+  }
+ 
+  async obtenerTotalJuzgados() {
+    try {
+      return await Juzgado.count()
+    } catch (err) {
+      throw err
+    }
+  }
+
+
 }
 
 module.exports = new JuzgadoDAO()

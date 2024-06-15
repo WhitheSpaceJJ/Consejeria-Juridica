@@ -14,12 +14,18 @@ const permisosAceptables = ["AD_GENEROS_SA","ALL_SA"]
 
 // Creamos un nuevo router
 const router = express.Router();
-
+ 
+router.route('/paginacion')
+  // Obtener todos los géneros
+  .get(
+    validarPermisos(permisosAceptables),
+    servicioGeneros.obtenerGenerosPaginacion)
 
 router.route('/')
   // Obtener todos los géneros
   .get(
-    validarPermisos(["AD_GENEROS_SA","ALL_SA","ALL_SD","REGISTRO_ASESORIA_SA", "REGISTRO_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD"]),
+    validarPermisos(["ALL_SA","ALL_SD","REGISTRO_ASESORIA_SA", "TURNAR_ASESORIA_SA",
+      "REGISTRO_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD"]),
     servicioGeneros.obtenerGeneros)
   // Agregar un nuevo género
   .post(
