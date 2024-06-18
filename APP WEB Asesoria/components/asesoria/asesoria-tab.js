@@ -176,6 +176,7 @@ export class AsesoriaTab extends HTMLElement {
     //Llamada a la funcion que llena los inputs con los valores obtenidos
     await this.fillInputs()
 
+    await this.agregarMunicipiosByDistrito()
     //Llamada a la funcion que maneja los eventos de los inputs
     await this.manejadorDeEntrada()
   }
@@ -321,7 +322,6 @@ export class AsesoriaTab extends HTMLElement {
     this.#tipoJuicio = this.shadowRoot.getElementById('tipo-juicio')
     this.#municipio = this.shadowRoot.getElementById('municipio')
     this.#distrito = this.shadowRoot.getElementById('distrito')
-    this.#distrito.addEventListener('change', this.agregarMunicipiosByDistrito)
     this.#resumen = this.shadowRoot.getElementById('resumen')
     this.#conclusion = this.shadowRoot.getElementById('conclusion')
 
@@ -339,6 +339,8 @@ export class AsesoriaTab extends HTMLElement {
 
   //Este metodo se encarga de buscar los municipios relacionados con respecto al distrito seleccionado
   agregarMunicipiosByDistrito = async () => {
+    //     this.#distrito.value = this.#api.user.id_distrito_judicial
+    this.#distrito.value = this.#api.user.id_distrito_judicial
     //Si el distrito seleccionado es 0 se habilita el input municipio y se le asigna el valor 0
     if (this.#distrito.value === '0') {
       this.shadowRoot.getElementById('municipio').value = '0'
@@ -359,6 +361,7 @@ export class AsesoriaTab extends HTMLElement {
         this.#municipio.appendChild(option)
       })
     }
+
   }
 
 

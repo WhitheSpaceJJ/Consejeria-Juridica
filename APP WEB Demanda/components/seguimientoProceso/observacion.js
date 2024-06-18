@@ -200,6 +200,35 @@ export class ObservacionPromovente extends HTMLElement {
           //Validacion si el campo de observacion no esta vacio y no excede los 200 caracteres
           if (observacion !== '' && observacion.length <= 200) {
             //Se obtiene el id de la observacion
+            
+          /*
+  const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de agregar el estado procesal presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar estado procesal?'
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Se crea un objeto con los datos del estado procesal
+                  const estadoProcesalData = {
+                    descripcion_estado_procesal: estadoProcesal,
+                    fecha_estado_procesal: fechaEstadoProcesal
+                  }
+                  this.#actual++
+                  //Se agrega el estado procesal al arreglo de estados procesales
+                  this.#estadosProcesales.push(estadoProcesalData)
+                  //Se llama a la funcion que muestra los estados procesales
+                  this.mostrarEstadosProcesales()
+                  //Se limpian los campos del formulario
+                  this.#estadoProcesal.value = ''
+                  this.#fechaEstadoProcesal.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
+          */
+            /*
             const id_observacion_si_tiene = this.#observaciones[observacionId - 1].id_observacion
             const id_proceso_judicial_si_tiene = this.#observaciones[observacionId - 1].id_proceso_judicial
             const observacionData = {
@@ -215,6 +244,33 @@ export class ObservacionPromovente extends HTMLElement {
             this.#idObservacion = null
             //Se limpia el campo de observacion
             this.#observacion.value = ''
+            */
+            
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de editar la observación presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de editar observación?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Se crea un objeto con los datos de la observacion
+                  const observacionData = {
+                    observacion: observacion
+                  }
+                  //Se actualiza la observacion
+                  this.#observaciones[observacionId - 1] = observacionData
+                  //Se muestra la observacion en la tabla
+                  this.mostrarObservaciones()
+                  //Se limpian los campos
+                  this.#idObservacion = null
+                  //Se limpia el campo de observacion
+                  this.#observacion.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
           } else {
             const modal = document.querySelector('modal-warning')
             modal.message = 'El campo de observación es obligatorio.'
@@ -254,6 +310,8 @@ export class ObservacionPromovente extends HTMLElement {
       } else {
         //Validacion si el campo de observacion no esta vacio y no excede los 200 caracteres
         if (observacion !== '' && observacion.length <= 200) {
+           
+          /*
           const observacionData = {
             observacion: observacion
           }
@@ -263,6 +321,30 @@ export class ObservacionPromovente extends HTMLElement {
           this.mostrarObservaciones()
           //Se limpian los campos
           this.#observacion.value = ''
+          */
+          const modal = document.querySelector('modal-warning') 
+          modal.message = 'Si esta seguro de agregar la observación presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar observación?'
+
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+                //Se crea un objeto con los datos de la observacion
+                const observacionData = {
+                  observacion: observacion
+                }
+                //Se agrega la observacion
+                this.#observaciones.push(observacionData)
+                //Se muestra la observacion en la tabla
+                this.mostrarObservaciones()
+                //Se limpian los campos
+                this.#observacion.value = ''
+              }
+            }
+          }
+          );
+          modal.open = true
         } else {
           //Caso contrario se muestra un mensaje de error
           const modal = document.querySelector('modal-warning')

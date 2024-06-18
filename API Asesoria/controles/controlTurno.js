@@ -7,32 +7,88 @@ const modeloTurno = require('../modelos/modeloTurno');
  * @abstract Función que permite obtener todos los turnos
  * @returns turnos
  */
-const obtenerTurnos = async () => {
+const obtenerTurnos = async (id_defensor, id_distrito_judicial, total, pagina) => {
   try {
-    const controlAsesoria = require('./controlAsesoria');
-    const controlDefensor = require('./controlDefensor');
 
-    const turnos = await modeloTurno.Turno.findAll({
-      raw: false,
-      nest: true,
-      where: { estatus_general: "NO_SEGUIMIENTO" },
-    });
-    const turnos_regreso = [];
-    for (let i = 0; i < turnos.length; i++) {
-      const turno = JSON.parse(JSON.stringify(turnos[i]));
-      const asesoria = await controlAsesoria.obtenerAsesoriaPorId(turno.id_asesoria);
-      delete asesoria.turno;
-      const defensor = await controlDefensor.obtenerDefensorPorId(turno.id_defensor);
-      delete turno.id_asesoria;
-      delete turno.id_defensor;
-      turno.asesoria = asesoria;
-      turno.defensor = defensor;
-      turnos_regreso.push(turno);
+    const limite = 10;
+    const offset = (parseInt(pagina, 10) - 1) * limite;
+
+    const whereClause = { estatus_general: "NO_SEGUIMIENTO" };
+    if (id_defensor) whereClause.id_defensor = id_defensor;
+    if (id_distrito_judicial) whereClause['$defensor.empleado.id_distrito_judicial$'] = id_distrito_judicial;
+
+    if (total) {
+      return await modeloTurno.Turno.count({
+        raw: false,
+        nest: true,
+        where: whereClause,
+        include: [
+          {
+            model: modeloTurno.Asesoria,
+          }, 
+          {
+            model: modeloTurno.Defensor,
+            include: [
+              {
+                model: modeloTurno.Empleado,
+              },
+            ],
+          },
+
+        ] });
+    } else {
+      const turnos_pre = await modeloTurno.Turno.findAll({
+        raw: false,
+        nest: true,
+        where: whereClause,
+        include: [
+          {
+            model: modeloTurno.Asesoria,
+          }, 
+          {
+            model: modeloTurno.Defensor,
+            include: [
+              {
+                model: modeloTurno.Empleado,
+              },
+            ],
+          },
+
+        ]
+       // ,limit: limite,
+      //  offset: offset
+      });
+    
+     const controlAsesoria = require('./controlAsesoria');
+
+      const turnos = [];
+
+      const pageSize = 10;
+      const pageNumber = parseInt(pagina, 10);
+      const startIndex = (pageNumber - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+
+       const turnosOnPage = turnos_pre.slice(startIndex, endIndex); 
+
+      for (let i = 0; i < turnosOnPage.length; i++) {
+        const turno = JSON.parse(JSON.stringify(turnosOnPage[i]));
+        const asesoria = await controlAsesoria.obtenerAsesoriaPorId(turno.id_asesoria);
+        delete asesoria.turno;
+        delete turno.id_asesoria;
+        delete turno.id_defensor;
+        turno.asesoria = asesoria;
+        turnos.push(turno);
+      }
+
+       if (turnos.length > 0) {
+        return turnos;
+      } else {
+        return null;
+      }
     }
-    return turnos_regreso;
   } catch (error) {
-    console.log("Error turno:", error.message);
-    return null;
+    console.error("Error turno:", error.message);
+    throw error;
   }
 };
 
@@ -44,20 +100,31 @@ const obtenerTurnos = async () => {
 const obtenerTurnoPorId = async (id) => {
   try {
     const controlAsesoria = require('./controlAsesoria');
-    const controlDefensor = require('./controlDefensor');
 
     const turno_pre = await modeloTurno.Turno.findByPk(id, {
       raw: false,
       nest: true,
+      include: [
+        {
+          model: modeloTurno.Asesoria,
+        }, 
+        {
+          model: modeloTurno.Defensor,
+          include: [
+            {
+              model: modeloTurno.Empleado,
+            },
+          ],
+        },
+
+      ] 
     });
     const turno = JSON.parse(JSON.stringify(turno_pre));
     const asesoria = await controlAsesoria.obtenerAsesoriaPorId(turno.id_asesoria);
     delete asesoria.turno;
-    const defensor = await controlDefensor.obtenerDefensorPorId(turno.id_defensor);
     delete turno.id_asesoria;
     delete turno.id_defensor;
     turno.asesoria = asesoria;
-    turno.defensor = defensor;
     return turno;
   } catch (error) {
     console.log("Error turno:", error.message);
@@ -67,23 +134,34 @@ const obtenerTurnoPorId = async (id) => {
 const obtenerTurnoPorDefensorId = async (id) => {
   try {
     const controlAsesoria = require('./controlAsesoria');
-    const controlDefensor = require('./controlDefensor');
 
     const turno_pre = await modeloTurno.Turno.findAll({
       raw: false,
       nest: true,
-      where: { id_defensor: id , estatus_general: "NO_SEGUIMIENTO"},
+      include: [
+        {
+          model: modeloTurno.Asesoria,
+        }, 
+        {
+          model: modeloTurno.Defensor,
+          include: [
+            {
+              model: modeloTurno.Empleado,
+            },
+          ],
+        },
+
+      ] ,
+      where: { id_defensor: id, estatus_general: "NO_SEGUIMIENTO" },
     });
     const turnos = [];
     for (let i = 0; i < turno_pre.length; i++) {
       const turno = JSON.parse(JSON.stringify(turno_pre[i]));
       const asesoria = await controlAsesoria.obtenerAsesoriaPorId(turno.id_asesoria);
       delete asesoria.turno;
-      const defensor = await controlDefensor.obtenerDefensorPorId(turno.id_defensor);
       delete turno.id_asesoria;
       delete turno.id_defensor;
       turno.asesoria = asesoria;
-      turno.defensor = defensor;
       turnos.push(turno);
     }
     return turnos;
@@ -117,7 +195,6 @@ const agregarTurno = async (turno) => {
  */
 const actualizarTurno = async (turno) => {
   try {
-    console.log("turno", turno);
     const result = await modeloTurno.Turno.update(turno, { where: { id_turno: turno.id_turno } });
     return result[0] === 1;
   } catch (error) {

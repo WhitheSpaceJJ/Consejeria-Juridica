@@ -133,17 +133,82 @@
 
 
 
+  <div class="flex justify-center space-x-6 mt-4">
+    <!-- Botón para Estados Procesales -->
+    <button id="button-estados-procesales" class="flex-shrink-0 inline-flex items-center
+                  text-sm font-medium text-center text-white  py-2 bg-red-500 hover:bg-red-600  mr-2 px-6
+                  border border-[#9c1d23] rounded-lg hover:bg-red-700 focus:ring-4 
+                  focus:outline-none focus:ring-red-300 h-full" type="button"
+      title="Descarga Reporte Estados Procesales">
+      <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 2a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2h6zm0 2H6v16h6V4zM18 6h2v14h-2V6z" />
+      </svg>
+      Estados Procesales
+    </button>
 
+    <!-- Botón para Observaciones -->
+    <button id="button-observaciones" class="flex-shrink-0 inline-flex items-center
+                  text-sm font-medium text-center text-white py-2 bg-red-500 hover:bg-red-600 mr-2 px-6
+                  border border-[#9c1d23] rounded-lg hover:bg-red-700 focus:ring-4 
+                  focus:outline-none focus:ring-red-300 h-full" type="button" title="Descarga Reporte Observaciones">
+      <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 4a8 8 0 100 16 8 8 0 000-16zm0 2a6 6 0 110 12A6 6 0 0112 6zm0 2a1 1 0 100 2 1 1 0 000-2zm0 3a3 3 0 10.001 5.999A3 3 0 0012 11z" />
+      </svg>
+      Observaciones
+    </button>
 
-  <estado-procesal></estado-procesal>
+    <!-- Botón para Resoluciones -->
+    <button id="button-resoluciones" class="flex-shrink-0 inline-flex items-center
+                  text-sm font-medium text-center text-white  py-2 bg-red-500 hover:bg-red-600  mr-2 px-6
+                  border border-[#9c1d23] rounded-lg hover:bg-red-700 focus:ring-4 
+                  focus:outline-none focus:ring-red-300 h-full" type="button" title="Descarga Reporte Resoluciones">
+      <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2a2 2 0 012 2v6h6v12H4V2h8zm0 2H6v14h12V10h-6V4z" />
+      </svg>
+      Resoluciones
+    </button>
 
-  <prueba-promovente> </prueba-promovente>
+    <!-- Botón para Familiares -->
+    <button id="button-familiares" class="flex-shrink-0 inline-flex items-center
+                  text-sm font-medium text-center text-white  py-2 bg-red-500 hover:bg-red-600 mr-2 px-6
+                  border border-[#9c1d23] rounded-lg hover:bg-red-700 focus:ring-4 
+                  focus:outline-none focus:ring-red-300 h-full" type="button" title="Descarga Reporte Familiares">
+      <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 12a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm0-10a4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 014-4zM7 6a2 2 0 100 4 2 2 0 000-4z" />
+      </svg>
+      Familiares
+    </button>
 
-  <observacion-promovente></observacion-promovente>
+    <!-- Botón para Pruebas -->
+    <button id="button-pruebas" class="flex-shrink-0 inline-flex items-center
+                  text-sm font-medium text-center text-white  py-2 bg-red-500 hover:bg-red-600 mr-2 px-6
+                  border border-[#9c1d23] rounded-lg hover:bg-red-700 focus:ring-4 
+                  focus:outline-none focus:ring-red-300 h-full" type="button" title="Descarga Reporte Pruebas">
+      <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M10 4H2v16h20V6H12l-2-2zm0 2l2 2h8v10H4V6h6zm0-2v2H4V4h6z" />
+      </svg>
+      Pruebas
+    </button>
+  </div>
+  <div id="estadoProcesal" class="hidden">
+    <estado-procesal></estado-procesal>
+  </div>
+  <div id="pruebaPromovente" class="hidden">
+    <prueba-promovente> </prueba-promovente>
+  </div>
+  <div id="observacionPromovente" class="hidden">
+    <observacion-promovente></observacion-promovente>
+  </div>
+  <div id="resolucionPromovente" class="hidden">
+    <resolucion-promovente></resolucion-promovente>
+  </div>
+  <div id="familiarPromovente" class="hidden">
+    <familiar-promovente></familiar-promovente>
+  </div>
 
-  <resolucion-promovente></resolucion-promovente>
-
-  <familiar-promovente></familiar-promovente>
 
 
   <div class="flex items-start justify-end">

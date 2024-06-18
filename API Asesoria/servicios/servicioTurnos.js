@@ -14,18 +14,24 @@ const CustomeError = require("../utilidades/customeError");
  */
 
 const obtenerTurnos = asyncError(async (req, res, next) => {
-  const result = await controlTurnos.obtenerTurnos();
-  if (result === null || result === undefined || result.length === 0) {
-    const error = new CustomeError('No se encontraron turnos', 404);
-    return next(error);
-  } else {
+  let { id_defensor, id_distrito_judicial, total, pagina } = req.query;
+  const totalBool = total === 'true';
 
-    res.status(200).json({
-        turnos: result
-    });
+  try {
+    id_defensor = parseInt(id_defensor, 10) || null;
+    id_distrito_judicial = parseInt(id_distrito_judicial, 10) || null;
+    const result = await controlTurnos.obtenerTurnos(id_defensor || null, id_distrito_judicial || null, totalBool, pagina);
+
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      return next(new CustomeError('No se encontraron turnos', 404));
+    }
+
+    const responseKey = totalBool ? 'totalTurnos' : 'turnos';
+    res.status(200).json({ [responseKey]: result });
+  } catch (error) {
+    return next(error);
   }
 });
-
 
 
 /**
@@ -38,13 +44,13 @@ const obtenerTurnos = asyncError(async (req, res, next) => {
  */
 const actualizarTurno = asyncError(async (req, res, next) => {
   const result = await controlTurnos.actualizarTurno(req.body);
-  if ( result === false) {
+  if (result === false) {
     const error = new CustomeError('Error al actualizar el turno', 400);
     return next(error);
   } else {
 
     res.status(200).json({
-        turno: req.body
+      turno: req.body
     });
   }
 });
@@ -65,7 +71,7 @@ const obtenerTurnoPorId = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-        turno: result
+      turno: result
     });
   }
 });
@@ -78,7 +84,7 @@ const obtenerTurnoPorDefensorId = asyncError(async (req, res, next) => {
   } else {
 
     res.status(200).json({
-        turnos: result
+      turnos: result
     });
   }
 });

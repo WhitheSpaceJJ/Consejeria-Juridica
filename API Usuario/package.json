@@ -24,9 +24,11 @@
     "mysql2": "^3.3.4",
     "nodemailer": "^6.9.5",
     "readline-sync": "^1.4.10",
-    "sequelize": "^6.32.0"
+    "sequelize": "^6.32.0",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.3"
   }
 }

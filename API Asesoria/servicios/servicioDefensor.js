@@ -27,8 +27,8 @@ const obtenerDefensores = asyncError(async (req, res, next) => {
 
 
 const obtenerDefensoresByDistrito = asyncError(async (req, res, next) => {
-    const id_distrito_judicial = req.params.id;
-    const result = await controlDefensores.obtenerDefensoresByDistrito(id_distrito_judicial);
+    const {id_distrito_judicial,activo }= req.query
+    const result = await controlDefensores.obtenerDefensoresByDistrito(id_distrito_judicial, activo);
     if (result === null || result === undefined || result.length === 0) {
         const error = new CustomeError('No se encontraron defensores', 404);
         return next(error);

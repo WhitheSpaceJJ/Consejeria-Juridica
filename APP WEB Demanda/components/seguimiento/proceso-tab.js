@@ -200,10 +200,92 @@ export class ProcesoTab extends HTMLElement {
     }
   }
 
+  #botonEstadoProcesal
+  #botonFamiliar
+  #botonObservacion
+  #botonPrueba
+  #botonResolucion
 
+  #componenteEstadoProcesal
+  #componenteFamiliar
+  #componenteObservacion
+  #componentePrueba
+  #componenteResolucion
+
+
+  manejadorComponentes(componente) {
+    switch (componente) {
+      case 'estado-procesal':
+        this.#componenteEstadoProcesal.classList.remove('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'familiar':
+        this.#componenteFamiliar.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'observacion':
+        this.#componenteObservacion.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'prueba':
+        this.#componentePrueba.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'resolucion':
+        this.#componenteResolucion.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        break
+    }
+  }
 
   //Metodo que se encarga de llenar los campos del formulario
   manageFormFields() {
+
+    this.#componenteEstadoProcesal = this.shadowRoot.getElementById('estadoProcesal')
+    this.#componenteFamiliar = this.shadowRoot.getElementById('familiarPromovente')
+    this.#componenteObservacion = this.shadowRoot.getElementById('observacionPromovente')
+    this.#componentePrueba = this.shadowRoot.getElementById('pruebaPromovente')
+    this.#componenteResolucion = this.shadowRoot.getElementById('resolucionPromovente')
+
+    this.#botonPrueba = this.shadowRoot.getElementById('button-pruebas')
+    this.#botonFamiliar = this.shadowRoot.getElementById('button-familiares')
+    this.#botonObservacion = this.shadowRoot.getElementById('button-observaciones')
+    this.#botonResolucion = this.shadowRoot.getElementById('button-resoluciones')
+    this.#botonEstadoProcesal = this.shadowRoot.getElementById('button-estados-procesales')
+
+
+    this.#botonEstadoProcesal.addEventListener('click', () => {
+      this.manejadorComponentes('estado-procesal')
+    })
+    this.#botonFamiliar.addEventListener('click', () => {
+      this.manejadorComponentes('familiar')
+    })
+    this.#botonObservacion.addEventListener('click', () => {
+      this.manejadorComponentes('observacion')
+    })
+    this.#botonPrueba.addEventListener('click', () => {
+      this.manejadorComponentes('prueba')
+    })
+    this.#botonResolucion.addEventListener('click', () => {
+      this.manejadorComponentes('resolucion')
+    })
+
+
     this.#fecha_estatus = this.shadowRoot.getElementById('fecha-estatus')
     this.#fechaInicio = this.shadowRoot.getElementById('fecha-inicio')
     this.#estatusProceso = this.shadowRoot.getElementById('estatus')
@@ -236,10 +318,10 @@ export class ProcesoTab extends HTMLElement {
     //Se obteiene el componente web de estado procesal y se le asigna la data
 
     const estadoProcesalWC = this.#estadosProcesalesWC
-
+     
     // Verificar si el componente fue encontrado
     if (estadoProcesalWC) {
-      const data = this.registroTab.data.proceso.estadosProcesales;
+      const data = this.registroTab.data.id_proceso_judicial;
       estadoProcesalWC.data = data;
     } else {
       console.error('No se encontró el componente web "estado-procesal" en el DOM.');
@@ -251,7 +333,7 @@ export class ProcesoTab extends HTMLElement {
 
     // Verificar si el componente fue encontrado
     if (familiarWC) {
-      const data = this.registroTab.data.promovente.promovente.familiares;
+      const data = this.registroTab.data.id_proceso_judicial
       familiarWC.data = data;
     } else {
       console.error('No se encontró el componente web "familiar" en el DOM.');
@@ -264,7 +346,7 @@ export class ProcesoTab extends HTMLElement {
 
     // Verificar si el componente fue encontrado
     if (observacionWC) {
-      const data = this.registroTab.data.proceso.observaciones;
+      const data = this.registroTab.data.id_proceso_judicial
       observacionWC.data = data;
 
     } else {
@@ -277,7 +359,7 @@ export class ProcesoTab extends HTMLElement {
 
     // Verificar si el componente fue encontrado
     if (pruebaWC) {
-      const data = this.registroTab.data.proceso.pruebas;
+      const data = this.registroTab.data.id_proceso_judicial
       pruebaWC.data = data;
     } else {
       console.error('No se encontró el componente web "prueba" en el DOM.');
@@ -288,7 +370,7 @@ export class ProcesoTab extends HTMLElement {
     // Verificar si el componente fue encontrado
 
     if (resolucionWC) {
-      const data = this.registroTab.data.proceso.resoluciones;
+      const data = this.registroTab.data.id_proceso_judicial
       resolucionWC.data = data;
     } else {
       console.error('No se encontró el componente web "resolucion" en el DOM.');

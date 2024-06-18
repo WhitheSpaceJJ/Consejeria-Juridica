@@ -7,7 +7,7 @@ const controlEmpleado = require('./controlEmpleados.js');
  * @returns  defensores
  * */
 
-const obtenerDefensores = async (id_distrito_judicial,pagina) => {
+const obtenerDefensores = async (id_distrito_judicial, pagina) => {
     try {
         /*
         pagina = parseInt(pagina,10);
@@ -29,11 +29,11 @@ const obtenerDefensores = async (id_distrito_judicial,pagina) => {
         Perdon no es un limite de 10 es de 5
         */
 
-           pagina = parseInt(pagina,10);
+        pagina = parseInt(pagina, 10);
         const offset = (pagina - 1) * 5;
         const limit = 5;
 
-        return await modeloDefensor.Defensor.findAll({  
+        return await modeloDefensor.Defensor.findAll({
             raw: false,
             nest: true,
             include: [{
@@ -41,7 +41,7 @@ const obtenerDefensores = async (id_distrito_judicial,pagina) => {
                 where: { id_distrito_judicial: id_distrito_judicial }
             }
             ]
-             ,limit: limit,
+            , limit: limit,
             offset: offset
         });
 
@@ -52,20 +52,35 @@ const obtenerDefensores = async (id_distrito_judicial,pagina) => {
     }
 };
 
-const obtenerDefensoresByDistrito = async (id_distrito_judicial) => {
+const obtenerDefensoresByDistrito = async (id_distrito_judicial, activo) => {
     try {
-        const whereClause = {};
-        whereClause['$empleado.estatus_general$'] = "ACTIVO";
-        whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
-        return await modeloDefensor.Defensor.findAll({
-            raw: false,
-            nest: true,
-            include: [{
-                model: modeloDefensor.Empleado
-            }
-            ],
-            where: whereClause
-        });
+        if (activo === 'true' || activo === true) {
+            const whereClause = {};
+            whereClause['$empleado.estatus_general$'] = "ACTIVO";
+            whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+            return await modeloDefensor.Defensor.findAll({
+                raw: false,
+                nest: true,
+                include: [{
+                    model: modeloDefensor.Empleado
+                }
+                ],
+                where: whereClause
+            });
+        }else {
+            const whereClause = {};
+            whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
+            return await modeloDefensor.Defensor.findAll({
+                raw: false,
+                nest: true,
+                include: [{
+                    model: modeloDefensor.Empleado
+                }
+                ],
+                where: whereClause
+            });
+        }
+
     } catch (error) {
         console.log("Error defensor:", error.message);
         return null;

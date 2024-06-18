@@ -15,7 +15,7 @@ router.route('/defensor/:id')
   validarPermisos( permisosAceptables),
   servicioTurnos.obtenerTurnoPorDefensorId)
 
-router.route('/')
+router.route('/busqueda')
   // Obtener todos los turnos
   .get(
     validarPermisos(permisosAceptables),

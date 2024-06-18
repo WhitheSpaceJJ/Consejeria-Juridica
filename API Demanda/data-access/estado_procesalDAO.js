@@ -10,7 +10,8 @@ class EstadoProcesalDAO {
     try {
       const result = await estado_procesal.create({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial })
       return result
-    } catch (error) {      console.log(err.message)
+    } catch (error) {
+      console.log(err.message)
 
       throw error
     }
@@ -26,19 +27,45 @@ class EstadoProcesalDAO {
     try {
       const result = await estado_procesal.update({ descripcion_estado_procesal, fecha_estado_procesal, id_proceso_judicial }, { where: { id_estado_procesal } })
       return result[0] == 1
-    } catch (error) {      console.log(err.message)
+    } catch (error) {
+      console.log(err.message)
 
       throw error
     }
   }
 
-  async obtenerEstadoProcesalPorProcesoJudicial(id_proceso_judicial) {
+  async obtenerEstadoProcesalPorProcesoJudicial(id_proceso_judicial, totalBool, pagina) {
+
     try {
-      const estadoProcesal = await estado_procesal.findAll({ where: { id_proceso_judicial:id_proceso_judicial } })
-      return estadoProcesal
-    } catch (error) {
-      throw error
+      const limite = 10;
+      const offset = (parseInt(pagina, 10) - 1) * limite;
+      const whereClause = { id_proceso_judicial: id_proceso_judicial };
+      if (totalBool) {
+        return await estado_procesal.count({
+          raw: false,
+          nest: true,
+          where: whereClause
+        });
+      } else {
+        const estadosProcesales = await estado_procesal.findAll({
+          raw: false,
+          nest: true,
+          where: whereClause,
+          limit: limite,
+          offset: offset
+        });
+        if (estadosProcesales.length > 0) {
+          return estadosProcesales;
+        } else {
+          return null;
+        }
+      }
     }
+    catch (error) {
+     console.log(error.message)  
+      throw error;
+    }
+
   }
 
 

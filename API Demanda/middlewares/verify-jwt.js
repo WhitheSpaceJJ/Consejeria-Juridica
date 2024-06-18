@@ -31,10 +31,14 @@ const jwtMiddleware = async (req, res, next) => {
        const permisos =  response.permisos;
        const id_distrito_judicial = response.id_distrito_judicial;
        const id_usuario = response.id_usuario;
+       const id_tipouser = response.id_tipouser; 
+       const id_empleado = response.id_empleado;
       if ( permisos=== 0) {
         const customeError = new CustomeError('Token inválido, no ha iniciado sesión o no cuenta con permisos.', 401);
         next(customeError);
       } else{
+        req.id_tipouser = id_tipouser;
+        req.id_empleado = id_empleado;
         req.id_usuario = id_usuario;
         req.id_distrito_judicial = id_distrito_judicial;
         req.permisos = response.permisos;

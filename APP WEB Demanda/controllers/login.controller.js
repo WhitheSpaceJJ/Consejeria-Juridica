@@ -20,24 +20,20 @@ class LoginController {
           'Campos obligatorios en blanco, por favor revise.'
         )
       }
-
-      //Llamamos a la función login del modelo
+      //Aqui en este caso se procedera a cambiar el assets del navbar con respecto a los permisos del usuario
       const user = await this.model.login({ correo, password })
-      const permiso = this.utils.validatePermissions({})
-      if (permiso) {
-        const userPermissions = user.permisos;
-        const acceptablePermissions = this.#acceptablePermissions;
-        const hasPermission = (userPermissions, acceptablePermissions) => {
-          return userPermissions.some(permission => acceptablePermissions.includes(permission));
-        };
-        if (!hasPermission(userPermissions, acceptablePermissions)) {
-          window.location.href = 'login.html';
-        }
+      const userPermissions = user.permisos;
+      const acceptablePermissions = this.#acceptablePermissions;
+      const hasPermission = (userPermissions, acceptablePermissions) => {
+        return userPermissions.some(permission => acceptablePermissions.includes(permission));
+      };
+      if (!hasPermission(userPermissions, acceptablePermissions)) {
+        window.location.href = 'login.html';
       }
-      //En caso de que el login sea exitoso, almacenamos el usuario en el sessionStorage
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')
     } catch (error) {
+      console.error(error.message)
       //Muestra un mensaje de error en caso de que el login no sea exitoso
       if (error instanceof ValidationError) {
         const modal = document.querySelector('modal-warning')

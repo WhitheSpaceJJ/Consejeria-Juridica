@@ -178,6 +178,8 @@ export class DemandadoTab extends HTMLElement {
         // Si el campo contiene caracteres no válidos, lanzar una excepción
 
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -185,6 +187,8 @@ export class DemandadoTab extends HTMLElement {
       } else if (nombreInput.value.length > 50) {
         // Si el campo tiene más de 50 caracteres, lanzar una excepción
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -196,11 +200,15 @@ export class DemandadoTab extends HTMLElement {
 
       if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoPaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -212,11 +220,15 @@ export class DemandadoTab extends HTMLElement {
 
       if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -229,17 +241,23 @@ export class DemandadoTab extends HTMLElement {
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'La edad no puede estar vacía, por favor ingresela.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'La edad solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
           modal.open = true;
         }
       } else if (edadInput.value > 200) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;

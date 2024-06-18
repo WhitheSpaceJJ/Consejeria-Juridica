@@ -102,17 +102,21 @@ const actualizarFamiliar = async (req, res) => {
 }
 
 const obtenerFamiliaresPorPromovente = async (req, res) => {
+
     try {
-        const { id } = req.params
-        const familiares = await FamiliarDAO.obtenerFamiliarPorPromovente(Number(id))
-        if (familiares === null || familiares === undefined || familiares.length === 0) {
-            res.status(404).json({
-                message: 'Familiares no encontrados'
-            })
+        let {id_promovente, total, pagina} = req.query
+        const totalBool = total === 'true'
+         id_promovente = parseInt(id_promovente, 10) || null
+         pagina = parseInt(pagina, 10) || 1
+        const result = await FamiliarDAO.obtenerFamiliarPorPromovente(id_promovente || null, totalBool, pagina)
+        if (!result || (Array.isArray(result) && result.length === 0)) {
+            return res.status(404).json({ message: 'No se encontraron familiares' })
         }
-        else {
-            res.status(200).json(familiares)
-        }
+        const responseKey = totalBool
+            ? 'totalFamiliares'
+            : 'familiares'
+        res.status(200).json({ [responseKey]: result })
+
     } catch (error) {
         res.status(500).json({
             message: error.message

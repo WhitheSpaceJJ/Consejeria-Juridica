@@ -1,4 +1,9 @@
-
+/*
+//Variables requeridas https
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+*/
 
 // Importamos los módulos necesarios
 const express = require('express');
@@ -12,6 +17,9 @@ const errorController = require("./utilidades/errrorController")
 
 
 const jwtController = require("./utilidades/jwtController");
+
+const logger = require('./utilidades/logger');
+
 // Importamos el módulo cors para permitir solicitudes de origen cruzado
 const cors = require('cors');
 
@@ -24,6 +32,21 @@ app.use(express.json());
 // Usamos el middleware cors para permitir solicitudes de origen cruzado
 app.use(cors());
 
+// Middleware para loguear cada petición con URL completa, headers, y cuerpo
+app.use((req, res, next) => {
+  const { method, url, body, query, headers } = req;
+
+  // Filtrar solo los encabezados relevantes
+  const relevantHeaders = {
+    authorization: headers.authorization,
+    'user-agent': headers['user-agent'],
+    referer: headers.referer,
+    origin: headers.origin
+  };
+  logger.info(`Request: ${method} ${url} - Headers: ${JSON.stringify(relevantHeaders)} - Query: ${JSON.stringify(query)} - Body: ${JSON.stringify(body)}`);
+  next();
+});
+
 const jwtMiddleware = async (req, res, next) => {
   // Obtenemos el token del encabezado de la solicitud
   if (req.path === "/usuario" || req.path === "/recuperacion") {
@@ -34,19 +57,23 @@ const jwtMiddleware = async (req, res, next) => {
     if (!tokenHeader) {
       // Si no hay token, creamos un error personalizado y lo pasamos al siguiente middleware
       const customeError = new CustomeError('Token no proporcionado.', 401);
+      logger.warn('Token no proporcionado.');
       next(customeError);
       return;
     }
     // Eliminamos el prefijo 'Bearer ' del token
     const token = tokenHeader.replace('Bearer ', '');
     try {
-      const data= await jwtController.verifyToken(token);
+      const data = await jwtController.verifyToken(token);
       req.id_usuario = data.id_usuario;
+      req.id_tipouser = data.id_tipouser;
+      req.id_empleado = data.id_empleado;
       req.id_distrito_judicial = data.id_distrito_judicial;
       req.permisos = data.permisos;
       next();
     } catch (error) {
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión o cuenta con permisos', 401);
+      logger.warn('Token inválido.');
       next(customeError);
     }
   }
@@ -63,15 +90,29 @@ app.use('/usuarios',
 // Si ninguna ruta coincide, creamos un error personalizado y lo pasamos al siguiente middleware
 app.all("*", (req, res, next) => {
   const err = new CustomeError("No se puede encontrar " + req.originalUrl + " en el servidor", 404);
+  logger.warn("No se puede encontrar " + req.originalUrl + " en el servidor");
   next(err);
 });
 
 // Usamos el controlador de errores como último middleware
 app.use(errorController);
 
-// Hacemos que la aplicación escuche en el puerto especificado
+/*
+//Forma con https
+const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+// Crear el servidor HTTPS
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(PORT, () => {
+  logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
+});
+*/
+//Forma sin https
 app.listen(PORT, () => {
-  console.log(`Aplicación corriendo en el puerto ${PORT}`);
+  logger.info(`Servidor escuchando en el puerto ${PORT}`);
 });
 
 const { packageDefinition } = require("./grpc/route.server");
@@ -92,11 +133,13 @@ function getServer() {
     validarToken: (call, callback) => {
       jwtController.verifyToken(call.request.token)
         .then((data) => {
-          callback(null, { permisos: data.permisos, id_distrito_judicial: data.id_distrito_judicial, 
-             id_usuario: data.id_usuario
-           });
+          callback(null, {
+            permisos: data.permisos, id_distrito_judicial: data.id_distrito_judicial,
+            id_usuario: data.id_usuario, id_tipouser: data.id_tipouser , id_empleado: data.id_empleado
+          });
         })
         .catch((error) => {
+          logger.error('Error en la validación del token: ', error.message);
           callback(null, { permisos: [] });
         });
     }
@@ -115,6 +158,7 @@ function getServer() {
           }
         })
         .catch(() => {
+          logger.error('Error en la validación del usuario: ', error.message);
           callback(null, { message: 'Usuario inválido' });
         });
     }
@@ -126,15 +170,15 @@ function getServer() {
 const controlUsuarios = require("./controles/controlUsuario");
 
 
-const server = getServer();
+var server = getServer();
 server.bindAsync(
   `localhost:${GRPCPORTUSUARIOS}`,
   grpc.ServerCredentials.createInsecure(),
   (err, port) => {
     if (err != null) {
+      logger.error(`gRPC Error: ${err.message}`);
       return console.error(err);
     }
-    console.log(`gRPC listening on ${GRPCPORTUSUARIOS}`);
-    server.start();
+    logger.info(`gRPC listening on ${GRPCPORTUSUARIOS}`);
   }
 );

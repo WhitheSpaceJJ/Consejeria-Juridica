@@ -45,12 +45,34 @@ class FamiliarDAO {
    
  
 
-  async obtenerFamiliarPorPromovente(idPromovente) {
+  async obtenerFamiliarPorPromovente(id_promovente, totalBool, pagina) {
+
     try {
-      const familiar = await Familiar.findAll({ where: { id_promovente: idPromovente } })
-      return familiar
-    } catch (err) {
-      throw err
+      const limite = 10
+      const offset = (parseInt(pagina, 10) - 1) * limite
+      const whereClause = { id_promovente: id_promovente }
+      if (totalBool) {
+        return await Familiar.count({
+          raw: false,
+          nest: true,
+          where: whereClause
+        })
+      } else {
+        const familiares = await Familiar.findAll({
+          raw: false,
+          nest: true,
+          where: whereClause,
+          limit: limite,
+          offset: offset
+        })
+        if (familiares.length > 0) {
+          return familiares
+        } else {
+          return null
+        }
+      }
+    } catch (error) {
+      throw error
     }
   }
 

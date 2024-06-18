@@ -44,13 +44,38 @@ class ResolucionDAO {
  * @returns {array} Retorna un arreglo de objetos de resoluciones si la operación fue exitosa, de lo contrario lanza un error
  * */
 
-    async obtenerResolucionesPorProcesoJudicial(id_proceso_judicial) {
+    async obtenerResolucionesPorProcesoJudicial(id_proceso_judicial, totalBool, pagina) {
+    
         try {
-            const resolucion = await Resolucion.findAll({ where: { id_proceso_judicial: id_proceso_judicial } })
-            return resolucion
-        } catch (err) {
-            throw err
+            const limite = 10
+            const offset = (parseInt(pagina, 10) - 1) * limite
+            const whereClause = { id_proceso_judicial: id_proceso_judicial }
+            if (totalBool) {
+                return await Resolucion.count({
+                    raw: false,
+                    nest: true,
+                    where: whereClause
+                })
+            } else {
+                const resoluciones = await Resolucion.findAll({
+                    raw: false,
+                    nest: true,
+                    where: whereClause,
+                    limit: limite,
+                    offset: offset
+                })
+                if (resoluciones.length > 0) {
+                    return resoluciones
+                } else {
+                    return null
+                }
+            }
+
         }
+        catch (error) {
+            throw error
+        }
+
     }
 
     /**

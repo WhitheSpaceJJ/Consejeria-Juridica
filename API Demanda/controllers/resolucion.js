@@ -83,21 +83,23 @@ const actualizarResolucion = async (req, res) => {
 }
 
 const obtenerResolucionesPorProcesoJudicial = async (req, res) => {
+
     try {
-        const { id } = req.params
-        const resoluciones = await ResolucionDAO.obtenerResolucionesPorProcesoJudicial(Number(id))
-        if (resoluciones === null || resoluciones === undefined || resoluciones.length === 0) {
-            res.status(404).json({
-                message: 'Resoluciones no encontradas'
-            })
-        } else {
-            res.status(200).json(resoluciones)
+        let { id_proceso_judicial, total, pagina } = req.query;
+        const totalBool = total === 'true';
+        id_proceso_judicial = parseInt(id_proceso_judicial, 10) || null;
+        pagina = parseInt(pagina, 10) || 1;
+        const result = await ResolucionDAO.obtenerResolucionesPorProcesoJudicial(id_proceso_judicial || null, totalBool, pagina);
+        if (!result || (Array.isArray(result) && result.length === 0)) {
+            return res.status(404).json({ message: 'No se encontraron resoluciones' });
         }
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
+        const responseKey = totalBool ? 'totalResoluciones' : 'resoluciones';
+        res.status(200).json({ [responseKey]: result });
     }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
 }
 
 // Exportar todas las funciones

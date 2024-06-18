@@ -1,6 +1,6 @@
 import { APIModel } from '../../models/api.model'
 
- 
+
 
 export class Resolucion extends HTMLElement {
 
@@ -50,15 +50,15 @@ export class Resolucion extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-        //Inicialización de variables
-        this.#api = new APIModel()
+    //Inicialización de variables
+    this.#api = new APIModel()
 
-        this.#idResolucion = null
-        this.#resoluciones = []
-        //Llamado al metodo que se encarga de gestionar los campos del formulario
-        this.manageFormFields()
-        //Llamado al metodo que se encarga de llenar los campos del formulario
-        this.fillInputs()
+    this.#idResolucion = null
+    this.#resoluciones = []
+    //Llamado al metodo que se encarga de gestionar los campos del formulario
+    this.manageFormFields()
+    //Llamado al metodo que se encarga de llenar los campos del formulario
+    this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
@@ -83,10 +83,10 @@ export class Resolucion extends HTMLElement {
   }
 
   //Metodo que se encarga de validar los campos del formulario de resolucion evento input
-  manejadoeDeEntradaDeTexto(){
+  manejadoeDeEntradaDeTexto() {
     var resolucionInput = this.#resolucion
     resolucionInput.addEventListener('input', function () {
-    if (resolucionInput.value.length > 200) {
+      if (resolucionInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
@@ -160,7 +160,7 @@ export class Resolucion extends HTMLElement {
         modal.title = 'Error de validación'
         modal.open = true
       } else {
-  
+
 
 
         const fechaActual = new Date();
@@ -169,22 +169,80 @@ export class Resolucion extends HTMLElement {
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-         
+
         //En caso de que el campo de resolucion y fecha de resolucion no esten vacios se procede a agregar la resolucion
-        if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
+        if (resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "") {
           //Se crea un objeto con los datos de la resolucion
-        const resolucionData = {
-          resolucion: resolucion,
-          fecha_resolucion: fechaResolucion
+
+          /*
+  const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de agregar el estado procesal presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar estado procesal?'
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Se crea un objeto con los datos del estado procesal
+                  const estadoProcesalData = {
+                    descripcion_estado_procesal: estadoProcesal,
+                    fecha_estado_procesal: fechaEstadoProcesal
+                  }
+                  this.#actual++
+                  //Se agrega el estado procesal al arreglo de estados procesales
+                  this.#estadosProcesales.push(estadoProcesalData)
+                  //Se llama a la funcion que muestra los estados procesales
+                  this.mostrarEstadosProcesales()
+                  //Se limpian los campos del formulario
+                  this.#estadoProcesal.value = ''
+                  this.#fechaEstadoProcesal.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
+          */
+
+          /*
+          const resolucionData = {
+            resolucion: resolucion,
+            fecha_resolucion: fechaResolucion
+          }
+          //Se añade la resolucion al arreglo de resoluciones
+          this.#resoluciones.push(resolucionData)
+          //Se llama a la funcion que se encarga de mostrar las resoluciones
+          this.mostrarResoluciones()
+          //Se limpian los campos de resolucion y fecha de resolucion
+          this.#resolucion.value = ''
+          this.#fechaResolucion.value = ''
+          */ 
+         const modal = document.querySelector('modal-warning')
+          modal.message = 'Si esta seguro de agregar la resolución presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar resolución?'
+
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+                //Se crea un objeto con los datos de la resolucion
+                const resolucionData = {
+                  resolucion: resolucion,
+                  fecha_resolucion: fechaResolucion
+                }
+                //Se añade la resolucion al arreglo de resoluciones
+                this.#resoluciones.push(resolucionData)
+                //Se llama a la funcion que se encarga de mostrar las resoluciones
+                this.mostrarResoluciones()
+                //Se limpian los campos de resolucion y fecha de resolucion
+                this.#resolucion.value = ''
+                this.#fechaResolucion.value = ''
+              }
+            }
+          }
+          );
+          modal.open = true
+
+
         }
-        //Se añade la resolucion al arreglo de resoluciones
-        this.#resoluciones.push(resolucionData)
-        //Se llama a la funcion que se encarga de mostrar las resoluciones
-        this.mostrarResoluciones()
-        //Se limpian los campos de resolucion y fecha de resolucion
-        this.#resolucion.value = ''
-        this.#fechaResolucion.value = ''
-      }
       }
     }
     else {
@@ -249,27 +307,59 @@ export class Resolucion extends HTMLElement {
         // Obtener la fecha ingresada desde tu input HTML (asegúrate de obtener el valor correctamente)
         const fechaIngresada = new Date(fechaResolucion);
         fechaIngresada.setUTCHours(0, 0, 0, 0); // Establecer hora UTC
-        
+
         //En caso de que el campo de resolucion y fecha de resolucion no esten vacios se procede a editar la resolucion
-        if(resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "" ){
+        if (resolucion !== '' && fechaResolucion !== '' && fechaResolucion !== "") {
           //Se genera un objeto con los datos de la resolucion
-        const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
-        const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
-        const resolucionData = {
-          id_resolucion: id_resolucion_si_tiene,
-          resolucion: resolucion,
-          fecha_resolucion: fechaResolucion,
-          id_proceso_judicial: id_proceso_judicial_si_tiene
+          /*
+          const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
+          const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
+          const resolucionData = {
+            id_resolucion: id_resolucion_si_tiene,
+            resolucion: resolucion,
+            fecha_resolucion: fechaResolucion,
+            id_proceso_judicial: id_proceso_judicial_si_tiene
+          }
+          //Se reemplaza la resolucion en el arreglo de resoluciones
+          this.#resoluciones[resolucionID - 1] = resolucionData
+          //Se llama a la funcion que se encarga de mostrar las resoluciones
+          this.mostrarResoluciones()
+          //Se limpian los campos de resolucion y fecha de resolucion
+          this.#idResolucion = null
+          this.#resolucion.value = ''
+          this.#fechaResolucion.value = ''
+          */
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'Si esta seguro de editar la resolución presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de editar resolución?'
+           
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+                const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
+                const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
+                const resolucionData = {
+                  id_resolucion: id_resolucion_si_tiene,
+                  resolucion: resolucion,
+                  fecha_resolucion: fechaResolucion,
+                  id_proceso_judicial: id_proceso_judicial_si_tiene
+                }
+                //Se reemplaza la resolucion en el arreglo de resoluciones
+                this.#resoluciones[resolucionID - 1] = resolucionData
+                //Se llama a la funcion que se encarga de mostrar las resoluciones
+                this.mostrarResoluciones()
+                //Se limpian los campos de resolucion y fecha de resolucion
+                this.#idResolucion = null
+                this.#resolucion.value = ''
+                this.#fechaResolucion.value = ''
+              }
+            }
+          }
+          );
+
+          modal.open = true
         }
-        //Se reemplaza la resolucion en el arreglo de resoluciones
-        this.#resoluciones[resolucionID - 1] = resolucionData
-        //Se llama a la funcion que se encarga de mostrar las resoluciones
-        this.mostrarResoluciones()
-        //Se limpian los campos de resolucion y fecha de resolucion
-        this.#idResolucion = null
-        this.#resolucion.value = ''
-        this.#fechaResolucion.value = ''
-      }
         // }
       }
 
@@ -331,7 +421,7 @@ export class Resolucion extends HTMLElement {
       console.error('Error al obtener las resoluciones:', error)
     }
   }
- //Metodo que muestra un mensaje de error
+  //Metodo que muestra un mensaje de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message

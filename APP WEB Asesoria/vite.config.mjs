@@ -73,6 +73,7 @@ export default defineConfig({
         turnar: resolve(__dirname, 'turnar.html'),
         usuarios: resolve(__dirname, 'usuarios.html'),
       }
-    },
+    },  cacheAssets: false, // Esta opción desactiva la caché de los activos generados
+
   },
 });

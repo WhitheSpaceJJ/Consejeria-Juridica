@@ -61,7 +61,6 @@ export class AsesoradoTab extends HTMLElement {
     this.#api = new APIModel()
     await this.campos()
 
-
     //Se obtiene el genero de la persona 
     this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero).then(data => {
       this.#generoActual = data.genero
@@ -172,7 +171,6 @@ export class AsesoradoTab extends HTMLElement {
         }
       }
     });
-
 
     //Encarga de validar el apellido paterno en tiempo real con respecto a la entrada de texto y validar si cumple con solo letras y no tiene mas de 50 caracteres
     apellidoPaternoInput.addEventListener('input', function () {

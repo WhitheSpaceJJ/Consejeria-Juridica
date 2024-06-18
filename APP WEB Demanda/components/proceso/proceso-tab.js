@@ -155,6 +155,8 @@ export class ProcesoTab extends HTMLElement {
     this.#distritosJudiciales = distritosJudiciales
 
     //Obtenemos los datos del turno seleccionado y los asignamos a las variables correspondientes
+
+
     const id_distrito_judicial = this.registroTab.data.turno.asesoria.distrito_judicial.id_distrito_judicial
     const id_municipio = this.registroTab.data.turno.asesoria.municipio.id_municipio_distrito
     this.#idDistritoJudicial = id_distrito_judicial
@@ -172,8 +174,90 @@ export class ProcesoTab extends HTMLElement {
 
   }
 
+  #botonEstadoProcesal
+  #botonFamiliar
+  #botonObservacion
+  #botonPrueba
+  #botonResolucion
+
+  #componenteEstadoProcesal
+  #componenteFamiliar
+  #componenteObservacion
+  #componentePrueba
+  #componenteResolucion
+
+
+  manejadorComponentes(componente) {
+    switch (componente) {
+      case 'estado-procesal':
+        this.#componenteEstadoProcesal.classList.remove('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'familiar':
+        this.#componenteFamiliar.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'observacion':
+        this.#componenteObservacion.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'prueba':
+        this.#componentePrueba.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componenteResolucion.classList.add('hidden')
+        break
+      case 'resolucion':
+        this.#componenteResolucion.classList.remove('hidden')
+        this.#componenteEstadoProcesal.classList.add('hidden')
+        this.#componenteFamiliar.classList.add('hidden')
+        this.#componenteObservacion.classList.add('hidden')
+        this.#componentePrueba.classList.add('hidden')
+        break
+    }
+  }
+
   //Metodo que se ejecuta cuando se cambia un atributo
   manageFormFields() {
+    this.#componenteEstadoProcesal = this.shadowRoot.getElementById('estadoProcesal')
+    this.#componenteFamiliar = this.shadowRoot.getElementById('familiarPromovente')
+    this.#componenteObservacion = this.shadowRoot.getElementById('observacionPromovente')
+    this.#componentePrueba = this.shadowRoot.getElementById('pruebaPromovente')
+    this.#componenteResolucion = this.shadowRoot.getElementById('resolucionPromovente')
+
+    this.#botonPrueba = this.shadowRoot.getElementById('button-pruebas')
+    this.#botonFamiliar = this.shadowRoot.getElementById('button-familiares')
+    this.#botonObservacion = this.shadowRoot.getElementById('button-observaciones')
+    this.#botonResolucion = this.shadowRoot.getElementById('button-resoluciones')
+    this.#botonEstadoProcesal = this.shadowRoot.getElementById('button-estados-procesales')
+
+
+    this.#botonEstadoProcesal.addEventListener('click', () => {
+      this.manejadorComponentes('estado-procesal')
+    })
+    this.#botonFamiliar.addEventListener('click', () => {
+      this.manejadorComponentes('familiar')
+    })
+    this.#botonObservacion.addEventListener('click', () => {
+      this.manejadorComponentes('observacion')
+    })
+    this.#botonPrueba.addEventListener('click', () => {
+      this.manejadorComponentes('prueba')
+    })
+    this.#botonResolucion.addEventListener('click', () => {
+      this.manejadorComponentes('resolucion')
+    })
+
     //Asignacion de los campos del formulario a las variables correspondientes
     this.#fechaInicio = this.shadowRoot.getElementById('fecha-inicio')
     this.#estatusProceso = this.shadowRoot.getElementById('estatus')
@@ -211,6 +295,8 @@ export class ProcesoTab extends HTMLElement {
 
       if (numeroExpedienteInput.value.length > 20) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
+
         modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true
@@ -222,6 +308,8 @@ export class ProcesoTab extends HTMLElement {
     controlInternoInput.addEventListener('input', function () {
       if (controlInternoInput.value.length > 20) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
+
         modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true

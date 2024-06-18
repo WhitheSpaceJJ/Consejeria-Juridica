@@ -21,7 +21,7 @@ const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
 // Se crea una instancia de Router
 const router = Router()
 
-router.get('/promovente/:id', 
+router.get('/promovente', 
 validarPermisos(permisosAceptables2),
 existePromovente,
 obtenerFamiliaresPorPromovente)

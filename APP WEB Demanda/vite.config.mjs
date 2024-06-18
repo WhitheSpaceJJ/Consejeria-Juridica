@@ -76,6 +76,7 @@ export default defineConfig({
         seguimiento: resolve(__dirname, 'seguimiento.html'),
       }
     },
-    
+    cacheAssets: false, // Esta opción desactiva la caché de los activos generados
+
   },
 });

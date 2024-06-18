@@ -602,7 +602,7 @@ class APIModel {
   }
   //Metodo para obtener asesores por distrito    
   async getDefensoresByDistrito(id) {
-    const url = `${this.ASESORIAS_API_URL}/defensores/distrito/${id}`
+    const url = `${this.ASESORIAS_API_URL}/defensores/distrito?id_distrito_judicial=${id}&activo=true`
     const response = await fetch(url, {
       method: 'GET',
       headers: {

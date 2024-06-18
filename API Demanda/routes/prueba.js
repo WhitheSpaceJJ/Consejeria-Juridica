@@ -22,7 +22,7 @@ const validarPermisos = require("../utilidades/validadorPermisos");
 const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
 const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
 
-router.get('/proceso-judicial/:id', 
+router.get('/proceso-judicial', 
 validarPermisos(permisosAceptables2),
 existeProcesoJudicial,
 obtenerPruebasPorProcesoJudicial)

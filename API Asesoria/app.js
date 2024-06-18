@@ -1,3 +1,11 @@
+/*
+//Variables requeridas https
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+*/
+
+
 // Variable para cargar el módulo de express 
 const express = require('express');
 // Puerto en el que se ejecutará el servidor
@@ -28,6 +36,8 @@ const { packageDefinition3 } = require("./clienteUsuarios/cliente.js")
 const CustomeError = require("./utilidades/customeError");
 // Variable para cargar el módulo de control de errores
 const errorController = require("./utilidades/errrorController")
+
+const logger = require('./utilidades/logger');
 // Variable para cargar el módulo de cors
 const cors = require('cors');
 // Variable para cargar el módulo de express
@@ -37,11 +47,27 @@ app.use(express.json());
 // Uso de cors
 app.use(cors());
 
+// Middleware para loguear cada petición con URL completa, headers, y cuerpo
+app.use((req, res, next) => {
+  const { method, url, body, query, headers } = req;
+
+  // Filtrar solo los encabezados relevantes
+  const relevantHeaders = {
+    authorization: headers.authorization,
+    'user-agent': headers['user-agent'],
+    referer: headers.referer,
+    origin: headers.origin
+  };
+
+  logger.info(`Request: ${method} ${url} - Headers: ${JSON.stringify(relevantHeaders)} - Query: ${JSON.stringify(query)} - Body: ${JSON.stringify(body)}`);
+  next();
+});
 const jwtMiddleware = async (req, res, next) => {
   const tokenHeader = req.headers.authorization; // Obtener el valor del encabezado "Authorization"
   // Verificar si el token existe en el encabezado
   if (!tokenHeader) {
     const customeError = new CustomeError('Token no proporcionado.', 401);
+     logger.warn('Token no proporcionado.');
     next(customeError);
     return;
   }
@@ -62,11 +88,16 @@ const jwtMiddleware = async (req, res, next) => {
      const permisos =  response.permisos;
      const id_distrito_judicial = response.id_distrito_judicial;
      const id_usuario = response.id_usuario;
+     const id_tipouser = response.id_tipouser;
+     const id_empleado = response.id_empleado;
     if ( permisos=== 0) {
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión o no cuenta con permisos.', 401);
+       logger.warn('Token inválido.');
       next(customeError);
     } else{
+      req.id_tipouser = id_tipouser;
       req.id_usuario = id_usuario;
+      req.id_empleado = id_empleado;
       req.id_distrito_judicial = id_distrito_judicial;
       req.permisos = response.permisos;
       next();
@@ -122,13 +153,27 @@ jwtMiddleware,
 // Middleware para manejar las rutas no encontradas
 app.all("*", (req, res, next) => {
   const err = new CustomeError("Cannot find " + req.originalUrl + " on the server", 404);
+  logger.warn(`Cannot find ${req.originalUrl} on the server`);
   next(err);
 });
 // Middleware para manejar los errores
 app.use(errorController);
-// Iniciamos el servidor
+/*
+//Forma con https
+const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+// Crear el servidor HTTPS
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(PORT, () => {
+  logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
+});
+*/
+//Forma sin https
 app.listen(PORT, () => {
-  console.log(`Aplicación corriendo en el puerto ${PORT}`);
+  logger.info(`Servidor escuchando en el puerto ${PORT}`); 
 });
 
 
@@ -166,6 +211,7 @@ const controlDistritos = require("./controles/controlDistritosJudiciales.js");
 const controlTurnos = require("./controles/controlTurno.js");
 const controlTipoJuicio = require("./controles/controlTipoJuicio.js");
 const controlDefensores = require("./controles/controlDefensor.js");
+const { log } = require('winston');
 /**
 * Función que permite crear el servidor GRPC el cual valida el token
 *  */
@@ -181,6 +227,7 @@ function getServer() {
        }
 
      }).catch((err) => {
+       logger.error(`gRPC Error: ${err.message}`);
        callback(null, responseInvalidoEmpleado);
      });
    }
@@ -196,6 +243,7 @@ function getServer() {
       }
 
     }).catch((err) => {
+       logger.error(`gRPC Error: ${err.message}`);
       callback(null, responseInvalidoDistrito);
     });
   }
@@ -211,6 +259,7 @@ server.addService(routeguide.TurnoService.service, {
       }
 
     }).catch((err) => {
+       logger.error(`gRPC Error: ${err.message}`);
       callback(null,  responseInvalidoTurno);
     });
   }
@@ -228,6 +277,7 @@ server.addService(routeguide.TipoJuicioService.service, {
       }
 
     }).catch((err) => {
+       logger.error(`gRPC Error: ${err.message}`);
       callback(null,  responseInvalidoTipoJuicio);
     });
   }
@@ -256,17 +306,16 @@ server.addService(routeguide.DefensorService.service, {
  return server;
 }
 
-//Inicializamos el servidor GRPC en el puerto 161
+
 var server2 = getServer();
 server2.bindAsync(
- `localhost:${GRPCPORTASESORIAS}`,
- grpc2.ServerCredentials.createInsecure(),
- (err, port) => {
-   if (err != null) {
-     return console.error(err);
-   }
-   console.log("")
-   console.log(`gRPC listening on ${GRPCPORTASESORIAS}`)
-   server2.start();
- }
+  `localhost:${GRPCPORTASESORIAS}`,
+  grpc2.ServerCredentials.createInsecure(),
+  (err, port) => {
+    if (err != null) {
+      logger.error(`gRPC Error: ${err.message}`);
+      return console.error(err);
+    }
+    logger.info(`gRPC listening on ${GRPCPORTASESORIAS}`);
+  }
 );

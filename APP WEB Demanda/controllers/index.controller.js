@@ -4,6 +4,7 @@ class IndexController {
   constructor(model) {
     this.model = model
     this.utils = new ControllerUtils(model.user)
+    console.log(this.model.user)
   }
 
   #acceptablePermissions = ['ALL_SD', 'AD_ESCOLARIDAD_SD', 'AD_ETNIA_SD', 'AD_JUZGADO_SD', 'AD_OCUPACION_SD', 'CONSULTA_PROCESO_JUDICIAL_SD', 'SEGUIMIENTO_PROCESO_JUDICIAL_SD', 'REGISTRO_PROCESO_JUDICIAL_SD']

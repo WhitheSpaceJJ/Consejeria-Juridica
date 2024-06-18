@@ -22,7 +22,7 @@ const {
     const router = Router()
 
 // Ruta para obtener todas las resoluciones
-router.get('/proceso-judicial/:id',
+router.get('/proceso-judicial',
 validarPermisos(permisosAceptables2),
  existeProcesoJudicial,
 obtenerResolucionesPorProcesoJudicial)

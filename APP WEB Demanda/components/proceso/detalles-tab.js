@@ -222,7 +222,44 @@ export class DetallesTab extends HTMLElement {
 
         //Evento que se ejecuta al hacer clic en el boton de crear asesoria
         this.btnCrearAsesoria.addEventListener('click', async () => {
-            try {
+            try { 
+                /*
+
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de editar el catalogo presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de editar catalogo?'
+                
+                modal.setOnCloseCallback(() => {
+                  if (modal.open === 'false') {
+                    if (modal.respuesta === true) {
+                      modal.respuesta = false
+
+                      this.#api.putCatalogos(catalogoID, catalogo).then(response => {
+                        if (response) {
+                          this.#catalogo.value = '';
+                          this.#estatusCatalogo.value = '0';
+                          this.#idSeleccion = null;
+                          this.#pagina = 1
+                          this.getNumeroPaginas()
+                          this.mostrarCatalogos();
+                        }
+                      }).catch(error => {
+                        console.error('Error al editar el catalogo:', error);
+                        const modal = document.querySelector('modal-warning')
+                        modal.setOnCloseCallback(() => {});
+
+                        modal.message = 'Error al editar el catalogo, intente de nuevo o verifique el status del servidor.'
+                        modal.title = 'Error de validación'
+                        modal.open = true
+                      });
+                    }
+                  }
+                }
+                );
+                modal.open = true
+
+                */
+                /*
                 //Obtencion de los datos de los tabs de registro, promovente, demandado y proceso
                 const { turno } = this.#registroTab.data
                 const { promovente } = this.#promoventeTab.data
@@ -256,6 +293,66 @@ export class DetallesTab extends HTMLElement {
                         location.href = '/'
                     }
                 )
+                    */
+                    
+                const modal = document.querySelector('modal-warning')
+                modal.message = 'Si esta seguro de crear el proceso judicial presione aceptar, de lo contrario presione x para cancelar.'
+                modal.title = '¿Confirmacion de crear proceso judicial?'
+
+                modal.setOnCloseCallback(() => {
+                    if (modal.open === 'false') {
+                        if (modal.respuesta === true) {
+                            modal.respuesta = false
+                            const { turno } = this.#registroTab.data
+                            const { promovente } = this.#promoventeTab.data
+                            const { demandado } = this.#demandadoTab.data
+                            const { proceso } = this.#procesoTab.data
+                            const procesoJudicial = {
+                                turno,
+                                promovente,
+                                demandado,
+                                proceso
+                            }
+                            this.#api.postProcesoJudicial(procesoJudicial).then(response => {
+                                if (response) {
+                                    const turnoActualizado = {
+                                        id_turno: turno.id_turno,
+                                        fecha_turno: turno.fecha_turno,
+                                        hora_turno: turno.hora_turno,
+                                        id_asesoria: turno.asesoria.datos_asesoria.id_asesoria,
+                                        id_defensor: turno.defensor.id_defensor,
+                                        estatus_general: 'EN_SEGUIMIENTO'
+                                    }
+                                    this.#api.putTurno(turno.id_turno, turnoActualizado).then(response => {
+                                        if (response) {
+                                            this.#showModal(
+                                                'El proceso judicial se ha creado correctamente',
+                                                'Proceso Judicial creado',
+                                                () => {
+                                                    location.href = '/'
+                                                }
+                                            )
+                                        }
+                                    }).catch(error => {
+                                        console.error('Error al actualizar el turno:', error)
+                                        this.#showModal(
+                                            'Ocurrió un error al actualizar el turno',
+                                            'Error al actualizar el turno'
+                                        )
+                                    })
+                                }
+                            }).catch(error => {
+                                console.error('Error al registrar el proceso judicial:', error)
+                                this.#showModal(
+                                    'Ocurrió un error al registrar el proceso judicial',
+                                    'Error al registrar el proceso judicial'
+                                )
+                            })
+                        }
+                    }
+                })
+                modal.open = true
+                   
             } catch (error) {
                 console.error(error)
                 this.#showModal(

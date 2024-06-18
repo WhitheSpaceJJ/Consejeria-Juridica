@@ -134,6 +134,36 @@ export class Prueba extends HTMLElement {
         } else {
           //Validamos si el campo de prueba no esta vacio y tiene menos de 200 caracteres
           if (prueba !== '' && prueba.length <= 200) {
+            
+          /*
+  const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de agregar el estado procesal presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar estado procesal?'
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Se crea un objeto con los datos del estado procesal
+                  const estadoProcesalData = {
+                    descripcion_estado_procesal: estadoProcesal,
+                    fecha_estado_procesal: fechaEstadoProcesal
+                  }
+                  this.#actual++
+                  //Se agrega el estado procesal al arreglo de estados procesales
+                  this.#estadosProcesales.push(estadoProcesalData)
+                  //Se llama a la funcion que muestra los estados procesales
+                  this.mostrarEstadosProcesales()
+                  //Se limpian los campos del formulario
+                  this.#estadoProcesal.value = ''
+                  this.#fechaEstadoProcesal.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
+          */
+
+            /*
             //Creamos un objeto con la descripcion de la prueba
             const pruebaData = {
               descripcion_prueba: prueba
@@ -144,6 +174,32 @@ export class Prueba extends HTMLElement {
             this.mostrarPruebas()
             //Limpiamos los campos del formulario
             this.#prueba.value = ''
+            */
+            
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de agregar la prueba presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar prueba?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Creamos un objeto con la descripcion de la prueba
+                  const pruebaData = {
+                    descripcion_prueba: prueba
+                  }
+                  //Añadimos la prueba al arreglo de pruebas
+                  this.#pruebas.push(pruebaData)
+                  //Llamamos al metodo que se encarga de mostrar las pruebas
+                  this.mostrarPruebas()
+                  //Limpiamos los campos del formulario
+                  this.#prueba.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
+
           } else {
             //Mostramos un mensaje de error si el campo de prueba esta vacio
             const modal = document.querySelector('modal-warning')
@@ -197,6 +253,7 @@ export class Prueba extends HTMLElement {
                
 //Validamos si el campo de prueba no esta vacio y tiene menos de 200 caracteres
               if (prueba !== '' && prueba.length <= 200) {
+                /*
                 //Validamos si la prueba seleccionada de la tabla tiene un id de prueba y un id de proceso judicial
           const id_prueba_si_tiene = this.#pruebas[idPrueba - 1].id_prueba
           const id_proceso_judicial_si_tiene = this.#pruebas[idPrueba - 1].id_proceso_judicial
@@ -212,6 +269,35 @@ export class Prueba extends HTMLElement {
           //Limpiamos los campos del formulario
           this.#idPrueba = null
           this.#prueba.value = ''
+          */
+          const modal = document.querySelector('modal-warning')
+          modal.message = 'Si esta seguro de editar la prueba presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de editar prueba?'
+
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+                //Validamos si la prueba seleccionada de la tabla tiene un id de prueba y un id de proceso judicial
+                const id_prueba_si_tiene = this.#pruebas[idPrueba - 1].id_prueba
+                const id_proceso_judicial_si_tiene = this.#pruebas[idPrueba - 1].id_proceso_judicial
+                const pruebaData = {
+                  id_prueba: id_prueba_si_tiene,
+                  descripcion_prueba: prueba,
+                  id_proceso_judicial: id_proceso_judicial_si_tiene
+                }
+                //Editamos la prueba seleccionada de la tabla
+                this.#pruebas[idPrueba - 1] = pruebaData
+                //Llamamos al metodo que se encarga de mostrar las pruebas
+                this.mostrarPruebas()
+                //Limpiamos los campos del formulario
+                this.#idPrueba = null
+                this.#prueba.value = ''
+              }
+            }
+          }
+          );
+          modal.open = true
         } else {
           //Mostramos un mensaje de error si el campo de prueba esta vacio
           const modal = document.querySelector('modal-warning')

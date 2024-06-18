@@ -12,12 +12,12 @@ const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
 const crearProcesoJudicial = async (req, res) => {
   try {
 
- const { turno, promovente, demandado, proceso } = req.body
+    const { turno, promovente, demandado, proceso } = req.body
 
-  const procesoJudicial = await procesoJudicialDAO.crearProcesoJudicial({
-    turno, promovente, demandado, proceso
-  })
-  res.json(procesoJudicial)
+    const procesoJudicial = await procesoJudicialDAO.crearProcesoJudicial({
+      turno, promovente, demandado, proceso
+    })
+    res.json(procesoJudicial)
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -52,32 +52,24 @@ const obtenerProcesosJudiciales = async (req, res) => {
  */
 
 
-const obtenerProcesosJudicialesPorDefensor = async (req, res) => {
+const obtenerProcesosJudicialesBusqueda = async (req, res) => {
   try {
-    const estatus_proceso = req.query.estatus_proceso
-    const id_defensor = req.query.id_defensor
-    if (estatus_proceso === undefined || estatus_proceso === null || estatus_proceso === "") {
-      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensor(id_defensor)
-      if (procesosJudiciales === null || procesosJudiciales.length === 0) {
-        res.status(404).json({
-          message: "No hay procesos judiciales registrados"
-        })
-      }
-      else {
-        res.status(200).json(procesosJudiciales)
-      }
-    } else {
-      const procesosJudiciales = await procesoJudicialDAO.obtenerProcesosJudicialesPorDefensorEstatus(id_defensor, estatus_proceso)
-      if (procesosJudiciales === null || procesosJudiciales.length === 0) {
-        res.status(404).json({
-          message: "No hay procesos judiciales registrados"
-        })
-      }
-      else {
-        res.status(200).json(procesosJudiciales)
-      }
+    let { id_defensor, id_distrito_judicial, total, pagina, estatus_proceso } = req.query;
+    const totalBool = total === 'true';
+
+    pagina = parseInt(pagina, 10) || 1;
+    id_defensor = parseInt(id_defensor, 10) || null;
+    id_distrito_judicial = parseInt(id_distrito_judicial, 10) || null;
+    
+
+    const result = await procesoJudicialDAO.obtenerProcesosJudicialesBusqueda(id_defensor, id_distrito_judicial, totalBool, pagina, estatus_proceso);
+
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      return res.status(404).json({ message: "No hay procesos judiciales registrados" });
     }
 
+    const responseKey = totalBool ? 'totalProcesosJudiciales' : 'procesosJudiciales';
+    res.status(200).json({ [responseKey]: result });
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -116,8 +108,8 @@ const obtenerProcesoJudicial = async (req, res) => {
  */
 const actualizarProcesoJudicial = async (req, res) => {
   try {
-  
-    const {id} = req.params
+
+    const { id } = req.params
     const { promovente, imputado, proceso } = req.body
     const procesoJudicial = await procesoJudicialDAO.actualizarProcesoJudicialOficial(Number(id), {
       promovente, imputado, proceso
@@ -156,7 +148,7 @@ module.exports = {
   obtenerProcesosJudiciales,
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
-  obtenerProcesosJudicialesPorDefensor
+  obtenerProcesosJudicialesBusqueda
   ,
   obtenerProcesosJudicialesPorTramite
 }

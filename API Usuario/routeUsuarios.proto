@@ -27,4 +27,6 @@ message ValidacionResponseToken {
   repeated string permisos = 1;
   string id_distrito_judicial = 2;
   string id_usuario = 3;
+   string id_tipouser = 4;
+   string id_empleado = 5;
 }

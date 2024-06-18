@@ -41,7 +41,31 @@
       </div>
     </div>
     <div class="relative overflow-x-auto overflow-y-hidden h-auto ">
-      <h2 class="text-2xl font-bold mt-4">Estados Procesal</h2>
+      <div class="flex items-center justify-between">
+        <!-- Div que contiene el título siempre al inicio -->
+        <div class="relative p-2 flex items-center">
+          <h2 class="text-2xl font-bold mt-4">Estados Procesales</h2>
+        </div>
+        
+        <!-- Div que contiene los botones siempre al final -->
+        <div class="relative p-2 flex items-center space-x-2">
+          <span id="total-e" class="font-bold">Total: </span>
+          <button id="anterior-e" class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 rounded flex items-center">
+            <svg class="w-4 h-4 inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Anterior
+          </button>
+          <button id="siguiente-e" class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 rounded flex items-center">
+            Siguiente
+            <svg class="w-4 h-4 inline-block ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>

@@ -67,17 +67,20 @@ const actualizarEstadoProcesal = async (req, res) => {
     })
   }
 }
+const logger = require('../utilidades/logger')
 
 const obtenerEstadosProcesalesPorProcesoJudicial = async (req, res) => {
   try {
-    const { id } = req.params
-    const estados_procesales = await estado_procesalDAO.obtenerEstadoProcesalPorProcesoJudicial(Number(id))
-     if (estados_procesales === null || estados_procesales === undefined || estados_procesales.length === 0) {
-      return res.status(404).json({
-        message: 'Estados procesales no encontrado'
-      });
+    let { id_proceso_judicial, total, pagina } = req.query;
+    const totalBool = total === 'true';
+    id_proceso_judicial = parseInt(id_proceso_judicial, 10) || null;
+    pagina = parseInt(pagina, 10) || 1;
+    const result = await estado_procesalDAO.obtenerEstadoProcesalPorProcesoJudicial(id_proceso_judicial || null, totalBool, pagina);
+    if (!result || (Array.isArray(result) && result.length === 0)) {
+      return res.status(404).json({ message: 'No se encontraron estados procesales' });
     }
-    res.status(200).json(estados_procesales)  
+    const responseKey = totalBool ? 'totalEstadosProcesales' : 'estadosProcesales';
+    res.status(200).json({ [responseKey]: result });
   } catch (error) {
     res.status(500).json({
       message: error.message

@@ -51,7 +51,7 @@ const verifyToken = async (token) => {
           if (permisos.length === 0) {
             reject({ message: 'No tiene permisos' });
           }else{
-            resolve({permisos:permisos, id_distrito_judicial:usuario.id_distrito_judicial});
+            resolve({permisos:permisos, id_distrito_judicial:usuario.id_distrito_judicial, id_usuario:usuario.id_usuario, id_tipouser:usuario.id_tipouser, id_empleado:usuario.id_empleado});
           }
         } catch (error) {
           reject(error);  // Rechaza la promesa en caso de errores en las llamadas asíncronas

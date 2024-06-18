@@ -45,6 +45,9 @@ export class FamiliarPromovente extends HTMLElement {
       familiares: familiares
     }
   }
+  #limite = 5
+  #actual = 0
+
 
   //Metodo que asigna los datos del componente y en caso de se seleccione un nuevo turno se actualice la tabla a valores por default
   set data(value) {
@@ -112,6 +115,8 @@ export class FamiliarPromovente extends HTMLElement {
     parentescoInput.addEventListener('input', function () {
       if (parentescoInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de parentesco no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -122,6 +127,8 @@ export class FamiliarPromovente extends HTMLElement {
     nacionalidadInput.addEventListener('input', function () {
       if (nacionalidadInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nacionalidad no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -132,6 +139,8 @@ export class FamiliarPromovente extends HTMLElement {
     nombreInput.addEventListener('input', function () {
      if (nombreInput.value.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -225,6 +234,8 @@ export class FamiliarPromovente extends HTMLElement {
     if (idFamiliar === null) {
       //En caso de no haber seleccionado un familiar se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Debe seleccionar un familiar para poder editarlo.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -242,11 +253,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que el nombre no este vacio y que no contenga mas de 100 caracteres
       if (nombre === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nombre es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (nombre.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -255,11 +270,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que la nacionalidad no este vacia y que no contenga mas de 100 caracteres
       if (nacionalidad === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nacionalidad es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (nacionalidad.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nacionalidad no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -268,11 +287,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que el parentesco no este vacio y que no contenga mas de 100 caracteres
       if (parentesco === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de parentesco es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (parentesco.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de parentesco no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -283,7 +306,8 @@ export class FamiliarPromovente extends HTMLElement {
          y que los campos de texto no esten vacios y que no contengan mas de 100 caracteres
          */
          if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
-              
+           
+          /*
 
           //Se asignan los datos del familiar a la variable familiarData
           const familiarData = {
@@ -318,9 +342,60 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pobrezaExtremaRadioYes.checked = true
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
+          */ 
+           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+
+                //Se asignan los datos del familiar a la variable familiarData
+                const familiarData = {
+                  nombre: nombre,
+                  nacionalidad: nacionalidad,
+                  parentesco: parentesco,
+                  perteneceComunidadLGBT: perteneceComunidadLGBT,
+                  adultaMayor: adultaMayor,
+                  saludPrecaria: saludPrecaria,
+                  pobrezaExtrema: pobrezaExtrema
+                }
+                //Se asignan los datos del familiar a la lista de familiares
+                this.#familiares[idFamiliar - 1] = familiarData
+                //Se muestran los familiares en la tabla
+                this.mostrarFamiliares()
+                //Se limpian los campos del formulario y del id del familiar seleccionado
+                this.#idFamiliar = null
+                this.#nombreFamiliar.value = ''
+                this.#nacionalidadFamilar.value = ''
+                this.#parentescoFamiliar.value = ''
+                this.#pertenceComunidadLGBTRadioYes.checked = false
+                this.#pertenceComunidadLGBTRadioNo.checked = false
+                this.#adultaMayorRadioYes.checked = false
+                this.#adultaMayorRadioNo.checked = false
+                this.#saludPrecariaRadioYes.checked = false
+                this.#saludPrecariaRadioNo.checked = false
+                this.#pobrezaExtremaRadioYes.checked = false
+                this.#pobrezaExtremaRadioNo.checked = false
+
+                this.#saludPrecariaRadioYes.checked = true
+                this.#pobrezaExtremaRadioYes.checked = true
+                this.#pertenceComunidadLGBTRadioYes.checked = true
+                this.#adultaMayorRadioYes.checked = true
+              }
+            }
+          } 
+          );
+
+          modal.message = 'Si esta seguro de editar el familiar presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de editar familiar?'
+
+          modal.open = true
+          
         } else {
            //En caso de que no se eleccione un radio se muestra un mensaje de error
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'Debe seleccionar una opción en los campos de radio.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -332,6 +407,7 @@ export class FamiliarPromovente extends HTMLElement {
  
   //Metodo que se encarga de agregar un familiar
   agregarFamiliar = async () => {
+    if(this.#actual<this.#limite){
      //ID del familiar variable que nos sirve para saber si se ha seleccionado previamente un familiar
     const idFamiliar = this.#idFamiliar
 
@@ -349,11 +425,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que el nombre no este vacio y que no contenga mas de 100 caracteres
       if (nombre === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nombre es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (nombre.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nombre no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -362,11 +442,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que la nacionalidad no este vacia y que no contenga mas de 100 caracteres
       if (nacionalidad === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nacionalidad es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (nacionalidad.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de nacionalidad no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -376,11 +460,15 @@ export class FamiliarPromovente extends HTMLElement {
       //Se verifica que el parentesco no este vacio y que no contenga mas de 100 caracteres
       if (parentesco === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de parentesco es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
       } else if (parentesco.length > 100) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de parentesco no puede contener más de 100 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -394,6 +482,7 @@ export class FamiliarPromovente extends HTMLElement {
 
         if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
           //Se asignan los datos del familiar a la variable familiarData
+          /*
           const familiarData = {
             nombre: nombre,
             nacionalidad: nacionalidad,
@@ -407,6 +496,7 @@ export class FamiliarPromovente extends HTMLElement {
           this.#familiares.push(familiarData)
           //Se muestran los familiares en la tabla
           this.mostrarFamiliares()
+          this.#actual++  
           //Se limpian los campos del formulario
           this.#nombreFamiliar.value = ''
           this.#nacionalidadFamilar.value = ''
@@ -424,18 +514,71 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pobrezaExtremaRadioYes.checked = true
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
+          */
+          const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+
+                //Se asignan los datos del familiar a la variable familiarData
+                const familiarData = {
+                  nombre: nombre,
+                  nacionalidad: nacionalidad,
+                  parentesco: parentesco,
+                  perteneceComunidadLGBT: perteneceComunidadLGBT,
+                  adultaMayor: adultaMayor,
+                  saludPrecaria: saludPrecaria,
+                  pobrezaExtrema: pobrezaExtrema
+                }
+                //Se asignan los datos del familiar a la lista de familiares
+                this.#familiares.push(familiarData)
+                //Se muestran los familiares en la tabla
+                this.mostrarFamiliares()
+                this.#actual++  
+                //Se limpian los campos del formulario
+                this.#nombreFamiliar.value = ''
+                this.#nacionalidadFamilar.value = ''
+                this.#parentescoFamiliar.value = ''
+                this.#pertenceComunidadLGBTRadioYes.checked = false
+                this.#pertenceComunidadLGBTRadioNo.checked = false
+                this.#adultaMayorRadioYes.checked = false
+                this.#adultaMayorRadioNo.checked = false
+                this.#saludPrecariaRadioYes.checked = false
+                this.#saludPrecariaRadioNo.checked = false
+                this.#pobrezaExtremaRadioYes.checked = false
+                this.#pobrezaExtremaRadioNo.checked = false
+
+                this.#saludPrecariaRadioYes.checked = true
+                this.#pobrezaExtremaRadioYes.checked = true
+                this.#pertenceComunidadLGBTRadioYes.checked = true
+                this.#adultaMayorRadioYes.checked = true
+              }
+            }
+          } 
+          );
+
+          modal.message = 'Si esta seguro de agregar el familiar presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar familiar?'
+
+          modal.open = true
         } else {
           //En caso de que no se eleccione un radio se muestra un mensaje de error
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'Debe seleccionar una opción en los campos de radio.'
           modal.title = 'Error de validación'
           modal.open = true
+
         }
       }
     }
     else {
       //En caso de que se haya seleccionado previamente un familiar se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'No se puede agregar un familiar si ha seleccionado previamente uno de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -457,6 +600,14 @@ export class FamiliarPromovente extends HTMLElement {
       this.#pertenceComunidadLGBTRadioYes.checked = true
       this.#adultaMayorRadioYes.checked = true
     }
+  }else{
+    const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => {});
+
+    modal.message = 'Limite de 5 familares durante el registro de un proceso, sin embargo puede registrar nuevos en la seccion de continuacion de proceso'
+    modal.title = 'Error de validación'
+    modal.open = true
+  }
   }
 
   //Metodo que se encarga de activar el boton de seleccionar familiar

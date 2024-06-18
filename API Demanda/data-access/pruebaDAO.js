@@ -40,12 +40,36 @@ class PruebaDAO {
    * @returns {array} Retorna un arreglo de objetos de pruebas si la operación fue exitosa, de lo contrario lanza un error
    * */
 
-  async obtenerPruebasPorProcesoJudicial(id_proceso_judicial) {
-    try {
-      const prueba = await Prueba.findAll({ where: { id_proceso_judicial: id_proceso_judicial } })
-      return prueba
-    } catch (err) {
-      throw err
+  async obtenerPruebasPorProcesoJudicial(id_proceso_judicial, totalBool, pagina) {
+
+     try {
+      const limite = 10
+      const offset = (parseInt(pagina, 10) - 1) * limite
+      const whereClause = { id_proceso_judicial: id_proceso_judicial }
+      if (totalBool) {
+        return await Prueba.count({
+          raw: false,
+          nest: true,
+          where: whereClause
+        })
+      } else {
+        const pruebas = await Prueba.findAll({
+          raw: false,
+          nest: true,
+          where: whereClause,
+          limit: limite,
+          offset: offset
+        })
+        if (pruebas.length > 0) {
+          return pruebas
+        } else {
+          return null
+        }
+      }
+
+    }
+    catch (error) {
+      throw error
     }
   }
 

@@ -8,7 +8,7 @@ const router = express.Router();
 
 const validarPermisos = require("../utilidades/validadorPermisos");
 
-router.route('/distrito/:id') 
+router.route('/distrito') 
 // Obtener todos los asesores
 .get(
      validarPermisos(["AD_EMPLEADOS_SA","ALL_SA","REGISTRO_ASESORIA_SA",

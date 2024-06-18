@@ -291,6 +291,56 @@ export class FamiliarPromovente extends HTMLElement {
          //Verificacion de los campos de radio
         if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
          //Obtención del id del familiar si tiene
+         /*
+  const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+
+                //Se asignan los datos del familiar a la variable familiarData
+                const familiarData = {
+                  nombre: nombre,
+                  nacionalidad: nacionalidad,
+                  parentesco: parentesco,
+                  perteneceComunidadLGBT: perteneceComunidadLGBT,
+                  adultaMayor: adultaMayor,
+                  saludPrecaria: saludPrecaria,
+                  pobrezaExtrema: pobrezaExtrema
+                }
+                //Se asignan los datos del familiar a la lista de familiares
+                this.#familiares.push(familiarData)
+                //Se muestran los familiares en la tabla
+                this.mostrarFamiliares()
+                this.#actual++  
+                //Se limpian los campos del formulario
+                this.#nombreFamiliar.value = ''
+                this.#nacionalidadFamilar.value = ''
+                this.#parentescoFamiliar.value = ''
+                this.#pertenceComunidadLGBTRadioYes.checked = false
+                this.#pertenceComunidadLGBTRadioNo.checked = false
+                this.#adultaMayorRadioYes.checked = false
+                this.#adultaMayorRadioNo.checked = false
+                this.#saludPrecariaRadioYes.checked = false
+                this.#saludPrecariaRadioNo.checked = false
+                this.#pobrezaExtremaRadioYes.checked = false
+                this.#pobrezaExtremaRadioNo.checked = false
+
+                this.#saludPrecariaRadioYes.checked = true
+                this.#pobrezaExtremaRadioYes.checked = true
+                this.#pertenceComunidadLGBTRadioYes.checked = true
+                this.#adultaMayorRadioYes.checked = true
+              }
+            }
+          } 
+          );
+
+          modal.message = 'Si esta seguro de agregar el familiar presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar familiar?'
+
+          modal.open = true
+         */
+        /*
          const id_familiar_si_tiene = this.#familiares[idFamiliar - 1].id_familiar
          const id_proceso_judicial_si_tiene = this.#familiares[idFamiliar - 1].id_proceso_judicial
           const familiarData = {
@@ -326,6 +376,55 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pobrezaExtremaRadioYes.checked = true
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
+          */
+
+          const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+
+                //Se asignan los datos del familiar a la variable familiarData
+                const familiarData = {
+                  nombre: nombre,
+                  nacionalidad: nacionalidad,
+                  parentesco: parentesco,
+                  perteneceComunidadLGBT: perteneceComunidadLGBT,
+                  adultaMayor: adultaMayor,
+                  saludPrecaria: saludPrecaria,
+                  pobrezaExtrema: pobrezaExtrema
+                }
+                //Se asignan los datos del familiar a la lista de familiares
+                this.#familiares.push(familiarData)
+                //Se muestran los familiares en la tabla
+                this.mostrarFamiliares()
+                //Se limpian los campos del formulario
+                this.#nombreFamiliar.value = ''
+                this.#nacionalidadFamilar.value = ''
+                this.#parentescoFamiliar.value = ''
+                this.#pertenceComunidadLGBTRadioYes.checked = false
+                this.#pertenceComunidadLGBTRadioNo.checked = false
+                this.#adultaMayorRadioYes.checked = false
+                this.#adultaMayorRadioNo.checked = false
+                this.#saludPrecariaRadioYes.checked = false
+                this.#saludPrecariaRadioNo.checked = false
+                this.#pobrezaExtremaRadioYes.checked = false
+                this.#pobrezaExtremaRadioNo.checked = false
+
+                this.#saludPrecariaRadioYes.checked = true
+                this.#pobrezaExtremaRadioYes.checked = true
+                this.#pertenceComunidadLGBTRadioYes.checked = true
+                this.#adultaMayorRadioYes.checked = true
+              }
+            }
+          } 
+          );
+
+          modal.message = 'Si esta seguro de agregar el familiar presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar familiar?'
+
+          modal.open = true
+
         } else {
           //Mensaje de error si no se han seleccionado los campos de radio
           const modal = document.querySelector('modal-warning')
@@ -403,7 +502,7 @@ export class FamiliarPromovente extends HTMLElement {
 
         //Verificacion de los campos de radio 
         if ((perteneceComunidadLGBT === true || perteneceComunidadLGBT === false) && (adultaMayor === true || adultaMayor === false) && (saludPrecaria === true || saludPrecaria === false) && (pobrezaExtrema === true || pobrezaExtrema === false ) &&  (parentesco !== '' && parentesco.length <= 100) && (nacionalidad !== '' && nacionalidad.length <= 100) && (nombre !== '' && nombre.length <= 100)){
-
+           /*
            //Obtención del id del familiar si tiene
           const familiarData = {
             nombre: nombre,
@@ -435,6 +534,54 @@ export class FamiliarPromovente extends HTMLElement {
           this.#pobrezaExtremaRadioYes.checked = true
           this.#pertenceComunidadLGBTRadioYes.checked = true
           this.#adultaMayorRadioYes.checked = true
+          */
+          
+          const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {
+            if (modal.open === 'false') {
+              if (modal.respuesta === true) {
+                modal.respuesta = false
+
+                //Se asignan los datos del familiar a la variable familiarData
+                const familiarData = {
+                  nombre: nombre,
+                  nacionalidad: nacionalidad,
+                  parentesco: parentesco,
+                  perteneceComunidadLGBT: perteneceComunidadLGBT,
+                  adultaMayor: adultaMayor,
+                  saludPrecaria: saludPrecaria,
+                  pobrezaExtrema: pobrezaExtrema
+                }
+                //Se asignan los datos del familiar a la lista de familiares
+                this.#familiares.push(familiarData)
+                //Se muestran los familiares en la tabla
+                this.mostrarFamiliares()
+                //Se limpian los campos del formulario
+                this.#nombreFamiliar.value = ''
+                this.#nacionalidadFamilar.value = ''
+                this.#parentescoFamiliar.value = ''
+                this.#pertenceComunidadLGBTRadioYes.checked = false
+                this.#pertenceComunidadLGBTRadioNo.checked = false
+                this.#adultaMayorRadioYes.checked = false
+                this.#adultaMayorRadioNo.checked = false
+                this.#saludPrecariaRadioYes.checked = false
+                this.#saludPrecariaRadioNo.checked = false
+                this.#pobrezaExtremaRadioYes.checked = false
+                this.#pobrezaExtremaRadioNo.checked = false
+
+                this.#saludPrecariaRadioYes.checked = true
+                this.#pobrezaExtremaRadioYes.checked = true
+                this.#pertenceComunidadLGBTRadioYes.checked = true
+                this.#adultaMayorRadioYes.checked = true
+              }
+            }
+          } 
+          );
+
+          modal.message = 'Si esta seguro de agregar el familiar presione aceptar, de lo contrario presione x para cancelar.'
+          modal.title = '¿Confirmacion de agregar familiar?'
+
+          modal.open = true
         } else {
           //Mensaje de error si no se han seleccionado los campos de radio
           const modal = document.querySelector('modal-warning')

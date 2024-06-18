@@ -34,14 +34,14 @@ class PromoventeDAO {
       const etnia =  await etniaDAO.obtenerEtnia(promvente_obejct.id_etnia)
       const escolaridad =  await escolaridadDAO.obtenerEscolaridadPorId(promvente_obejct.id_escolaridad)
       const ocupacion =  await ocupacionDAO.obtenerOcupacion(promvente_obejct.id_ocupacion)
-      const familiares =  await familiarDAO.obtenerFamiliarPorPromovente(promvente_obejct.id_promovente)
+     // const familiares =  await familiarDAO.obtenerFamiliarPorPromovente(promvente_obejct.id_promovente)
       delete promvente_obejct.id_etnia
       delete promvente_obejct.id_escolaridad
       delete promvente_obejct.id_ocupacion    
       promvente_obejct.etnia = etnia
       promvente_obejct.escolaridad = escolaridad
       promvente_obejct.ocupacion = ocupacion
-      promvente_obejct.familiares = familiares
+     // promvente_obejct.familiares = familiares
       return promvente_obejct
     } catch (err) {
       throw err

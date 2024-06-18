@@ -7,7 +7,7 @@ const {
   obtenerProcesosJudiciales,
   obtenerProcesoJudicial,
   actualizarProcesoJudicial,
-  obtenerProcesosJudicialesPorDefensor,
+  obtenerProcesosJudicialesBusqueda,
   obtenerProcesosJudicialesPorTramite
   ,
 } = require('../controllers/proceso_judicial')
@@ -20,25 +20,29 @@ const validarPermisos = require("../utilidades/validadorPermisos");
 
 // Creamos una nueva instancia de Router
 const router = Router()
+
+/*
 router.get('/tramite/',  
 validarPermisos(["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]),
 obtenerProcesosJudicialesPorTramite
 )
+*/
 
 // Definimos la ruta para crear un nuevo proceso judicial
 router.post('/',  
 validarPermisos(["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]),
  crearProcesoJudicial)
-
+/*
 // Definimos la ruta para obtener todos los procesos judiciales
 router.get('/', 
   validarPermisos(["CONSULTA_PROCESO_JUDICIAL_SD","ALL_SD"]), 
 obtenerProcesosJudiciales)
+*/
 
 // Definimos la ruta para obtener todos los procesos judiciales
-router.get('/defensor/',
+router.get('/busqueda',
   validarPermisos(["CONSULTA_PROCESO_JUDICIAL_SD","SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]),
-obtenerProcesosJudicialesPorDefensor)
+obtenerProcesosJudicialesBusqueda)
 
 
 // Definimos la ruta para obtener un proceso judicial por su id

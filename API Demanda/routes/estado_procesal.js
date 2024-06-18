@@ -22,7 +22,7 @@ const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]
 // Creamos una nueva instancia de Router
 const router = Router()
 
-router.get('/proceso-judicial/:id',
+router.get('/proceso-judicial',
 validarPermisos(permisosAceptables2),
  existeProcesoJudicial,
   obtenerEstadosProcesalesPorProcesoJudicial)

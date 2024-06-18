@@ -90,24 +90,23 @@ const actualizarObservacion = async (req, res) => {
     }
 }
 
- const obtenerObservacionesPorProcesoJudicial = async (req, res) => {
+ const obtenerObservacionesPorProcesoJudicial = async (req, res) => { 
     try {
-        const { id } = req.params
-        const observacion = await observacionDAO.obtenerObservacionesPorProcesoJudicial(Number(id))
-        if (observacion === null || observacion === undefined || observacion.length === 0) {
-            res.status(404).json({
-                message: 'Observacion no encontrada'
-            })
+        let {id_proceso_judicial, total, pagina} = req.query;
+        const totalBool = total === 'true';
+        id_proceso_judicial = parseInt(id_proceso_judicial, 10) || null;
+        pagina = parseInt(pagina, 10) || 1;
+        const result = await observacionDAO.obtenerObservacionesPorProcesoJudicial(id_proceso_judicial || null, totalBool, pagina);
+        if (!result || (Array.isArray(result) && result.length === 0)) {
+            return res.status(404).json({ message: 'No se encontraron observaciones' });
         }
-        else {
-            res.status(200).json(observacion)
-        }
-
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
+        const responseKey = totalBool ? 'totalObservaciones' : 'observaciones';
+        res.status(200).json({ [responseKey]: result });
     }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
 
 }
 

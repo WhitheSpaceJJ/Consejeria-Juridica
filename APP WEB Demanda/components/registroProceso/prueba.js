@@ -107,9 +107,11 @@ export class Prueba extends HTMLElement {
     window.activarBotonSeleccionarPrueba = activarBotonSeleccionarPrueba
 
   }
-
+  #limite = 5
+  #actual = 0
   //Metodo que se encarga de agregar una prueba
   agregarPrueba = async () => {
+     if(this.#actual<this.#limite){
  //Variable que nos ayuda a determinar si una prueba ha sido seleccionada
  //con el fin de verificar si se puede agregar una nueva prueba
     const idPrueba = this.#idPrueba
@@ -123,6 +125,8 @@ export class Prueba extends HTMLElement {
       //Se verifica si el campo de prueba esta vacio y se muestra un mensaje de error o si el campo de prueba tiene mas de 200 caracteres
       if (prueba === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de prueba es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -131,12 +135,16 @@ export class Prueba extends HTMLElement {
       //Verificacion de que el campo de prueba no tenga mas de 200 caracteres
         if (prueba.length > 200) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
         } else {
           //En caso de que el campo de prueba no este vacio y no tenga mas de 200 caracteres se procede a agregar la prueba
           if (prueba !== '' && prueba.length <= 200) {
+             
+                /*
             //Asignacion de la variable pruebaData con el valor del campo de prueba
             const pruebaData = {
               descripcion_prueba: prueba
@@ -145,11 +153,40 @@ export class Prueba extends HTMLElement {
             this.#pruebas.push(pruebaData)
             //Se llama al metodo que se encarga de mostrar las pruebas
             this.mostrarPruebas()
+            this.#actual++
             //Se reinician las variables idPrueba y prueba
             this.#prueba.value = ''
+            */
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de agregar la prueba presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de agregar prueba?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+
+                  //Asignacion de la variable pruebaData con el valor del campo de prueba
+                  const pruebaData = {
+                    descripcion_prueba: prueba
+                  }
+                  //Se agrega la prueba al arreglo de pruebas
+                  this.#pruebas.push(pruebaData)
+                  //Se llama al metodo que se encarga de mostrar las pruebas
+                  this.mostrarPruebas()
+                  this.#actual++
+                  //Se reinician las variables idPrueba y prueba
+                  this.#prueba.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
           } else {
             //Mensaje de error en caso de que el campo de prueba este vacio
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de prueba es obligatorio.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -159,12 +196,22 @@ export class Prueba extends HTMLElement {
     else {
       //En caso de que si se haya seleccionado una prueba se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'No se puede agregar una prueba si ha selecionado previamente una de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
       this.#idPrueba = null
       this.#prueba.value = ''
     }
+  }else{
+    const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => {});
+
+    modal.message = 'Limite de 5 pruebas durante el registro de un proceso, sin embargo puede registrar nuevos en la seccion de continuacion de proceso'
+    modal.title = 'Error de validación'
+    modal.open = true
+  }
   }
 
   //Metodo que se encarga de editar una prueba
@@ -177,6 +224,8 @@ export class Prueba extends HTMLElement {
     if (idPrueba === null) {
        //Muestra de mensaje de error en caso de que no se haya seleccionado una prueba
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {});
+
       modal.message = 'Debe seleccionar una prueba para poder editarla.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -188,6 +237,8 @@ export class Prueba extends HTMLElement {
       //Se verifica si el campo de prueba esta vacio y se muestra un mensaje de error o si el campo de prueba tiene mas de 200 caracteres
       if (prueba === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo de prueba es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -195,12 +246,15 @@ export class Prueba extends HTMLElement {
 //Verificacion de que el campo de prueba no tenga mas de 200 caracteres
         if (prueba.length > 200) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => {});
+
           modal.message = 'El campo de prueba no puede contener más de 200 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
         } else {
           //En caso de que el campo de prueba no este vacio y no tenga mas de 200 caracteres se procede a editar la prueba
           if (prueba !== '' && prueba.length <= 200) {
+            /*
             //Asignacion de la variable pruebaData con el valor del campo de prueba
             const pruebaData = {
               descripcion_prueba: prueba
@@ -212,9 +266,38 @@ export class Prueba extends HTMLElement {
             //Se reinician las variables idPrueba y prueba
             this.#idPrueba = null
             this.#prueba.value = ''
+            */
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de editar la prueba presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de editar prueba?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+
+                  //Asignacion de la variable pruebaData con el valor del campo de prueba
+                  const pruebaData = {
+                    descripcion_prueba: prueba
+                  }
+                  //Se edita la prueba en el arreglo de pruebas
+                  this.#pruebas[idPrueba - 1] = pruebaData
+                  //Se llama al metodo que se encarga de mostrar las pruebas
+                  this.mostrarPruebas()
+                  //Se reinician las variables idPrueba y prueba
+                  this.#idPrueba = null
+                  this.#prueba.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
+            
           } else {
             //Mensaje de error en caso de que el campo de prueba este vacio
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => {});
+
             modal.message = 'El campo de prueba es obligatorio.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -296,6 +379,8 @@ export class Prueba extends HTMLElement {
     pruebaInput.addEventListener('input', function () {
       if (pruebaInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {});
+
         modal.message = 'El campo prueba no puede tener más de 200 caracteres'
         modal.title = 'Error'
         modal.open = true

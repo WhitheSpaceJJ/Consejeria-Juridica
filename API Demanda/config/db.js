@@ -1,4 +1,7 @@
 const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv'); 
+// Invocamos el metodo config de dotenv
+dotenv.config(); 
 
 // Crear instancia de Sequelize y establecer conexión a la base de datos
 const sequelize = new Sequelize(

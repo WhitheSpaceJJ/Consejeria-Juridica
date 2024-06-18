@@ -1,6 +1,6 @@
 import { APIModel } from '../../models/api.model'
 
- 
+
 
 export class ObservacionPromovente extends HTMLElement {
   //Variables de la clase
@@ -42,7 +42,7 @@ export class ObservacionPromovente extends HTMLElement {
     this.mostrarObservaciones()
     this.setAttribute('data', value)
   }
-  
+
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('/components/registroProceso/observacion.html')).text();
@@ -53,17 +53,17 @@ export class ObservacionPromovente extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-    
-     //Inicialización de variables
-     this.#api = new APIModel()
-     //Se establece el valor del idObvervacion en null 
-     this.#idObservacion = null
-     //Se establece el valor de observaciones en un arreglo vacio
-     this.#observaciones = []
-     //Llamado de los metodos en este caso el de manageFormFields y fillInputs
-     this.manageFormFields()
-     //Llamado de los metodos en este caso el de fillInputs
-     this.fillInputs()
+
+    //Inicialización de variables
+    this.#api = new APIModel()
+    //Se establece el valor del idObvervacion en null 
+    this.#idObservacion = null
+    //Se establece el valor de observaciones en un arreglo vacio
+    this.#observaciones = []
+    //Llamado de los metodos en este caso el de manageFormFields y fillInputs
+    this.manageFormFields()
+    //Llamado de los metodos en este caso el de fillInputs
+    this.fillInputs()
   }
   //Constructor de la clase
   constructor() {
@@ -80,15 +80,17 @@ export class ObservacionPromovente extends HTMLElement {
     this.#botonAgregarObservacion = this.shadowRoot.getElementById('agregar-observacion')
     this.#botonEditarObservacion = this.shadowRoot.getElementById('editar-observacion')
     //Llamado del metodo manejadorEntradaTexto
-   this.manejadorEntradaTexto()
+    this.manejadorEntradaTexto()
   }
 
   //Metodo que se encarga de validar la longitud del campo de observacion 
-  manejadorEntradaTexto(){
+  manejadorEntradaTexto() {
     var observacionInput = this.#observacion
     observacionInput.addEventListener('input', function () {
-     if (observacionInput.value.length > 200) {
+      if (observacionInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
+
         modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -120,7 +122,7 @@ export class ObservacionPromovente extends HTMLElement {
       })
     })
 
-   //Funcion que se encarga de activar el boton de seleccionar observacion
+    //Funcion que se encarga de activar el boton de seleccionar observacion
     const activarBotonSeleccionarObservacion = (observacionId) => {
       this.activarBotonSeleccionarObservacion(observacionId)
     }
@@ -165,15 +167,17 @@ export class ObservacionPromovente extends HTMLElement {
 
   //Metodo que se encarga de editar una observacion
   editarObservacion = async () => {
-    
+
     //Asignacion del id de la observacion a la variable observacionId 
     //con el fin de validar si se ha seleccionado una observacion y asi poder editarla o caso contrario mostrar un mensaje de error
     const observacionId = this.#idObservacion
-     
+
     //Validacion de si se ha seleccionado una observacion
     if (observacionId == null) {
       //Mensaje de error si no se ha seleccionado una observacion
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => { });
+
       modal.message = 'Seleccione una observación para editar.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -185,6 +189,8 @@ export class ObservacionPromovente extends HTMLElement {
       //Se valida si el campo de observacion esta vacio o si tiene mas de 200 caracteres
       if (observacion === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
+
         modal.message = 'El campo de observación es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -192,14 +198,16 @@ export class ObservacionPromovente extends HTMLElement {
       else
         if (observacion.length > 200) {
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => { });
+
           modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
           modal.title = 'Error de validación'
           modal.open = true
         } else {
           //En caso de que el campo de observacion no este vacio y tenga menos de 200 caracteres se procede a editar la observacion
           if (observacion !== '' && observacion.length <= 200) {
-
-             //Se asigna la observacion a la variable observacionData
+           /*
+            //Se asigna la observacion a la variable observacionData
             const observacionData = {
               observacion: observacion
             }
@@ -210,9 +218,36 @@ export class ObservacionPromovente extends HTMLElement {
             //Se limpian los campos de observacion
             this.#idObservacion = null
             this.#observacion.value = ''
+            */
+            const modal = document.querySelector('modal-warning')
+            modal.message = 'Si esta seguro de editar la observacion presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de editar observacion?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  //Se asigna la observacion a la variable observacionData
+                  const observacionData = {
+                    observacion: observacion
+                  }
+                  //Se asigna la observacion a la posicion del arreglo de observaciones
+                  this.#observaciones[observacionId - 1] = observacionData
+                  //Se muestra la observacion en la tabla
+                  this.mostrarObservaciones()
+                  //Se limpian los campos de observacion
+                  this.#idObservacion = null
+                  this.#observacion.value = ''
+                }
+              }
+            }
+            );
+            modal.open = true
           } else {
             //Mensaje de error si no se ha seleccionado una observacion
             const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => { });
+
             modal.message = 'El campo de observación es obligatorio.'
             modal.title = 'Error de validación'
             modal.open = true
@@ -221,66 +256,114 @@ export class ObservacionPromovente extends HTMLElement {
     }
 
   }
+  #limite = 5
+  #actual = 0
 
 
   //Metodo que se encarga de agregar una observacion
   agregarObservacion = async () => {
-    //Asignacion del id de la observacion a la variable idObservacion
-    //con el fin de validar si se ha seleccionado una observacion y asi poder agregar una nueva observacion o caso contrario mostrar un mensaje de error
-    const idObservacion = this.#idObservacion
- 
-    //Validacion de si se ha seleccionado una observacion
-    if (idObservacion === null) {
-      //En caso de que no se haya seleccionado una observacion se procede a agregar una nueva observacion
+    if (this.#actual < this.#limite) {
+      //Asignacion del id de la observacion a la variable idObservacion
+      //con el fin de validar si se ha seleccionado una observacion y asi poder agregar una nueva observacion o caso contrario mostrar un mensaje de error
+      const idObservacion = this.#idObservacion
 
-      const observacion = this.#observacion.value
+      //Validacion de si se ha seleccionado una observacion
+      if (idObservacion === null) {
+        //En caso de que no se haya seleccionado una observacion se procede a agregar una nueva observacion
 
-      //Se valida si el campo de observacion esta vacio o si tiene mas de 200 caracteres
-      if (observacion === '') {
-        const modal = document.querySelector('modal-warning')
-        modal.message = 'El campo de observación es obligatorio.'
-        modal.title = 'Error de validación'
-        modal.open = true
-      }
-      else
-        if (observacion.length > 200) {
+        const observacion = this.#observacion.value
+
+        //Se valida si el campo de observacion esta vacio o si tiene mas de 200 caracteres
+        if (observacion === '') {
           const modal = document.querySelector('modal-warning')
-          modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
+          modal.setOnCloseCallback(() => { });
+
+          modal.message = 'El campo de observación es obligatorio.'
           modal.title = 'Error de validación'
           modal.open = true
-        } else {
-
-          //En caso de que el campo de observacion no este vacio y tenga menos de 200 caracteres se procede a agregar la observacion
-          if (observacion !== '' && observacion.length <= 200) {
-
-            //Se asigna la observacion a la variable observacionData
-            const observacionData = {
-              observacion: observacion
-            }
-            //Se agrega la observacion al arreglo de observaciones
-            this.#observaciones.push(observacionData)
-            //Se muestra la observacion en la tabla
-            this.mostrarObservaciones()
-            //Se limpian los campos de observacion
-            this.#observacion.value = ''
-          } else {
-            //Mensaje de error si no se ha seleccionado una observacion
+        }
+        else
+          if (observacion.length > 200) {
             const modal = document.querySelector('modal-warning')
-            modal.message = 'El campo de observación es obligatorio.'
+            modal.setOnCloseCallback(() => { });
+
+            modal.message = 'El campo de observación no puede contener más de 200 caracteres.'
             modal.title = 'Error de validación'
             modal.open = true
+          } else {
+
+            //En caso de que el campo de observacion no este vacio y tenga menos de 200 caracteres se procede a agregar la observacion
+            if (observacion !== '' && observacion.length <= 200) {
+        
+           /*
+              //Se asigna la observacion a la variable observacionData
+              const observacionData = {
+                observacion: observacion
+              }
+              //Se agrega la observacion al arreglo de observaciones
+              this.#observaciones.push(observacionData)
+              //Se muestra la observacion en la tabla
+              this.mostrarObservaciones()
+              this.#actual++
+              //Se limpian los campos de observacion
+              this.#observacion.value = ''
+              */
+
+              const modal = document.querySelector('modal-warning')
+              modal.message = 'Si esta seguro de agregar la observacion presione aceptar, de lo contrario presione x para cancelar.'
+              modal.title = '¿Confirmacion de agregar observacion?'
+
+              modal.setOnCloseCallback(() => {
+                if (modal.open === 'false') {
+                  if (modal.respuesta === true) {
+                    modal.respuesta = false
+
+                    //Se asigna la observacion a la variable observacionData
+                    const observacionData = {
+                      observacion: observacion
+                    }
+                    //Se agrega la observacion al arreglo de observaciones
+                    this.#observaciones.push(observacionData)
+                    //Se muestra la observacion en la tabla
+                    this.mostrarObservaciones()
+                    this.#actual++
+                    //Se limpian los campos de observacion
+                    this.#observacion.value = ''
+                  }
+                }
+              }
+              );
+              modal.open = true
+            } else {
+              //Mensaje de error si no se ha seleccionado una observacion
+              const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => { });
+
+              modal.message = 'El campo de observación es obligatorio.'
+              modal.title = 'Error de validación'
+              modal.open = true
+            }
           }
-        }
-    }
-    else {
-      //Mensaje de error si se ha seleccionado una observacion 
+      }
+      else {
+        //Mensaje de error si se ha seleccionado una observacion 
+        const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { });
+
+        modal.message = 'No se puede agregar una observación si ha selecionado previamente una de la tabla, se eliminaran los campos.'
+        modal.title = 'Error de validación'
+        modal.open = true
+        this.#idObservacion = null
+        this.#observacion.value = ''
+
+      }
+    } else {
       const modal = document.querySelector('modal-warning')
-      modal.message = 'No se puede agregar una observación si ha selecionado previamente una de la tabla, se eliminaran los campos.'
+      modal.setOnCloseCallback(() => { });
+
+      modal.message = 'Limite de 5 observaciones durante el registro de un proceso, sin embargo puede registrar nuevos en la seccion de continuacion de proceso'
       modal.title = 'Error de validación'
       modal.open = true
-      this.#idObservacion = null
-      this.#observacion.value = ''
-
     }
   }
 
@@ -314,7 +397,7 @@ export class ObservacionPromovente extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
- 
+
 }
 
 customElements.define('observacion-promovente', ObservacionPromovente)
