@@ -556,6 +556,8 @@ export class DemandadoTab extends HTMLElement {
   //Metodo que muestra un modal con respecto a un mensaje y un titulo para errores, etc
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

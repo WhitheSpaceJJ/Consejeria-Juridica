@@ -1,3 +1,4 @@
+const logger = require('../utilidades/logger');
 const Ocupacion = require('../models/ocupacion')
 
 class OcupacionDAO {
@@ -9,7 +10,9 @@ class OcupacionDAO {
  */
   async crearOcupacion({ descripcion_ocupacion ,estatus_general}) {
     try {
+       logger.info("Creando de ocupacion", { descripcion_ocupacion,estatus_general })
       const ocupacion = await Ocupacion.create({ descripcion_ocupacion,estatus_general })
+      logger.info("Ocupacion creada", { ocupacion })
       return ocupacion
     } catch (err) {
       throw err
@@ -22,14 +25,21 @@ class OcupacionDAO {
  */
   async obtenerOcupaciones(activo) {
     try {
+       
+      logger.info("Obteniendo ocupaciones, en base a su estatus", { activo })
       if (activo !== undefined && activo !== null && activo !== "") {
+        logger.info("Se envió el parámetro activo y se obtendrán las ocupaciones activas")
         const ocupaciones = await Ocupacion.findAll({ where: { estatus_general: "ACTIVO" } })
+        logger.info("Ocupaciones activas obtenidas", { ocupaciones })
         return ocupaciones
       }else{
+        logger.info("No se envió el parámetro activo y se obtendrán todas las ocupaciones")
       const ocupaciones = await Ocupacion.findAll()
+      logger.info("Ocupaciones obtenidas", { ocupaciones })
       return ocupaciones
       }
     } catch (err) {
+      logger.error("Error al obtener ocupaciones", { error: err.message })
       throw err
     }
   }
@@ -41,9 +51,12 @@ class OcupacionDAO {
  */
   async obtenerOcupacion(id) {
     try {
+      logger.info("Obteniendo ocupacion por ID", { id })
       const ocupacion = await Ocupacion.findByPk(id)
+      logger.info("Ocupacion obtenida", { ocupacion })
       return ocupacion
     } catch (err) {
+      logger.error("Error al obtener ocupacion por ID", { error: err.message })
       throw err
     }
   }
@@ -56,9 +69,12 @@ class OcupacionDAO {
  */
   async actualizarOcupacion(id_ocupacion, { descripcion_ocupacion,estatus_general }) {
     try {
+      logger.info("Actualizando de ocupacion", { id_ocupacion, descripcion_ocupacion,estatus_general })
       const ocupacion = await Ocupacion.update({ descripcion_ocupacion ,estatus_general}, { where: { id_ocupacion } })
+      logger.info("Retornando resultado de la actualización", { result: ocupacion[0] === 1 })
       return ocupacion[0]==1
     } catch (err) {
+      logger.error("Error al actualizar ocupacion", { error: err.message })
       throw err
     }
   }
@@ -67,9 +83,11 @@ class OcupacionDAO {
 
   async obtenerOcupacionesPaginacion(pagina) {
     try {
+      logger.info("Obteniendo ocupaciones por paginación y límite de 10", { pagina })
       pagina = parseInt(pagina, 10)
       const offset = (pagina - 1) * 10
       const resultados = await Ocupacion.findAll({ offset: offset, limit: 10 })
+      logger.info("Ocupaciones paginadas obtenidas", { resultados })
       return resultados
     } catch (err) {
       throw err
@@ -79,8 +97,10 @@ class OcupacionDAO {
 
   async obtenerTotalOcupaciones() {
     try {
+      logger.info("Obteniendo total de ocupaciones")
       return await Ocupacion.count()
     } catch (err) {
+      logger.error("Error al obtener total de ocupaciones", { error: err.message })
       throw err
     }
 

@@ -32,10 +32,11 @@ const controlDefensor = require('../controles/controlDefensor.js');
 const controlPersonas = require('../controles/controlPersonas.js');
 const controlDomicilios = require('../controles/controlDomicilio.js');
 
+const logger = require('../utilidades/logger');
 
 
 async function validarPeticionPaginacion(req, res, next) {
-
+ logger.info("Middleware para validar la paginación")
   if (Object.keys(req.query).length > 1) {
     return res.status(400).json({ message: "Sólo se permite el parámetro página." });
   }
@@ -44,20 +45,24 @@ async function validarPeticionPaginacion(req, res, next) {
   if (!pagina) {
     return res.status(400).json({ message: "La página es requerida." });
   }
-
+ 
+   logger.info("Fin del middleware para validar la paginación")
   next();
 }
 
 async function validarPaginaFiltro(req, res, next) {
+  logger.info("Middleware para validar la paginación y los filtros")
   const { pagina } = req.query;
   if (!pagina) {
     return res.status(400).json({ message: "La página es requerida." });
   }
+  logger.info("Fin del middleware para validar la paginación y los filtros")
   next();
 }
 
 
 async function validarPeticionBuscarNombre(req, res, next) {
+  logger.info("Middleware para validar la búsqueda por nombre")
   const { nombre, apellido_materno, apellido_paterno,pagina, total, ...extraData } = req.query;
   //Evalua que solo esten los parametros requeridos nombre, appellido materno y paterno y que no haya mas parametros
 
@@ -70,13 +75,14 @@ async function validarPeticionBuscarNombre(req, res, next) {
   if (Object.keys(extraData).length > 0) {
     return res.status(400).json({ message: "Sólo se permiten los parámetros nombre, apellido_materno y apellido_paterno." });
   }
-
+   logger.info("Fin del middleware para validar la búsqueda por nombre")
   next();
 }
 
 
 
 async function validarPeticionDescargarExcel(req, res, next) {
+  logger.info("Middleware para validar la descarga de un archivo Excel")
   const filtrosPeticion = req.query.filtros;
 
   //Verifca que exista el filtro 
@@ -120,11 +126,12 @@ async function validarPeticionDescargarExcel(req, res, next) {
       return res.status(400).json({ message: `Los siguientes campos no son válidos: ${camposInvalidos.join(', ')}` });
     }
   }
+  logger.info("Fin del middleware para validar la descarga de un archivo Excel")
   next();
 }
 
 async function validarPeticionPOST(req, res, next) {
-
+    logger.info("Middleware para validar el JSON de la asesoría en el POST")  
   const { asesorado, persona, datos_asesoria, recibidos, tipos_juicio, empleado, ...extraData } = req.body;
 
   if (Object.keys(extraData).length > 0) {
@@ -558,7 +565,7 @@ async function validarPeticionPOST(req, res, next) {
     console.log(error.message)
     return res.status(400).json({ message: "El usuario no coincide." });
   }
-
+   logger.info("Fin del middleware para validar el JSON de la asesoría en el POST")
 
   next();
 
@@ -567,7 +574,7 @@ async function validarPeticionPOST(req, res, next) {
 
 
 async function validarPeticionPUT(req, res, next) {
-
+    logger.info("Middleware para validar el JSON de la asesoría en el PUT")
   const { turno, distrito_judicial, tipos_juicio, persona, municipio, datos_asesoria, ...extraData } = req.body;
 
   if (Object.keys(extraData).length > 0) {
@@ -915,11 +922,14 @@ async function validarPeticionPUT(req, res, next) {
   } catch (error) {
     return res.status(400).json({ message: "El id de colonia no existe." });
   }
+  logger.info("Fin del middleware para validar el JSON de la asesoría en el PUT")
   next();
 }
 
 
 async function validarFiltros(req, res, next) {
+
+  logger.info("Middleware para validar los filtros de la petición")
   const filtrosPeticion = req.query.filtros;
 
   //Verifca que exista el filtro 
@@ -945,7 +955,7 @@ async function validarFiltros(req, res, next) {
 
   //Verifica que no exitan mas dar
 
-
+   logger.info("Fin del middleware para validar los filtros de la petición")
   next();
 }
 

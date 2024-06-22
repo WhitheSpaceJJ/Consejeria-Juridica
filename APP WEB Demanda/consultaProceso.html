@@ -25,7 +25,7 @@
           <form class="mt-4 flex" id="filtros-form">
             <div class="flex items-center">
               <div class="">
-                <div class="flex items-center">
+                <div class="flex items-center" id="bloque-defensor">
                   <label for="defensor" class="font-medium text-lg text-black mr-4 w-32">Defensor</label>
                   <select id="defensor" name="defensor"
                     class="block p-1 px-2.5 text-black border border-gray-300 rounded-lg bg-gray-50 text-md focus:ring-blue-500 focus:border-blue-500 w-64">
@@ -97,6 +97,31 @@
     </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="flex items-center justify-between">
+        <!-- Div que contiene el título siempre al inicio -->
+        <div class="relative p-2 flex items-center">
+          <h2 class="text-2xl font-bold mb-4">Procesos Judiciales:</h2>
+        </div>
+        
+        <!-- Div que contiene los botones siempre al final -->
+        <div class="relative p-2 flex items-center space-x-2">
+          <span id="total" class="font-bold">Total: </span>
+          <button id="anterior" class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 rounded flex items-center">
+            <svg class="w-4 h-4 inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Anterior
+          </button>
+          <button id="siguiente" class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-1 rounded flex items-center">
+            Siguiente
+            <svg class="w-4 h-4 inline-block ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
       <table class="w-full text-left text-gray-500">
         <thead class="text-gray-700 uppercase bg-gray-100">
           <tr class="text-sm">

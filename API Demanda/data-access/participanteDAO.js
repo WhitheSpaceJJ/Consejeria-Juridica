@@ -2,6 +2,10 @@ const Participante = require('../models/participante')
 const promventeDAO = require('../data-access/promoventeDAO')
 const demandadoDAO = require('../data-access/demandadoDAO')
 const domicilioDAO = require('../data-access/domicilio_participanteDAO')
+
+const logger = require('../utilidades/logger');
+
+
 class ParticipanteDAO {
   /**
  * @abstract Método que permite crear un participante en la base de datos
@@ -10,10 +14,12 @@ class ParticipanteDAO {
  */
   async crearParticipante({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial   }) {
     try {
+      logger.info("Creando de participante", { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
       const participante = await Participante.create({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
+      logger.info("Participante creado", { participante })
       return participante
-    } catch (err) {      console.log(err.message)
-
+    } catch (err) {     // console.log(err.message)
+      logger.error("Error al crear participante", { error: err.message })
       throw err
     }
   }
@@ -26,33 +32,44 @@ class ParticipanteDAO {
  */
   async actualizarParticipante(id_participante, {nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial }) {
     try {
+      logger.info("Actualizando participante", { id_participante, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
       const participante = await Participante.update({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial }, { where: { id_participante } })
+      logger.info("Participante actualizado retonando resultado", { result: participante[0] === 1 })
       return participante[0] === 1 
-    } catch (err) {      console.log(err.message)
-
+    } catch (err) {   //   console.log(err.message)  
+         logger.error("Error al actualizar participante", { error: err.message })
       throw err
     }
   }
   async obtenerParticipantesPorProcesoJudicial(id_proceso_judicial) {
     try {
+      logger.info("Obteniendo participantes por proceso judicial", { id_proceso_judicial })
       const participantes = await Participante.findAll({ where: { id_proceso_judicial :id_proceso_judicial} })
       const participantes_obejct =  JSON.parse(JSON.stringify(participantes))
       for (let i = 0; i < participantes_obejct.length; i++) {
         try {
+          logger.info("Obteniendo promovente por participante", { id_participante: participantes_obejct[i].id_participante })
           const promovente = await promventeDAO.obtenerPromovente(participantes_obejct[i].id_participante)
           participantes_obejct[i].promovente = promovente
         } catch (err) {
+          logger.error("Error al obtener promovente por participante", { error: err.message })
         }
         try {
+          logger.info("Obteniendo demandado por participante", { id_participante: participantes_obejct[i].id_participante })  
           const demandado = await demandadoDAO.obtenerDemandado(participantes_obejct[i].id_participante)
           participantes_obejct[i].demandado = demandado
         } catch (err) {
+           logger.error("Error al obtener demandado por participante", { error: err.message })
         }
+         
+        logger.info("Obteniendo domicilio por participante", { id_participante: participantes_obejct[i].id_participante })
         const domicilio = await domicilioDAO.obtenerDomicilioParticipantePorParticipante(participantes_obejct[i].id_participante)
         participantes_obejct[i].domicilio = domicilio
       }
+      logger.info("Participantes obtenidos", { participantes_obejct })
       return participantes_obejct
     } catch (err) {
+      logger.error("Error al obtener participantes por proceso judicial", { error: err.message })
       throw err
     }
   }

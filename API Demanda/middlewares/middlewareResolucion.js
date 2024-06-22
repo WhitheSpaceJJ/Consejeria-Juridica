@@ -4,20 +4,27 @@
 const controlResolucion = require('../data-access/resolucionDAO')
 const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
 
+const logger = require('../utilidades/logger');
 
 
 async function existeProcesoJudicial(req, res, next) {
-    const { id } = req.params
-    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id)
+    logger.info("Middleware para validar la existencia de un proceso judicial" )
+    
+     const { id_proceso_judicial } = req.query
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
       return res.status(404).json({
         message: 'No existe un proceso judicial con ese id'
       })
     }
+
+    logger.info("Fin del middleware para validar la existencia de un proceso judicial") 
     next()
   }
   
 async function existeResolucion(req, res, next) {
+    logger.info("Middleware para validar la existencia de una resolución" )
+
     const { id } = req.params
     const resolucion = await controlResolucion.obtenerResolucion(Number(id))
     if (!resolucion) {
@@ -25,6 +32,8 @@ async function existeResolucion(req, res, next) {
             message: 'No existe una resolución con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de una resolución")
     next()
 }
 
@@ -32,6 +41,9 @@ async function existeResolucion(req, res, next) {
 
 
 async function validarJSONResolucionPOST(req, res, next) {
+
+    logger.info("Middleware para validar el JSON de la resolución en el POST")
+     
     const { resolucion, fecha_resolucion, id_proceso_judicial, ...extraData } = req.body
 
     if (Object.keys(extraData).length !== 0) {
@@ -51,6 +63,12 @@ async function validarJSONResolucionPOST(req, res, next) {
             message: 'El id del proceso judicial no es un número.'
         })
     }
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
+        })
+    }
 
 
     if (resolucion.length > 200) {
@@ -66,7 +84,7 @@ async function validarJSONResolucionPOST(req, res, next) {
     }
 
 
-
+     logger.info("Fin del middleware para validar el JSON de la resolución en el POST")
     next()
 }
 
@@ -74,6 +92,8 @@ async function validarJSONResolucionPOST(req, res, next) {
 
 
 async function validarJSONResolucionPUT(req, res, next) {
+     logger.info("Middleware para validar el JSON de la resolución en el PUT")
+
     const { id_resolucion, resolucion, fecha_resolucion, id_proceso_judicial, ...extraData } = req.body
    
     if (Object.keys(extraData).length !== 0) {
@@ -98,6 +118,12 @@ async function validarJSONResolucionPUT(req, res, next) {
     if(isNaN(id_proceso_judicial)){
         return res.status(400).json({
             message: 'El id del proceso judicial no es un número.'
+        })
+    }
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
         })
     }
 
@@ -138,7 +164,8 @@ async function validarJSONResolucionPUT(req, res, next) {
             message: 'El id del proceso judicial proporcionado no coincide con el id del proceso judicial de la resolución que se quiere modificar.'
         })
     }
-
+   
+    logger.info("Fin del middleware para validar el JSON de la resolución en el PUT")
 
     next()
 }

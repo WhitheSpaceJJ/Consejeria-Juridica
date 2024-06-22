@@ -1,7 +1,9 @@
 
 const controlCatalogoRequisitos = require('../controles/controlCatalogoRequisito')
+const logger = require('../utilidades/logger');
 
 async function existeCatalogoRequisitos(req, res, next) {
+    logger.info("Middleware para validar la existencia de un catalogo de requisitos")
     const { id } = req.params
     const catalogoRequisitos = await controlCatalogoRequisitos.obtenerCatalogoRequisitoPorId(id)
     if (!catalogoRequisitos) {
@@ -9,11 +11,13 @@ async function existeCatalogoRequisitos(req, res, next) {
             message: 'No existe un catalogo de requisitos con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un catalogo de requisitos")
     next()
 }
 
 
 async function validarJSONCatalogoRequisitosPOST(req, res, next) {
+    logger.info("Middleware para validar el JSON del catalogo de requisitos en el POST") 
     const { descripcion_catalogo, estatus_general, ...extraData  } = req.body
     
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -42,7 +46,7 @@ async function validarJSONCatalogoRequisitosPOST(req, res, next) {
         });
     }
 
-
+    logger.info("Fin del middleware para validar el JSON del catalogo de requisitos en el POST")
 
     next()
 }
@@ -50,6 +54,8 @@ async function validarJSONCatalogoRequisitosPOST(req, res, next) {
 
 
 async function validarJSONCatalogoRequisitosPUT(req, res, next) {
+
+    logger.info("Middleware para validar el JSON del catalogo de requisitos en el PUT")
     const { id_catalogo, descripcion_catalogo, estatus_general, ...extraData } = req.body
 
       // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -90,6 +96,7 @@ async function validarJSONCatalogoRequisitosPUT(req, res, next) {
             message: 'El id del catalogo de requisitos proporcionado no coincide con el id del catalogo de requisitos que se quiere modificar.'
         })
     }
+    logger.info("Fin del middleware para validar el JSON del catalogo de requisitos en el PUT")
     next()
 }
 

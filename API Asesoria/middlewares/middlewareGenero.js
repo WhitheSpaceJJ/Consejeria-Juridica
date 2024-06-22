@@ -1,7 +1,9 @@
 const controlGenero = require('../controles/controlGenero')
 
+const logger = require('../utilidades/logger');
 
 async function existeGenero(req, res, next) {
+    logger.info("Middleware para validar la existencia de un genero")
     const { id } = req.params
     const genero = await controlGenero.obtenerGeneroPorId(id)
     if (!genero) {
@@ -9,10 +11,12 @@ async function existeGenero(req, res, next) {
             message: 'No existe un genero con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un genero")
     next()
 }
 
 async function validarJSONGeneroPOST(req, res, next) {
+    logger.info("Middleware para validar el JSON del genero en el POST")
     const { descripcion_genero, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -42,12 +46,13 @@ async function validarJSONGeneroPOST(req, res, next) {
     }
 
 
-
+    logger.info("Fin del middleware para validar el JSON del genero en el POST")
     next()
 }
 
 
 async function validarJSONGeneroPUT(req, res, next) {
+     logger.info("Middleware para validar el JSON del genero en el PUT")
     const { id_genero, descripcion_genero, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -89,6 +94,7 @@ async function validarJSONGeneroPUT(req, res, next) {
             message: 'El id del genero proporcionado no coincide con el id del genero que se quiere modificar.'
         })
     }
+    logger.info("Fin del middleware para validar el JSON del genero en el PUT")
     next()
 }
 

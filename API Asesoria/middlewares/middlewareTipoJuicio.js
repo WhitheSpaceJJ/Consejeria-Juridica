@@ -1,7 +1,9 @@
 
 const controlTipoJuicio = require('../controles/controlTipoJuicio')
+const logger = require('../utilidades/logger');
 
 async function existeTipoJuicio(req, res, next) {
+ logger.info("Middleware para validar la existencia de un tipo de juicio")
     const { id } = req.params
     const tipoJuicio = await controlTipoJuicio.obtenerTipoDeJuicioPorId(id)
     if (!tipoJuicio) {
@@ -9,11 +11,15 @@ async function existeTipoJuicio(req, res, next) {
             message: 'No existe un tipo de juicio con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de un tipo de juicio")
     next()
 }
 
 
 async function validarJSONTipoJuicioPOST(req, res, next) {
+
+    logger.info("Middleware para validar el JSON del tipo de juicio en el POST")
     const { tipo_juicio, estatus_general, ...extraData } = req.body;
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -43,7 +49,8 @@ async function validarJSONTipoJuicioPOST(req, res, next) {
             message: 'El campo "estatus_general" solo acepta los valores "ACTIVO".'
         });
     }
-
+ 
+    logger.info("Fin del middleware para validar el JSON del tipo de juicio en el POST")
     next();
 }
 
@@ -51,6 +58,8 @@ async function validarJSONTipoJuicioPOST(req, res, next) {
 
 
 async function validarJSONTipoJuicioPUT(req, res, next) {
+
+    logger.info("Middleware para validar el JSON del tipo de juicio en el PUT")
     const { id_tipo_juicio, tipo_juicio, estatus_general, ...extraData } = req.body;
     // Verifica si hay datos adicionales en el cuerpo de la petición
     if (Object.keys(extraData).length !== 0) {
@@ -90,7 +99,7 @@ async function validarJSONTipoJuicioPUT(req, res, next) {
             message: 'El id del tipo de juicio proporcionado no coincide con el id del tipo de juicio que se quiere modificar.'
         });
     }
-
+    logger.info("Fin del middleware para validar el JSON del tipo de juicio en el PUT")
 
     next();
 }

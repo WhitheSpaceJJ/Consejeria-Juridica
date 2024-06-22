@@ -396,6 +396,8 @@ export class Prueba extends HTMLElement {
    //Metodo que se encarga de mostra un mensaje modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

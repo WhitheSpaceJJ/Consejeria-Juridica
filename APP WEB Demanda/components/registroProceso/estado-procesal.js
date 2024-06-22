@@ -401,6 +401,8 @@ export class EstadoProcesal extends HTMLElement {
   //Metodo que se encarga de mostrar el modal de error al usuario
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

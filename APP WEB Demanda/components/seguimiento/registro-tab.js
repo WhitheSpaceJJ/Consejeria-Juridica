@@ -104,7 +104,9 @@ export class RegistroTab extends HTMLElement {
     template.innerHTML = html;
     return template;
   }
-
+  #idEmpleado
+  #rol
+  
   #pagina = 1
   #numeroPaginas
 
@@ -151,8 +153,7 @@ export class RegistroTab extends HTMLElement {
       this.fillTabla()
     }
   }
-  #idEmpleado
-  #rol
+
   //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
   handleNextPage = async () => {
     //Validación de la pagina actual
@@ -222,6 +223,7 @@ export class RegistroTab extends HTMLElement {
     //Obtener los defensores
     await this.obtencionDatos()
   }
+
   async obtencionDatos() {
     //LLamada al metodo para agregar eventos a los botones
     this.agregarEventosBotones()
@@ -551,8 +553,10 @@ export class RegistroTab extends HTMLElement {
         if (this.#proceso.id_proceso_judicial !== proceso.id_proceso_judicial) {
           const modal = document.querySelector('modal-warning');
           modal.setOnCloseCallback(() => {
+
             if (modal.open === 'false') {
               if (modal.respuesta === true) {
+                this.modal.respuesta = false; 
                 this.#proceso = proceso;
                 this.#idProceso.innerHTML = proceso.id_proceso_judicial;
               }
@@ -622,6 +626,8 @@ export class RegistroTab extends HTMLElement {
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.message = message
+    modal.setOnCloseCallback(() => { })
+
     modal.title = title
     modal.open = true
     modal.setOnCloseCallback(onCloseCallback)

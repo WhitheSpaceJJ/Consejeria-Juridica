@@ -1,6 +1,7 @@
 const modeloDefensor = require('../modelos/modeloDefensor.js');
 const controlEmpleado = require('./controlEmpleados.js');
 //Falta relacion de defensor y asesoria y actualizar controles
+const logger = require('../utilidades/logger');
 
 /**	
  * @abstract Función que permite obtener todos los defensores
@@ -28,11 +29,15 @@ const obtenerDefensores = async (id_distrito_judicial, pagina) => {
         });
         Perdon no es un limite de 10 es de 5
         */
+    logger.info("Se obtienen los defensores por distrito judicial", id_distrito_judicial)
+
+    logger.info("Se establece la pagina, offset y limit", pagina)
 
         pagina = parseInt(pagina, 10);
         const offset = (pagina - 1) * 5;
         const limit = 5;
-
+ 
+        logger.info("Se obtienen los defensores por distrito judicial y paginacion")
         return await modeloDefensor.Defensor.findAll({
             raw: false,
             nest: true,
@@ -44,17 +49,23 @@ const obtenerDefensores = async (id_distrito_judicial, pagina) => {
             , limit: limit,
             offset: offset
         });
-
+  
 
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return null;
+      //     console.log("Error defensor:", error.message);
+           logger.error("Error defensor:", error.message);  
+      return null;
     }
 };
 
 const obtenerDefensoresByDistrito = async (id_distrito_judicial, activo) => {
     try {
+        logger.info("Se obtienen los defensores por distrito judicial", id_distrito_judicial)
+        
+        
+      logger.info("Se valida si se obtienen los defensores activos o no activos", activo)
         if (activo === 'true' || activo === true) {
+            logger.info("Se obtienen los defensores activos por distrito judicial", id_distrito_judicial)
             const whereClause = {};
             whereClause['$empleado.estatus_general$'] = "ACTIVO";
             whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
@@ -69,6 +80,7 @@ const obtenerDefensoresByDistrito = async (id_distrito_judicial, activo) => {
             });
         }else {
             const whereClause = {};
+            logger.info("Se obtienen los defensores no activos por distrito judicial", id_distrito_judicial)
             whereClause['$empleado.id_distrito_judicial$'] = id_distrito_judicial;
             return await modeloDefensor.Defensor.findAll({
                 raw: false,
@@ -82,8 +94,9 @@ const obtenerDefensoresByDistrito = async (id_distrito_judicial, activo) => {
         }
 
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return null;
+     //     console.log("Error defensor:", error.message);
+       logger.error("Error defensor:", error.message); 
+      return null;
     }
 };
 
@@ -94,6 +107,7 @@ const obtenerDefensoresByDistrito = async (id_distrito_judicial, activo) => {
  * */
 const obtenerDefensorPorId = async (id) => {
     try {
+         logger.info("Se obtiene el defensor por su id", id)
         return await modeloDefensor.Defensor.findByPk(id, {
             raw: false,
             nest: true,
@@ -103,7 +117,8 @@ const obtenerDefensorPorId = async (id) => {
             ]
         });
     } catch (error) {
-        console.log("Error defensor:", error.message);
+        //console.log("Error defensor:", error.message);
+        logger.error("Error defensor:", error.message);
         return null;
     }
 };
@@ -115,10 +130,12 @@ const obtenerDefensorPorId = async (id) => {
  * */
 const agregarDefensor = async (defensor) => {
     try {
+        logger.info("Se agrega el defensor", defensor)
         return (await modeloDefensor.Defensor.create(defensor, { raw: true, nest: true })).dataValues;
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return false;
+      //  console.log("Error defensor:", error.message);
+       logger.error("Error defensor:", error.message);
+       return false;
     }
 };
 
@@ -131,38 +148,50 @@ const agregarDefensor = async (defensor) => {
  * */
 const actualizarDefensor = async (id, defensor) => {
     try {
+        logger.info("Se actualiza el defensor", defensor)
         const result = await modeloDefensor.Defensor.update(defensor, { where: { id_defensor: id } });
+        logger.info("Se retorna el resultado de la actualizacion", result[0] === 1)	
         return result[0] === 1;
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return false;
+       // console.log("Error defensor:", error.message);
+         logger.error("Error defensor:", error.message); 
+       return false;
     }
 };
 
 const obtenerDefensoresZona = async (id) => {
     try {
+        logger.info("Se obtienen los defensores por zona", id)
         const defensores = await controlEmpleado.obtenerEmpleadosDefensoresPorZona(id);
+        logger.info("Se valida si existen defensores", defensores)
         if (defensores) {
+             logger.info("Se obtienen los defensores por id", defensores)
             const defensoresReturn = [];
             for (let i = 0; i < defensores.length; i++) {
                 defensores[i] = defensores[i];
                 const defensor = await obtenerDefensorPorId(defensores[i].id_empleado);
                 defensoresReturn.push(defensor);
             }
+            logger.info("Se retorna los defensores", defensoresReturn)
             return defensoresReturn;
         }
+        logger.info("No existen defensores")
         return null;
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return null;
+      //  console.log("Error defensor:", error.message);
+        logger.error("Error defensor:", error.message); 
+      return null;
     }
 };
 const obtenerDefensorIDSimpleMiddleware = async (id) => {
     try {
+         logger.info("Se obtiene el defensor por su id", id)
         const defensor = await modeloDefensor.Defensor.findByPk(id);
+        logger.info("Se retorna el defensor", defensor)
         return defensor;
     } catch (error) {
-        console.log("Error defensor:", error.message);
+       logger.error("Error defensor:", error.message); 
+       // console.log("Error defensor:", error.message);
         return null;
     }
 }
@@ -174,6 +203,7 @@ const obtenerDefensorIDSimpleMiddleware = async (id) => {
  * */
 const obtenerDefensorPorIdActivo = async (id) => {
     try {
+        logger.info("Se obtiene el defensor por su id", id)
         return await modeloDefensor.Defensor.findByPk(id, {
             raw: false,
             nest: true,
@@ -183,8 +213,9 @@ const obtenerDefensorPorIdActivo = async (id) => {
             ]
         });
     } catch (error) {
-        console.log("Error defensor:", error.message);
-        return null;
+       // console.log("Error defensor:", error.message);
+        logger.error("Error defensor:", error.message); 
+       return null;
     }
 };
 

@@ -9,11 +9,13 @@ const modelMunicipios = require('../models/municipios.models');
  * @returns {Object} - Objeto con el municipio
  * @throws {Error} - Error en la consulta de municipio
  */
+const logger = require('../utilities/logger');
 
 const getMunicipio = async (id) => {
     try {
         //Obtenemos un municipio
-        return await modelMunicipios.Municipio.findOne({
+        logger.info(`Obteniendo municipio con respecto al id: ${id}`);
+        const municipio = await modelMunicipios.Municipio.findOne({
             raw: true,
             where: {
                 id_municipio: id
@@ -24,9 +26,12 @@ const getMunicipio = async (id) => {
             nest: true,
             include: [modelMunicipios.Estado]
         });
+         logger.info("Municipio obtenido correctamente", municipio);
+    return municipio;
     } catch (error) {
-        console.log(error);
-        throw new Error('Error en la consulta de municipios');
+       // console.log(error);
+        logger.error('Error en la consulta de municipios', error.message); 
+       throw new Error('Error en la consulta de municipios');
     }
 };
 

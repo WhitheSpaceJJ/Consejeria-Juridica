@@ -1,4 +1,5 @@
 const modeloDetalleAsesoriaCatalogo = require('../modelos/modeloDetalleAsesoria');
+const logger = require('../utilidades/logger');
 
 
 /**
@@ -8,13 +9,15 @@ const modeloDetalleAsesoriaCatalogo = require('../modelos/modeloDetalleAsesoria'
  * */
 const obtenerDetalleAsesoriaCatalogoPorId = async (id) => {
   try {
+    logger.info("Se obtiene el detalle de asesoria por su id", id)
     return await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.findByPk(id, {
       raw: true,
       nest: true
     });
   } catch (error) {
-    console.log("Error detalle asesoria:", error.message);
-    return null;
+   // console.log("Error detalle asesoria:", error.message);
+    logger.error("Error detalle asesoria:", error.message); 
+   return null;
   }
 };
 
@@ -25,10 +28,12 @@ const obtenerDetalleAsesoriaCatalogoPorId = async (id) => {
  *  */
 const agregarDetalleAsesoriaCatalogo = async (detalle) => {
   try {
+    logger.info("Se agrega el detalle de asesoria", detalle)
     return (await modeloDetalleAsesoriaCatalogo.DetalleAsesoriaCatalogo.create(detalle, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error detalle asesoria:", error.message);
-    return false;
+   // console.log("Error detalle asesoria:", error.message);
+    logger.error("Error detalle asesoria:", error.message); 
+   return false;
   }
 };
 

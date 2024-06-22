@@ -1,4 +1,5 @@
 const modeloZona = require('../modelos/modeloZona');
+const logger = require('../utilidades/logger');
 
 
 /**
@@ -7,12 +8,14 @@ const modeloZona = require('../modelos/modeloZona');
  */
 const obtenerZonas = async () => {
   try {
+    logger.info("Se obtienen las zonas")  
     return await modeloZona.Zona.findAll({
       raw: true,
       nest: true
     });
   } catch (error) {
-    console.log("Error zona:", error.message);
+    logger.error("Error zona:", error.message);
+   // console.log("Error zona:", error.message);
     return null;
   }
 };
@@ -24,13 +27,15 @@ const obtenerZonas = async () => {
  * */
 const obtenerZonaPorId = async (id) => {
   try {
+    logger.info("Se obtiene la zona por su id", id)
     return await modeloZona.Zona.findByPk(id, {
       raw: true,
       nest: true
     });
   } catch (error) {
-    console.log("Error zona:", error.message);
-    return null;
+   // console.log("Error zona:", error.message);
+    logger.error("Error zona:", error.message); 
+   return null;
   }
 };
 

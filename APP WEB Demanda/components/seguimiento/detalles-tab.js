@@ -300,6 +300,8 @@ export class DetallesTab extends HTMLElement {
     //Metodo que muestra el mensaje de modal
     #showModal(message, title, onCloseCallback) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = message
         modal.title = title
         modal.open = true

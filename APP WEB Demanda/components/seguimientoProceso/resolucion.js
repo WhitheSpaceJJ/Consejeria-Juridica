@@ -34,18 +34,113 @@ export class Resolucion extends HTMLElement {
     return { resoluciones: resoluciones }
   }
 
-  //Metodo que asigna los datos de las resoluciones
-  set data(value) {
-    this.#resoluciones = value
-    this.mostrarResoluciones()
-    this.setAttribute('data', value)
-  }
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('/components/seguimientoProceso/resolucion.html')).text();
     template.innerHTML = html;
     return template;
   }
+
+
+
+  //Metodo que establece el valor del atributo data
+  set data(value) {
+    this.#idProcesoJudicial = value
+    this.cargaDatos()
+    this.setAttribute('data', value)
+  }
+
+
+  #idProcesoJudicial
+  async cargaDatos() {
+    try {
+      const { resoluciones } = await this.#api.getResolucionesBusqueda(this.#idProcesoJudicial, false, this.#pagina)
+      this.#resoluciones = resoluciones
+      this.getNumeroPaginas()
+      this.mostrarResoluciones()
+    }
+    catch (error) {
+      console.error(error.message)
+      this.#resoluciones = []
+      const total = this.shadowRoot.getElementById('total-r')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + 0
+      console.error('Error al establecer el valor del atributo data:', error)
+    }
+  }
+
+  #pagina = 1
+  #numeroPaginas
+  //Este metodo se encarga de gestionar la paginacion de las asesorias
+  buttonsEventListeners = () => {
+    //Asignación de las variables correspondientes a los botones
+    const prev = this.shadowRoot.getElementById('anterior-r')
+    const next = this.shadowRoot.getElementById('siguiente-r')
+    //Asignación de los eventos de los botones y la llamada de los metodos correspondientes en este caso la paginacion metodos de next y prev
+    prev.addEventListener('click', this.handlePrevPage)
+    next.addEventListener('click', this.handleNextPage)
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion previa
+  handlePrevPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina > 1) {
+      //Decremento de la pagina
+      this.#pagina--
+      //Llamada al metodo de consultar asesorias
+      this.cargaDatos()
+    }
+  }
+
+  //Metodo que se encarga de gestionar con respecto a la pagina actual seguir con la paginacion siguiente
+  handleNextPage = async () => {
+    //Validación de la pagina actual
+    if (this.#pagina < this.#numeroPaginas) {
+      //Incremento de la pagina
+      this.#pagina++
+      //Llamada al metodo de consultar asesorias
+      this.cargaDatos()
+    }
+  }
+
+  getNumeroPaginas = async () => {
+    try {
+      const { totalResoluciones } = await this.#api.getResolucionesBusqueda(this.#idProcesoJudicial, true, 1)
+      const total = this.shadowRoot.getElementById('total-r')
+      total.innerHTML = ''
+      total.innerHTML = 'Total :' + totalResoluciones
+      this.#numeroPaginas = (totalResoluciones) / 10
+    } catch (error) {
+      console.error('Error ', error.message)
+      //Mensaje de error
+      const modal = document.querySelector('modal-warning');
+      modal.setOnCloseCallback(() => { });
+
+      modal.message = 'Error al obtener el total de resoluciones, intente de nuevo mas tarde o verifique el status del servidor';
+      modal.title = 'Error'
+      modal.open = 'true'
+    }
+  }
+
+  //Este metodo se encarga de verificar la cantidad de filas de la tabla y asi poder limpiar la tabla
+  //y regesar true en caso de que la tabla tenga filas o regresar false en caso de que la tabla no tenga filas
+  validateRows = rowsTable => {
+    if (rowsTable > 0) {
+      this.cleanTable(rowsTable);
+      return true
+    } else { return true }
+  }
+
+  //Este metodo se encarga de limpiar la tabla
+  cleanTable = rowsTable => {
+    const table = this.#tableResoluciones
+    for (let i = rowsTable - 1; i >= 0; i--) {
+      table.deleteRow(i)
+    }
+  }
+
+
+
   async init2() {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
@@ -71,6 +166,8 @@ export class Resolucion extends HTMLElement {
   fillInputs() {
     //Llamado al metodo que se encarga de llenar los eventos de los botones
     this.agregarEventosBotones()
+    this.buttonsEventListeners()
+
   }
 
   ////Metodo que se encarga de gestionar los campos del formulario
@@ -88,6 +185,8 @@ export class Resolucion extends HTMLElement {
     resolucionInput.addEventListener('input', function () {
       if (resolucionInput.value.length > 200) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -140,6 +239,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de resolucion esta vacio
       if (resolucion === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de resolución es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -148,6 +249,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de resolucion tiene mas de 200 caracteres
       if (resolucion.length > 200) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -156,6 +259,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de fecha de resolucion esta vacio
       if (fechaResolucion === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de fecha de resolución es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -214,8 +319,9 @@ export class Resolucion extends HTMLElement {
           //Se limpian los campos de resolucion y fecha de resolucion
           this.#resolucion.value = ''
           this.#fechaResolucion.value = ''
-          */ 
-         const modal = document.querySelector('modal-warning')
+          */
+
+          const modal = document.querySelector('modal-warning')
           modal.message = 'Si esta seguro de agregar la resolución presione aceptar, de lo contrario presione x para cancelar.'
           modal.title = '¿Confirmacion de agregar resolución?'
 
@@ -226,8 +332,17 @@ export class Resolucion extends HTMLElement {
                 //Se crea un objeto con los datos de la resolucion
                 const resolucionData = {
                   resolucion: resolucion,
-                  fecha_resolucion: fechaResolucion
+                  fecha_resolucion: fechaResolucion,
+                  id_proceso_judicial: this.#idProcesoJudicial
                 }
+                this.#api.postResolucion(resolucionData).then((response) => {
+                  this.cargaDatos()
+                  this.#resolucion.value = ''
+                  this.#fechaResolucion.value = ''
+                }).catch((error) => {
+                  console.error('Error al agregar la resolución:', error)
+                })
+                /*
                 //Se añade la resolucion al arreglo de resoluciones
                 this.#resoluciones.push(resolucionData)
                 //Se llama a la funcion que se encarga de mostrar las resoluciones
@@ -235,19 +350,21 @@ export class Resolucion extends HTMLElement {
                 //Se limpian los campos de resolucion y fecha de resolucion
                 this.#resolucion.value = ''
                 this.#fechaResolucion.value = ''
+                */
               }
             }
           }
           );
           modal.open = true
-
-
         }
+
       }
     }
     else {
       //En caso de que se haya seleccionado una resolucion previamente se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => { })
+
       modal.message = 'No se puede agregar una resolución si ha selecionado previamente una de la tabla, se eliminaran los campos.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -266,6 +383,8 @@ export class Resolucion extends HTMLElement {
     if (resolucionID === null) {
       //En caso de que no se haya seleccionado una resolucion previamente se muestra un mensaje de error
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => { })
+
       modal.message = 'Debe seleccionar una resolución para poder editarla.'
       modal.title = 'Error de validación'
       modal.open = true
@@ -278,6 +397,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de resolucion esta vacio
       if (resolucion === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de resolución es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -286,6 +407,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de resolucion tiene mas de 200 caracteres
       if (resolucion.length > 200) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de resolución no puede contener más de 200 caracteres.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -294,6 +417,8 @@ export class Resolucion extends HTMLElement {
       //Se valida si el campo de fecha de resolucion esta vacio
       if (fechaResolucion === '') {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El campo de fecha de resolución es obligatorio.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -329,36 +454,61 @@ export class Resolucion extends HTMLElement {
           this.#resolucion.value = ''
           this.#fechaResolucion.value = ''
           */
-          const modal = document.querySelector('modal-warning')
-          modal.message = 'Si esta seguro de editar la resolución presione aceptar, de lo contrario presione x para cancelar.'
-          modal.title = '¿Confirmacion de editar resolución?'
-           
-          modal.setOnCloseCallback(() => {
-            if (modal.open === 'false') {
-              if (modal.respuesta === true) {
-                modal.respuesta = false
-                const id_resolucion_si_tiene = this.#resoluciones[resolucionID - 1].id_resolucion
-                const id_proceso_judicial_si_tiene = this.#resoluciones[resolucionID - 1].id_proceso_judicial
-                const resolucionData = {
-                  id_resolucion: id_resolucion_si_tiene,
-                  resolucion: resolucion,
-                  fecha_resolucion: fechaResolucion,
-                  id_proceso_judicial: id_proceso_judicial_si_tiene
+          const resolucionObtenida = await this.#api.getResolucionByID(resolucionID)
+          if (resolucionObtenida.resolucion === resolucion && resolucionObtenida.fecha_resolucion === fechaResolucion) {
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => { })
+
+            modal.message = 'La resolución no ha sido modificada, es la misma que la actual'
+            modal.title = 'Error de validación'
+            modal.open = true
+          } else {
+
+
+
+            const modal = document.querySelector('modal-warning')
+            modal.setOnCloseCallback(() => { })
+
+            modal.message = 'Si esta seguro de editar la resolución presione aceptar, de lo contrario presione x para cancelar.'
+            modal.title = '¿Confirmacion de editar resolución?'
+
+            modal.setOnCloseCallback(() => {
+              if (modal.open === 'false') {
+                if (modal.respuesta === true) {
+                  modal.respuesta = false
+                  const resolucionData = {
+                    id_resolucion: resolucionID,
+                    resolucion: resolucion,
+                    fecha_resolucion: fechaResolucion,
+                    id_proceso_judicial: this.#idProcesoJudicial
+                  }
+                  this.#api.putResolucion(resolucionID, resolucionData).then((response) => {
+                    this.cargaDatos()
+                    this.#idResolucion = null
+                    this.#resolucion.value = ''
+                    this.#fechaResolucion.value = ''
+                  }).catch((error) => {
+                    console.error('Error al editar la resolución:', error)
+                  })
+                  /*
+                  //Se reemplaza la resolucion en el arreglo de resoluciones
+                  this.#resoluciones[resolucionID - 1] = resolucionData
+                  //Se llama a la funcion que se encarga de mostrar las resoluciones
+                  this.mostrarResoluciones()
+                  //Se limpian los campos de resolucion y fecha de resolucion
+                  this.#idResolucion = null
+                  this.#resolucion.value = ''
+                  this.#fechaResolucion.value = ''
+                  */
                 }
-                //Se reemplaza la resolucion en el arreglo de resoluciones
-                this.#resoluciones[resolucionID - 1] = resolucionData
-                //Se llama a la funcion que se encarga de mostrar las resoluciones
-                this.mostrarResoluciones()
-                //Se limpian los campos de resolucion y fecha de resolucion
-                this.#idResolucion = null
-                this.#resolucion.value = ''
-                this.#fechaResolucion.value = ''
               }
             }
-          }
-          );
+            );
 
-          modal.open = true
+            modal.open = true
+
+          }
+
         }
         // }
       }
@@ -367,11 +517,12 @@ export class Resolucion extends HTMLElement {
   }
 
   //Metodo que se encarga de activar el boton de seleccionar resolucion y que muestra los datos de la resolucion seleccionada
-  activarBotonSeleccionarResolucion = (resolucionId) => {
+  activarBotonSeleccionarResolucion = async (resolucionId) => {
 
     try {
+      resolucionId = parseInt(resolucionId, 10)
       //Se obtiene la resolucion seleccionada
-      const resolucion = this.#resoluciones[resolucionId - 1]
+      const resolucion = await this.#api.getResolucionByID(resolucionId)
       //Se valida si la resolucion seleccionada existe
       if (resolucion) {
         //Se muestra la resolucion seleccionada en los campos de resolucion y fecha de resolucion
@@ -389,41 +540,42 @@ export class Resolucion extends HTMLElement {
 
   //Metodo que muestra las resoluciones en la tabla de resoluciones
   mostrarResoluciones = async () => {
+
     try {
-      //Se obtienen las resoluciones
       const resoluciones = this.#resoluciones
-      //Se obtiene la tabla de resoluciones
-      const tableBody = this.#tableResoluciones
-      //Se limpia la tabla de resoluciones
-      tableBody.innerHTML = ''
-      //Se recorre cada resolucion y se muestra en la tabla de resoluciones
       const lista = resoluciones
-      const funcion =
+      const table = this.#tableResoluciones
+      const rowsTable = this.#tableResoluciones.rows.length
+      if (this.validateRows(rowsTable)) {
         lista.forEach((resolucion, i) => {
           const row = document.createElement('tr')
           row.innerHTML = `
-          <tr id="resolucion-${i + 1}">
-          <td class="px-6 py-4 whitespace-nowrap">${i + 1}</td>
+          <tr id="resolucion-${resolucion.id_resolucion}">
+          <td class="px-6 py-4 whitespace-nowrap">${resolucion.id_resolucion}</td>
           <td class="px-6 py-4 whitespace-nowrap">${resolucion.resolucion}</td>
           <td class="px-6 py-4 whitespace-nowrap">${resolucion.fecha_resolucion}</td>
           <td class="px-6 py-4 whitespace-nowrap">
-          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-resolucion" onclick="activarBotonSeleccionarResolucion(this.value)" value="${i + 1}">
+          <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-resolucion" onclick="activarBotonSeleccionarResolucion(this.value)" value="${resolucion.id_resolucion}">
           Seleccionar
         </button>
       
           </td>
       </tr>
           `
-          tableBody.appendChild(row)
-        })
-
-    } catch (error) {
+          table.appendChild(row)
+        }
+        )
+      }
+    }
+    catch (error) {
       console.error('Error al obtener las resoluciones:', error)
     }
   }
   //Metodo que muestra un mensaje de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

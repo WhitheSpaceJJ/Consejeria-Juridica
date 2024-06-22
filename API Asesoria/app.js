@@ -1,9 +1,7 @@
-/*
 //Variables requeridas https
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-*/
 
 
 // Variable para cargar el módulo de express 
@@ -158,7 +156,7 @@ app.all("*", (req, res, next) => {
 });
 // Middleware para manejar los errores
 app.use(errorController);
-/*
+
 //Forma con https
 const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
@@ -169,13 +167,13 @@ const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(PORT, () => {
   logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
-});
-*/
+});/*
 //Forma sin https
 app.listen(PORT, () => {
   logger.info(`Servidor escuchando en el puerto ${PORT}`); 
 });
 
+*/
 
 
 

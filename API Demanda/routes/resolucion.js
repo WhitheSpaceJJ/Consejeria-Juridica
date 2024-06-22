@@ -36,7 +36,6 @@ obtenerResolucion)
 router.post('/', 
 validarPermisos(permisosAceptables1),
 validarJSONResolucionPOST,
-existeProcesoJudicial,
 crearResolucion)
 
 // Ruta para actualizar una resolucion por su id
@@ -44,7 +43,6 @@ router.put('/:id',
 validarPermisos(permisosAceptables2),
 existeResolucion,
 validarJSONResolucionPUT,
-existeProcesoJudicial,
 actualizarResolucion)
 
 

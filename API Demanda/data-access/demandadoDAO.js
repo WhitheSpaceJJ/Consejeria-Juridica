@@ -1,4 +1,5 @@
 const Demandado = require('../models/demandado')
+const logger = require('../utilidades/logger');
 
 class DemandadoDAO {
   /**
@@ -8,10 +9,13 @@ class DemandadoDAO {
  */
   async crearDemandado({ id_demandado }) {
     try {
+      logger.info("Creando de demandado", { id_demandado })
       const demandado = await Demandado.create({ id_demandado })
+      logger.info("Demandado creado", { demandado })
       return demandado
-    } catch (err) {      console.log(err.message)
-
+    } catch (err) {   
+      //   console.log(err.message)
+    logger.error("Error al crear demandado", { error: err.message })
       throw err
     }
   }
@@ -24,9 +28,12 @@ class DemandadoDAO {
  */
   async obtenerDemandado(id) {
     try {
+      logger.info("Obteniendo demandado", { id })
       const demandado = await Demandado.findByPk(id)
+      logger.info("Demandado obtenido", { demandado })
       return demandado
     } catch (err) {
+      logger.error("Error al obtener demandado", { error: err.message })
       throw err
     }
   }

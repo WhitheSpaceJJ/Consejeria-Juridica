@@ -1,9 +1,7 @@
-/*
 //Variables requeridas https
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-*/
 
 // Importamos los módulos necesarios
 const express = require('express');
@@ -48,28 +46,37 @@ app.use((req, res, next) => {
 });
 
 const jwtMiddleware = async (req, res, next) => {
-  // Obtenemos el token del encabezado de la solicitud
+  // Obtenemos el token del encabezado de la solicitud de ahora en adelante con logger realizar un log de cada cuerpo del copdigo
+  logger.info('Verificando token');
+  logger.info(req.path);
+  logger.info("Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña");
   if (req.path === "/usuario" || req.path === "/recuperacion") {
-    next();
+     logger.info("Se permite el acceso a la ruta de usuario o recuperacion")
+     logger.info("Se continua con el siguiente middleware")
+     next();
   } else {
-
+    
     const tokenHeader = req.headers.authorization;
     if (!tokenHeader) {
       // Si no hay token, creamos un error personalizado y lo pasamos al siguiente middleware
       const customeError = new CustomeError('Token no proporcionado.', 401);
-      logger.warn('Token no proporcionado.');
+      logger.warn('Token no proporcionado, no ha iniciado sesión o cuenta con permisos');
       next(customeError);
       return;
     }
     // Eliminamos el prefijo 'Bearer ' del token
+    logger.info('Token proporcionado, verificando...');
     const token = tokenHeader.replace('Bearer ', '');
     try {
+      logger.info('Token verificando...');
       const data = await jwtController.verifyToken(token);
+      logger.info('Token verificado.');
       req.id_usuario = data.id_usuario;
       req.id_tipouser = data.id_tipouser;
       req.id_empleado = data.id_empleado;
       req.id_distrito_judicial = data.id_distrito_judicial;
       req.permisos = data.permisos;
+      logger.info('Se continua con el siguiente middleware, se ha verificado el token', data);
       next();
     } catch (error) {
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión o cuenta con permisos', 401);
@@ -97,7 +104,7 @@ app.all("*", (req, res, next) => {
 // Usamos el controlador de errores como último middleware
 app.use(errorController);
 
-/*
+
 //Forma con https
 const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
@@ -109,11 +116,12 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(PORT, () => {
   logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
 });
-*/
+/*
 //Forma sin https
 app.listen(PORT, () => {
   logger.info(`Servidor escuchando en el puerto ${PORT}`);
 });
+*/
 
 const { packageDefinition } = require("./grpc/route.server");
 const grpc = require('@grpc/grpc-js');
@@ -133,6 +141,7 @@ function getServer() {
     validarToken: (call, callback) => {
       jwtController.verifyToken(call.request.token)
         .then((data) => {
+          logger.info('Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado');
           callback(null, {
             permisos: data.permisos, id_distrito_judicial: data.id_distrito_judicial,
             id_usuario: data.id_usuario, id_tipouser: data.id_tipouser , id_empleado: data.id_empleado
@@ -151,9 +160,12 @@ function getServer() {
       const { id_usuario, usuario } = call.request;
       controlUsuarios.obtenerUsuarioByIDAndNameGrpc(id_usuario, usuario)
         .then((usuario) => {
+          logger.info('Usuario: ', usuario);
           if (usuario) {
+            logger.info('Usuario válido, a traves del id y nombre');
             callback(null, { message: 'Usuario válido' });
           } else {
+            logger.warn('Usuario inválido');
             callback(null, { message: 'Usuario inválido' });
           }
         })
@@ -168,6 +180,7 @@ function getServer() {
 }
 
 const controlUsuarios = require("./controles/controlUsuario");
+const { log } = require('winston');
 
 
 var server = getServer();

@@ -3,20 +3,27 @@
 const controlPrueba = require('../data-access/pruebaDAO')
 const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
 
+const logger = require('../utilidades/logger');
 
 
 async function existeProcesoJudicial(req, res, next) {
-    const { id } = req.params
-    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id)
+    logger.info("Middleware para validar la existencia de un proceso judicial")
+
+
+    const { id_proceso_judicial } = req.query
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
         return res.status(404).json({
             message: 'No existe un proceso judicial con ese id'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de un proceso judicial")
     next()
 }
 
 async function existePrueba(req, res, next) {
+    logger.info("Middleware para validar la existencia de una prueba")
     const { id } = req.params
     const prueba = await controlPrueba.obtenerPrueba(Number(id))
     if (!prueba) {
@@ -24,12 +31,16 @@ async function existePrueba(req, res, next) {
             message: 'No existe una prueba con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de una prueba")
     next()
 }
 
 
 
 async function validarJSONPruebaPOST(req, res, next) {
+
+    logger.info("Middleware para validar el JSON de la prueba en el POST")
     const { descripcion_prueba, id_proceso_judicial, ...extraData } = req.body
     if (Object.keys(extraData).length !== 0) {
         return res.status(400).json({
@@ -48,13 +59,19 @@ async function validarJSONPruebaPOST(req, res, next) {
             message: 'El id del proceso judicial no es un número.'
         })
     }
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
+        })
+    }
 
     if (descripcion_prueba.length > 200) {
         return res.status(400).json({
             message: 'El campo "descripcion_prueba" excede el tamaño permitido.'
         });
     }
-
+   logger.info("Fin del middleware para validar el JSON de la prueba en el POST")
     next()
 }
 
@@ -62,6 +79,8 @@ async function validarJSONPruebaPOST(req, res, next) {
 
 
 async function validarJSONPruebaPUT(req, res, next) {
+
+    logger.info("Middleware para validar el JSON de la prueba en el PUT")
     const { id_prueba, descripcion_prueba, id_proceso_judicial, ...extraData } = req.body
 
     if (Object.keys(extraData).length !== 0) {
@@ -90,6 +109,12 @@ async function validarJSONPruebaPUT(req, res, next) {
         })
     }
 
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
+        })
+    }
 
 
     if (descripcion_prueba.length > 200) {
@@ -119,7 +144,7 @@ async function validarJSONPruebaPUT(req, res, next) {
         })
     }
 
-
+    logger.info("Fin del middleware para validar el JSON de la prueba en el PUT")
     next()
 }
 

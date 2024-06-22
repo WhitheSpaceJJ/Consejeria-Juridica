@@ -1,7 +1,10 @@
 
 const controlDistritoJudicial = require('../controles/controlDistritosJudiciales')
 const controlEmpleado = require('../controles/controlEmpleados')
+const logger = require('../utilidades/logger');
+
 async function existeDistritoJudicial(req, res, next) {
+    logger.info("Middleware para validar la existencia de un distrito judicial")
     const distritoJudicial = await controlDistritoJudicial.obtenerDistritoJudicial(Number(req.body.id_distrito_judicial))
 
     if (!distritoJudicial) {
@@ -9,12 +12,14 @@ async function existeDistritoJudicial(req, res, next) {
             message: 'El distrito judicial proporcionado no existe.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un distrito judicial")
 
     next()
 }
 const controlDistrito = require('../controles/controlDistritosJudiciales.js');
 
 async function existeEmpleado(req, res, next) {
+    logger.info("Middleware para validar la existencia de un empleado")
     const empleado = await controlEmpleado.obtenerEmpleadoPorId(Number(req.params.id))
 
     if (!empleado) {
@@ -22,12 +27,14 @@ async function existeEmpleado(req, res, next) {
             message: 'El empleado proporcionado no existe.'
         })
     }
-
+    logger.info("Fin del middleware para validar la existencia de un empleado") 
     next()
 }
 
 
 async function validarJSONEmpleadoPOST(req, res, next) {
+
+    logger.info("Middleware para validar el JSON del empleado en el POST")
     const { nombre, tipo_empleado, estatus_general, id_distrito_judicial, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -77,7 +84,7 @@ async function validarJSONEmpleadoPOST(req, res, next) {
         return res.status(400).json({ message: "El id de distrito judicial no existe" });
     }
 
-
+    logger.info("Fin del middleware para validar el JSON del empleado en el POST")
 
     next()
 }
@@ -86,6 +93,7 @@ async function validarJSONEmpleadoPOST(req, res, next) {
 
 
 async function validarJSONEmpleadoPUT(req, res, next) {
+    logger.info("Middleware para validar el JSON del empleado en el PUT")
     const { id_empleado, nombre, tipo_empleado, estatus_general, id_distrito_judicial, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -153,6 +161,7 @@ async function validarJSONEmpleadoPUT(req, res, next) {
         })
     }
 
+     logger.info("Fin del middleware para validar el JSON del empleado en el PUT")
     next()
 }
 

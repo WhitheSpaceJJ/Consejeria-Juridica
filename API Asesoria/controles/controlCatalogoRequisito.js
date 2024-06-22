@@ -1,4 +1,5 @@
 const modeloCatalogoRequisito = require('../modelos/modeloCatalogoRequisito');
+const logger = require('../utilidades/logger');
 
   
 /**
@@ -7,20 +8,25 @@ const modeloCatalogoRequisito = require('../modelos/modeloCatalogoRequisito');
  */
 const obtenerCatalogoRequisitos = async (activo) => {
   try {
+     logger.info("Se obtienen los catalogos de requisitos, en caso de que se envie un parametro activo se filtra por activo")
+     logger.info("Se vakiida el parametro activo", activo)
     if(activo !== undefined && activo !== null && activo !== ""){
+       logger.info("Se retorna los catalogos de requisitos activos")
       return await modeloCatalogoRequisito.CatalogoRequisito.findAll({
         raw: false,
         nest: true,
         where: { estatus_general: "ACTIVO" }
       });
     }else {
+      logger.info("Se retorna el total de catalogos de requisitos")
       return await modeloCatalogoRequisito.CatalogoRequisito.findAll({
         raw: false,
         nest: true
       });
     }
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message);
+    //console.log("Error de catalogo requisito:", error.message);
     return null;
   }
 };
@@ -32,26 +38,33 @@ const obtenerCatalogoRequisitos = async (activo) => {
  *  */
 const obtenerCatalogoRequisitoPorId = async (id) => {
   try {
-      return await modeloCatalogoRequisito.CatalogoRequisito.findByPk(id,{
+     logger.info("Se obtiene el catalogo de requisito por su id", id)
+      const result= await modeloCatalogoRequisito.CatalogoRequisito.findByPk(id,{
         raw: false,
         nest: true
       });
-  
+      logger.info("Se retorna el catalogo de requisito", result)
+      return result;
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
-    return null;
+  //  console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message); 
+  return null;
   }
 };
 
 const obtenerDocumentoPorPorIdMiddleware = async (id) => {
   try {
-    return await modeloCatalogoRequisito.CatalogoRequisito.findOne({
+    logger.info("Se obtiene el catalogo de requisito por su id", id)
+    const result = await modeloCatalogoRequisito.CatalogoRequisito.findOne({
       raw: false,
       nest: true,
       where: { id_catalogo: id, estatus_general: "ACTIVO" }
     });
+    logger.info("Se retorna el catalogo de requisito", result)
+    return result;
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
+   //  console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message);
     return null;
   }
 }
@@ -64,11 +77,12 @@ const obtenerDocumentoPorPorIdMiddleware = async (id) => {
  * */
 const agregarCatalogoRequisito = async (catalogoRequisito) => {
   try {
- 
+    logger.info("Se agrega el catalogo de requisito", catalogoRequisito)
     return (await modeloCatalogoRequisito.CatalogoRequisito.create(catalogoRequisito, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
-    return false;
+   // console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message); 
+   return false;
   }
 };
 
@@ -81,36 +95,47 @@ const agregarCatalogoRequisito = async (catalogoRequisito) => {
  */
 const actualizarCatalogoRequisito = async (catalogoRequisito) => {
   try {
+    logger.info("Se actualiza el catalogo de requisito", catalogoRequisito)
    const result= await modeloCatalogoRequisito.CatalogoRequisito.update(catalogoRequisito, { where: { id_catalogo: catalogoRequisito.id_catalogo } });
+     logger.info("Se retorna la validacion de actualizacion de catalogo de requisito", result[0] === 1) 
     return result[0] === 1;
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
-    return false;
+   // console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message); 
+   return false;
   }
 };
 
 
 const obtenerCatalogoRequisitosPaginacion = async (pagina) => {
   try {
+    logger.info("Se obtienen los catalogos de requisitos por paginacion")
+    logger.info("Se establece la pagina, offset y limit", pagina)
+
     pagina = parseInt(pagina, 10);
     const offset = (pagina - 1) * 10;
+    logger.info("Se obtienen los catalogos de requisitos por paginacion")
     const resultados = await modeloCatalogoRequisito.CatalogoRequisito.findAll({
       raw: false,
       nest: true,
       offset: offset,
       limit: 10
     });
+    logger.info("Se retorna los catalogos de requisitos por paginacion", resultados)
     return resultados;
   } catch (error) {
+    logger.error("Error de catalogo requisito:", error.message);
     return null;
   }
 }
 
 const obtenerTotalCatalogoRequisitos = async () => {
   try {
+    logger.info("Se obtiene el total de catalogos de requisitos")
     return await modeloCatalogoRequisito.CatalogoRequisito.count();
   } catch (error) {
-    console.log("Error de catalogo requisito:", error.message);
+    logger.error("Error de catalogo requisito:", error.message);
+    //console.log("Error de catalogo requisito:", error.message);
     return null;
   }
 }

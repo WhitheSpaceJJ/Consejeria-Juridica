@@ -2,21 +2,25 @@
 
 const controlFamiliar = require('../data-access/familiarDAO')
 const controlPromovente = require('../data-access/promoventeDAO')
+const logger = require('../utilidades/logger');
 
 
 async function existePromovente(req, res, next) {
-    const { id } = req.params
-    const promovente = await controlPromovente.obtenerPromoventeMiddlware(Number(id))
+    logger.info("Middleware para validar la existencia de un promovente")
+    const { id_promovente } = req.query
+    const promovente = await controlPromovente.obtenerPromoventeMiddlware(Number(id_promovente))
     if (!promovente) {
         return res.status(404).json({
             message: 'No existe un promovente con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un promovente")
     next()
 }
 
 
 async function existeFamiliar(req, res, next) {
+    logger.info("Middleware para validar la existencia de un familiar")
     const { id } = req.params
     const familiar = await controlFamiliar.obtenerFamiliar(Number(id))
     if (!familiar) {
@@ -24,12 +28,14 @@ async function existeFamiliar(req, res, next) {
             message: 'No existe un familiar con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un familiar")
     next()
 }
 
 
 
 async function validarJSONFamiliarPOST(req, res, next) {
+    logger.info("Middleware para validar el JSON del familiar en el POST")
     const { nombre, nacionalidad, parentesco, perteneceComunidadLGBT, adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente, ...extraData } = req.body
     if (Object.keys(extraData).length !== 0) {
         return res.status(400).json({
@@ -48,7 +54,12 @@ async function validarJSONFamiliarPOST(req, res, next) {
         })
     }
 
-
+    const promovente = await controlPromovente.obtenerPromoventeMiddlware(Number(id_promovente))
+    if (!promovente) {
+        return res.status(404).json({
+            message: 'No existe un promovente con el id proporcionado, asi que no se puede continuar con la petición.'
+        })
+    }
     if (nombre.length > 100) {
         return res.status(400).json({
             message: 'El campo "nombre" excede el tamaño permitido.'
@@ -91,7 +102,7 @@ async function validarJSONFamiliarPOST(req, res, next) {
             message: 'El campo "pobrezaExtrema" no es un booleano.'
         })
     }
-
+   logger.info("Fin del middleware para validar el JSON del familiar en el POST")
 
 
     next()
@@ -101,6 +112,7 @@ async function validarJSONFamiliarPOST(req, res, next) {
 
 
 async function validarJSONFamiliarPUT(req, res, next) {
+      logger.info("Middleware para validar el JSON del familiar en el PUT")
     const { id_familiar, nombre, nacionalidad, parentesco, perteneceComunidadLGBT, adultaMayor, saludPrecaria, pobrezaExtrema, id_promovente, ...extraData } = req.body
 
     if (Object.keys(extraData).length !== 0) {
@@ -189,6 +201,7 @@ async function validarJSONFamiliarPUT(req, res, next) {
             message: 'El id del promovente proporcionado no coincide con el id del promovente del familiar que se quiere modificar, no es posible cambiar el promovente del familiar.'
         })
     }
+    logger.info("Fin del middleware para validar el JSON del familiar en el PUT")
 
     next()
 }

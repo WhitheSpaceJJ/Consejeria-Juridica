@@ -6,7 +6,7 @@ class APIModel {
  CP_API_URL = `${this.API_URL}:3012`
  DEMANDAS_API_URL = `${this.API_URL}:3026`
  */
-  API_URL = 'http://localhost'
+  API_URL = 'https://localhost'
   USERS_API_URL = `${this.API_URL}:3002`
   ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`
@@ -1308,20 +1308,31 @@ class APIModel {
 
   }
 
-  async getPruebasByProcesoJudicial(id) {
-    const url = `${this.DEMANDAS_API_URL}/prueba/proceso-judicial/${id}`
-    const response = await fetch(url, {
+  async getPruebasBusqueda(id_proceso_judicial, total, pagina) {
+    const url = new URL(`${this.DEMANDAS_API_URL}/prueba/proceso-judicial`);
+
+    const params = new URLSearchParams();
+
+    if (id_proceso_judicial) params.append('id_proceso_judicial', id_proceso_judicial);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+
+
+    url.search = params.toString();
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
+      const data = await response.json();
+      return data;
+    }
+    else {
+      throw new Error('Error en la petición');
     }
 
   }
@@ -1386,20 +1397,32 @@ class APIModel {
   }
 
 
-  async getEstadosProcesalesByProcesoJudicial(id) {
-    const url = `${this.DEMANDAS_API_URL}/estado-procesal/proceso-judicial/${id}`
-    const response = await fetch(url, {
+  async getEstadosBusqueda(id_proceso_judicial, total, pagina) {
+ 
+    const url = new URL(`${this.DEMANDAS_API_URL}/estado-procesal/proceso-judicial`);
+
+    const params = new URLSearchParams();
+
+    if (id_proceso_judicial) params.append('id_proceso_judicial', id_proceso_judicial);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+
+
+    url.search = params.toString();
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
+      const data = await response.json();
+      return data;
+    }
+    else {
+      throw new Error('Error en la petición');
     }
 
   }
@@ -1468,21 +1491,33 @@ class APIModel {
   }
 
 
-  async getObservacionesByProcesoJudicial(id) {
-    const url = `${this.DEMANDAS_API_URL}/observacion/proceso-judicial/${id}`
-    const response = await fetch(url, {
+  async getObservacionesBusqueda(id_proceso_judicial, total, pagina) {
+    const url = new URL(`${this.DEMANDAS_API_URL}/observacion/proceso-judicial`);
+
+    const params = new URLSearchParams();
+
+    if (id_proceso_judicial) params.append('id_proceso_judicial', id_proceso_judicial);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+
+
+    url.search = params.toString();
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
+      const data = await response.json();
+      return data;
     }
+    else {
+      throw new Error('Error en la petición');
+    }
+
 
   }
 
@@ -1556,22 +1591,32 @@ class APIModel {
 
 
 
-  async getResolucionesByProcesoJudicial(id) {
-    const url = `${this.DEMANDAS_API_URL}/resolucion/proceso-judicial/${id}`
-    const response = await fetch(url, {
+  async getResolucionesBusqueda(id_proceso_judicial, total, pagina) {
+    const url = new URL(`${this.DEMANDAS_API_URL}/resolucion/proceso-judicial`);
+
+    const params = new URLSearchParams();
+
+    if (id_proceso_judicial) params.append('id_proceso_judicial', id_proceso_judicial);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+
+
+    url.search = params.toString();
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
+      const data = await response.json();
+      return data;
     }
-
+    else {
+      throw new Error('Error en la petición');
+    } 
   }
 
 
@@ -1644,22 +1689,34 @@ class APIModel {
 
 
 
-  async getFamiliaresByPromovente(id) {
-    const url = `${this.DEMANDAS_API_URL}/familiar/promovente/${id}`
-    const response = await fetch(url, {
-      method: 'GET',
+  async getFamiliaresBusqueda(id_promovente, total, pagina) {
+    const url = new URL(`${this.DEMANDAS_API_URL}/familiar/promovente`);
+
+    const params = new URLSearchParams();
+
+    if (id_promovente) params.append('id_promovente', id_promovente);
+    if (total) params.append('total', total);
+    if (pagina) params.append('pagina', pagina);
+
+
+    url.search = params.toString();
+    
+    
+    const response = await fetch(url.toString(), {
+      method: 'GET',  
       headers: {
         Authorization: `Bearer ${this.user.token}`,
       },
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      return data
-    } else {
-      throw new Error('Error en la petición')
+      const data = await response.json();
+      return data;
     }
-
+    else {
+      throw new Error('Error en la petición');
+    }
+    
   }
 
 

@@ -1,4 +1,5 @@
 const Juzgado = require('../models/juzgado')
+const logger = require('../utilidades/logger');
 
 class JuzgadoDAO {
   /**
@@ -9,9 +10,12 @@ class JuzgadoDAO {
 
   async crearJuzgado({ nombre_juzgado, estatus_general }) {
     try {
+      logger.info("Creando de juzgado", { nombre_juzgado, estatus_general })
       const juzgado = await Juzgado.create({ nombre_juzgado, estatus_general })
+      logger.info("Juzgado creado", { juzgado })
       return juzgado
     } catch (err) {
+      logger.error("Error al crear juzgado", { error: err.message })
       throw err
     }
   }
@@ -22,14 +26,22 @@ class JuzgadoDAO {
  */
   async obtenerJuzgados(activo) {
     try {
+      logger.info("Obteniendo juzgados, en base a su estatus", { activo })
+
       if (activo !== undefined && activo !== null && activo !== "") {
+        logger.info("Se envió el parámetro activo y se obtendrán los juzgados activos")
         const juzgados = await Juzgado.findAll({ where: { estatus_general: "ACTIVO" } })
+        logger.info("Juzgados activos obtenidos", { juzgados })
         return juzgados
       } else {
+        logger.info("No se envió el parámetro activo y se obtendrán todos los juzgados")
         const juzgados = await Juzgado.findAll()
+        logger.info("Juzgados obtenidos", { juzgados })
         return juzgados
       }
     } catch (err) {
+
+      logger.error("Error al obtener juzgados", { error: err.message })
       throw err
     }
   }
@@ -41,9 +53,12 @@ class JuzgadoDAO {
  */
   async obtenerJuzgado(id) {
     try {
+      logger.info("Obteniendo juzgado por ID", { id })
       const juzgado = await Juzgado.findByPk(id)
+      logger.info("Juzgado obtenido", { juzgado })
       return juzgado
     } catch (err) {
+      logger.error("Error al obtener juzgado por ID", { error: err.message })
       throw err
     }
   }
@@ -56,9 +71,12 @@ class JuzgadoDAO {
  */
   async actualizarJuzgado(id_juzgado, { nombre_juzgado, estatus_general }) {
     try {
+      logger.info("Actualizando juzgado", { id_juzgado, nombre_juzgado, estatus_general })
       const juzgado = await Juzgado.update({ nombre_juzgado, estatus_general }, { where: { id_juzgado } })
+      logger.info("Juzgado actualizado retonando resultado", { result: juzgado[0] === 1 })
       return juzgado[0] == 1
     } catch (err) {
+      logger.error("Error al actualizar juzgado", { error: err.message })
       throw err
     }
   }
@@ -66,19 +84,25 @@ class JuzgadoDAO {
     
    async obtenerJuzgadosPaginacion(pagina) {
     try {
+      logger.info("Obteniendo juzgados paginados y limitados a 10", { pagina })
       pagina = parseInt(pagina, 10)
       const offset = (pagina - 1) * 10
       const resultados = await Juzgado.findAll({ offset: offset, limit: 10 })
+      logger.info("Juzgados paginados obtenidos", { resultados })
       return resultados
     } catch (err) {
+
+      logger.error("Error al obtener juzgados paginados", { error: err.message })
       throw err
     }
   }
  
   async obtenerTotalJuzgados() {
     try {
+      logger.info("Obteniendo total de juzgados")
       return await Juzgado.count()
     } catch (err) {
+      logger.error("Error al obtener total de juzgados", { error: err.message })
       throw err
     }
   }

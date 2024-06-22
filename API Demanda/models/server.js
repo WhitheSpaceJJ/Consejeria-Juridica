@@ -1,10 +1,8 @@
 // Importamos los módulos necesarios
-/*
 //Variables requeridas https
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-*/
 
 
 
@@ -128,7 +126,7 @@ class Server {
   // Método para iniciar el servidor
   listen() {
 
-/*
+
 //Forma con https
 const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
@@ -139,14 +137,14 @@ const httpsServer = https.createServer(credentials, this.app);
 
 httpsServer.listen(this.port, () => {
   logger.info(`Aplicación HTTPS corriendo en el puerto ${this.port}`);
-});
-*/
+});/*
 //Forma sin https
     this.app.listen(this.port, () => {
       logger.info(`El servidor de demandas está corriendo en el puerto ` + this.port)
     })
-  }
-}
+*/
+  } 
+} 
 
 // Exportamos la clase Server
 module.exports = Server

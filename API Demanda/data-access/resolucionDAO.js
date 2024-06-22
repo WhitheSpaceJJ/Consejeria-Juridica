@@ -2,6 +2,7 @@
 
 
 const Resolucion = require('../models/resolucion')
+const logger = require('../utilidades/logger');
 
 class ResolucionDAO {
 
@@ -14,10 +15,12 @@ class ResolucionDAO {
 
     async crearResolucion({ id_proceso_judicial, resolucion, fecha_resolucion }) {
         try {
+            logger.info("Creando de resolución", { id_proceso_judicial, resolucion, fecha_resolucion })
             const resolucionCreda = await Resolucion.create({ id_proceso_judicial, resolucion, fecha_resolucion })
+            logger.info("Resolución creada", { resolucionCreda })
             return resolucionCreda
-        } catch (err) {      console.log(err.message)
-
+        } catch (err) {   //   console.log(err.message)
+            logger.error("Error al crear resolución", { error: err.message })
             throw err
         }
     }
@@ -32,9 +35,12 @@ class ResolucionDAO {
 
     async obtenerResolucion(id_resolucion) {
         try {
+            logger.info("Obteniendo resolución por ID", { id_resolucion })
             const resolucion = await Resolucion.findByPk(id_resolucion)
+            logger.info("Resolución obtenida", { resolucion })
             return resolucion
         } catch (err) {
+            logger.error("Error al obtener resolución por ID", { error: err.message })
             throw err
         }
     }
@@ -47,16 +53,21 @@ class ResolucionDAO {
     async obtenerResolucionesPorProcesoJudicial(id_proceso_judicial, totalBool, pagina) {
     
         try {
+            logger.info("Obteniendo resoluciones por proceso judicial y limitando a 10", { id_proceso_judicial })
             const limite = 10
             const offset = (parseInt(pagina, 10) - 1) * limite
             const whereClause = { id_proceso_judicial: id_proceso_judicial }
+
+            logger.info("Verificando si se envió el parámetro totalBool, con el fin de obtener el total de resoluciones o solo las resoluciones")
             if (totalBool) {
+                logger.info("Se envió el parámetro totalBool y se obtendrá el total de resoluciones")
                 return await Resolucion.count({
                     raw: false,
                     nest: true,
                     where: whereClause
                 })
             } else {
+                logger.info("No se envió el parámetro totalBool y se obtendrán las resoluciones paginadas")
                 const resoluciones = await Resolucion.findAll({
                     raw: false,
                     nest: true,
@@ -64,15 +75,20 @@ class ResolucionDAO {
                     limit: limite,
                     offset: offset
                 })
+
+                logger.info("Verificando si el total de resoluciones es mayor a 0")
                 if (resoluciones.length > 0) {
+                    logger.info("Resoluciones paginadas obtenidas", { resoluciones })
                     return resoluciones
                 } else {
+                    logger.info("No se encontraron resoluciones paginadas")
                     return null
                 }
             }
 
         }
         catch (error) {
+            logger.error("Error al obtener resoluciones por proceso judicial", { error: error.message })
             throw error
         }
 
@@ -87,10 +103,12 @@ class ResolucionDAO {
 
     async actualizarResolucion(id_resolucion, { resolucion, fecha_resolucion }) {
         try {
+            logger.info("Actualizando resolución", { id_resolucion, resolucion, fecha_resolucion })
             const resolucionActualizado = await Resolucion.update({ resolucion, fecha_resolucion }, { where: { id_resolucion: id_resolucion } })
-            return resolucionActualizado[0] === 1 
-        } catch (err) {      console.log(err.message)
-
+            logger.info("Resolución actualizada retonando resultado", { result: resolucionActualizado[0] === 1 })
+              return resolucionActualizado[0] === 1 
+        } catch (err) {    //  console.log(err.message)
+            logger.error("Error al actualizar resolución", { error: err.message })
             throw err
         }
     }

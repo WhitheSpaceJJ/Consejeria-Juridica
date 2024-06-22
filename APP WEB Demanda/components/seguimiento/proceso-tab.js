@@ -193,6 +193,8 @@ export class ProcesoTab extends HTMLElement {
   cambioEstatus() {
     if (this.#estatusProceso.value === '1' || this.#estatusProceso.value === '2') {
       const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => { })
+
       modal.message = 'Al cambiar de estatus y actualizarlo, este no podra ser modificado, al menos que un encargado  de distrito lo haga'
       modal.title = 'Mensaje de Advertencia unico'
       modal.open = true
@@ -317,6 +319,7 @@ export class ProcesoTab extends HTMLElement {
 
     //Se obteiene el componente web de estado procesal y se le asigna la data
 
+
     const estadoProcesalWC = this.#estadosProcesalesWC
      
     // Verificar si el componente fue encontrado
@@ -333,7 +336,7 @@ export class ProcesoTab extends HTMLElement {
 
     // Verificar si el componente fue encontrado
     if (familiarWC) {
-      const data = this.registroTab.data.id_proceso_judicial
+      const data =this.registroTab.data.promovente.id_participante
       familiarWC.data = data;
     } else {
       console.error('No se encontró el componente web "familiar" en el DOM.');
@@ -390,6 +393,8 @@ export class ProcesoTab extends HTMLElement {
 
       if (numeroExpedienteInput.value.length > 20) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El número de expediente no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true
@@ -400,6 +405,8 @@ export class ProcesoTab extends HTMLElement {
     controlInternoInput.addEventListener('input', function () {
       if (controlInternoInput.value.length > 20) {
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El número de control interno no debe ser mayor a 20 caracteres'
         modal.title = 'Error de validación'
         modal.open = true
@@ -611,6 +618,8 @@ export class ProcesoTab extends HTMLElement {
   //Metodo que se encarga de mostrar el modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

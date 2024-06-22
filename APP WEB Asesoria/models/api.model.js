@@ -5,7 +5,7 @@ class APIModel {
   ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`
   */
-  API_URL = 'http://localhost'
+  API_URL = 'https://localhost'
   USERS_API_URL = `${this.API_URL}:3002`
   ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`

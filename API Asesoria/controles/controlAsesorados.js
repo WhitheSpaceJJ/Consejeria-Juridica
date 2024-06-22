@@ -1,4 +1,5 @@
 const modeloAsesorado = require('../modelos/modeloAsesorado');
+const logger = require('../utilidades/logger');
 
 /**
  *   @abstract Función que permite obtener todos los asesorados
@@ -6,7 +7,8 @@ const modeloAsesorado = require('../modelos/modeloAsesorado');
  */
 const obtenerAsesorados = async () => {
   try {
-    return await modeloAsesorado.Asesorado.findAll({
+    logger.info("Se obtienen los asesorados")
+    const result= await modeloAsesorado.Asesorado.findAll({
       raw: true,
       nest: true,
 
@@ -16,9 +18,12 @@ const obtenerAsesorados = async () => {
       include: [modeloAsesorado.Motivo, modeloAsesorado.EstadoCivil]
 
     });
+    logger.info("Se retornan los asesorados")
+    return result;
   } catch (error) {
-    console.log("Error asesorados:", error.message);
-    return null;
+   //  console.log("Error asesorados:", error.message);
+    logger.error("Error de asesorados:", error.message); 
+   return null;
   }
 };
 
@@ -29,7 +34,8 @@ const obtenerAsesorados = async () => {
  * */
 const obtenerAsesoradoPorId = async (id) => {
   try {
-    return await modeloAsesorado.Asesorado.findByPk(id, {
+    logger.info("Se obtiene el asesorado por su id", id)
+    const result = await modeloAsesorado.Asesorado.findByPk(id, {
       raw: true,
       nest: true
       ,
@@ -39,8 +45,11 @@ const obtenerAsesoradoPorId = async (id) => {
       include: [modeloAsesorado.Motivo, modeloAsesorado.EstadoCivil]
 
     });
+    logger.info("Se retorna el asesorado", result)
+    return result;
   } catch (error) {
-    console.log("Error asesorados:", error.message);
+    logger.error("Error asesorados:", error.message);
+  //  console.log("Error asesorados:", error.message);
     return null;
   }
 };
@@ -52,10 +61,14 @@ const obtenerAsesoradoPorId = async (id) => {
  * */
 const agregarAsesorado = async (asesorado) => {
   try {
-    return (await modeloAsesorado.Asesorado.create(asesorado, { raw: true, nest: true })).dataValues;
+    logger.info("Se agrega el asesorado", asesorado)
+    const rwsult= (await modeloAsesorado.Asesorado.create(asesorado, { raw: true, nest: true })).dataValues;
+    logger.info("Se retorna el asesorado", rwsult)
+    return rwsult;
   } catch (error) {
-    console.log("Error asesorados:", error.message);
-    return false;
+  //   console.log("Error asesorados:", error.message);
+     logger.error("Error de asesorados:", error.message);  
+  return false;
   }
 };
 
@@ -68,11 +81,14 @@ const agregarAsesorado = async (asesorado) => {
  */
 const actualizarAsesorado = async (asesorado) => {
   try {
-  const result=   await modeloAsesorado.Asesorado.update(asesorado, { where: { id_asesorado: asesorado.id_asesorado } });
+    logger.info("Se actualiza el asesorado", asesorado)
+    const result=   await modeloAsesorado.Asesorado.update(asesorado, { where: { id_asesorado: asesorado.id_asesorado } });
+    logger.info("Se retorna el asesorado", result)
     return result[0] === 1;
   } catch (error) {
-    console.log("Error asesorados:", error.message);
-    return false;
+   // console.log("Error asesorados:", error.message);
+    logger.error("Error de asesorados:", error.message);
+   return false;
   }
 };
 

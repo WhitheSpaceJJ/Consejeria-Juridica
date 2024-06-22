@@ -391,6 +391,8 @@ export class PromoventeTab extends HTMLElement {
           // Si el campo contiene caracteres no válidos, lanzar una excepción
 
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'El nombre solo permite letras, verifique su respuesta.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -398,6 +400,8 @@ export class PromoventeTab extends HTMLElement {
         } else if (nombreInput.value.length > 50) {
           // Si el campo tiene más de 50 caracteres, lanzar una excepción
           const modal = document.querySelector('modal-warning')
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
           modal.title = 'Error de validación'
           modal.open = true
@@ -408,11 +412,15 @@ export class PromoventeTab extends HTMLElement {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
  if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoPaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -424,11 +432,15 @@ export class PromoventeTab extends HTMLElement {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -444,17 +456,23 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'La edad no puede estar vacía, por favor ingresela.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'La edad solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
           modal.open = true;
         }
       } else if (edadInput.value > 200) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -469,17 +487,23 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       if (!telefonoPattern.test(telefonoInput.value)) {
         if (telefonoInput.value === '') {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'El teléfono no puede estar vacío, por favor ingréselo.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
+          modal.setOnCloseCallback(() => { })
+
           modal.message = 'El teléfono solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
           modal.open = true;
         }
       } else if (telefonoInput.value.length > 10) {
         const modal = document.querySelector('modal-warning');
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El teléfono no puede tener más de 10 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
         modal.open = true;
@@ -871,6 +895,8 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
   //Muestra un modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

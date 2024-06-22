@@ -1,9 +1,7 @@
-/*
-//Variables requeridas https
+//Variables requeridas https¨
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-*/
 
 const express = require("express");
 const { PORT, HOSTTOKENUSUARIOS, GRPCPORTCODIGOSPOSTALES } = require("./config/default.js");
@@ -26,7 +24,6 @@ app.use(cors());
 // Middleware para loguear cada petición con URL completa, headers, y cuerpo
 app.use((req, res, next) => {
   const { method, url, body, query, headers } = req;
-
   // Filtrar solo los encabezados relevantes
   const relevantHeaders = {
     authorization: headers.authorization,
@@ -96,7 +93,6 @@ app.use((err, req, res, next) => {
   logger.error(`Error: ${err.message}`);
   errorController(err, req, res, next);
 });
-/*
 //Forma con https
 const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
@@ -108,11 +104,14 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(PORT, () => {
   logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
 });
-*/
+/*
+
 //Forma sin https
 app.listen(PORT, () => {
   logger.info(`Aplicación corriendo en el puerto ${PORT}`);
 });
+*/
+
 
 const { packageDefinition2 } = require("./grpc/route.server");
 const grpc2 = require('@grpc/grpc-js');

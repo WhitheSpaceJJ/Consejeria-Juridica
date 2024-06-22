@@ -1,8 +1,10 @@
 
 const controlEstadoCivil = require('../controles/controlEstadoCivil')
 
+const logger = require('../utilidades/logger');
 
 async function existeEstadoCivil(req, res, next) {
+    logger.info("Middleware para validar la existencia de un estado civil")
     const { id } = req.params
     const estadoCivil = await controlEstadoCivil.obtenerEstadoCivilPorId(id)
     if (!estadoCivil) {
@@ -10,10 +12,12 @@ async function existeEstadoCivil(req, res, next) {
             message: 'No existe un estado civil con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un estado civil")
     next()
 }
 
 async function validarJSONEstadoCivilPOST(req, res, next) {
+    logger.info("Middleware para validar el JSON del estado civil en el POST")
     const { estado_civil, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -43,7 +47,7 @@ async function validarJSONEstadoCivilPOST(req, res, next) {
         });
     }
 
-
+    logger.info("Fin del middleware para validar el JSON del estado civil en el POST")
 
     next()
 }
@@ -51,6 +55,7 @@ async function validarJSONEstadoCivilPOST(req, res, next) {
 
 
 async function validarJSONEstadoCivilPUT(req, res, next) {
+    logger.info("Middleware para validar el JSON del estado civil en el PUT")
     const { id_estado_civil, estado_civil, estatus_general, ...extraData } = req.body
     // Verifica si hay datos adicionales en el cuerpo de la petición
     if (Object.keys(extraData).length !== 0) {
@@ -92,6 +97,7 @@ async function validarJSONEstadoCivilPUT(req, res, next) {
             message: 'El id del estado civil proporcionado no coincide con el id del estado civil que se quiere modificar.'
         })
     }
+    logger.info("Fin del middleware para validar el JSON del estado civil en el PUT")
     next()
 }
 

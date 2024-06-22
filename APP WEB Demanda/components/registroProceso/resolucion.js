@@ -442,6 +442,8 @@ export class Resolucion extends HTMLElement {
   //Metodo que se encarga de mostrar un modal con un mensaje de error
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

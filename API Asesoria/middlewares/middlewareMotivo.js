@@ -1,8 +1,10 @@
 
 const controlMotivo = require('../controles/controlMotivo')
+const logger = require('../utilidades/logger');
 
 
 async function existeMotivo(req, res, next) {
+    logger.info("Middleware para validar la existencia de un motivo")
     const { id } = req.params
     const motivo = await controlMotivo.obtenerMotivoPorId(id)
     if (!motivo) {
@@ -10,12 +12,14 @@ async function existeMotivo(req, res, next) {
             message: 'No existe un motivo con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de un motivo")
     next()
 }
 
 
 
 async function validarJSONMotivoPOST(req, res, next) {
+     logger.info("Middleware para validar el JSON del motivo en el POST")
     const { descripcion_motivo, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -45,13 +49,14 @@ async function validarJSONMotivoPOST(req, res, next) {
         });
     }
 
-
+   logger.info("Fin del middleware para validar el JSON del motivo en el POST")
 
     next()
 }
 
 
 async function validarJSONMotivoPUT(req, res, next) {
+     logger.info("Middleware para validar el JSON del motivo en el PUT")
     const { id_motivo, descripcion_motivo, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -90,7 +95,7 @@ async function validarJSONMotivoPUT(req, res, next) {
             message: 'El id del motivo proporcionado no coincide con el id del motivo que se quiere modificar.'
         })
     }
-
+    logger.info("Fin del middleware para validar el JSON del motivo en el PUT")
     next()
 }
 

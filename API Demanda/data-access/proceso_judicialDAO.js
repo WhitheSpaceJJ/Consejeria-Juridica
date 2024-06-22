@@ -14,6 +14,7 @@ const promoventeDAO = require('../data-access/promoventeDAO')
 const domicilioDAO = require('../data-access/domicilio_participanteDAO')
 
 
+const logger = require('../utilidades/logger');
 
 
 class ProcesoJudicialDAO {
@@ -26,20 +27,25 @@ class ProcesoJudicialDAO {
   async crearProcesoJudicial({
     turno, promovente, demandado, proceso }) {
     try {
+      logger.info("Creando de proceso judicial", { turno, promovente, demandado, proceso })
       const promovente_object = JSON.parse(JSON.stringify(promovente))
       const turno_object = JSON.parse(JSON.stringify(turno))
       const demandado_object = JSON.parse(JSON.stringify(demandado))
       const proceso_object = JSON.parse(JSON.stringify(proceso))
 
-
+       logger.info("Registrando proceso judicial", { proceso_object})
       const proceso_creado = await this.registrarProceso(proceso_object, turno_object)
+     logger.info("Registrando promovente", { promovente_object})  
       const promovente_creado = await this.registrarPromovente(promovente_object, proceso_object.familiares, proceso_creado.id_proceso_judicial)
+      logger.info("Registrando demandado", { demandado_object})
       const demandado_creado = await this.registrarDemandado(demandado_object, proceso_creado.id_proceso_judicial)
       const proces_cread_object = JSON.parse(JSON.stringify(proceso_creado))
       proces_cread_object.promovente = promovente_creado
       proces_cread_object.demandado = demandado_creado
+      logger.info("LLamando a obtener proceso judicial y obtener todos sus datos", { id_proceso_judicial: proceso_creado.id_proceso_judicial })
       return await this.obtenerProcesoJudicial(proceso_creado.id_proceso_judicial)
     } catch (err) {
+      logger.error("Error al crear proceso judicial", { error: err.message })
       throw err
     }
   }
@@ -52,17 +58,20 @@ class ProcesoJudicialDAO {
    * */
 
   async registrarDemandado(demandado, id_proceso_judicial) {
-
+    logger.info("Registrando demandado", { demandado })
     const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = demandado
+    logger.info("Creando participante", { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
     const demandado_creado = await participanteDAO.crearParticipante({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
     const demandado_object = JSON.parse(JSON.stringify(demandado_creado))
 
     const domicilio = demandado.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
 
+    logger.info("Creando domicilio de participante", { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: demandado_object.id_participante })
     const domicilioParticipante = await domicilioDAO.crearDomicilioParticipante({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: demandado_object.id_participante })
     demandado_object.domicilio = domicilioParticipante
 
+    logger.info("Creando demandado", { id_demandado: demandado_object.id_participante })
     const demandado_creado_oficial = await demandadoDAO.crearDemandado({ id_demandado: demandado_object.id_participante })
     demandado_object.demandado = demandado_creado_oficial
 
@@ -79,24 +88,28 @@ class ProcesoJudicialDAO {
    * */
 
   async registrarPromovente(promovente, familiares, id_proceso_judicial) {
-
+    logger.info("Registrando promovente", { promovente })
 
     const { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = promovente
+
+    logger.info("Creando participante", { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
     const participante = await participanteDAO.crearParticipante({ nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_proceso_judicial })
     const participante_object = JSON.parse(JSON.stringify(participante))
     const domicilio = promovente.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
 
+    logger.info("Creando domicilio de participante", { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: participante_object.id_participante })
     const domicilioParticipante = await domicilioDAO.crearDomicilioParticipante({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante: participante_object.id_participante })
     participante_object.domicilio = domicilioParticipante
     const id_promovente = participante_object.id_participante
     const { español, id_escolaridad, id_etnia, id_ocupacion } = promovente
 
-
+   logger.info("Creando promovente", { id_promovente, español, id_escolaridad, id_etnia, id_ocupacion })
     const promovente_creado = await promoventeDAO.crearPromovente({ id_promovente, español, id_escolaridad, id_etnia, id_ocupacion })
     participante_object.promovente = promovente_creado
 
     const familiares_creados = []
+    logger.info("Creando familiares", { familiares })
     for (let i = 0; i < familiares.length; i++) {
       const familiar = familiares[i]
       const { nombre, nacionalidad, parentesco, perteneceComunidadLGBT, adultaMayor, saludPrecaria, pobrezaExtrema } = familiar
@@ -105,7 +118,7 @@ class ProcesoJudicialDAO {
     }
     participante_object.familiares = familiares_creados
 
-
+  logger.info("Promovente creado", { participante_object })
     return participante_object
   }
 
@@ -119,13 +132,14 @@ class ProcesoJudicialDAO {
 
 
   async registrarProceso(proceso, turno) {
-
+    logger.info("Registrando proceso judicial", { proceso })
     const proceso_object = JSON.parse(JSON.stringify(proceso))
     const turno_object = JSON.parse(JSON.stringify(turno))
 
     const { fecha_inicio, fecha_estatus, control_interno, numero_expediente, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio, estatus_proceso, id_juzgado, id_defensor } = proceso_object
     const { id_turno } = turno_object
 
+    logger.info("Creando proceso judicial", { fecha_inicio, fecha_estatus, control_interno, numero_expediente, id_turno, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio, estatus_proceso, id_juzgado, id_defensor })
     const procesoJudicial = await proceso_judicial.create({ fecha_inicio, fecha_estatus, control_interno, numero_expediente, id_turno, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio, estatus_proceso, id_juzgado, id_defensor })
 
     const proceso_judicial_object = JSON.parse(JSON.stringify(procesoJudicial))
@@ -140,19 +154,25 @@ class ProcesoJudicialDAO {
     const resoluciones_creadas = []
     const estadosProcesales_creados = []
 
+     logger.info("Creando pruebas", { pruebas })
     for (let i = 0; i < pruebas.length; i++) {
       const prueba = await pruebasDAO.crearPrueba({ descripcion_prueba: pruebas[i].descripcion_prueba, id_proceso_judicial: procesoJudicial.id_proceso_judicial })
       pruebas_creadas.push(prueba)
     }
 
+    logger.info("Creando observaciones", { observaciones })
     for (let i = 0; i < observaciones.length; i++) {
       const observacion = await observacionesDAO.crearObservacion({ observacion: observaciones[i].observacion, id_proceso_judicial: procesoJudicial.id_proceso_judicial })
       observaciones_creadas.push(observacion)
     }
+
+    logger.info("Creando resoluciones", { resoluciones })
     for (let i = 0; i < resoluciones.length; i++) {
       const resolucion = await resolucionesDAO.crearResolucion({ resolucion: resoluciones[i].resolucion, fecha_resolucion: resoluciones[i].fecha_resolucion, id_proceso_judicial: procesoJudicial.id_proceso_judicial })
       resoluciones_creadas.push(resolucion)
     }
+
+    logger.info("Creando estados procesales", { estadosProcesales })
     for (let i = 0; i < estadosProcesales.length; i++) {
       const estadoProcesal = await estadosProcesalesDAO.crearEstadoProcesal({ descripcion_estado_procesal: estadosProcesales[i].descripcion_estado_procesal, fecha_estado_procesal: estadosProcesales[i].fecha_estado_procesal, id_proceso_judicial: procesoJudicial.id_proceso_judicial })
       estadosProcesales_creados.push(estadoProcesal)
@@ -162,6 +182,8 @@ class ProcesoJudicialDAO {
     proceso_judicial_object.observaciones = observaciones_creadas
     proceso_judicial_object.resoluciones = resoluciones_creadas
     proceso_judicial_object.estadosProcesales = estadosProcesales_creados
+
+    logger.info("Proceso judicial creado", { proceso_judicial_object })
     return proceso_judicial_object
 
   }
@@ -176,19 +198,23 @@ class ProcesoJudicialDAO {
 
   async actualizarProcesoJudicial(proceso_judicial_ob, promovente) {
  
+    logger.info("Actualizando proceso judicial", { proceso_judicial_ob, promovente })
     const proceso_object = JSON.parse(JSON.stringify(proceso_judicial_ob))
     const promovente_object = JSON.parse(JSON.stringify(promovente))
      const id_proceso_judicial = proceso_object.id_proceso_judicial
       const estatus_proceso = proceso_object.estatus_proceso
 
+      logger.info("Actualizando proceso judicial dependiendo del estatus del proceso judicial", { estatus_proceso })
      if(estatus_proceso !== "EN_TRAMITE"){
-      const {  fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio } = proceso_object
 
+      const {  fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio } = proceso_object
+      logger.info("Actualizando proceso judicial no tramite (Baja,COncluido)", { fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio })
       const procesoJudicial = await proceso_judicial.update({ fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio }, { where: { id_proceso_judicial: proceso_object.id_proceso_judicial } })
      }else {
       const {  fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio } = proceso_object
       const estatus_proceso_ = "EN_TRAMITE"
       const fecha_estatus_ = null
+      logger.info("Actualizando proceso judicial en tramite", { fecha_inicio, fecha_estatus_, estatus_proceso_, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio })
       const procesoJudicial = await proceso_judicial.update({ fecha_inicio, fecha_estatus_, estatus_proceso_, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio }, { where: { id_proceso_judicial: proceso_object.id_proceso_judicial } })
     
      }
@@ -273,6 +299,7 @@ class ProcesoJudicialDAO {
     //proceso_judicial_object_pre.observaciones = observaciones_actualizadas
     //proceso_judicial_object_pre.resoluciones = resoluciones_actualizadas
     //proceso_judicial_object_pre.estados_procesales = estadosProcesales_actualizados
+     logger.info("Proceso judicial actualizado", { proceso_judicial_object_pre })
     return proceso_judicial_object_pre
   }
   /**  
@@ -283,12 +310,14 @@ class ProcesoJudicialDAO {
 
 
   async actualizarDemandado(demandado) {
-  
+     logger.info("Actualizando demandado", { demandado })
     const demandado_object = JSON.parse(JSON.stringify(demandado))
     const { id_demandado, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero } = demandado_object
+     logger.info("Actualizando participante", { id_demandado, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
     const demandado_ = await participanteDAO.actualizarParticipante(id_demandado, { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
     const domicilio = demandado_object.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
+    logger.info("Actualizando domicilio de participante", { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
     const domicilioParticipante = await domicilioDAO.actualizarDomicilioParticipante(domicilio.id_domicilio, { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
     return demandado_object
   }
@@ -302,14 +331,18 @@ class ProcesoJudicialDAO {
   
 
   async actualizarPromovente(promovente) {
-
+   logger.info("Actualizando promovente", { promovente })
     const promovente_object = JSON.parse(JSON.stringify(promovente))
     const { id_promovente, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_escolaridad, id_etnia, id_ocupacion, español } = promovente_object
+     logger.info("Actualizando promovente", { id_promovente, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero, id_escolaridad, id_etnia, id_ocupacion, español })
     const promovente_ = await promoventeDAO.actualizarPromovente(id_promovente, {español, id_escolaridad, id_etnia, id_ocupacion  })
+     logger.info("Actualizando participante", { id_promovente, nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
     const participante_actualizado = await participanteDAO.actualizarParticipante(id_promovente, { nombre, apellido_paterno, apellido_materno, edad, telefono, id_genero })
     const domicilio = promovente_object.domicilio
     const { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia } = domicilio
+   logger.info("Actualizando domicilio de participante", { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
     const domicilioParticipante = await domicilioDAO.actualizarDomicilioParticipante(domicilio.id_domicilio, { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia })
+     logger.info("Promovente actualizado", { promovente_object })
     return promovente_object
     
   }
@@ -322,9 +355,12 @@ class ProcesoJudicialDAO {
 
   async obtenerProcesoJudicialNormal(id) {
     try {
+      logger.info("Obteniendo proceso judicial", { id })
       const procesoJudicial = await proceso_judicial.findByPk(id)
+      logger.info("Proceso judicial obtenido", { procesoJudicial })
       return procesoJudicial
     } catch (err) {
+      logger.error("Error al obtener proceso judicial", { error: err.message })
       throw err
     }
   }
@@ -334,8 +370,10 @@ class ProcesoJudicialDAO {
  */
   async obtenerProcesosJudiciales() {
     try {
+      logger.info("Obteniendo procesos judiciales")
       const procesosJudiciales = await proceso_judicial.findAll()
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
+       logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")  
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
         procesosJudicialesObject[i].participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
         procesosJudicialesObject[i].juzgado = await juzgadoDAO.obtenerJuzgado(procesosJudicialesObject[i].id_juzgado)
@@ -344,8 +382,11 @@ class ProcesoJudicialDAO {
        // procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       //  procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       }
+
+      logger.info("Procesos judiciales obtenidos", { procesosJudicialesObject })
       return procesosJudicialesObject
     } catch (err) {
+      logger.error("Error al obtener procesos judiciales", { error: err.message })
       throw err
     }
   }
@@ -358,15 +399,18 @@ class ProcesoJudicialDAO {
 
   async obtenerProcesosJudicialesPorDefensor(id_defensor) {
     try {
+      logger.info("Obteniendo procesos judiciales por defensor", { id_defensor })
       const procesosJudiciales = await proceso_judicial.findAll({ where: { id_defensor: id_defensor } })
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
+
+      logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
         procesosJudicialesObject[i].participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
         procesosJudicialesObject[i].juzgado = await juzgadoDAO.obtenerJuzgado(procesosJudicialesObject[i].id_juzgado)
-        procesosJudicialesObject[i].estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].observaciones = await observacionesDAO.obtenerObservacionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+       // procesosJudicialesObject[i].estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+      //  procesosJudicialesObject[i].observaciones = await observacionesDAO.obtenerObservacionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+      //  procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+      //  procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       }
       return procesosJudicialesObject
     } catch (err) {
@@ -376,15 +420,18 @@ class ProcesoJudicialDAO {
 
   async obtenerProcesosJudicialesPorDefensorEstatus(id_defensor, estatus_proceso) {
     try {
+       logger.info("Obteniendo procesos judiciales por defensor y estatus", { id_defensor, estatus_proceso })
       const procesosJudiciales = await proceso_judicial.findAll({ where: { id_defensor: id_defensor, estatus_proceso: estatus_proceso } })
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
+
+      logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
         procesosJudicialesObject[i].participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
         procesosJudicialesObject[i].juzgado = await juzgadoDAO.obtenerJuzgado(procesosJudicialesObject[i].id_juzgado)
-        procesosJudicialesObject[i].estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].observaciones = await observacionesDAO.obtenerObservacionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
-        procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+     //   procesosJudicialesObject[i].estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+     //   procesosJudicialesObject[i].observaciones = await observacionesDAO.obtenerObservacionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+     //   procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
+     //   procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       }
       return procesosJudicialesObject
     } catch (err) {
@@ -398,18 +445,24 @@ class ProcesoJudicialDAO {
  */
   async obtenerProcesoJudicial(id) {
     try {
+      logger.info("Obteniendo proceso judicial", { id })
+
       const procesoJudicial = await proceso_judicial.findByPk(id)
       const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
        
+      logger.info("Obteniendo todos los datos del proceso judicial, juzgados y particpantes")
       procesoJudicialObject.participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(id)
       procesoJudicialObject.juzgado = await juzgadoDAO.obtenerJuzgado(procesoJudicialObject.id_juzgado)
      // procesoJudicialObject.estados_procesales = await estadosProcesalesDAO.obtenerEstadoProcesalPorProcesoJudicial(id)
     //  procesoJudicialObject.observaciones = await observacionesDAO.obtenerObservacionesPorProcesoJudicial(id)
      // procesoJudicialObject.resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(id)
      // procesoJudicialObject.pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(id)
+
+      logger.info("Proceso judicial obtenido", { procesoJudicialObject })
       return procesoJudicialObject
     } catch (err) {
-      console.log(err.message)
+      logger.error("Error al obtener proceso judicial", { error: err.message })
+      //console.log(err.message)
 
       throw err
     }
@@ -418,11 +471,14 @@ class ProcesoJudicialDAO {
 
    async obtenerProcesoJudicialMiddleware(id) {
     try {
+      logger.info("Obteniendo proceso judicial", { id })
       const procesoJudicial = await proceso_judicial.findByPk(id)
       const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
+       logger.info("Processo judicial obtenido", { procesoJudicialObject })
       return procesoJudicialObject
     } catch (err) {
-      console.log(err.message)
+      logger.error("Error al obtener proceso judicial", { error: err.message })
+      //console.log(err.message)
       throw err
     }
    }
@@ -435,17 +491,22 @@ class ProcesoJudicialDAO {
  */
   async actualizarProcesoJudicialOficial(id, { promovente, demandado, proceso }) {
     try {
-
+      logger.info("Actualizando proceso judicial", { id, promovente, demandado, proceso })  
       const promovente_object = JSON.parse(JSON.stringify(promovente))
       const demandado_object = JSON.parse(JSON.stringify(demandado))
       const proceso_object = JSON.parse(JSON.stringify(proceso))
-
+       
+      logger.info("Actualizando proceso judicial", { id, promovente, demandado, proceso })
       const proceso_actualizado = await this.actualizarProcesoJudicial(proceso_object, promovente_object)
+      logger.info("Actualizando promovente", { promovente })
       const promovente_actualizado = await this.actualizarPromovente(promovente_object)
+      logger.info("Actualizando demandado", { demandado })
       const demandado_actualizado = await this.actualizarDemandado(demandado_object)
+      logger.info("Proceso judicial actualizado", { proceso_actualizado })
       return await this.obtenerProcesoJudicial(id)
     } catch (err) {
-      console.log(err.message)
+      logger.error("Error al actualizar proceso judicial", { error: err.message })
+      //console.log(err.message)
       throw err
     }
   }
@@ -459,8 +520,10 @@ class ProcesoJudicialDAO {
 
   async obtenerProcesosJudicialesPorTramite(estatus_proceso){
     try {
+      logger.info("Obteniendo procesos judiciales por estatus", { estatus_proceso })
       const procesosJudiciales = await proceso_judicial.findAll({ where: {estatus_proceso: estatus_proceso } })
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
+      logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
         procesosJudicialesObject[i].participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
         procesosJudicialesObject[i].juzgado = await juzgadoDAO.obtenerJuzgado(procesosJudicialesObject[i].id_juzgado)
@@ -469,8 +532,10 @@ class ProcesoJudicialDAO {
      //   procesosJudicialesObject[i].resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       //  procesosJudicialesObject[i].pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(procesosJudicialesObject[i].id_proceso_judicial)
       }
+      logger.info("Procesos judiciales obtenidos", { procesosJudicialesObject })
       return procesosJudicialesObject
     } catch (err) {
+      logger.error("Error al obtener procesos judiciales por estatus", { error: err.message })
       throw err
     }
     
@@ -479,26 +544,33 @@ class ProcesoJudicialDAO {
 
   async  obtenerProcesosJudicialesBusqueda(id_defensor,id_distrito_judicial, total, pagina,estatus_proceso) {
     try {
+     logger.info("Obteniendo procesos judiciales por busqueda", { id_defensor, id_distrito_judicial, total, pagina,estatus_proceso })
+       
       const limite = 10;
       const offset = (pagina - 1) * limite;
       const whereClause = {};
          
+      logger.info("Verificando datos de clausula where que se van a agregar al query", { id_defensor, id_distrito_judicial, total, pagina,estatus_proceso })
       if(id_defensor) whereClause.id_defensor = id_defensor;
       if(id_distrito_judicial) whereClause.id_distrito_judicial = id_distrito_judicial;
       if (estatus_proceso) whereClause.estatus_proceso = estatus_proceso;
   
-  
+      logger.info("Si total es verdadero se cuenta la cantidad de procesos judiciales, de lo contrario se obtienen los procesos judiciales")
       if (total) {
+
+        logger.info("Contando la cantidad de procesos judiciales")
         return await proceso_judicial.count({
           where: whereClause
         });
       } else {
+        logger.info("Obteniendo los procesos judiciales")
         const procesosJudiciales = await proceso_judicial.findAll({
           where: whereClause,
           limit: limite,
           offset: offset
         });
         const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales));
+        logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
         for (let i = 0; i < procesosJudicialesObject.length; i++) {
           const proceso = procesosJudicialesObject[i];
           proceso.participantes = await participanteDAO.obtenerParticipantesPorProcesoJudicial(proceso.id_proceso_judicial);
@@ -508,10 +580,13 @@ class ProcesoJudicialDAO {
         //  proceso.resoluciones = await resolucionesDAO.obtenerResolucionesPorProcesoJudicial(proceso.id_proceso_judicial);
          // proceso.pruebas = await pruebasDAO.obtenerPruebasPorProcesoJudicial(proceso.id_proceso_judicial);
         }
+
+        logger.info("Procesos judiciales obtenidos", { procesosJudicialesObject })
         return procesosJudicialesObject;
       }
     } catch (err) {
-      console.error("Error al obtener procesos judiciales:", err.message);
+      logger.error("Error al obtener procesos judiciales por busqueda", { error: err.message })
+  //    console.error("Error al obtener procesos judiciales:", err.message);
       throw err;
     }
   }

@@ -36,7 +36,6 @@ obtenerObservacion)
 router.post('/', 
 validarPermisos(permisosAceptables1),
 validarJSONObservacionPOST,
-existeProcesoJudicial,
 crearObservacion)
 
 // Ruta para actualizar una observacion por su id
@@ -44,7 +43,6 @@ router.put('/:id',
 validarPermisos(permisosAceptables2),
 existeObservacion,
 validarJSONObservacionPUT,
-existeProcesoJudicial,
 actualizarObservacion)
 
 

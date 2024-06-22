@@ -1,5 +1,6 @@
 
 const controlUsuario = require('../controles/controlUsuario');
+const logger = require('../utilidades/logger');
 
 const { HOSTGRPCASESORIAS } = require("../configuracion/default.js");
 
@@ -15,21 +16,26 @@ const controlTipoUsuario = require('../controles/controlTipoUsuario');
 
 
 async function existeUsuario(req, res, next) {
+  logger.info("Middleware para validar la existencia de un usuario");
   try {
     const { id } = req.params
     const usuario = await controlUsuario.obtenerUsuarioPorId(id);
     if (usuario) {
+      logger.info("Usuario encontrado");
       next();
     } else {
+      logger.info("Usuario no encontrado");
       res.status(404).json({ error: 'Usuario no encontrado' });
     }
   } catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un usuario");
     res.status(500).json({ error: error.message });
   }
+
 }
 
 async function validarJSONUsuarioPOST(req, res, next) {
-
+ logger.info("Middleware para validar el JSON del usuario en el POST");
   const { nombre, correo, password, id_distrito_judicial,
     id_empleado, estatus_general, id_tipouser, permisos, ...extraData } = req.body;
 
@@ -272,11 +278,12 @@ async function validarJSONUsuarioPOST(req, res, next) {
   }
 
  // return res.status(200).json({ message: "Fin del Middleware" });
-
+   logger.info("Fin del middleware para validar el JSON del usuario en el POST");
    next();
 }
 
 async function validarJSONUsuarioPUT(req, res, next) {
+  logger.info("Middleware para validar el JSON del usuario en el PUT");
   // id_usuario 
   const { id_usuario, nombre,
     correo, id_distrito_judicial, id_empleado, estatus_general, id_tipouser, permisos, ...extraData } = req.body;
@@ -422,6 +429,7 @@ async function validarJSONUsuarioPUT(req, res, next) {
   } catch (error) {
     return res.status(400).json({ message: "Error al obtener el usuario" });
   }
+  logger.info("Fin del middleware para validar el JSON del usuario en el PUT");
   next();
 }
 

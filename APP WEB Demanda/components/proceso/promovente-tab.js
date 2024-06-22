@@ -247,6 +247,8 @@ export class PromoventeTab extends HTMLElement {
       } else if (nombreInput.value.length > 50) {
         // Si el campo tiene más de 50 caracteres, lanzar una excepción
         const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
+
         modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
         modal.title = 'Error de validación'
         modal.open = true
@@ -882,6 +884,8 @@ export class PromoventeTab extends HTMLElement {
   //Metodo que se encarga de mostrar un modal
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { })
+
     modal.message = message
     modal.title = title
     modal.open = true

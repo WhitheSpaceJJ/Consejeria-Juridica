@@ -1,9 +1,13 @@
 
 
+const { log } = require('@grpc/grpc-js/build/src/logging');
 const controlOcupacion = require('../data-access/ocupacionDAO')
 
+const logger = require('../utilidades/logger');
 
 async function existeOcupacion(req, res, next) {
+
+    logger.info("Middleware para validar la existencia de una ocupación")
     const { id } = req.params
     const ocupacion = await controlOcupacion.obtenerOcupacion(Number(id))
     if (!ocupacion) {
@@ -11,12 +15,16 @@ async function existeOcupacion(req, res, next) {
             message: 'No existe una ocupación con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de una ocupación")
     next()
 }
 
 
 
 async function validarJSONOcupacionPOST(req, res, next) {
+   logger.info("Middleware para validar el JSON de la ocupación en el POST")
+
     const { descripcion_ocupacion, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -46,7 +54,8 @@ async function validarJSONOcupacionPOST(req, res, next) {
         });
     }
 
-
+   
+    logger.info("Fin del middleware para validar el JSON de la ocupación en el POST")
 
     next()
 }
@@ -55,6 +64,7 @@ async function validarJSONOcupacionPOST(req, res, next) {
 
 
 async function validarJSONOcupacionPUT(req, res, next) {
+    logger.info("Middleware para validar el JSON de la ocupación en el PUT")
     const { id_ocupacion, descripcion_ocupacion, estatus_general, ...extraData } = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -96,6 +106,8 @@ async function validarJSONOcupacionPUT(req, res, next) {
             message: 'El id de la ocupación proporcionado no coincide con el id de la ocupación que se quiere modificar.'
         })
     }
+
+    logger.info("Fin del middleware para validar el JSON de la ocupación en el PUT")
     next()
 }
 

@@ -461,9 +461,9 @@ export class RegistroTab extends HTMLElement {
         if (this.#turno.id_turno !== turno.id_turno) {
           const modal = document.querySelector('modal-warning');
           modal.setOnCloseCallback(() => {
-            modal.respuesta = false;
             if (modal.open === 'false') {
               if (modal.respuesta === true) {
+                modal.respuesta = false;
                 this.#turno = turno;
                 this.#idAsesoria.innerHTML = turno.asesoria.datos_asesoria.id_asesoria;
               }
@@ -538,6 +538,7 @@ export class RegistroTab extends HTMLElement {
   //Metodo que se encarga de mostrar el modal de advertencia
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
+    modal.setOnCloseCallback(() => { });
     modal.message = message
     modal.title = title
     modal.open = true

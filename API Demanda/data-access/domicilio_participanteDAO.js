@@ -1,6 +1,7 @@
 
 
 const DomicilioParticipante = require('../models/domicilio_participante')
+const logger = require('../utilidades/logger');
 
 class DomicilioParticipanteDAO {
    /**
@@ -11,10 +12,13 @@ class DomicilioParticipanteDAO {
 
     async crearDomicilioParticipante({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante }) {
         try {
+            logger.info("Creando de domicilio de participante", { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante })
             const domicilioParticipante = await DomicilioParticipante.create({ calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante })
+            logger.info("Domicilio de participante creado", { domicilioParticipante })
             return domicilioParticipante
-        } catch (err) {      console.log(err.message)
-
+        } catch (err) {     
+            // console.log(err.message)
+            logger.error("Error al crear domicilio de participante", { error: err.message })
             throw err
         }
     }
@@ -28,9 +32,13 @@ class DomicilioParticipanteDAO {
 
     async obtenerDomicilioParticipantePorParticipante(id_participante) {
         try {
+
+            logger.info("Obteniendo domicilio de participante", { id_participante })
             const domicilioParticipante = await DomicilioParticipante.findOne({ where: { id_participante: id_participante } })
+            logger.info("Domicilio de participante obtenido", { domicilioParticipante })
             return domicilioParticipante
         } catch (err) {
+            logger.error("Error al obtener domicilio de participante", { error: err.message })
             throw err
         }
     }
@@ -46,11 +54,14 @@ class DomicilioParticipanteDAO {
 
     async actualizarDomicilioParticipante(id_domicilio, { calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante }) {
         try {
+            logger.info("Actualizando domicilio de participante", { id_domicilio, calle_domicilio, numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante })
             const domicilioParticipanteActualizado = await DomicilioParticipante.update({ calle_domicilio, 
                 numero_exterior_domicilio, numero_interior_domicilio, id_colonia, id_participante }, { where: { id_domicilio : id_domicilio }   } )
-            return domicilioParticipanteActualizado [0] === 1
+            logger.info("Domicilio de participante actualizado retonando resultado",{result:domicilioParticipanteActualizado [0] === 1})
+                return domicilioParticipanteActualizado [0] === 1
         } catch (err) {
-            console.log(err.message)
+            logger.error("Error al actualizar domicilio de participante", { error: err.message })
+         //   console.log(err.message)
             throw err
         }
     }

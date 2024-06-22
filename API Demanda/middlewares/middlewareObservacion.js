@@ -2,21 +2,26 @@
 
 const controlObservacion = require('../data-access/observacionDAO')
 const procesoJudicialDAO = require('../data-access/proceso_judicialDAO')
+const logger = require('../utilidades/logger');
 
 
 async function existeProcesoJudicial(req, res, next) {
-    const { id } = req.params
-    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id)
+    logger.info("Middleware para validar la existencia de un proceso judicial")
+    const { id_proceso_judicial } = req.query
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
       return res.status(404).json({
         message: 'No existe un proceso judicial con ese id'
       })
     }
+    logger.info("Fin del middleware para validar la existencia de un proceso judicial")
+
     next()
   }
   
 
 async function existeObservacion(req, res, next) {
+    logger.info("Middleware para validar la existencia de una observacion")
     const { id } = req.params
     const observacion = await controlObservacion.obtenerObservacion(Number(id))
     if (!observacion) {
@@ -24,12 +29,15 @@ async function existeObservacion(req, res, next) {
             message: 'No existe una observacion con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+    logger.info("Fin del middleware para validar la existencia de una observacion")
     next()
 }
 
 
 
 async function validarJSONObservacionPOST(req, res, next) {
+
+    logger.info("Middleware para validar el JSON de la observacion en el POST")
     const { observacion, id_proceso_judicial, ...extraData } = req.body
 
     if (Object.keys(extraData).length !== 0) {
@@ -48,6 +56,12 @@ async function validarJSONObservacionPOST(req, res, next) {
             message: 'El id del proceso judicial no es un número.'
         })
     }
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
+        })
+    }
 
   //Limite 200
     if (observacion.length > 200) {
@@ -56,6 +70,7 @@ async function validarJSONObservacionPOST(req, res, next) {
         });
     }
 
+    logger.info("Fin del middleware para validar el JSON de la observacion en el POST")
     next()
 }
 
@@ -63,6 +78,8 @@ async function validarJSONObservacionPOST(req, res, next) {
 
 
 async function validarJSONObservacionPUT(req, res, next) {
+
+    logger.info("Middleware para validar el JSON de la observacion en el PUT")  
     const { id_observacion, observacion, id_proceso_judicial, ...extraData } = req.body
     
     if (Object.keys(extraData).length !== 0) {
@@ -90,6 +107,12 @@ async function validarJSONObservacionPUT(req, res, next) {
         })
     }
 
+    const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
+    if (!procesoJudicial) {
+        return res.status(404).json({
+            message: 'No existe un proceso judicial con ese id'
+        })
+    }
 
 
     if (observacion.length > 200) {
@@ -122,7 +145,7 @@ async function validarJSONObservacionPUT(req, res, next) {
         })
     }
 
-
+    logger.info("Fin del middleware para validar el JSON de la observacion en el PUT")  
     next()
 }
 

@@ -2,6 +2,12 @@ const controlAsesorias = require('../controles/controlAsesoria');
 const asyncError = require("../utilidades/asyncError");
 const CustomeError = require("../utilidades/customeError");
 const ExcelJS = require('exceljs');
+
+
+const logger = require('../utilidades/logger');
+const { log } = require('winston');
+
+
 /**
  * @abstract Servicio  que permite obtener una asesoría por filtro
  * @param {Object} req Request
@@ -10,12 +16,23 @@ const ExcelJS = require('exceljs');
  * @returns {Object} asesoria de la base de datos
  *  */
 const obtenerAsesoriaFiltro = asyncError(async (req, res, next) => {
+ logger.info("Petición para obtener asesorías por filtro recibida") 
+   
+  logger.info("Filtros: "+req.query.filtros)
   const filtros = JSON.parse(req.query.filtros);
+
+  logger.info("Llamada al metodo obtenerAsesoriasFiltro")
+  
   const result = await controlAsesorias.obtenerAsesoriasFiltro(filtros);
+  
+  logger.info("Se verifica si el resultado es nulo o indefinido")
   if (result === null || result === undefined || result.length === 0) {
+  
+    logger.info("No se encontraron asesorías")
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
+    logger.info("Se encontraron asesorías")
     res.status(200).json({
       asesorias: result
     });
@@ -33,12 +50,21 @@ const obtenerAsesoriaFiltro = asyncError(async (req, res, next) => {
  * @returns {Object} asesoria de la base de datos
  * */
 const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
+  logger.info("Petición para obtener asesorías por página recibida") 
+
+   logger.info("Se obtiene la página", req.query.pagina)
   const pagina = req.query.pagina;
+
+  logger.info("Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página")
   const result = await controlAsesorias.obtenerAsesoriasPorPagina(pagina);
+
+  logger.info("Se verifica si el resultado contiene asesorías o si es nulo o indefinido")
   if (result === null || result === undefined || result.length === 0) {
+    logger.info("No se encontraron asesorías")
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
+    logger.info("Se encontraron asesorías")
     res.status(200).json({
       asesorias: result
     });
@@ -47,13 +73,24 @@ const obtenerAsesoriasPagina = asyncError(async (req, res, next) => {
 );
 
 const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
+  logger.info("Petición para obtener asesorías por página recibida")
+
+
+   logger.info("Se obtienen las paginas y los filtros", req.query.pagina, req.query.filtros)
   const filtros = JSON.parse(req.query.filtros);
   const pagina = req.query.pagina;
+
+  logger.info("Llamada al metodo obtenerAsesoriasFiltroPagina, para obtener las asesorías de la página")
   const result = await controlAsesorias.obtenerAsesoriasFiltroPagina(pagina, filtros);
+
+  logger.info("Se verifica si el resultado contiene asesorías o si es nulo o indefinido")
   if (result === null || result === undefined || result.length === 0) {
+
+    logger.info("No se encontraron asesorías")
     const error = new CustomeError('No se encontraron asesorías', 404);
     return next(error);
   } else {
+    logger.info("Se encontraron asesorías")
     res.status(200).json({
       asesorias: result
     });
@@ -70,28 +107,40 @@ const obtenerAsesoriasPaginaFiltro = asyncError(async (req, res, next) => {
  * @returns {Object} asesoria de la base de datos
  * */
 const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
-   
+   logger.info("Petición para obtener asesorías por filtro para exportar a excel recibida")  
+
+
+  logger.info("Filtros: "+req.query.filtros)
   const filtros = req.query.filtros;
 
 
   let result = {};
+
+  logger.info("Se verifica si los filtros son nulos o indefinidos esto con el fin de obtener las asesorias con filtros o sin filtros")
   if (filtros === null || filtros === undefined || filtros === '') {
     try {
+      logger.info("Llamada al metodo obtenerAsesorias, para obtener las asesorías")
       const resultA = await controlAsesorias.obtenerAsesorias();
+
+      logger.info("Se verifica si el resultado es nulo o indefinido")
       if (resultA.length === 0) {
         result = null;
       } else {
         result = resultA;
       }
     } catch (error) {
-      console.log('error', error);
+      logger.info("Error al obtener las asesorías sin filtros")
+     // console.log('error', error);
       result = null;
     }
 
   } else {
 
     try {
+      logger.info("Llamada al metodo obtenerAsesoriasFiltro, para obtener las asesorías con filtros")
       const resultB = await controlAsesorias.obtenerAsesoriasFiltro(JSON.parse(req.query.filtros));
+       
+      logger.info("Se verifica si el resultado es nulo o indefinido")
       if (resultB.length === 0) {
         result = null;
       }
@@ -99,7 +148,8 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
         result = resultB;
       }
     } catch (error) {
-      console.log('error', error);
+      logger.info("Error al obtener las asesorías con filtros")
+     // console.log('error', error);
       result = null;
     }
   }
@@ -111,9 +161,12 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
   const verificadorCampos = req.query.campos;
 
+
+  logger.info("Se verifica si los campos son nulos o indefinidos esto con el fin de obtener las asesorias con determinados campos o con todos los campos")
   if (verificadorCampos === null || verificadorCampos === undefined || verificadorCampos === '' || verificadorCampos === 'null') {
    try{
 
+     logger.info("Se obtienen la asesorías con todos los campos") 
     const campos = ['nombre-asesorado', 'nombre-usuario', 'nombre-empleado', 'genero', 'colonia', 'trabaja', 'ingreso_mensual', 'motivo', 'estado_civil', 'telefono', 'numero_hijos', 'fecha_registro', 'tipo_juicio', 'conclusion', 'documentos-recibidos', 'resumen'];
 
     const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
@@ -155,6 +208,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     // Agregar encabezados al libro de Excel
     sheet.addRow(encabezados);
     // Agregar datos al libro de Excel
+    logger.info("Se agregan las asesorías al libro de excel")
     asesoriasFiltradas.forEach((asesoria) => {
       const asesorado = asesoria.asesorado;
       const turno = asesoria.turno;
@@ -310,8 +364,9 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
 
   } catch (error) {
-    console.log('error', error);
-    const error2 = new CustomeError('Error al obtener las asesorías', 404);
+   // console.log('error', error);
+    logger.info("Error al obtener las asesorías con todos los campos")   
+   const error2 = new CustomeError('Error al obtener las asesorías', 404);
     return next(error2);
   }
 
@@ -320,7 +375,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
 
   } else {
 
-
+   logger.info("Se obtienen los campos, para obtener las asesorías con determinados campos")
     const campos = JSON.parse(verificadorCampos);
     const asesoriasFiltradas = JSON.parse(JSON.stringify(result));
     const workbook = new ExcelJS.Workbook();
@@ -361,6 +416,7 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
     // Agregar encabezados al libro de Excel
     sheet.addRow(encabezados);
     // Agregar datos al libro de Excel
+    logger.info("Se agregan las asesorías al libro de excel")
     asesoriasFiltradas.forEach((asesoria) => {
       const asesorado = asesoria.asesorado;
       const turno = asesoria.turno;
@@ -525,12 +581,18 @@ const obtenerAsesoriaFiltroExcel = asyncError(async (req, res, next) => {
  */
 
 const agregarAsesoria = asyncError(async (req, res, next) => {
+  logger.info("Petición para agregar asesoría recibida")
+  
+  logger.info("Llamada al metodo agregarAsesoria")
   const result = await controlAsesorias.agregarAsesoria(req.body);
+
+  logger.info("Se verifica si el resultado es falso")
   if (result === false) {
+    logger.info("Error al agregar una asesoría")
     const error = new CustomeError('Error al agregar una asesoría', 400);
     return next(error);
   } else {
-
+    logger.info("Asesoría agregada correctamente")
     res.status(201).json({
       asesoria: result
     });
@@ -551,12 +613,16 @@ const agregarAsesoria = asyncError(async (req, res, next) => {
  */
 
 const actualizarAsesoria = asyncError(async (req, res, next) => {
+   logger.info("Petición para actualizar asesoría recibida")
+  
   const result = await controlAsesorias.actualizarAsesoria(req.body);
+  logger.info("Se verifica si el resultado es falso") 
   if (result === false) {
+    logger.info("Error al actualizar la asesoría")
     const error = new CustomeError('Error al actualizar la asesoría', 400);
     return next(error);
   } else {
-
+    logger.info("Asesoría actualizada correctamente")
     res.status(200).json({
       asesoria: req.body
     });
@@ -572,12 +638,18 @@ const actualizarAsesoria = asyncError(async (req, res, next) => {
  */
 
 const obtenerAsesoriaPorId = asyncError(async (req, res, next) => {
+  logger.info("Petición para obtener asesoría por id recibida")
+
+  logger.info("Llamada al metodo obtenerAsesoriaPorId")
   const result = await controlAsesorias.obtenerAsesoriaPorId(req.params.id);
+  
+  logger.info("Se verifica si el resultado es nulo o indefinido")
   if (result === null || result === undefined) {
+    logger.info("Error al obtener la asesoría")
     const error = new CustomeError('Error al obtener la asesoría', 404);
     return next(error);
   } else {
-
+    logger.info("Asesoría obtenida correctamente", result)
     res.status(200).json({
       asesoria: result
     });
@@ -595,25 +667,42 @@ const obtenerAsesoriaPorId = asyncError(async (req, res, next) => {
  */
 
 const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
+
+  logger.info("Petición para obtener asesoría por nombre de la persona asesorada recibida")
+
+  logger.info("Se obtienen los parametros de la petición", req.query.nombre, req.query.apellido_paterno, req.query.apellido_materno)  
+
   const { nombre, apellido_materno, apellido_paterno,pagina,total } = req.query;
+
+  logger.info("Se verifica si el total es verdadero o falso, con el fin de obtener todas las asesorías o solo el total")
   if(total !==undefined && total !==null && total === 'true'){
+     
+    logger.info("Llamada al metodo obtenerAsesoriasNombre para asi obtener el total de asesorías")
     const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno,null, total); 
+
+    logger.info("Se verifica si el resultado es nulo o indefinido")
     if (result === null || result === undefined ) {
+      logger.info("Error al obtener las asesorías")
       const error = new CustomeError('Error al obtener las asesorías', 404);
       return next(error);
     } else {
-
-      res.status(200).json({
+      logger.info("Asesorías obtenidas correctamente")
+      res.status(200).json({ 
         totalAsesorias: result
       });
     }
   }else {
+
+    logger.info("Llamada al metodo obtenerAsesoriasNombre para asi obtener las asesorías")
     const result = await controlAsesorias.obtenerAsesoriasNombre(nombre, apellido_paterno, apellido_materno,pagina, null); 
+
+    logger.info("Se verifica si el resultado es nulo o indefinido")
     if (result === null || result === undefined || result.length === 0) {
+      logger.info("No se encontraron asesorías")
       const error = new CustomeError('Error al obtener las asesorías', 404);
       return next(error);
     } else {
-
+      logger.info("Asesorías obtenidas correctamente")
       res.status(200).json({
         asesorias: result
       });
@@ -626,11 +715,18 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
  * @abstract Servicio  que permite obtener todas las asesorías
  */
 const obtenerAsesoriaTotal = asyncError(async (req, res, next) => {
+  logger.info("Petición para obtener todas las asesorías recibida") 
+   
+  logger.info("Llamada al metodo obtenerAsesorias")
   const result = await controlAsesorias.obtenerTotalAsesoriasSistema();
+
+  logger.info("Se verifica si el resultado es nulo o indefinido")
   if (result === null || result === undefined) {
+    logger.info("Error al obtener las asesorías")
     const error = new CustomeError('Error al obtener las asesorías', 404);
     return next(error);
   } else {
+    logger.info("Asesorías obtenidas correctamente")
     res.status(200).json({
       totalAsesorias: result
     });
@@ -641,13 +737,22 @@ const obtenerAsesoriaTotal = asyncError(async (req, res, next) => {
  * @abstract Servicio  que permite obtener todas las asesorías
  */
 const obtenerAsesoriaFiltroTotal = asyncError(async (req, res, next) => {
+  logger.info("Petición para obtener asesorías por filtro recibida")
+
+  logger.info("Filtros: "+req.query.filtros)
   const filtros = JSON.parse(req.query.filtros);
+
+  logger.info("Llamada al metodo obtenerTotalAsesorias")
   const result = await controlAsesorias.obtenerTotalAsesorias(filtros);
+
+  logger.info("Se verifica si el resultado es nulo o indefinido")
   if (result === null || result === undefined) {
+
+    logger.info("Error al obtener las asesorías")
     const error = new CustomeError('Error al obtener las asesorías', 404);
     return next(error);
   } else {
-
+    logger.info("Asesorías obtenidas correctamente")
     res.status(200).json({
       totalAsesoriasFiltro: result
     });

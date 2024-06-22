@@ -1,4 +1,5 @@
 const modeloDomicilio = require('../modelos/modeloDomicilio'); // Asegúrate de tener el modelo de domicilios importado.
+const logger = require('../utilidades/logger');
 
 /**
  * @abstract Función que permite obtener todos los domicilios
@@ -6,13 +7,15 @@ const modeloDomicilio = require('../modelos/modeloDomicilio'); // Asegúrate de 
  */
 const obtenerDomicilios = async () => {
   try {
+    logger.info("Se obtienen los domicilios")
     return await modeloDomicilio.Domicilio.findAll({
       raw: true,
       nest: true
     });
   } catch (error) {
-    console.log("Error domicilios :", error.message);
-    return null;
+ //   console.log("Error domicilios :", error.message);
+    logger.error("Error domicilios :", error.message); 
+ return null;
   }
 };
 
@@ -23,12 +26,14 @@ const obtenerDomicilios = async () => {
  *  */
 const obtenerDomicilioPorId = async (id) => {
   try {
+    logger.info("Se obtiene el domicilio por su id", id)
     return await modeloDomicilio.Domicilio.findByPk(id, {
       raw: true,
       nest: true
     });
   } catch (error) {
-    console.log("Error domicilios :", error.message);
+    //console.log("Error domicilios :", error.message);
+    logger.error("Error domicilios :", error.message);
     return null;
   }
 };
@@ -40,10 +45,12 @@ const obtenerDomicilioPorId = async (id) => {
  * */
 const agregarDomicilio = async (domicilio) => {
   try {
+    logger.info("Se agrega el domicilio", domicilio)
     return (await modeloDomicilio.Domicilio.create(domicilio, { raw: true, nest: true })).dataValues;
   } catch (error) {
-    console.log("Error domicilios :", error.message);
-    return false;
+   // console.log("Error domicilios :", error.message);
+    logger.error("Error domicilios :", error.message); 
+   return false;
   }
 };
 
@@ -56,19 +63,24 @@ const agregarDomicilio = async (domicilio) => {
  */
 const actualizarDomicilio = async (domicilio) => {
   try {
+    logger.info("Se actualiza el domicilio", domicilio)
    const result= await modeloDomicilio.Domicilio.update(domicilio, { where: { id_domicilio: domicilio.id_domicilio } });
-    return result[0] === 1; 
+    logger.info("Se retorna el domicilio actualizado", result[0] === 1)	
+   return result[0] === 1; 
   } catch (error) {
-    console.log("Error domicilios :", error.message);
+    //console.log("Error domicilios :", error.message);
+    logger.error("Error domicilios :", error.message);
     return false;
   }
 };
 
 const obtenerDomicilioPorIdMiddleware = async (id) => {
   try {
+    logger.info("Se obtiene el domicilio por su id", id)
     return await modeloDomicilio.Domicilio.findByPk(id);
   } catch (error) {
-    console.log("Error domicilios :", error.message);
+    logger.error("Error domicilios :", error.message);
+  //  console.log("Error domicilios :", error.message);
     return null;
   }
 }

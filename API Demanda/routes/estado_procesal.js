@@ -36,7 +36,6 @@ validarPermisos(permisosAceptables2),
 router.post('/', 
 validarPermisos(permisosAceptables1),
  validarJSONEstadoProcesalPOST,
- existeProcesoJudicial,
 crearEstadoProcesal)
 
 // Definimos la ruta para actualizar un estado procesal por su id
@@ -44,7 +43,6 @@ router.put('/:id',
 validarPermisos(permisosAceptables2),
 existeEstadoProcesal,
   validarJSONEstadoProcesalPUT,
-  existeProcesoJudicial,
 actualizarEstadoProcesal)
 
 

@@ -1,5 +1,6 @@
 
 const modeloGenero = require('../modelos/modeloGenero');
+const logger = require('../utilidades/logger');
 
 
 /**
@@ -8,13 +9,16 @@ const modeloGenero = require('../modelos/modeloGenero');
  */
 const obtenerGeneros = async (activo) => {
   try {
+    logger.info("Se obtienen los generos, con respecto a su estatus", activo)
     if (activo !== undefined && activo !== null && activo !== "") {
+      logger.info("Se obtienen los generos activos")
       return await modeloGenero.Genero.findAll({
         raw: true,
         nest: true,
         where: { estatus_general: "ACTIVO" }
       });
     }else {
+      logger.info("Se obtienen todos los generos")
     return await modeloGenero.Genero.findAll({
       raw: true,
       nest: true,
@@ -22,7 +26,8 @@ const obtenerGeneros = async (activo) => {
 
     }
   } catch (error) {
-    console.log("Error generos:", error.message);
+   // console.log("Error generos:", error.message);
+      logger.error("Error generos:", error.message);
     return null;
   }
 };
@@ -36,25 +41,29 @@ const obtenerGeneros = async (activo) => {
  * */
 const obtenerGeneroPorId = async (id) => {
   try {
+    logger.info("Se obtiene el genero por su id", id)
     return await modeloGenero.Genero.findByPk(id, {
       raw: true,
       nest: true,
     });
   } catch (error) {
-    console.log("Error generos:", error.message);
-    return null;
+  //  console.log("Error generos:", error.message);
+   logger.error("Error generos:", error.message);  
+  return null;
   }
 };
 
 const obtenerGeneroPorPorIdMiddleware =async (id) => {
   try {
+    logger.info("Se obtiene el genero por su id y su estatus activo", id)
     return  await modeloGenero.Genero.findOne({
       raw: true,
       nest: true,
       where: { id_genero: id, estatus_general: "ACTIVO" }
     });
   } catch (error) {
-    console.log("Error generos:", error.message);
+    //console.log("Error generos:", error.message);
+    logger.error("Error generos:", error.message);
     return null;
   }
 };
@@ -67,9 +76,11 @@ const obtenerGeneroPorPorIdMiddleware =async (id) => {
  * */
 const agregarGenero = async (genero) => {
   try {
+    logger.info("Se agrega el genero", genero)
     return (await modeloGenero.Genero.create(genero, { raw: true, nest: true })).dataValues; 
   } catch (error) {
-    console.log("Error generos:", error.message);
+    //console.log("Error generos:", error.message);
+    logger.error("Error generos:", error.message);
     return false;
   }
 };
@@ -82,10 +93,13 @@ const agregarGenero = async (genero) => {
  */
 const actualizarGenero = async (genero) => {
   try {
+    logger.info("Se actualiza el genero", genero)
     const result = await modeloGenero.Genero.update(genero, { where: { id_genero: genero.id_genero } });
+   logger.info("Se retorna el resultado de actualizar el genero", result[0] === 1)
     return result[0] === 1;
   } catch (error) {
-    console.log("Error generos:", error.message);
+   // console.log("Error generos:", error.message);
+    logger.error("Error generos:", error.message);
     return false;
   }
 };
@@ -93,16 +107,24 @@ const actualizarGenero = async (genero) => {
 
 const obtenerGenerosPaginacion = async (pagina) => { 
   try {
+    logger.info("Se obtienen los generos por paginación", pagina)
+
+    logger.info("Se establece el offset y el limite, y parseo de la pagina", pagina)
     pagina = parseInt(pagina, 10);
     const offset = (pagina - 1) * 10;
+
+    logger.info("Se obtienen los generos por paginación")
     const resultados = await modeloGenero.Genero.findAll({
       raw: false,
       nest: true,
       offset: offset,
       limit: 10
     });
+
+    logger.info("Se retorna los generos por paginación", resultados)
     return resultados;
   } catch (error) {
+    //console.log("Error generos:", error.message);
     return null;
   }
 }
@@ -110,9 +132,11 @@ const obtenerGenerosPaginacion = async (pagina) => {
 
 const obtenerTotalGeneros = async () => {
   try {
+    logger.info("Se obtiene el total de generos")
     return await modeloGenero.Genero.count();
   } catch (error) {
-    console.log("Error generos:", error.message);
+    logger.error("Error generos:", error.message);
+   // console.log("Error generos:", error.message);
     return null;
   }
 }

@@ -1,5 +1,5 @@
 const Etnia = require('../models/etnia')
-
+const logger = require('../utilidades/logger');
 class EtniaDAO {
 
   /**
@@ -9,9 +9,12 @@ class EtniaDAO {
    */
   async crearEtnia({ nombre, estatus_general }) {
     try {
+      logger.info("Creando de etnia", { nombre, estatus_general })  
       const etnia = await Etnia.create({ nombre, estatus_general })
+      logger.info("Etnia creada", { etnia })
       return etnia
     } catch (err) {
+      logger.error("Error al crear etnia", { error: err.message })
       throw err
     }
   }
@@ -22,14 +25,20 @@ class EtniaDAO {
    */
   async obtenerEtnias(activo) {
     try {
+      logger.info("Obteniendo etnias, en base a su estatus", { activo })
       if (activo !== undefined && activo !== null && activo !== "") {
+        logger.info("Se envió el parámetro activo y se obtendrán las etnias activas")
         const etnias = await Etnia.findAll({ where: { estatus_general: "ACTIVO" } })
+        logger.info("Etnias activas obtenidas", { etnias })
         return etnias
       } else {
+        logger.info("No se envió el parámetro activo y se obtendrán todas las etnias")
         const etnias = await Etnia.findAll()
+        logger.info("Etnias obtenidas", { etnias })
         return etnias
       }
     } catch (err) {
+      logger.error("Error al obtener etnias", { error: err.message })
       throw err
     }
   }
@@ -41,9 +50,12 @@ class EtniaDAO {
    */
   async obtenerEtnia(id) {
     try {
+      logger.info("Obteniendo etnia por ID", { id })
       const etnia = await Etnia.findByPk(id)
+      logger.info("Etnia obtenida", { etnia })
       return etnia
     } catch (err) {
+      logger.error("Error al obtener etnia por ID", { error: err.message })
       throw err
     }
   }
@@ -56,9 +68,12 @@ class EtniaDAO {
    */
   async actualizarEtnia(id_etnia, { nombre, estatus_general }) {
     try {
+      logger.info("Actualizando etnia", { id_etnia, nombre, estatus_general })
       const etnia = await Etnia.update({ nombre, estatus_general }, { where: { id_etnia } })
+      logger.info("Etnia actualizada retonando resultado", { result: etnia[0] === 1 })
       return etnia[0] == 1
     } catch (err) {
+      logger.error("Error al actualizar etnia", { error: err.message })
       throw err
     }
   }
@@ -67,11 +82,17 @@ class EtniaDAO {
 
   async obtenerEtniasPaginacion(pagina) {
     try {
+      logger.info("Obteniendo etnias paginadas y limitadas a 10 registros por página", { pagina })
       pagina = parseInt(pagina, 10)
       const offset = (pagina - 1) * 10
+  
+      logger.info("Obteniendo etnias paginadas", { offset })
       const resultados = await Etnia.findAll({ offset: offset, limit: 10 })
+
+      logger.info("Etnias paginadas obtenidas", { resultados })
       return resultados
     } catch (err) {
+      logger.error("Error al obtener etnias paginadas", { error: err.message })
       throw err
     }
   }
@@ -79,8 +100,10 @@ class EtniaDAO {
 
   async obtenerTotalEtnias() {
     try {
+      logger.info("Obteniendo total de etnias")
       return await Etnia.count()
     } catch (err) {
+      logger.error("Error al obtener total de etnias", { error: err.message })
       throw err
     }
 

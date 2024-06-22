@@ -1,4 +1,5 @@
 const modeloDistritoJudicial = require('../modelos/modeloDistritoJudicial.js');
+const logger = require('../utilidades/logger');
 
 
 /**
@@ -6,6 +7,7 @@ const modeloDistritoJudicial = require('../modelos/modeloDistritoJudicial.js');
  * @returns {Object} Distritos judiciales
  */
 const obtenerDistritosJudiciales = async () => {
+    logger.info("Se obtienen los distritos judiciales")
     const distritosJudiciales = await modeloDistritoJudicial.DistritoJudicial.findAll({
         
         raw: false,
@@ -19,6 +21,7 @@ const obtenerDistritosJudiciales = async () => {
             modeloDistritoJudicial.Zona
         ]
     });
+    logger.info("Se retornan los distritos judiciales")
     return distritosJudiciales;
 };
 
@@ -32,6 +35,7 @@ const obtenerDistritosJudiciales = async () => {
 const obtenerDistritoJudicial = async (id) => {
 
     try {
+        logger.info("Se obtiene el distrito judicial por su id", id)
         const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.findByPk(id,{
          
             raw: false,
@@ -45,9 +49,11 @@ const obtenerDistritoJudicial = async (id) => {
                 modeloDistritoJudicial.Zona
             ]
         });
+        logger.info("Se retorna el distrito judicial", distritoJudicial)
         return distritoJudicial;
     } catch (error) {
-        console.log(error);
+        //console.log(error);
+        logger.error("Error distrito judicial:", error.message);
     }
 
 
@@ -56,10 +62,12 @@ const obtenerDistritoJudicial = async (id) => {
 };
 
 const obtenerDistritoPorPorIdMiddleware = async (id) => {
+    logger.info("Se obtiene el distrito judicial por su id", id)
     const distritoJudicial = await modeloDistritoJudicial.DistritoJudicial.findByPk(id,{
         raw: false,
         nest: true,
     });
+    logger.info("Se retorna el distrito judicial", distritoJudicial)
     return distritoJudicial;
 }
 

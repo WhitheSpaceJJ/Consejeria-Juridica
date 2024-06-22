@@ -36,7 +36,6 @@ obtenerPruebasPorProcesoJudicial)
 router.post('/', 
 validarPermisos(permisosAceptables1),
 validarJSONPruebaPOST,
-existeProcesoJudicial,
 crearPrueba)
 
 // Ruta para actualizar una prueba por su id
@@ -44,7 +43,6 @@ router.put('/:id',
 validarPermisos(permisosAceptables2),
  existePrueba, 
 validarJSONPruebaPUT,
-existeProcesoJudicial,
 actualizarPrueba)
 
 

@@ -2,8 +2,11 @@
 
 const controlEtnia = require('../data-access/etniaDAO')
 
+const logger = require('../utilidades/logger');
 
 async function existeEtnia(req, res, next) {
+
+    logger.info("Middleware para validar la existencia de una etnia")
     const { id } = req.params
     const etnia = await controlEtnia.obtenerEtnia(Number(id))
     if (!etnia) {
@@ -11,12 +14,15 @@ async function existeEtnia(req, res, next) {
             message: 'No existe una etnia con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+
+    logger.info("Fin del middleware para validar la existencia de una etnia")
     next()
 }
 
 
 
 async function validarJSONEtniaPOST(req, res, next) {
+    logger.info("Middleware para validar el JSON de la etnia en el POST")
     const { nombre, estatus_general, ...extraData} = req.body
 
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -45,7 +51,7 @@ async function validarJSONEtniaPOST(req, res, next) {
         });
     }
 
-     
+      logger.info("Fin del middleware para validar el JSON de la etnia en el POST")
     next()
 }
 
@@ -53,6 +59,7 @@ async function validarJSONEtniaPOST(req, res, next) {
 
 
 async function validarJSONEtniaPUT(req, res, next) {
+    logger.info("Middleware para validar el JSON de la etnia en el PUT")
     const { id_etnia, nombre, estatus_general, ...extraData } = req.body
   
     // Verifica si hay datos adicionales en el cuerpo de la petición
@@ -94,6 +101,7 @@ async function validarJSONEtniaPUT(req, res, next) {
             message: 'El id de la etnia proporcionado no coincide con el id de la etnia que se quiere modificar.'
         })
     }
+    logger.info("Fin del middleware para validar el JSON de la etnia en el PUT")
     next()
 }
 
