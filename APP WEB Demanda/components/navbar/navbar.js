@@ -32,7 +32,7 @@ class Navbar extends HTMLElement {
   async eliminarPermisos() {
     const permisos = this._permisos;
     const elementos = await this.getElementos();
-    if (!permisos.includes('ALL_SA')) {
+    if (!permisos.includes('ALL_SD')) {
       const elementosAEliminar = elementos.filter(elemento => !permisos.includes(elemento.id));
       elementosAEliminar.forEach(elemento => {
         elemento.remove();

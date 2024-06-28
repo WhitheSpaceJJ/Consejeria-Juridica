@@ -1,13 +1,17 @@
 //Variables requeridas https
+
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-
 // Variable para cargar el módulo de express 
 const express = require('express');
 // Puerto en el que se ejecutará el servidor
-const {PORT,HOSTTOKENUSUARIOS,GRPCPORTASESORIAS} = require("./configuracion/default.js");
+const {PORT,HOSTTOKENUSUARIOS,GRPCPORTASESORIAS,
+   DEPLOY
+   
+
+} = require("./configuracion/default.js");
 // Rutas de la aplicación
 const zonasRutas = require("./rutas/zonaRutas");
 const tipoDeJuiciosRutas = require("./rutas/tipoJuicioRutas");
@@ -157,23 +161,21 @@ app.all("*", (req, res, next) => {
 // Middleware para manejar los errores
 app.use(errorController);
 
-//Forma con https
-const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+if (DEPLOY === 'DEPLOYA') {
+  app.listen(PORT, () => {
+    logger.info(`Servidor escuchando en el puerto ${PORT}`);
+  });
+} else if (DEPLOY === 'DEPLOYB') {
+  const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+  const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+  const credentials = { key: privateKey, cert: certificate };
 
-// Crear el servidor HTTPS
-const httpsServer = https.createServer(credentials, app);
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(PORT, () => {
+    logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
+  });
+}
 
-httpsServer.listen(PORT, () => {
-  logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
-});/*
-//Forma sin https
-app.listen(PORT, () => {
-  logger.info(`Servidor escuchando en el puerto ${PORT}`); 
-});
-
-*/
 
 
 
@@ -198,14 +200,20 @@ const responseInvalidoTurno = { message: 'Turno inválido' };
 const responseInvalidoTipoJuicio = { message: 'Tipo Juicio inválido' };
 
 
+const responseValidoMunicipio = { message: 'Municipio válido' };
+const responseInvalidoMunicipio = { message: 'Municipio inválido' };
 
   const responseValidoDefensor = { message: 'Defensor válido' };
 const responseInvalidoDefensor = { message: 'Defensor inválido' };
 
+const responseValidoGenero = { message: 'Genero válido' };
+const responseInvalidoGenero = { message: 'Genero inválido' };
 
+
+const controlGeneros = require("./controles/controlGenero.js");
 const controlEmpleados = require("./controles/controlEmpleados.js");
 const controlDistritos = require("./controles/controlDistritosJudiciales.js");
-
+const controlMunicipios = require("./controles/controlMunicipioDistro.js");
 const controlTurnos = require("./controles/controlTurno.js");
 const controlTipoJuicio = require("./controles/controlTipoJuicio.js");
 const controlDefensores = require("./controles/controlDefensor.js");
@@ -246,7 +254,51 @@ function getServer() {
     });
   }
 });
+ /*
+service GeneroService {
+  rpc validarGenero(ValidacionGeneroRequest) returns (ValidacionResponse) {}
+}
 
+message ValidacionGeneroRequest {
+  string id_genero = 1;
+}
+ */
+server.addService(routeguide.GeneroService.service, {
+  validarGenero: (call, callback) => {  
+    controlGeneros.obtenerGeneroPorId(call.request.id_genero).then((response) => {
+      if (response !== null) {
+        callback(null, responseValidoGenero);
+      } else {
+        callback(null, responseInvalidoGenero);
+      }
+
+    }
+    ).catch((err) => {
+      logger.error(`gRPC Error: ${err.message}`);
+      callback(null, responseInvalidoGenero);
+    }
+    );
+  }
+});
+
+server.addService(routeguide.MunicipioDistritoService.service, {
+  validarMunicipio: (call, callback) => {
+    controlMunicipios.obtenerMunicipioPorId(call.request.id_municipio_distrito).then((response) => {
+      if (response !== null) {
+        callback(null, responseValidoMunicipio);
+      } else {
+        callback(null, responseInvalidoMunicipio);
+      }
+
+    }).catch((err) => {
+       logger.error(`gRPC Error: ${err.message}`);
+      callback(null, responseInvalidoMunicipio);
+    });
+  }
+
+});
+
+ 
 server.addService(routeguide.TurnoService.service, {
   validarTurno: (call, callback) => {
    controlTurnos.onbtenerTurnoIDSimple(call.request.id_turno).then((response) => {

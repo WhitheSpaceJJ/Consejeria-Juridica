@@ -2,7 +2,7 @@
 require('dotenv').config()
 
 // Importamos la clase Server desde el archivo server.js en la carpeta models
-const Server = require('./models/server')
+const Server = require('./server')
 
 // Creamos una nueva instancia de la clase Server
 const server = new Server()

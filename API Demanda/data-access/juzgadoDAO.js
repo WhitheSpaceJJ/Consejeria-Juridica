@@ -31,11 +31,22 @@ class JuzgadoDAO {
       if (activo !== undefined && activo !== null && activo !== "") {
         logger.info("Se envió el parámetro activo y se obtendrán los juzgados activos")
         const juzgados = await Juzgado.findAll({ where: { estatus_general: "ACTIVO" } })
+        if (juzgados === null || juzgados.length === 0) {
+          logger.info("No hay juzgados activos registrados")
+          throw new Error("No hay juzgados activos registrados")
+        }
+
         logger.info("Juzgados activos obtenidos", { juzgados })
         return juzgados
       } else {
         logger.info("No se envió el parámetro activo y se obtendrán todos los juzgados")
         const juzgados = await Juzgado.findAll()
+
+        if (juzgados === null || juzgados.length === 0) {
+          logger.info("No hay juzgados registrados")
+          throw new Error("No hay juzgados registrados")
+        }
+
         logger.info("Juzgados obtenidos", { juzgados })
         return juzgados
       }
@@ -55,6 +66,11 @@ class JuzgadoDAO {
     try {
       logger.info("Obteniendo juzgado por ID", { id })
       const juzgado = await Juzgado.findByPk(id)
+      if (!juzgado) {
+        logger.info("No se encontró el juzgado")
+        throw new Error("No se encontró el juzgado")
+      }
+
       logger.info("Juzgado obtenido", { juzgado })
       return juzgado
     } catch (err) {
@@ -88,6 +104,12 @@ class JuzgadoDAO {
       pagina = parseInt(pagina, 10)
       const offset = (pagina - 1) * 10
       const resultados = await Juzgado.findAll({ offset: offset, limit: 10 })
+
+      if (resultados === null || resultados.length === 0) {
+        logger.info("No se encontraron juzgados paginados")
+        throw new Error("No se encontraron juzgados paginados")
+      }
+
       logger.info("Juzgados paginados obtenidos", { resultados })
       return resultados
     } catch (err) {

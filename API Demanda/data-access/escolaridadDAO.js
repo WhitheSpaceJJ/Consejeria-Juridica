@@ -32,11 +32,23 @@ class EscolaridadDAO {
       if (activo !== undefined && activo !== null && activo !== "") {
         logger.info("Se envió el parámetro activo y se obtendrán las escolaridades activas")
         const escolaridades = await Escolaridad.findAll({ where: { estatus_general: "ACTIVO" } })
+   
+        if (escolaridades === null || escolaridades.length === 0) {
+          logger.info("No hay escolaridades activas registradas")
+          throw new Error("No hay escolaridades activas registradas")
+        }
+
+
         logger.info("Escolaridades activas obtenidas", { escolaridades })
         return escolaridades
       } else{
         logger.info("No se envió el parámetro activo y se obtendrán todas las escolaridades")
         const escolaridades = await Escolaridad.findAll()
+        if (escolaridades === null || escolaridades.length === 0) {
+          logger.info("No hay escolaridades registradas")
+          throw new Error("No hay escolaridades registradas")
+        }
+
         logger.info("Escolaridades obtenidas", { escolaridades })
         return escolaridades
       }
@@ -55,6 +67,12 @@ class EscolaridadDAO {
     try {
       logger.info("Obteniendo escolaridad por ID", { id })
       const escolaridad = await Escolaridad.findByPk(id)
+      
+      if (!escolaridad) {
+        logger.info("No se encontró la escolaridad")
+        throw new Error("No se encontró la escolaridad")
+      }
+
       logger.info("Escolaridad obtenida", { escolaridad })
       return escolaridad
     } catch (err) {
@@ -91,6 +109,14 @@ class EscolaridadDAO {
       const offset = (pagina - 1) * 10
       logger.info("Obteniendo escolaridades por paginación", { offset })
       const resultados = await Escolaridad.findAll({ offset: offset, limit: 10 })
+
+      
+      if (resultados === null || resultados.length === 0) { 
+        logger.info("No se encontraron escolaridades paginadas")
+        throw new Error("No se encontraron escolaridades paginadas")
+      }
+      
+
       logger.info("Escolaridades obtenidas por paginación", { resultados })
       return resultados
     } catch (err) {

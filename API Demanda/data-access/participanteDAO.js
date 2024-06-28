@@ -45,6 +45,11 @@ class ParticipanteDAO {
     try {
       logger.info("Obteniendo participantes por proceso judicial", { id_proceso_judicial })
       const participantes = await Participante.findAll({ where: { id_proceso_judicial :id_proceso_judicial} })
+     if( participantes ===null || participantes.length === 0){
+        logger.info("No se encontraron participantes")
+      throw new Error("No se encontraron participantes")
+      }
+
       const participantes_obejct =  JSON.parse(JSON.stringify(participantes))
       for (let i = 0; i < participantes_obejct.length; i++) {
         try {

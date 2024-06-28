@@ -5,7 +5,7 @@ class LoginController {
   constructor(model) {
     this.model = model
   }
-  #acceptablePermissions =  ['ALL_SA','AD_USUARIOS_SA','AD_EMPLEADOS_SA','AD_JUICIOS_SA','AD_GENEROS_SA','AD_ESTADOSCIVILES_SA','AD_MOTIVOS_SA','AD_CATALOGOREQUISITOS_SA','CONSULTA_ASESORIA_SA','REGISTRO_ASESORIA_SA','TURNAR_ASESORIA_SA']
+  #acceptablePermissions = ['ALL_SA', 'AD_USUARIOS_SA', 'AD_EMPLEADOS_SA', 'AD_JUICIOS_SA', 'AD_GENEROS_SA', 'AD_ESTADOSCIVILES_SA', 'AD_MOTIVOS_SA', 'AD_CATALOGOREQUISITOS_SA', 'CONSULTA_ASESORIA_SA', 'REGISTRO_ASESORIA_SA', 'TURNAR_ASESORIA_SA']
 
   // Metodo que se enc arga de manejar el login
   handleLogin = async () => {
@@ -25,11 +25,17 @@ class LoginController {
         return userPermissions.some(permission => acceptablePermissions.includes(permission));
       };
       if (!hasPermission(userPermissions, acceptablePermissions)) {
-        window.location.href = 'login.html';
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'No cuenta con permisos para acceso al sistema'
+        modal.title = 'Sin Credenciales'
+        modal.open = true
+        return;
       }
-      sessionStorage.setItem('user', JSON.stringify(user))
+      //sessionStorage.setItem('user', JSON.stringify(user))
+      document.cookie = `user=${user}; HttpOnly; Secure; SameSite=Strict;`;
+
       location.replace('index.html')
-    } catch (error) { 
+    } catch (error) {
       console.error(error.message)
       //Aqui se manejan los errores que se puedan presentar
       if (error instanceof ValidationError) {

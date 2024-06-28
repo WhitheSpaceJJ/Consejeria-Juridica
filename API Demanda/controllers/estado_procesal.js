@@ -110,7 +110,6 @@ const actualizarEstadoProcesal = async (req, res) => {
     })
   }
 }
-const logger = require('../utilidades/logger')
 
 const obtenerEstadosProcesalesPorProcesoJudicial = async (req, res) => {
   try {

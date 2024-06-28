@@ -32,7 +32,13 @@ class PruebaDAO {
   async obtenerPrueba(id_prueba) {
     try {
       logger.info("Obteniendo prueba por ID", { id_prueba })
-      const prueba = await Prueba.findByPk(id_prueba)
+       const prueba = await Prueba.findByPk(id_prueba)
+     if (!prueba) { 
+
+        logger.info("No se encontró la prueba")
+        throw new Error("No se encontró la prueba")
+      }
+        
       logger.info("Prueba obtenida", { prueba })
       return prueba
     } catch (err) {
@@ -71,8 +77,11 @@ class PruebaDAO {
           where: whereClause,
           limit: limite,
           offset: offset
-        })
-
+        }) 
+        if (pruebas === null || pruebas === undefined || pruebas.length === 0) {
+          logger.info("No se encontraron pruebas por proceso judicial paginado")
+          throw new Error("No se encontraron pruebas por proceso judicial paginado")  
+        }
         logger.info("Se verifica si el total de pruebas por proceso judicial es mayor a 0")
         if (pruebas.length > 0) {
           logger.info("Pruebas por proceso judicial paginado obtenido", { pruebas })

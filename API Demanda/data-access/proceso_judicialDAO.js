@@ -211,11 +211,11 @@ class ProcesoJudicialDAO {
       logger.info("Actualizando proceso judicial no tramite (Baja,COncluido)", { fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio })
       const procesoJudicial = await proceso_judicial.update({ fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio }, { where: { id_proceso_judicial: proceso_object.id_proceso_judicial } })
      }else {
-      const {  fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio } = proceso_object
-      const estatus_proceso_ = "EN_TRAMITE"
-      const fecha_estatus_ = null
-      logger.info("Actualizando proceso judicial en tramite", { fecha_inicio, fecha_estatus_, estatus_proceso_, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio })
-      const procesoJudicial = await proceso_judicial.update({ fecha_inicio, fecha_estatus_, estatus_proceso_, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio }, { where: { id_proceso_judicial: proceso_object.id_proceso_judicial } })
+      let {  fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio } = proceso_object
+       estatus_proceso = "EN_TRAMITE"
+      fecha_estatus = null
+      logger.info("Actualizando proceso judicial en tramite", { fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio })
+      const procesoJudicial = await proceso_judicial.update({ fecha_inicio, fecha_estatus, estatus_proceso, id_juzgado, numero_expediente, control_interno, id_defensor, id_distrito_judicial, id_municipio_distrito, id_tipo_juicio }, { where: { id_proceso_judicial: proceso_object.id_proceso_judicial } })
     
      }
 /*
@@ -357,6 +357,11 @@ class ProcesoJudicialDAO {
     try {
       logger.info("Obteniendo proceso judicial", { id })
       const procesoJudicial = await proceso_judicial.findByPk(id)
+     if (!procesoJudicial) {
+        logger.info("Proceso judicial no encontrado")
+        throw new Error("Proceso judicial no encontrado") 
+      }
+
       logger.info("Proceso judicial obtenido", { procesoJudicial })
       return procesoJudicial
     } catch (err) {
@@ -372,6 +377,11 @@ class ProcesoJudicialDAO {
     try {
       logger.info("Obteniendo procesos judiciales")
       const procesosJudiciales = await proceso_judicial.findAll()
+      if(procesosJudiciales ===null || procesosJudiciales.length === 0){
+        logger.info("Procesos judiciales no encontrados")
+        throw new Error("Procesos judiciales no encontrados")
+      }
+
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
        logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")  
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
@@ -401,6 +411,11 @@ class ProcesoJudicialDAO {
     try {
       logger.info("Obteniendo procesos judiciales por defensor", { id_defensor })
       const procesosJudiciales = await proceso_judicial.findAll({ where: { id_defensor: id_defensor } })
+      if(procesosJudiciales ===null || procesosJudiciales.length === 0){
+        logger.info("Procesos judiciales no encontrados")
+        throw new Error("Procesos judiciales no encontrados")
+      }
+
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
 
       logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
@@ -422,6 +437,11 @@ class ProcesoJudicialDAO {
     try {
        logger.info("Obteniendo procesos judiciales por defensor y estatus", { id_defensor, estatus_proceso })
       const procesosJudiciales = await proceso_judicial.findAll({ where: { id_defensor: id_defensor, estatus_proceso: estatus_proceso } })
+       if(procesosJudiciales ===null || procesosJudiciales.length === 0){
+        logger.info("Procesos judiciales no encontrados")
+        throw new Error("Procesos judiciales no encontrados")
+      }
+    
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
 
       logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
@@ -448,6 +468,10 @@ class ProcesoJudicialDAO {
       logger.info("Obteniendo proceso judicial", { id })
 
       const procesoJudicial = await proceso_judicial.findByPk(id)
+       if (!procesoJudicial) {
+        throw new Error("Proceso judicial no encontrado")  
+       }
+
       const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
        
       logger.info("Obteniendo todos los datos del proceso judicial, juzgados y particpantes")
@@ -473,6 +497,11 @@ class ProcesoJudicialDAO {
     try {
       logger.info("Obteniendo proceso judicial", { id })
       const procesoJudicial = await proceso_judicial.findByPk(id)
+      if (!procesoJudicial) {
+        throw new Error("Proceso judicial no encontrado")
+      } 
+      
+
       const procesoJudicialObject = JSON.parse(JSON.stringify(procesoJudicial))
        logger.info("Processo judicial obtenido", { procesoJudicialObject })
       return procesoJudicialObject
@@ -522,6 +551,10 @@ class ProcesoJudicialDAO {
     try {
       logger.info("Obteniendo procesos judiciales por estatus", { estatus_proceso })
       const procesosJudiciales = await proceso_judicial.findAll({ where: {estatus_proceso: estatus_proceso } })
+   if ( procesosJudiciales === null || procesosJudiciales.length === 0) {
+        throw new Error("Procesos judiciales no encontrados")  
+       }
+
       const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales))
       logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
       for (let i = 0; i < procesosJudicialesObject.length; i++) {
@@ -569,7 +602,12 @@ class ProcesoJudicialDAO {
           limit: limite,
           offset: offset
         });
+      if(procesosJudiciales === null || procesosJudiciales.length === 0){
+        throw new Error("Procesos judiciales no encontrados")
+      }
+
         const procesosJudicialesObject = JSON.parse(JSON.stringify(procesosJudiciales));
+
         logger.info("Obteniendo todos los datos de los procesos judiciales, juzgados y particpantes")
         for (let i = 0; i < procesosJudicialesObject.length; i++) {
           const proceso = procesosJudicialesObject[i];

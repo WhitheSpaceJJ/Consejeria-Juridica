@@ -5,6 +5,7 @@ const logger = require('../utilidades/logger');
 
 async function existeJuzgado(req, res, next) {
     logger.info("Middleware para validar la existencia de un juzgado")
+    try {
     const { id } = req.params
     const juzgado = await controlJuzgado.obtenerJuzgado(Number(id))
     if (!juzgado) {
@@ -12,6 +13,12 @@ async function existeJuzgado(req, res, next) {
             message: 'No existe un juzgado con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un juzgado", { error: error.message })
+    return res.status(500).json({
+        message: 'No existe un juzgado con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
     logger.info("Fin del middleware para validar la existencia de un juzgado")
     next()
 }

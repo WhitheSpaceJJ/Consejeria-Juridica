@@ -686,7 +686,7 @@ const obtenerAsesoriaNombre = asyncError(async (req, res, next) => {
       const error = new CustomeError('Error al obtener las asesorías', 404);
       return next(error);
     } else {
-      logger.info("Asesorías obtenidas correctamente")
+      logger.info("Asesorías obtenidas correctamente",result)
       res.status(200).json({ 
         totalAsesorias: result
       });

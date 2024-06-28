@@ -1,0 +1,814 @@
+2024-06-28 01:09:29 [31merror[39m: Error en la validación del token: 
+2024-06-28 01:09:35 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxMCwibm9tYnJlIjoiRFBTIFVzdWFyaW8gRGlleiIsImNvcnJlbyI6ImRlZmVuc29yaWEudGVzdGluZy51c3VhcmlvMTBAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkenlDblpaYkNlQi5ONmNuZDVUNXNhT0cySjJMTzhXdS44Wm9ESy83NjZoeVBQQ1kvek1vU2EiLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEwLCJpZF9lbXBsZWFkbyI6bnVsbCwiZXN0YXR1c19nZW5lcmFsIjoiQUNUSVZPIiwicGVybWlzb3MiOlsiQUxMX1NBIiwiQUxMX1NEIl0sImlhdCI6MTcxODU2MjY0NCwiZXhwIjoxNzE4NTkxNDQ0fQ.CtTy82PDDdqkX5pDe6PjNminUr9nHz7VbnKF-7owX4Y","user-agent":"PostmanRuntime/7.39.0"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-28 01:09:35 [32minfo[39m: Verificando token
+2024-06-28 01:09:35 [32minfo[39m: /usuario
+2024-06-28 01:09:35 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-28 01:09:35 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-28 01:09:35 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-28 01:09:35 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-28 01:09:35 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-28 01:09:35 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-28 01:09:35 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:09:35 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:09:35 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-28 01:09:35 [32minfo[39m: La contraseña es válida
+2024-06-28 01:09:35 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:09:35 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:09:35 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:09:35 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-28 01:09:35 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:09:35 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-06-28 01:09:35 [32minfo[39m: El usuario tiene permisos, se genera un token
+2024-06-28 01:09:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:09:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:09:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:09:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:09:49 [32minfo[39m: La contraseña es válida
+2024-06-28 01:09:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:09:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:09:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:09:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:09:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:09:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:09:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:10:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:10:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:10:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:10:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:10:51 [32minfo[39m: La contraseña es válida
+2024-06-28 01:10:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:10:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:10:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:10:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:10:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:10:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:10:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:14:31 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:14:31 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:14:31 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:14:31 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:14:31 [32minfo[39m: La contraseña es válida
+2024-06-28 01:14:31 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:14:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:14:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:14:31 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:14:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:14:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:14:31 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:18:04 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:18:04 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:18:04 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:18:04 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:18:04 [32minfo[39m: La contraseña es válida
+2024-06-28 01:18:04 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:18:04 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:18:04 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:18:04 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:18:04 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:18:04 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:18:04 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:19:07 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:19:07 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:19:07 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:19:07 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:19:07 [32minfo[39m: La contraseña es válida
+2024-06-28 01:19:07 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:19:07 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:19:07 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:19:07 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:19:07 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:19:07 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:19:07 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:19:52 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:19:52 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:19:52 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:19:52 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:19:52 [32minfo[39m: La contraseña es válida
+2024-06-28 01:19:52 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:19:52 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:19:52 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:19:52 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:19:52 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:19:52 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:19:52 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:20:58 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:20:58 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:20:58 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:20:58 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:20:58 [32minfo[39m: La contraseña es válida
+2024-06-28 01:20:58 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:20:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:20:58 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:20:58 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:20:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:20:58 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:20:58 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:22:00 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:22:00 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:22:00 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:22:00 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:22:00 [32minfo[39m: La contraseña es válida
+2024-06-28 01:22:00 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:22:00 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:22:00 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:22:00 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:22:00 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:22:00 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:22:00 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:23:54 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:23:54 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:23:54 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:23:54 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:23:54 [32minfo[39m: La contraseña es válida
+2024-06-28 01:23:54 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:23:54 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:23:54 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:23:54 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:23:54 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:23:54 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:23:54 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:24:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:24:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:24:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:24:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:24:11 [32minfo[39m: La contraseña es válida
+2024-06-28 01:24:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:24:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:24:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:24:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:24:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:24:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:24:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:30:00 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:30:00 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:30:00 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:30:00 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:30:00 [32minfo[39m: La contraseña es válida
+2024-06-28 01:30:00 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:30:00 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:00 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:00 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:30:00 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:00 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:00 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:30:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:30:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:30:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:30:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:30:11 [32minfo[39m: La contraseña es válida
+2024-06-28 01:30:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:30:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:30:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:30:20 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:30:20 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:30:20 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:30:20 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:30:20 [32minfo[39m: La contraseña es válida
+2024-06-28 01:30:20 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:30:20 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:20 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:20 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:30:20 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:20 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:20 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:30:26 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:30:26 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:30:26 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:30:26 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:30:26 [32minfo[39m: La contraseña es válida
+2024-06-28 01:30:26 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:30:26 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:26 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:26 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:30:26 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:30:26 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:30:26 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:33:10 [31merror[39m: Error en la validación del token: 
+2024-06-28 01:33:17 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxMCwibm9tYnJlIjoiRFBTIFVzdWFyaW8gRGlleiIsImNvcnJlbyI6ImRlZmVuc29yaWEudGVzdGluZy51c3VhcmlvMTBAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkenlDblpaYkNlQi5ONmNuZDVUNXNhT0cySjJMTzhXdS44Wm9ESy83NjZoeVBQQ1kvek1vU2EiLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEwLCJpZF9lbXBsZWFkbyI6bnVsbCwiZXN0YXR1c19nZW5lcmFsIjoiQUNUSVZPIiwicGVybWlzb3MiOlsiQUxMX1NBIiwiQUxMX1NEIl0sImlhdCI6MTcxODU2MjY0NCwiZXhwIjoxNzE4NTkxNDQ0fQ.CtTy82PDDdqkX5pDe6PjNminUr9nHz7VbnKF-7owX4Y","user-agent":"PostmanRuntime/7.39.0"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-28 01:33:17 [32minfo[39m: Verificando token
+2024-06-28 01:33:17 [32minfo[39m: /usuario
+2024-06-28 01:33:17 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-28 01:33:17 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-28 01:33:17 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-28 01:33:17 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-28 01:33:17 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-28 01:33:17 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-28 01:33:17 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:33:17 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:33:17 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-28 01:33:17 [32minfo[39m: La contraseña es válida
+2024-06-28 01:33:17 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:33:17 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:33:17 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:33:17 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-28 01:33:17 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:33:17 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-06-28 01:33:17 [32minfo[39m: El usuario tiene permisos, se genera un token
+2024-06-28 01:33:29 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:33:29 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:33:29 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:33:29 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:33:29 [32minfo[39m: La contraseña es válida
+2024-06-28 01:33:29 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:33:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:33:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:33:29 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:33:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:33:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:33:29 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:35:32 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:35:32 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:35:32 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:35:32 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:35:32 [32minfo[39m: La contraseña es válida
+2024-06-28 01:35:32 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:35:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:35:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:35:32 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:35:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:35:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:35:32 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:36:38 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:36:38 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:36:38 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:36:38 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:36:38 [32minfo[39m: La contraseña es válida
+2024-06-28 01:36:38 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:36:38 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:36:38 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:36:38 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:36:38 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:36:38 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:36:38 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:37:23 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:37:23 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:37:23 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:37:23 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:37:23 [32minfo[39m: La contraseña es válida
+2024-06-28 01:37:23 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:37:23 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:37:23 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:37:23 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:37:23 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:37:23 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:37:23 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:42:02 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:42:02 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:42:02 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:42:02 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:42:02 [32minfo[39m: La contraseña es válida
+2024-06-28 01:42:02 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:42:02 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:42:02 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:42:02 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:42:02 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:42:02 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:42:02 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:42:31 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:42:31 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:42:31 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:42:31 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:42:31 [32minfo[39m: La contraseña es válida
+2024-06-28 01:42:31 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:42:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:42:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:42:31 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:42:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:42:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:42:31 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:43:12 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:43:12 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:43:12 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:43:12 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:43:12 [32minfo[39m: La contraseña es válida
+2024-06-28 01:43:12 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:43:12 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:43:12 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:43:12 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:43:12 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:43:12 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:43:12 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:43:29 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:43:29 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:43:29 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:43:29 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:43:29 [32minfo[39m: La contraseña es válida
+2024-06-28 01:43:29 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:43:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:43:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:43:29 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:43:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:43:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:43:29 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:44:18 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:44:18 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:44:18 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:44:18 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:44:18 [32minfo[39m: La contraseña es válida
+2024-06-28 01:44:18 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:44:18 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:18 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:18 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:44:18 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:18 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:18 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:44:29 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:44:29 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:44:29 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:44:29 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:44:29 [32minfo[39m: La contraseña es válida
+2024-06-28 01:44:29 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:44:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:29 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:44:29 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:29 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:29 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:44:40 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:44:40 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:44:40 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:44:40 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:44:40 [32minfo[39m: La contraseña es válida
+2024-06-28 01:44:40 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:44:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:40 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:40 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:44:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:40 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:40 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:44:50 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:44:50 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:44:50 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:44:50 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:44:50 [32minfo[39m: La contraseña es válida
+2024-06-28 01:44:50 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:44:50 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:50 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:50 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:44:50 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:44:50 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:44:50 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:03 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:03 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:03 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:03 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:14 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:14 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:14 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:21 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:21 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:21 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:21 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:21 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:21 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:21 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:21 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:21 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:21 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:21 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:21 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:26 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:26 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:26 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:26 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:26 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:26 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:26 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:26 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:26 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:26 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:26 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:26 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:31 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:31 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:31 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:31 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:31 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:31 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:31 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:31 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:31 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:31 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:45:36 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:45:36 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:45:36 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:45:36 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:45:36 [32minfo[39m: La contraseña es válida
+2024-06-28 01:45:36 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:45:36 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:36 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:36 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:45:36 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:45:36 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:45:36 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: La contraseña es válida
+2024-06-28 01:46:32 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: La contraseña es válida
+2024-06-28 01:46:32 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 01:46:32 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 01:46:32 [32minfo[39m: La contraseña es válida
+2024-06-28 01:46:32 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 01:46:32 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 01:46:32 [32minfo[39m: Permisos obtenidos
+2024-06-28 01:46:32 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:27 [31merror[39m: Error en la validación del token: 
+2024-06-28 02:00:47 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-28 02:00:47 [32minfo[39m: Verificando token
+2024-06-28 02:00:47 [32minfo[39m: /usuario
+2024-06-28 02:00:47 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-28 02:00:47 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-28 02:00:47 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-28 02:00:47 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-28 02:00:47 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-28 02:00:47 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-28 02:00:47 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:47 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:47 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-28 02:00:47 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:47 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:47 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:47 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:47 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-28 02:00:47 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:47 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-06-28 02:00:47 [32minfo[39m: El usuario tiene permisos, se genera un token
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:00:51 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:00:51 [32minfo[39m: La contraseña es válida
+2024-06-28 02:00:51 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:00:51 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:00:51 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:00:51 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:11 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:11 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:11 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:11 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:11 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:11 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:07:12 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:07:12 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:07:12 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:07:12 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:07:12 [32minfo[39m: La contraseña es válida
+2024-06-28 02:07:12 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:07:12 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:12 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:12 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:07:12 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:07:12 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:07:12 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: Usuario obtenido correctamente
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-28 02:08:49 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-28 02:08:49 [32minfo[39m: La contraseña es válida
+2024-06-28 02:08:49 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-28 02:08:49 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-28 02:08:49 [32minfo[39m: Permisos obtenidos
+2024-06-28 02:08:49 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado

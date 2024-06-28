@@ -17,7 +17,7 @@ class TurnarController {
          return userPermissions.some(permission => acceptablePermissions.includes(permission));
        };
        if (!hasPermission(userPermissions, acceptablePermissions)) {
-         window.location.href = 'login.html';
+         window.location.href = 'index.html';
        }
     }
   }

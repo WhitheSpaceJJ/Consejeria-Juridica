@@ -1,0 +1,668 @@
+2024-06-22 23:08:42 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3002
+2024-06-22 23:08:42 [32minfo[39m: gRPC listening on 161
+2024-06-22 23:15:35 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-22 23:15:35 [32minfo[39m: Verificando token
+2024-06-22 23:15:35 [32minfo[39m: /usuario
+2024-06-22 23:15:35 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:15:35 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-22 23:15:35 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-22 23:15:35 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-22 23:15:35 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-22 23:15:35 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-22 23:15:36 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:15:36 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:15:36 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-22 23:15:36 [32minfo[39m: La contraseña es válida
+2024-06-22 23:15:36 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:15:36 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:15:36 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:15:36 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-22 23:15:36 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:15:36 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-06-22 23:15:36 [32minfo[39m: El usuario tiene permisos, se genera un token
+2024-06-22 23:17:10 [32minfo[39m: Request: GET /usuarios/busqueda?total=true&pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"total":"true","pagina":"1"} - Body: {}
+2024-06-22 23:17:10 [32minfo[39m: Verificando token
+2024-06-22 23:17:10 [32minfo[39m: /busqueda
+2024-06-22 23:17:10 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:10 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:10 [32minfo[39m: Token verificando...
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: Request: GET /usuarios/busqueda?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-22 23:17:10 [32minfo[39m: Verificando token
+2024-06-22 23:17:10 [32minfo[39m: /busqueda
+2024-06-22 23:17:10 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:10 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:10 [32minfo[39m: Token verificando...
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Token verificado.
+2024-06-22 23:17:10 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:10 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:17:10 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:17:10 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:17:10 [32minfo[39m: Se obtiene el total de usuarios
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Token verificado.
+2024-06-22 23:17:10 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:10 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:17:10 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:17:10 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los usuarios con la paginación
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:17:10 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:17:10 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Usuarios obtenidos correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si hay usuarios para obtener los permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retornan los usuarios con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:17:10 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:17:10 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:10 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:10 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:10 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:10 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:10 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:10 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:17:18 [32minfo[39m: Request: GET /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {}
+2024-06-22 23:17:18 [32minfo[39m: Verificando token
+2024-06-22 23:17:18 [32minfo[39m: /4
+2024-06-22 23:17:18 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:18 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:18 [32minfo[39m: Token verificando...
+2024-06-22 23:17:18 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:18 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:18 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:18 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:18 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:18 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:18 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:18 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:18 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:18 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:18 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:18 [32minfo[39m: Token verificado.
+2024-06-22 23:17:18 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:18 [32minfo[39m: Petición para obtener un usuario por su id
+2024-06-22 23:17:18 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:18 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:18 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:18 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:18 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:18 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:18 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su id
+2024-06-22 23:17:18 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:39 [32minfo[39m: Request: GET /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {}
+2024-06-22 23:17:39 [32minfo[39m: Verificando token
+2024-06-22 23:17:39 [32minfo[39m: /4
+2024-06-22 23:17:39 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:39 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:39 [32minfo[39m: Token verificando...
+2024-06-22 23:17:39 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:39 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:39 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:39 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:39 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:39 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:39 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:39 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:39 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:39 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:39 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:39 [32minfo[39m: Token verificado.
+2024-06-22 23:17:39 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:39 [32minfo[39m: Petición para obtener un usuario por su id
+2024-06-22 23:17:39 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:39 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:39 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:39 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:39 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:39 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:39 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su id
+2024-06-22 23:17:39 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Request: PUT /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {"id_usuario":4,"nombre":"Carlos Alfonso Sauceda Cervantes","correo":"defensoria.testing.usuario1@gmail.com","id_distrito_judicial":1,"estatus_general":"ACTIVO","id_tipouser":4,"permisos":["AD_USUARIOS_SA","AD_EMPLEADOS_SA","AD_JUICIOS_SA","AD_GENEROS_SA","AD_ESTADOSCIVILES_SA","AD_MOTIVOS_SA","AD_ESCOLARIDAD_SD","AD_ETNIA_SD","AD_JUZGADO_SD","AD_OCUPACION_SD"]}
+2024-06-22 23:17:40 [32minfo[39m: Verificando token
+2024-06-22 23:17:40 [32minfo[39m: /4
+2024-06-22 23:17:40 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:40 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:40 [32minfo[39m: Token verificando...
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:40 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:40 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:40 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Request: GET /usuarios/busqueda?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-22 23:17:40 [32minfo[39m: Verificando token
+2024-06-22 23:17:40 [32minfo[39m: /busqueda
+2024-06-22 23:17:40 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:40 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:40 [32minfo[39m: Token verificando...
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:40 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:40 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Token verificado.
+2024-06-22 23:17:40 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:40 [32minfo[39m: Middleware para validar la existencia de un usuario
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Token verificado.
+2024-06-22 23:17:40 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:40 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:17:40 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:17:40 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:17:40 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:17:40 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:17:40 [32minfo[39m: Se obtienen los usuarios con la paginación
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:40 [32minfo[39m: Usuario encontrado
+2024-06-22 23:17:40 [32minfo[39m: Middleware para validar el JSON del usuario en el PUT
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el tipo de usuario con id:
+2024-06-22 23:17:40 [32minfo[39m: Usuarios obtenidos correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si hay usuarios para obtener los permisos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Tipo de usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:40 [32minfo[39m: Fin del middleware para validar el JSON del usuario en el PUT
+2024-06-22 23:17:40 [32minfo[39m: Petición para actualizar un usuario
+2024-06-22 23:17:40 [32minfo[39m: Actualizando el usuario
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Usuario actualizado correctamente
+2024-06-22 23:17:40 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se retornan los usuarios con sus permisos
+2024-06-22 23:17:40 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:17:40 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:17:40 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:40 [32minfo[39m: Se verifican los permisos a eliminar y agregar
+2024-06-22 23:17:40 [32minfo[39m: Se eliminan los permisos del usuario
+2024-06-22 23:17:40 [32minfo[39m: Se agregan los permisos al usuario
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:40 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:40 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:40 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:40 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:40 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:40 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:41 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:41 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:41 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:41 [32minfo[39m: Se verifican los cambios en los permisos o si se actualizó el usuario
+2024-06-22 23:17:41 [32minfo[39m: Se verifica si hubo cambios en los permisos
+2024-06-22 23:17:41 [32minfo[39m: Se verifica el resultado de la petición de actualizar un usuario
+2024-06-22 23:17:41 [32minfo[39m: Usuario actualizado correctamente
+2024-06-22 23:17:44 [32minfo[39m: Request: GET /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {}
+2024-06-22 23:17:44 [32minfo[39m: Verificando token
+2024-06-22 23:17:44 [32minfo[39m: /4
+2024-06-22 23:17:44 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:44 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:44 [32minfo[39m: Token verificando...
+2024-06-22 23:17:44 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:44 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:44 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:44 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:44 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:44 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:44 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:44 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:44 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:44 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:44 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:44 [32minfo[39m: Token verificado.
+2024-06-22 23:17:44 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:44 [32minfo[39m: Petición para obtener un usuario por su id
+2024-06-22 23:17:44 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:44 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:44 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:44 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:44 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:44 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:44 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su id
+2024-06-22 23:17:44 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:56 [32minfo[39m: Request: GET /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {}
+2024-06-22 23:17:56 [32minfo[39m: Verificando token
+2024-06-22 23:17:56 [32minfo[39m: /4
+2024-06-22 23:17:56 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:56 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:56 [32minfo[39m: Token verificando...
+2024-06-22 23:17:56 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:56 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:56 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:56 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:56 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:56 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:56 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:56 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:56 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:56 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:56 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:56 [32minfo[39m: Token verificado.
+2024-06-22 23:17:56 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:56 [32minfo[39m: Petición para obtener un usuario por su id
+2024-06-22 23:17:56 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:56 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:56 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:56 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:56 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:56 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:56 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su id
+2024-06-22 23:17:56 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:57 [32minfo[39m: Request: PUT /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {"id_usuario":4,"nombre":"Carlos Alfonso Sauceda Cervantes","correo":"defensoria.testing.usuario1@gmail.com","id_distrito_judicial":1,"estatus_general":"ACTIVO","id_tipouser":4,"permisos":["AD_USUARIOS_SA","AD_EMPLEADOS_SA","AD_JUICIOS_SA","AD_GENEROS_SA","AD_ESTADOSCIVILES_SA","AD_MOTIVOS_SA","AD_CATALOGOREQUISITOS_SA","AD_ESCOLARIDAD_SD","AD_ETNIA_SD","AD_JUZGADO_SD","AD_OCUPACION_SD"]}
+2024-06-22 23:17:57 [32minfo[39m: Verificando token
+2024-06-22 23:17:57 [32minfo[39m: /4
+2024-06-22 23:17:57 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:57 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:57 [32minfo[39m: Token verificando...
+2024-06-22 23:17:57 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:57 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:57 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:57 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:57 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:57 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:57 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Request: GET /usuarios/busqueda?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-22 23:17:58 [32minfo[39m: Verificando token
+2024-06-22 23:17:58 [32minfo[39m: /busqueda
+2024-06-22 23:17:58 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:17:58 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:17:58 [32minfo[39m: Token verificando...
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:17:58 [32minfo[39m: La contraseña es válida
+2024-06-22 23:17:58 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Token verificado.
+2024-06-22 23:17:58 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:58 [32minfo[39m: Middleware para validar la existencia de un usuario
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Token verificado.
+2024-06-22 23:17:58 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:17:58 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:17:58 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:17:58 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:17:58 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:17:58 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:17:58 [32minfo[39m: Se obtienen los usuarios con la paginación
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:58 [32minfo[39m: Usuario encontrado
+2024-06-22 23:17:58 [32minfo[39m: Middleware para validar el JSON del usuario en el PUT
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo el tipo de usuario con id:
+2024-06-22 23:17:58 [32minfo[39m: Usuarios obtenidos correctamente
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si hay usuarios para obtener los permisos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Tipo de usuario obtenido correctamente
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:17:58 [32minfo[39m: Fin del middleware para validar el JSON del usuario en el PUT
+2024-06-22 23:17:58 [32minfo[39m: Petición para actualizar un usuario
+2024-06-22 23:17:58 [32minfo[39m: Actualizando el usuario
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Usuario actualizado correctamente
+2024-06-22 23:17:58 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se retornan los usuarios con sus permisos
+2024-06-22 23:17:58 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:17:58 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:17:58 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:17:58 [32minfo[39m: Se verifican los permisos a eliminar y agregar
+2024-06-22 23:17:58 [32minfo[39m: Se eliminan los permisos del usuario
+2024-06-22 23:17:58 [32minfo[39m: Se agregan los permisos al usuario
+2024-06-22 23:17:58 [32minfo[39m: Obteniendo el permiso en base a su nombre
+2024-06-22 23:17:58 [32minfo[39m: Permiso obtenido y se retorna el id del permiso
+2024-06-22 23:17:58 [32minfo[39m: Creando detalle permiso usuario
+2024-06-22 23:17:58 [32minfo[39m: Detalle permiso usuario creado y se retorna el detalle permiso usuario creado
+2024-06-22 23:17:58 [32minfo[39m: Se verifican los cambios en los permisos o si se actualizó el usuario
+2024-06-22 23:17:58 [32minfo[39m: Se verifica si hubo cambios en los permisos
+2024-06-22 23:17:58 [32minfo[39m: Se verifica el resultado de la petición de actualizar un usuario
+2024-06-22 23:17:58 [32minfo[39m: Usuario actualizado correctamente
+2024-06-22 23:18:20 [32minfo[39m: Request: GET /usuarios/4 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {} - Body: {}
+2024-06-22 23:18:20 [32minfo[39m: Verificando token
+2024-06-22 23:18:20 [32minfo[39m: /4
+2024-06-22 23:18:20 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:18:20 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:18:20 [32minfo[39m: Token verificando...
+2024-06-22 23:18:20 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:18:20 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:18:20 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:18:20 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:18:20 [32minfo[39m: La contraseña es válida
+2024-06-22 23:18:20 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:18:20 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:18:20 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:18:20 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:18:20 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:18:20 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:18:20 [32minfo[39m: Token verificado.
+2024-06-22 23:18:20 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:18:20 [32minfo[39m: Petición para obtener un usuario por su id
+2024-06-22 23:18:20 [32minfo[39m: Obteniendo el usuario por id
+2024-06-22 23:18:20 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:18:20 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:18:20 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:18:20 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:18:20 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:18:20 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su id
+2024-06-22 23:18:20 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Request: GET /usuarios/busqueda?total=true&pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"total":"true","pagina":"1"} - Body: {}
+2024-06-22 23:19:03 [32minfo[39m: Verificando token
+2024-06-22 23:19:03 [32minfo[39m: /busqueda
+2024-06-22 23:19:03 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:19:03 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:19:03 [32minfo[39m: Token verificando...
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: Request: GET /usuarios/busqueda?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5MTIzMzM2LCJleHAiOjE3MTkxNTIxMzZ9.-oNQdIqEiOrpu1K9dV7-dYQ8ysb8IXcqUCv7kOqbyzE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.8:3038/","origin":"http://192.168.100.8:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-22 23:19:03 [32minfo[39m: Verificando token
+2024-06-22 23:19:03 [32minfo[39m: /busqueda
+2024-06-22 23:19:03 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-22 23:19:03 [32minfo[39m: Token proporcionado, verificando...
+2024-06-22 23:19:03 [32minfo[39m: Token verificando...
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Token verificado.
+2024-06-22 23:19:03 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:19:03 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:19:03 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:19:03 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:19:03 [32minfo[39m: Se obtiene el total de usuarios
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Token verificado.
+2024-06-22 23:19:03 [32minfo[39m: Se continua con el siguiente middleware, se ha verificado el token
+2024-06-22 23:19:03 [32minfo[39m: Petición para obtener usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: se obtienen los datos de la petición
+2024-06-22 23:19:03 [32minfo[39m: Se manda a llamar la función obtenerUsuariosBusqueda, en base al correo, id_distrito_judicial, totalBool y pagina obtenidos en la petición
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo los usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Se establecen limites y offset para la paginación
+2024-06-22 23:19:03 [32minfo[39m: Se crea una clausula where para la búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si hay correo o id_distrito_judicial para agregar a la clausula where
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la variable es true con el fin de obtener el total de usuarios, caso contrario se obtienen los usuarios con la paginación
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los usuarios con la paginación
+2024-06-22 23:19:03 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:19:03 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Usuarios obtenidos correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si hay usuarios para obtener los permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retornan los usuarios con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Se verifica el resultado de la petición de obtener usuarios por búsqueda
+2024-06-22 23:19:03 [32minfo[39m: Usuarios obtenidos correctamente, se verifica si fue el total de usuarios o los usuarios
+2024-06-22 23:19:03 [32minfo[39m: Se envía la respuesta con los usuarios obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:03 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:03 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:03 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:03 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:03 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:03 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo el usuario por correo y contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado
+2024-06-22 23:19:14 [32minfo[39m: Usuario obtenido correctamente
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-22 23:19:14 [32minfo[39m: Se verifica si la contraseña es válida osea si es igual a la contraseña encriptada
+2024-06-22 23:19:14 [32minfo[39m: La contraseña es válida
+2024-06-22 23:19:14 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Se retorna el usuario con sus permisos
+2024-06-22 23:19:14 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-22 23:19:14 [32minfo[39m: Permisos obtenidos
+2024-06-22 23:19:14 [32minfo[39m: Token válido, se procede a retornar los permisos, id_distrito_judicial, id_usuario, id_tipouser e id_empleado

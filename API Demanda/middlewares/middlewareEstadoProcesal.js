@@ -7,6 +7,7 @@ const logger = require('../utilidades/logger');
 
 async function existeProcesoJudicial(req, res, next) {
     logger.info("Middleware para validar la existencia de un proceso judicial")
+try {
     const { id_proceso_judicial } = req.query
     const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
@@ -14,6 +15,12 @@ async function existeProcesoJudicial(req, res, next) {
             message: 'No existe un proceso judicial con ese id'
         })
     }
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un proceso judicial: " + error)
+    return res.status(500).json({
+        message: 'No existe un proceso judicial con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
     logger.info("Fin del middleware para validar la existencia de un proceso judicial")
     next()
 }
@@ -21,6 +28,7 @@ async function existeProcesoJudicial(req, res, next) {
 async function existeEstadoProcesal(req, res, next) {
 
     logger.info("Middleware para validar la existencia de un estado procesal")
+try {   
     const { id } = req.params
     const estadoProcesal = await controlEstadoProcesal.obtenerEstadoProcesal(Number(id))
     if (!estadoProcesal) {
@@ -28,6 +36,12 @@ async function existeEstadoProcesal(req, res, next) {
             message: 'No existe un estado procesal con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un estado procesal: " + error)
+    return res.status(500).json({
+        message: 'No existe un estado procesal con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
 
     logger.info("Fin del middleware para validar la existencia de un estado procesal")
     next()
@@ -57,12 +71,19 @@ async function validarJSONEstadoProcesalPOST(req, res, next) {
             message: 'El id del proceso judicial no es un número.'
         })
     }
+    try{
     const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
         return res.status(404).json({
             message: 'No existe un proceso judicial con ese id'
         })
     }
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un proceso judicial: " + error)
+    return res.status(500).json({
+        message: 'No existe un proceso judicial con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
 
     if (descripcion_estado_procesal.length > 200) {
         return res.status(400).json({
@@ -112,14 +133,19 @@ async function validarJSONEstadoProcesalPUT(req, res, next) {
             message: 'El campo "id_proceso_judicial" no acepta valores numericos.'
         });
     }
-
+   try{
     const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicialMiddleware(id_proceso_judicial)
     if (!procesoJudicial) {
         return res.status(404).json({
             message: 'No existe un proceso judicial con ese id'
         })
     }
-
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de un proceso judicial: " + error)
+    return res.status(500).json({
+        message: 'No existe un proceso judicial con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
 
     if (descripcion_estado_procesal.length > 200) {
         return res.status(400).json({
@@ -139,12 +165,17 @@ async function validarJSONEstadoProcesalPUT(req, res, next) {
             message: 'El id del estado procesal proporcionado no coincide con el id del estado procesal que se quiere modificar.'
         })
     }
-
+try{
     const estadoProcesal = await controlEstadoProcesal.obtenerEstadoProcesal(Number(id_estado_procesal))
 
     if (estadoProcesal.id_proceso_judicial !== id_proceso_judicial) {
         return res.status(400).json({
             message: 'El id del proceso judicial proporcionado no coincide con el id del proceso judicial del estado procesal, no se puede cambiar el proceso judicial del estado procesal.'
+        })
+    }    } catch (error) {
+        logger.error("Error en el middleware para validar la existencia de un estado procesal: " + error)
+        return res.status(500).json({
+            message: 'No existe un estado procesal con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
 

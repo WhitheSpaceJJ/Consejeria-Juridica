@@ -29,11 +29,19 @@ class EtniaDAO {
       if (activo !== undefined && activo !== null && activo !== "") {
         logger.info("Se envió el parámetro activo y se obtendrán las etnias activas")
         const etnias = await Etnia.findAll({ where: { estatus_general: "ACTIVO" } })
+        if (etnias === null || etnias.length === 0) {
+          logger.info("No hay etnias activas registradas")
+          throw new Error("No hay etnias activas registradas")
+        }
         logger.info("Etnias activas obtenidas", { etnias })
         return etnias
       } else {
         logger.info("No se envió el parámetro activo y se obtendrán todas las etnias")
         const etnias = await Etnia.findAll()
+        if (etnias === null || etnias.length === 0) {
+          logger.info("No hay etnias registradas")
+          throw new Error("No hay etnias registradas")
+        }
         logger.info("Etnias obtenidas", { etnias })
         return etnias
       }
@@ -52,6 +60,13 @@ class EtniaDAO {
     try {
       logger.info("Obteniendo etnia por ID", { id })
       const etnia = await Etnia.findByPk(id)
+      
+      if (!etnia) {
+        logger.info("No se encontró la etnia")
+        throw new Error("No se encontró la etnia")
+      }
+
+
       logger.info("Etnia obtenida", { etnia })
       return etnia
     } catch (err) {
@@ -88,6 +103,11 @@ class EtniaDAO {
   
       logger.info("Obteniendo etnias paginadas", { offset })
       const resultados = await Etnia.findAll({ offset: offset, limit: 10 })
+ 
+      if (resultados === null || resultados.length === 0) {
+        logger.info("No se encontraron etnias paginadas")
+        throw new Error("No se encontraron etnias paginadas")
+      }
 
       logger.info("Etnias paginadas obtenidas", { resultados })
       return resultados

@@ -123,6 +123,7 @@ const obtenerProcesoJudicial = async (req, res) => {
      
     logger.info("Se llama al metodo para obtener el proceso judicial")
     const procesoJudicial = await procesoJudicialDAO.obtenerProcesoJudicial(Number(id))
+      
 
     logger.info("Se valida si el proceso judicial fue encontrado")
     if (procesoJudicial === null) {
@@ -163,12 +164,12 @@ const actualizarProcesoJudicial = async (req, res) => {
 
 
     logger.info("Obteniendo los datos del proceso judicial", req.body)
-    const { promovente, imputado, proceso } = req.body
+    const { promovente, demandado, proceso } = req.body
 
 
     logger.info("Se llama al metodo para actualizar el proceso judicial")
     const procesoJudicial = await procesoJudicialDAO.actualizarProcesoJudicialOficial(Number(id), {
-      promovente, imputado, proceso
+      promovente, demandado, proceso
     })
 
     logger.info("Se envia el proceso judicial actualizado", procesoJudicial)

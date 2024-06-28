@@ -68,6 +68,11 @@ class EstadoProcesalDAO {
           limit: limite,
           offset: offset
         });
+        if (estadosProcesales === null || estadosProcesales.length === 0) {
+          logger.info("No se encontraron estado procesal por proceso judicial paginado")
+          throw new Error("No se encontraron estado procesal por proceso judicial paginado")
+        }
+
 
         logger.info("Se verifica si el total de estado procesal por proceso judicial es mayor a 0")
         if (estadosProcesales.length > 0) {
@@ -99,6 +104,11 @@ class EstadoProcesalDAO {
     try {
       logger.info("Obteniendo estado procesal por ID", { id_estado_procesal })
       const estadoProcesal = await estado_procesal.findByPk(id_estado_procesal)
+      if (!estadoProcesal) {
+        logger.info("No se encontró el estado procesal")
+        throw new Error("No se encontró el estado procesal")
+      }
+
       logger.info("Estado procesal obtenido", { estadoProcesal })
       return estadoProcesal
     } catch (error) {

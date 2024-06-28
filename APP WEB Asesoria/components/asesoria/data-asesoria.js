@@ -33,7 +33,7 @@ export class DataAsesoria extends HTMLElement {
     const asesorado = asesoria.asesoria.asesorado
     const datosAsesoria = asesoria.asesoria.datos_asesoria
     const recibidos = asesoria.asesoria.recibidos
-    const domicilioData = domicilio.colonia
+    const domicilioData = domicilio.domicilio.colonia
      
         //Se llenan los datos de la asesoria en este caso el nombre
     this.shadowRoot.getElementById(
@@ -58,7 +58,7 @@ export class DataAsesoria extends HTMLElement {
     this.shadowRoot.getElementById('calle').textContent = persona.domicilio.calle_domicilio
     this.shadowRoot.getElementById('numero-exterior').textContent = persona.domicilio.numero_exterior_domicilio
     this.shadowRoot.getElementById('numero-interior').textContent = persona.domicilio.numero_interior_domicilio
-    if( domicilioData !== undefined){
+    if( domicilioData  ){
       this.shadowRoot.getElementById('codigo-postal').textContent =  domicilioData.codigo_postal.codigo_postal
       this.shadowRoot.getElementById('estado').textContent = domicilioData.estado.nombre_estado
       this.shadowRoot.getElementById('municipio').textContent = domicilioData.municipio.nombre_municipio

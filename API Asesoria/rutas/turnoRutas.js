@@ -6,6 +6,8 @@ const servicioTurnos = require('../servicios/servicioTurnos');
 const router = express.Router();
 
 
+const { existeTurno,validarPeticionPUT } = require('../middlewares/middlewareTurno');
+
 const validarPermisos = require("../utilidades/validadorPermisos");
 const permisosAceptables = ["ALL_SD","REGISTRO_PROCESO_JUDICIAL_SD" ]
 
@@ -29,6 +31,8 @@ router.route('/:id')
   // Actualizar un turno por su ID
   .put(
     validarPermisos(permisosAceptables),
+    existeTurno,
+    validarPeticionPUT,
     servicioTurnos.actualizarTurno);
 
 // Exportamos el router

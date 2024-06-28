@@ -1,3 +1,4 @@
+
 class APIModel {
   /*
   API_URL = 'http://200.58.127.244'
@@ -5,10 +6,11 @@ class APIModel {
   ASESORIAS_API_URL = `${this.API_URL}:3009`
   CP_API_URL = `${this.API_URL}:3012`
   */
-  API_URL = 'https://localhost'
-  USERS_API_URL = `${this.API_URL}:3002`
-  ASESORIAS_API_URL = `${this.API_URL}:3009`
-  CP_API_URL = `${this.API_URL}:3012`
+ // API_URL = 'http://localhost'
+ USERS_API_URL = import.meta.env.VITE_DEPLOY_USUARIOS === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_USUARIOS : import.meta.env.VITE_BACKEND_USUARIOS_HTTPS
+  ASESORIAS_API_URL = import.meta.env.VITE_DEPLOY_ASESORIAS === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_ASESORIAS : import.meta.env.VITE_BACKEND_ASESORIAS_HTTPS
+  CP_API_URL = import.meta.env.VITE_DEPLOY_CODIGOS_POSTALES === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_CODIGOS_POSTALES : import.meta.env.VITE_BACKEND_CODIGOS_POSTALES_HTTPS
+  
   user = JSON.parse(sessionStorage.getItem('user'))
 
   constructor() { }
@@ -24,9 +26,10 @@ class APIModel {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.user.token}`,
+        'Content-Type': 'application/json'
+        //,Authorization: `Bearer ${this.user.token}`,
       },
+      credentials: 'include' // Incluir cookies en la solicitud
     })
     if (response.ok) {
       const data = await response.json()
@@ -65,12 +68,15 @@ class APIModel {
   //Metodo para iniciar sesion con un usuario y contraseña
   async login({ correo, password }) {
     const url = `${this.USERS_API_URL}/usuarios/usuario?correo=${correo}&password=${password}`
+    console.log(url)
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
+    
     if (response.ok) {
       const data = await response.json()
       return data
@@ -112,15 +118,15 @@ class APIModel {
       throw new Error('Error en la petición')
     }
   }
-  async  getUsuariosBusqueda( correo, id_distrito_judicial, total, pagina ) {
+  async getUsuariosBusqueda(correo, id_distrito_judicial, total, pagina) {
     const url = new URL(`${this.USERS_API_URL}/usuarios/busqueda`);
     const params = new URLSearchParams();
-  
+
     if (correo) params.append('correo', correo);
     if (id_distrito_judicial) params.append('id_distrito_judicial', id_distrito_judicial);
     if (total) params.append('total', total);
     if (pagina) params.append('pagina', pagina);
-  
+
     url.search = params.toString();
 
     const response = await fetch(url.toString(), {
@@ -129,7 +135,7 @@ class APIModel {
         Authorization: `Bearer ${this.user.token}`,
       },
     });
-  
+
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -294,6 +300,8 @@ class APIModel {
         Authorization: `Bearer ${this.user.token}`,
       },
     })
+
+    console.log(url)
     if (response.ok) {
       const data = await response.json()
       return data

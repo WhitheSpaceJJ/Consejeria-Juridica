@@ -19,6 +19,12 @@ const DBPORT = process.env.DBPORT || 3306;
 const HOSTTOKENUSUARIOS = process.env.HOSTTOKENUSUARIOS ;
 
 const GRPCPORTCODIGOSPOSTALES = process.env.GRPCPORTCODIGOSPOSTALES;
+
+const DEPLOY = process.env.DEPLOY ;
+const DEPLOYA = process.env.DEPLOYA ;
+const DEPLOYB = process.env.DEPLOYB ;
+
+const IPS = process.env.IPS;
 // Exportamos las variables
 module.exports = {
     DBHOST,
@@ -28,7 +34,9 @@ module.exports = {
     PORT,
     DBPORT,
     HOSTTOKENUSUARIOS,
-    GRPCPORTCODIGOSPOSTALES
+    GRPCPORTCODIGOSPOSTALES, 
+    DEPLOY, DEPLOYA, DEPLOYB,
+    IPS
 }
  
 

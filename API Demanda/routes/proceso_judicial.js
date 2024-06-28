@@ -12,7 +12,13 @@ const {
   ,
 } = require('../controllers/proceso_judicial')
 
-
+const { 
+  existeProcesoJudicial,
+  validarJSONProcesoJudicialPOST,
+  validarJSONProcesoJudicialPUT
+ } 
+ = require('../middlewares/middlewareProcesoJudicial')
+ 
 
 const validarPermisos = require("../utilidades/validadorPermisos");
 
@@ -31,6 +37,7 @@ obtenerProcesosJudicialesPorTramite
 // Definimos la ruta para crear un nuevo proceso judicial
 router.post('/',  
 validarPermisos(["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]),
+validarJSONProcesoJudicialPOST,
  crearProcesoJudicial)
 /*
 // Definimos la ruta para obtener todos los procesos judiciales
@@ -54,6 +61,8 @@ router.get('/:id',
 // Definimos la ruta para actualizar un proceso judicial por su id
 router.put('/:id', 
 validarPermisos(["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]),
+existeProcesoJudicial,
+validarJSONProcesoJudicialPUT,
  actualizarProcesoJudicial)
 
 

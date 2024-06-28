@@ -203,9 +203,10 @@ export class RegistroTab extends HTMLElement {
     this.#idEmpleado = id_empleado
     this.#idDistritoJudicial = id_distrito_judicial
     this.#idUsuario = id_usuario
+      
+
 
     if (this.#rol === 1 || this.#rol === 2 || this.#rol === 4) {
-
 
       const defensores = await this.#api.getDefensoresByDistrito2(this.#api.user.id_distrito_judicial)
       this.#defensores = defensores
@@ -258,6 +259,12 @@ export class RegistroTab extends HTMLElement {
         const { turnos } = await this.#api.getTurnosBusqueda(this.#api.user.id_empleado, null, false, 1);
         this.#turnos = turnos
         this.getNumeroPaginas(this.#api.user.id_empleado)
+        const defensores = await this.#api.getDefensoresByDistrito2(this.#api.user.id_distrito_judicial)
+        this.#defensores = defensores
+        this.fillInputs()
+        this.fillInputs()
+        this.fillTabla()
+
       } catch (error) {
         console.error('Error fetching turnos:', error.message);
         const modal = document.querySelector('modal-warning')
@@ -270,7 +277,6 @@ export class RegistroTab extends HTMLElement {
         modal.title = 'Sin turnos'
         modal.open = true
       }
-      this.fillTabla()
     }
 
     this.buttonsEventListeners()

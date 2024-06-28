@@ -30,6 +30,12 @@ class DemandadoDAO {
     try {
       logger.info("Obteniendo demandado", { id })
       const demandado = await Demandado.findByPk(id)
+
+      if (!demandado) {
+        logger.info("No se encontró el demandado")
+        throw new Error("No se encontró el demandado")
+      }
+
       logger.info("Demandado obtenido", { demandado })
       return demandado
     } catch (err) {

@@ -1,15 +1,16 @@
 // Importamos los módulos necesarios
 //Variables requeridas https
+/*
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-
+*/
 
 const express = require('express')
 const cors = require('cors')
-const verify_jwt = require('../middlewares/verify-jwt')
-const sequelize = require('../config/db')
+const verify_jwt = require('./middlewares/verify-jwt')
+const sequelize = require('./config/db')
 const {
   routerOcupacion,
   routerEstadoProcesal,
@@ -19,9 +20,9 @@ const {
 
   routerPrueba,
   routerObservacion, rouiterResolucion, routerFamiliar
-} = require('../routes')
-const logger = require('../utilidades/logger')
-const CustomeError = require("../utilidades/customeError");
+} = require('./routes')
+const logger = require('./utilidades/logger')
+const CustomeError = require("./utilidades/customeError");
 
 // Definimos la clase Server
 class Server {
@@ -127,23 +128,23 @@ class Server {
   listen() {
 
 
-//Forma con https
-const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
-
-// Crear el servidor HTTPS
-const httpsServer = https.createServer(credentials, this.app);
-
-httpsServer.listen(this.port, () => {
-  logger.info(`Aplicación HTTPS corriendo en el puerto ${this.port}`);
-});/*
-//Forma sin https
-    this.app.listen(this.port, () => {
-      logger.info(`El servidor de demandas está corriendo en el puerto ` + this.port)
-    })
-*/
-  } 
+    if (process.env.DEPLOY === 'DEPLOYA') {
+      this.app.listen(this.port, () => {
+        logger.info(`Servidor escuchando en el puerto ${this.port}`);
+      });
+    } else if (DEPLOY === 'DEPLOYB') {
+      const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+      const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+      const credentials = { key: privateKey, cert: certificate };
+    
+      const httpsServer = https.createServer(credentials, this.app);
+      httpsServer.listen(this.port, () => {
+        logger.info(`Aplicación HTTPS corriendo en el puerto ${this.port}`);
+      });
+    }
+  }
+    
+    
 } 
 
 // Exportamos la clase Server

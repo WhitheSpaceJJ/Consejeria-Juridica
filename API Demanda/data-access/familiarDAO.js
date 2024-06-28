@@ -79,6 +79,12 @@ class FamiliarDAO {
           limit: limite,
           offset: offset
         })
+        
+        if (familiares === null || familiares.length === 0) {
+          logger.info("No se encontraron familiares por promovente paginado")
+          throw new Error("No se encontraron familiares por promovente paginado")
+        }
+
 
         logger.info("Se verifica si el total de familiares por promovente es mayor a 0")
         if (familiares.length > 0) {
@@ -100,6 +106,11 @@ class FamiliarDAO {
     try {
       logger.info("Obteniendo familiar por ID", { id })
       const familiar = await Familiar.findByPk(id)
+      if (!familiar) {
+        logger.info("No se encontró el familiar")
+        throw new Error("No se encontró el familiar")
+      }
+
       logger.info("Familiar obtenido", { familiar })
       return familiar
     } catch (err) {

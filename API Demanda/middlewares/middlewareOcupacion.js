@@ -6,7 +6,7 @@ const controlOcupacion = require('../data-access/ocupacionDAO')
 const logger = require('../utilidades/logger');
 
 async function existeOcupacion(req, res, next) {
-
+ try {
     logger.info("Middleware para validar la existencia de una ocupación")
     const { id } = req.params
     const ocupacion = await controlOcupacion.obtenerOcupacion(Number(id))
@@ -15,6 +15,12 @@ async function existeOcupacion(req, res, next) {
             message: 'No existe una ocupación con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de una ocupación", { error: error.message })
+    return res.status(500).json({
+        message: 'No existe una ocupación con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
 
     logger.info("Fin del middleware para validar la existencia de una ocupación")
     next()

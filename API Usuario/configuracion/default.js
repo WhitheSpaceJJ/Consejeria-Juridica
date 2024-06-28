@@ -22,6 +22,9 @@ const DBPORT = process.env.DBPORT ;
 const GRPCPORTUSUARIOS = process.env.GRPCPORTUSUARIOS ;
 // Obtenemos el valor de la variable de entorno HOSTTOKENGR
 const HOSTGRPCASESORIAS = process.env.HOSTGRPCASESORIAS ; 
+const DEPLOY = process.env.DEPLOY ;
+const DEPLOYA = process.env.DEPLOYA ;
+const DEPLOYB = process.env.DEPLOYB ;
 // Exportamos las variables
 module.exports = {
     DBHOST,
@@ -30,7 +33,8 @@ module.exports = {
     DATABASE,
     PORT,
     DBPORT,
-    GRPCPORTUSUARIOS,HOSTGRPCASESORIAS
+    GRPCPORTUSUARIOS,HOSTGRPCASESORIAS,
+    DEPLOY, DEPLOYA, DEPLOYB
 }
  
 

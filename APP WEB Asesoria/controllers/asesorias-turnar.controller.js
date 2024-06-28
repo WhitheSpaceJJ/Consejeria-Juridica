@@ -77,7 +77,7 @@ class AsesoriasTurnarController {
       const acceptablePermissions = this.#acceptablePermissions
       const hasPermission = userPermissions.some(permission => acceptablePermissions.includes(permission))
       if (!hasPermission) {
-        window.location.href = 'login.html'
+        window.location.href = 'index.html'
         return
       }
     }

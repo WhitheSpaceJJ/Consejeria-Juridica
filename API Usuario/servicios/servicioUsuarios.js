@@ -142,7 +142,7 @@ const obtenerUsuarioCorreoPassword = asyncError(async (req, res, next) => {
         id_distrito_judicial: usuarioObj.id_distrito_judicial,
         id_tipouser: usuarioObj.id_tipouser,
         //   estatus_general: usuarioObj.estatus_general,
-        //   id_empleado: usuarioObj.id_empleado,  
+       id_empleado: usuarioObj.id_empleado,  
         id_usuario: usuarioObj.id_usuario,
         permisos: usuarioObj.permisos
       });

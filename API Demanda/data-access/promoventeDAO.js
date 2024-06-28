@@ -36,6 +36,10 @@ class PromoventeDAO {
       logger.info("Obteniendo promovente por ID", { id })
 
       const promovente = await Promovente.findByPk(id)
+       if (!promovente) {
+        logger.info("No se encontró el promovente")
+        throw new Error("No se encontró el promovente")
+      }
 
       logger.info("Promovente obtenido", { promovente })
 
@@ -67,6 +71,10 @@ class PromoventeDAO {
     try {
       logger.info("Obteniendo promovente por ID", { id })
       const promovente = await Promovente.findByPk(id)
+      if (!promovente) {
+        logger.info("No se encontró el promovente")
+        throw new Error("No se encontró el promovente")
+      }
       logger.info("Promovente obtenido", { promovente })
       return promovente
     } catch (err) {

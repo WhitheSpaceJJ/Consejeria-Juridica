@@ -28,7 +28,11 @@ class LoginController {
         return userPermissions.some(permission => acceptablePermissions.includes(permission));
       };
       if (!hasPermission(userPermissions, acceptablePermissions)) {
-        window.location.href = 'login.html';
+        const modal = document.querySelector('modal-warning')
+        modal.message = 'No cuenta con permisos para acceso al sistema'
+        modal.title = 'Sin Credenciales'
+        modal.open = true
+        return;
       }
       sessionStorage.setItem('user', JSON.stringify(user))
       location.replace('index.html')

@@ -190,7 +190,7 @@ export class DetallesTab extends HTMLElement {
         this.#numeroExpediente.textContent = proceso.numero_expediente
         this.#ci.textContent = proceso.control_interno
 
-
+   /*
 
         this.#estadosProcesales.textContent = proceso.estadosProcesales.map((estado, index) =>
             `${index + 1}. Estado Procesal: ${estado.descripcion_estado_procesal} Fecha: ${estado.fecha_estado_procesal}`).join(', ')
@@ -208,7 +208,7 @@ export class DetallesTab extends HTMLElement {
         this.#familiares.textContent = proceso.familiares.map((familiar, index) => `${index + 1}. Nombre: ${familiar.nombre} Nacionalidad: ${familiar.nacionalidad}
     Parentesco: ${familiar.parentesco} Pertenece a la comunidad LGBT: ${familiar.perteneceComunidadLGBT === true ? 'Si' : 'No'} Adulto Mayor: ${familiar.adultaMayor === true ? 'Si' : 'No'} Salud Precaria: ${familiar.saludPrecaria === true ? 'Si' : 'No'} Pobreza Extrema: ${familiar.pobrezaExtrema === true ? 'Si' : 'No'}`).join(', ')
 
-
+    */
 
         this.#nombrePromovente.textContent = promovente.nombre + ' ' + promovente.apellido_paterno + ' ' + promovente.apellido_materno
         this.#edadPromovente.textContent = promovente.edad
@@ -267,6 +267,7 @@ export class DetallesTab extends HTMLElement {
                     proceso
                 }
                 //LLamada a la API para crear un proceso judicial
+         
                 await this.#api.putProcesoJudicial(proceso.id_proceso_judicial, data)
                 //Mensaje de exito
                 this.#showModal(
@@ -275,7 +276,7 @@ export class DetallesTab extends HTMLElement {
                     () => {
                         location.href = '/'
                     }
-                )
+                ) 
             } catch (error) {
                 //Mensaje de error
                 console.error(error)

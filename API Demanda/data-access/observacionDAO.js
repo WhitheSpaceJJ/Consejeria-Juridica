@@ -37,6 +37,12 @@ class ObservacionDAO {
       try {
          logger.info("Obteniendo observación por ID", { id_observacion })
          const observacion = await Observacion.findByPk(id_observacion)
+         if (!observacion) {
+            logger.info("No se encontró la observación")
+            throw new Error("No se encontró la observación")
+         }
+
+
          logger.info("Observación obtenida", { observacion })
          return observacion
       } catch (err) {
@@ -78,6 +84,12 @@ class ObservacionDAO {
                limit: limite,
                offset: offset
             })
+              
+            if(  observaciones === null || observaciones.length === 0){
+               logger.info("No se encontraron observaciones por proceso judicial paginado")
+               throw new Error("No se encontraron observaciones por proceso judicial paginado")
+            }
+
              logger.info("Se verifica si el total de observaciones por proceso judicial es mayor a 0")
             if (observaciones.length > 0) {
                logger.info("Observaciones por proceso judicial paginado obtenido", { observaciones })

@@ -95,8 +95,8 @@ class ConsultaController {
             <td class="px-6 py-4">
                 ${asesoria.tipos_juicio.tipo_juicio}
             </td>
-            <td class="px-6 py-4">
-                ${asesoria.datos_asesoria.resumen_asesoria}
+            <td class="px-6 py-4 ">
+                          <textarea  class="flex flex-wrap w-500px resize-none border-none" rows="5" >${asesoria.datos_asesoria.resumen_asesoria}</textarea>
             </td>
             <td class="px-6 py-4">
                 ${asesoria.datos_asesoria.usuario}
@@ -158,7 +158,7 @@ ${asesoria.datos_asesoria.estatus_asesoria === 'NO_TURNADA' ? '' : asesoria.turn
         return userPermissions.some(permission => acceptablePermissions.includes(permission));
       };
       if (!hasPermission(userPermissions, acceptablePermissions)) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
       }
     }
     //Se obtiene el total de asesorias

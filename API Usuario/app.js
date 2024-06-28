@@ -1,11 +1,13 @@
 //Variables requeridas https
+
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+
 // Importamos los módulos necesarios
 const express = require('express');
-const { PORT, GRPCPORTUSUARIOS } = require("./configuracion/default.js");
+const { PORT, GRPCPORTUSUARIOS, DEPLOY } = require("./configuracion/default.js");
 
 const usuariosRutas = require("./rutas/usuarioRutas");
 
@@ -105,23 +107,23 @@ app.all("*", (req, res, next) => {
 app.use(errorController);
 
 
-//Forma con https
-const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+if (DEPLOY === 'DEPLOYA') {
+  app.listen(PORT, () => {
+    logger.info(`Servidor escuchando en el puerto ${PORT}`);
+  });
+} else if (DEPLOY === 'DEPLOYB') {
+  const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+  const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+  const credentials = { key: privateKey, cert: certificate };
 
-// Crear el servidor HTTPS
-const httpsServer = https.createServer(credentials, app);
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(PORT, () => {
+    logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
+  });
+}
 
-httpsServer.listen(PORT, () => {
-  logger.info(`Aplicación HTTPS corriendo en el puerto ${PORT}`);
-});
-/*
-//Forma sin https
-app.listen(PORT, () => {
-  logger.info(`Servidor escuchando en el puerto ${PORT}`);
-});
-*/
+
+
 
 const { packageDefinition } = require("./grpc/route.server");
 const grpc = require('@grpc/grpc-js');

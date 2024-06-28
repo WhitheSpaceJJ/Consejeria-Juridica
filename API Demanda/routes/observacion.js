@@ -14,6 +14,7 @@ const { existeObservacion, validarJSONObservacionPOST, validarJSONObservacionPUT
 
 } 
 = require('../middlewares/middlewareObservacion')
+
 const validarPermisos = require("../utilidades/validadorPermisos");
 const permisosAceptables1 = ["REGISTRO_PROCESO_JUDICIAL_SD","ALL_SD"]
 const permisosAceptables2 = ["SEGUIMIENTO_PROCESO_JUDICIAL_SD","ALL_SD"]

@@ -6,11 +6,11 @@ const logger = require('../utilidades/logger');
 
 class ResolucionDAO {
 
-/**
- * Método que permite crear una resolución en la base de datos
- * @param {object} resolucion - Objeto que contiene los datos de la resolución
- * @returns {object} Retorna el objeto de la resolución creada si la operación fue exitosa, de lo contrario lanza un error
- * */
+    /**
+     * Método que permite crear una resolución en la base de datos
+     * @param {object} resolucion - Objeto que contiene los datos de la resolución
+     * @returns {object} Retorna el objeto de la resolución creada si la operación fue exitosa, de lo contrario lanza un error
+     * */
 
 
     async crearResolucion({ id_proceso_judicial, resolucion, fecha_resolucion }) {
@@ -25,7 +25,7 @@ class ResolucionDAO {
         }
     }
 
- 
+
 
     /**
      * Método que permite obtener una resolución de la base de datos por su id
@@ -37,6 +37,11 @@ class ResolucionDAO {
         try {
             logger.info("Obteniendo resolución por ID", { id_resolucion })
             const resolucion = await Resolucion.findByPk(id_resolucion)
+            if (!resolucion) {
+                logger.info("No se encontró la resolución")
+                throw new Error("No se encontró la resolución")
+            }
+
             logger.info("Resolución obtenida", { resolucion })
             return resolucion
         } catch (err) {
@@ -44,14 +49,14 @@ class ResolucionDAO {
             throw err
         }
     }
-/**
- * Método que permite obtener todas las resoluciones de un proceso judicial
- * @param {number} id_proceso_judicial - ID del proceso judicial a obtener sus resoluciones
- * @returns {array} Retorna un arreglo de objetos de resoluciones si la operación fue exitosa, de lo contrario lanza un error
- * */
+    /**
+     * Método que permite obtener todas las resoluciones de un proceso judicial
+     * @param {number} id_proceso_judicial - ID del proceso judicial a obtener sus resoluciones
+     * @returns {array} Retorna un arreglo de objetos de resoluciones si la operación fue exitosa, de lo contrario lanza un error
+     * */
 
     async obtenerResolucionesPorProcesoJudicial(id_proceso_judicial, totalBool, pagina) {
-    
+
         try {
             logger.info("Obteniendo resoluciones por proceso judicial y limitando a 10", { id_proceso_judicial })
             const limite = 10
@@ -74,7 +79,12 @@ class ResolucionDAO {
                     where: whereClause,
                     limit: limite,
                     offset: offset
-                })
+                }) 
+                  if(resoluciones === null ||  resoluciones.length === 0){
+                    logger.info("No se encontraron resoluciones por proceso judicial paginado")
+                    throw new Error("No se encontraron resoluciones por proceso judicial paginado")
+                } 
+
 
                 logger.info("Verificando si el total de resoluciones es mayor a 0")
                 if (resoluciones.length > 0) {
@@ -106,7 +116,7 @@ class ResolucionDAO {
             logger.info("Actualizando resolución", { id_resolucion, resolucion, fecha_resolucion })
             const resolucionActualizado = await Resolucion.update({ resolucion, fecha_resolucion }, { where: { id_resolucion: id_resolucion } })
             logger.info("Resolución actualizada retonando resultado", { result: resolucionActualizado[0] === 1 })
-              return resolucionActualizado[0] === 1 
+            return resolucionActualizado[0] === 1
         } catch (err) {    //  console.log(err.message)
             logger.error("Error al actualizar resolución", { error: err.message })
             throw err

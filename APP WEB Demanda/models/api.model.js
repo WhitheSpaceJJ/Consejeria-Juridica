@@ -6,11 +6,12 @@ class APIModel {
  CP_API_URL = `${this.API_URL}:3012`
  DEMANDAS_API_URL = `${this.API_URL}:3026`
  */
-  API_URL = 'https://localhost'
-  USERS_API_URL = `${this.API_URL}:3002`
-  ASESORIAS_API_URL = `${this.API_URL}:3009`
-  CP_API_URL = `${this.API_URL}:3012`
-  DEMANDAS_API_URL = `${this.API_URL}:3026`
+  API_URL = 'http://localhost'
+
+  USERS_API_URL = import.meta.env.VITE_DEPLOY_USUARIOS === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_USUARIOS : import.meta.env.VITE_BACKEND_USUARIOS_HTTPS
+  ASESORIAS_API_URL = import.meta.env.VITE_DEPLOY_ASESORIAS === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_ASESORIAS : import.meta.env.VITE_BACKEND_ASESORIAS_HTTPS
+  CP_API_URL = import.meta.env.VITE_DEPLOY_CODIGOS_POSTALES === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_CODIGOS_POSTALES : import.meta.env.VITE_BACKEND_CODIGOS_POSTALES_HTTPS
+  DEMANDAS_API_URL = import.meta.env.VITE_DEPLOY_DEMANDAS === 'DEPLOYA' ? import.meta.env.VITE_BACKEND_DEMANDAS : import.meta.env.VITE_BACKEND_DEMANDAS_HTTPS
 
   user = JSON.parse(sessionStorage.getItem('user'))
 
@@ -82,6 +83,8 @@ class APIModel {
       },
       body: JSON.stringify(data),
     })
+
+    console.log(url)
     if (response.ok) {
       const data = await response.json()
       return data
@@ -874,6 +877,7 @@ class APIModel {
 
 
     url.search = params.toString();
+ 
 
     const response = await fetch(url.toString(), {
       method: 'GET',

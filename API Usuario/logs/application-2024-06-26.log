@@ -1,0 +1,40 @@
+2024-06-26 23:18:20 [32minfo[39m: Servidor escuchando en el puerto 3002
+2024-06-26 23:18:20 [32minfo[39m: gRPC listening on 161
+2024-06-26 23:29:30 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-26 23:29:30 [32minfo[39m: Verificando token
+2024-06-26 23:29:30 [32minfo[39m: /usuario
+2024-06-26 23:29:30 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-26 23:29:30 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-26 23:29:30 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-26 23:29:30 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-26 23:29:30 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-26 23:29:30 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-26 23:29:30 [32minfo[39m: Usuario obtenido correctamente
+2024-06-26 23:29:30 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-26 23:29:30 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-26 23:29:30 [32minfo[39m: La contraseña es válida
+2024-06-26 23:29:30 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-26 23:29:30 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-26 23:29:30 [32minfo[39m: Permisos obtenidos
+2024-06-26 23:29:30 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-26 23:29:30 [31merror[39m: El usuario esta desabilitado
+2024-06-26 23:32:44 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-06-26 23:32:44 [32minfo[39m: Verificando token
+2024-06-26 23:32:44 [32minfo[39m: /usuario
+2024-06-26 23:32:44 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-06-26 23:32:44 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-06-26 23:32:44 [32minfo[39m: Se continua con el siguiente middleware
+2024-06-26 23:32:44 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-06-26 23:32:44 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-06-26 23:32:44 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-06-26 23:32:44 [32minfo[39m: Usuario obtenido correctamente
+2024-06-26 23:32:44 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-06-26 23:32:44 [32minfo[39m: Se verifica si la contraseña es válida
+2024-06-26 23:32:44 [32minfo[39m: La contraseña es válida
+2024-06-26 23:32:44 [32minfo[39m: Se obtienen los permisos del usuario
+2024-06-26 23:32:44 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-06-26 23:32:44 [32minfo[39m: Permisos obtenidos
+2024-06-26 23:32:44 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-06-26 23:32:44 [32minfo[39m: Usuario obtenido correctamente
+2024-06-26 23:32:44 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-06-26 23:32:44 [32minfo[39m: El usuario tiene permisos, se genera un token

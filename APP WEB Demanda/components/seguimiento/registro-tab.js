@@ -61,6 +61,7 @@ export class RegistroTab extends HTMLElement {
       fecha_inicio: this.#proceso.fecha_inicio,
       fecha_estatus: this.#proceso.fecha_estatus,
       control_interno: this.#proceso.control_interno,
+      estatus_proceso: this.#proceso.estatus_proceso,
       // quiero que obtengas el nombre del defensor en base al id del defensor localizado en el proceso y el select de defensores 
       numero_expediente: this.#proceso.numero_expediente,
       id_turno: this.#proceso.id_turno,
@@ -106,7 +107,7 @@ export class RegistroTab extends HTMLElement {
   }
   #idEmpleado
   #rol
-  
+
   #pagina = 1
   #numeroPaginas
 
@@ -132,24 +133,42 @@ export class RegistroTab extends HTMLElement {
   }
 
   verificadorEstado = async () => {
-    if (this.#rol === 1 || this.#rol === 2 || this.#rol === 4) {
+    if (this.#rol === 2 || this.#rol === 4) {
       if (this.#defensor.value !== '0') {
-        const {procesosJudiciales} = await this.#api.getProcesosBusqueda(this.#defensor.value, null, false, this.#pagina, "EN_TRAMITE")
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#defensor.value, null, false, this.#pagina, "EN_TRAMITE")
         this.#procesos = procesosJudiciales
         this.getNumeroPaginas(this.#defensor.value)
         this.fillTabla()
       }
       else {
-        const {procesosJudiciales} = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, this.#pagina, "EN_TRAMITE")
-        this.#procesos =procesosJudiciales
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, this.#pagina, "EN_TRAMITE")
+        this.#procesos = procesosJudiciales
         this.getNumeroPaginas(null)
         this.fillTabla()
       }
 
-    } else if (this.#rol === 3) {
-      this.getNumeroPaginas(this.#api.user.id_empleado)
-      const {procesosJudiciales} = await this.#api.getProcesosBusqueda(this.#idEmpleado, null, false, this.#pagina, "EN_TRAMITE")
+    }
+
+    else if (this.#rol === 1) {
+      if (this.#defensor.value !== '0') {
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#defensor.value, null, false, this.#pagina, null)
+        this.#procesos = procesosJudiciales
+        this.getNumeroPaginas(this.#defensor.value)
+        this.fillTabla()
+      }
+      else {
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, this.#pagina, null)
+        this.#procesos = procesosJudiciales
+        this.getNumeroPaginas(null)
+        this.fillTabla()
+      }
+
+    }
+
+    else if (this.#rol === 3) {
+      const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#idEmpleado, null, false, this.#pagina, "EN_TRAMITE")
       this.#procesos = procesosJudiciales
+      this.getNumeroPaginas(this.#api.user.id_empleado)
       this.fillTabla()
     }
   }
@@ -168,7 +187,8 @@ export class RegistroTab extends HTMLElement {
   getNumeroPaginas = async (id_defensor) => {
     try {
       const id_distrito_judicial = this.#api.user.id_distrito_judicial
-      const { totalProcesosJudiciales } = await this.#api.getProcesosBusqueda(id_defensor || null, id_defensor === null ? id_distrito_judicial : null, true, 1, "EN_TRAMITE")
+      const rol = this.#api.user.id_tipouser
+      const { totalProcesosJudiciales } = await this.#api.getProcesosBusqueda(id_defensor || null, id_defensor === null ? id_distrito_judicial : null, true, 1, rol !== 1 ? "EN_TRAMITE" : null)
       const total = this.shadowRoot.getElementById('total')
       total.innerHTML = ''
       total.innerHTML = 'Total :' + totalProcesosJudiciales
@@ -196,7 +216,7 @@ export class RegistroTab extends HTMLElement {
 
   //Este metodo se encarga de limpiar la tabla
   cleanTable = rowsTable => {
-    const table = this.#turnosTable
+    const table = this.#procesosTable
     for (let i = rowsTable - 1; i >= 0; i--) {
       table.deleteRow(i)
     }
@@ -235,11 +255,11 @@ export class RegistroTab extends HTMLElement {
     this.#idUsuario = id_usuario
 
 
-    if (this.#rol === 1 || this.#rol === 2 || this.#rol === 4) {
+    if (this.#rol === 2 || this.#rol === 4) {
       const defensores = await this.#api.getDefensoresByDistrito2(this.#api.user.id_distrito_judicial)
       this.#defensores = defensores
       try {
-        const {procesosJudiciales} = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, 1, "EN_TRAMITE")
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, 1, "EN_TRAMITE")
         this.#procesos = procesosJudiciales
         this.fillInputs()
         this.getNumeroPaginas(null)
@@ -249,15 +269,15 @@ export class RegistroTab extends HTMLElement {
             try {
               const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#defensor.value, null, false, 1, "EN_TRAMITE")
               this.#procesos = procesosJudiciales;
-              this.getNumeroPaginas(this.#defensor.value);
-              this.fillTabla();
+              this.getNumeroPaginas(this.#defensor.value)
+              this.fillTabla()
             } catch (error) {
-              console.error('Error fetching turnos:', error.message);
+              console.error('Error fetching procesos:', error.message);
               const modal = document.querySelector('modal-warning')
               modal.setOnCloseCallback(() => { });
-  
+
               modal.message = 'No hay procesos para el defensor seleccionado.'
-              modal.title = 'Sin turnos'
+              modal.title = 'Sin Procesos'
               modal.open = true
               this.#defensor.value = '0'
               this.#pagina = 1
@@ -281,13 +301,70 @@ export class RegistroTab extends HTMLElement {
         modal.open = true
       }
 
-   
-    } else if (this.#rol === 3) {
+
+    }
+    else if (this.#rol === 1) {
+      const defensores = await this.#api.getDefensoresByDistrito2(this.#api.user.id_distrito_judicial)
+      this.#defensores = defensores
+      try {
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, 1, null)
+        this.#procesos = procesosJudiciales
+        this.fillInputs()
+        this.getNumeroPaginas(null)
+        this.fillTabla()
+        this.#defensor.addEventListener('change', async () => {
+          if (this.#defensor.value !== '0') {
+            try {
+              const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#defensor.value, null, false, 1, null)
+              this.#procesos = procesosJudiciales;
+              this.getNumeroPaginas(this.#defensor.value)
+              this.fillTabla()
+            } catch (error) {
+              console.error('Error fetching procesos:', error.message);
+              const modal = document.querySelector('modal-warning')
+              modal.setOnCloseCallback(() => { });
+
+              modal.message = 'No hay procesos para el defensor seleccionado.'
+              modal.title = 'Sin Procesos'
+              modal.open = true
+              this.#defensor.value = '0'
+              this.#pagina = 1
+              const { procesosJudiciales } = await this.#api.getProcesosBusqueda(null, this.#api.user.id_distrito_judicial, false, 1, null)
+              this.#procesos = procesosJudiciales
+              this.getNumeroPaginas(null)
+              this.fillTabla()
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching turnos:', error.message);
+        const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => {
+          if (modal.open === 'false') {
+            window.location = '/index.html'
+          }
+        })
+        modal.message = 'No hay procesos asignados en el distrito .'
+        modal.title = 'Sin procesos'
+        modal.open = true
+      }
+
+
+    }
+
+    else if (this.#rol === 3) {
       this.#bloqueDefensor.style.display = 'none'
       try {
-        const  { procesosJudiciales }   = await this.#api.getProcesosBusqueda(this.#api.user.id_empleado, null, false, 1, "EN_TRAMITE")
+        const { procesosJudiciales } = await this.#api.getProcesosBusqueda(this.#api.user.id_empleado, null, false, 1, "EN_TRAMITE")
+        console.log(procesosJudiciales)
         this.#procesos = procesosJudiciales
+        console.log(this.#procesos)
         this.getNumeroPaginas(this.#api.user.id_empleado)
+        const defensores = await this.#api.getDefensoresByDistrito2(this.#api.user.id_distrito_judicial)
+        this.#defensores = defensores
+        this.fillInputs()
+        this.fillTabla()
+
       } catch (error) {
         console.error('Error fetching procesos:', error.message);
         const modal = document.querySelector('modal-warning')
@@ -300,7 +377,6 @@ export class RegistroTab extends HTMLElement {
         modal.title = 'Sin procesos'
         modal.open = true
       }
-      this.fillTabla()
     }
 
     this.buttonsEventListeners()
@@ -366,76 +442,7 @@ export class RegistroTab extends HTMLElement {
 
   // Metodo para rellenar la tabla con los procesos
   fillTabla() {
-    /*
-         try {
-       const catalogos = await this.#api.getCatalogosPagina(this.#pagina);
-       const lista = catalogos.requisitosCatalogo;
-       const table = this.#catalogos;
-       const rowsTable = this.#catalogos.rows.length
-       if (this.validateRows(rowsTable)) {
-         lista.forEach(catalogo => {
-           const row = document.createElement('tr');
-           row.innerHTML = `
-           <tr id="catalogo-${catalogo.id_catalogo}">
-           <td class="px-6 py-4 whitespace-nowrap">${catalogo.id_catalogo}</td>
-           <td class="px-6 py-4 whitespace-nowrap">${catalogo.descripcion_catalogo}</td>
-           <td class="px-6 py-4 whitespace-nowrap">${catalogo.estatus_general}</td>
-           <td class="px-6 py-4 whitespace-nowrap">
-           <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-catalogo" onclick="llamarActivarBotonSeleccionar(this.value)" value="${catalogo.id_catalogo}">
-           Seleccionar
-         </button>
-       
-           </td>
-       </tr>
-           
-           `;
-           table.appendChild(row);
-         })
- 
-       }
- 
-     } catch (error) {
-       console.error('Error al obtener los catalogos:', error);
-       const modal = document.querySelector('modal-warning')
-       modal.setOnCloseCallback(() => {});
- 
-       modal.message = 'Error al obtener los catalogos, intente de nuevo o verifique el status del servidor.'
-       modal.title = 'Error de validación'
-       modal.open = true
- 
-     }
-      */
-    /*
-    try {
-      const tableBody = this.#procesosTable;
-      tableBody.innerHTML = '';
-      const lista = this.#procesos;
-      lista.forEach(proceso => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <tr id="proceso-${proceso.id_proceso_judicial}">
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.id_proceso_judicial}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.fecha_inicio}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.control_interno}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.numero_expediente}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.fecha_estatus === null ? '' : proceso.fecha_estatus}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${proceso.estatus_proceso}</td>
-            <td class="px-6 py-4 whitespace-nowrap">${this.#defensores.find(defensor => defensor.id_defensor === proceso.id_defensor).nombre_defensor
-          }</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-            <button href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded seleccionar-proceso" onclick="llamarActivarBotonSeleccionar(this.value)" value="${proceso.id_proceso_judicial}">
-            Seleccionar
-          </button>
-        
-            </td>
-        </tr>
-            `;
-        tableBody.appendChild(row);
-      });
-    } catch (error) {
-      //  console.error('Error al obtener los procesos:', error.message);
-    }
-      */
+
     try {
       const procesos = this.#procesos
       const lista = procesos
@@ -556,7 +563,7 @@ export class RegistroTab extends HTMLElement {
 
             if (modal.open === 'false') {
               if (modal.respuesta === true) {
-                this.modal.respuesta = false; 
+                this.modal.respuesta = false;
                 this.#proceso = proceso;
                 this.#idProceso.innerHTML = proceso.id_proceso_judicial;
               }

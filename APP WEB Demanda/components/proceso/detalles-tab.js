@@ -295,6 +295,7 @@ export class DetallesTab extends HTMLElement {
                 )
                     */
                     
+                    
                 const modal = document.querySelector('modal-warning')
                 modal.message = 'Si esta seguro de crear el proceso judicial presione aceptar, de lo contrario presione x para cancelar.'
                 modal.title = '¿Confirmacion de crear proceso judicial?'
@@ -313,33 +314,35 @@ export class DetallesTab extends HTMLElement {
                                 demandado,
                                 proceso
                             }
+                            const turnoActualizado = {
+                                id_turno: turno.id_turno,
+                                fecha_turno: turno.fecha_turno,
+                                hora_turno: turno.hora_turno,
+                                id_asesoria: turno.asesoria.datos_asesoria.id_asesoria,
+                                id_defensor: turno.defensor.id_defensor,
+                                estatus_general: 'EN_SEGUIMIENTO'
+                            }
+
+                            this.#api.putTurno(turno.id_turno, turnoActualizado).then(response => {
+                              
+                            }).catch(error => {
+                                console.error('Error al actualizar el turno:', error)
+                                this.#showModal(
+                                    'Ocurrió un error al actualizar el turno, verifique que el turno con id ' + turno.id_turno + ' se haya sido actualizado, si no es así, actualice el turno manualmente' ,
+                                    'Error al actualizar el turno, consulte al administrador del sistema'
+                                )
+                            })
+                        
+
                             this.#api.postProcesoJudicial(procesoJudicial).then(response => {
                                 if (response) {
-                                    const turnoActualizado = {
-                                        id_turno: turno.id_turno,
-                                        fecha_turno: turno.fecha_turno,
-                                        hora_turno: turno.hora_turno,
-                                        id_asesoria: turno.asesoria.datos_asesoria.id_asesoria,
-                                        id_defensor: turno.defensor.id_defensor,
-                                        estatus_general: 'EN_SEGUIMIENTO'
-                                    }
-                                    this.#api.putTurno(turno.id_turno, turnoActualizado).then(response => {
-                                        if (response) {
-                                            this.#showModal(
-                                                'El proceso judicial se ha creado correctamente',
-                                                'Proceso Judicial creado',
-                                                () => {
-                                                    location.href = '/'
-                                                }
-                                            )
+                                    this.#showModal(
+                                        'El proceso judicial se ha registrado correctamente',
+                                        'Proceso judicial registrado',
+                                        () => {
+                                           location.href = '/'
                                         }
-                                    }).catch(error => {
-                                        console.error('Error al actualizar el turno:', error)
-                                        this.#showModal(
-                                            'Ocurrió un error al actualizar el turno',
-                                            'Error al actualizar el turno'
-                                        )
-                                    })
+                                    )
                                 }
                             }).catch(error => {
                                 console.error('Error al registrar el proceso judicial:', error)

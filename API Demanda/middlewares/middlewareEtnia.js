@@ -7,6 +7,7 @@ const logger = require('../utilidades/logger');
 async function existeEtnia(req, res, next) {
 
     logger.info("Middleware para validar la existencia de una etnia")
+    try{    
     const { id } = req.params
     const etnia = await controlEtnia.obtenerEtnia(Number(id))
     if (!etnia) {
@@ -14,7 +15,12 @@ async function existeEtnia(req, res, next) {
             message: 'No existe una etnia con el id proporcionado, asi que no se puede continuar con la petición.'
         })
     }
-
+} catch (error) {
+    logger.error("Error en el middleware para validar la existencia de una etnia", { error: error.message })
+    return res.status(500).json({
+        message: 'No existe una etnia con el id proporcionado, asi que no se puede continuar con la petición.'
+    })
+}
     logger.info("Fin del middleware para validar la existencia de una etnia")
     next()
 }

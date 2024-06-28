@@ -30,11 +30,21 @@ class OcupacionDAO {
       if (activo !== undefined && activo !== null && activo !== "") {
         logger.info("Se envió el parámetro activo y se obtendrán las ocupaciones activas")
         const ocupaciones = await Ocupacion.findAll({ where: { estatus_general: "ACTIVO" } })
+     if(ocupaciones ===null || ocupaciones.length === 0){
+        logger.info("No hay ocupaciones activas registradas")
+        throw new Error("No hay ocupaciones activas registradas")
+     }
+
         logger.info("Ocupaciones activas obtenidas", { ocupaciones })
         return ocupaciones
       }else{
         logger.info("No se envió el parámetro activo y se obtendrán todas las ocupaciones")
       const ocupaciones = await Ocupacion.findAll()
+      if(ocupaciones ===null || ocupaciones.length === 0){
+        logger.info("No hay ocupaciones registradas")
+        throw new Error("No hay ocupaciones registradas")
+      }
+
       logger.info("Ocupaciones obtenidas", { ocupaciones })
       return ocupaciones
       }
@@ -53,6 +63,11 @@ class OcupacionDAO {
     try {
       logger.info("Obteniendo ocupacion por ID", { id })
       const ocupacion = await Ocupacion.findByPk(id)
+      if (!ocupacion) {
+        logger.info("No se encontró la ocupacion")
+        throw new Error("No se encontró la ocupacion")
+      }
+
       logger.info("Ocupacion obtenida", { ocupacion })
       return ocupacion
     } catch (err) {
@@ -87,6 +102,11 @@ class OcupacionDAO {
       pagina = parseInt(pagina, 10)
       const offset = (pagina - 1) * 10
       const resultados = await Ocupacion.findAll({ offset: offset, limit: 10 })
+      if (resultados === null || resultados.length === 0) {
+        logger.info("No se encontraron ocupaciones")
+        throw new Error("No se encontraron ocupaciones")
+      }
+
       logger.info("Ocupaciones paginadas obtenidas", { resultados })
       return resultados
     } catch (err) {

@@ -105,12 +105,13 @@ export class ProcesoTab extends HTMLElement {
       id_tipo_juicio: this.#tipoJuicio.value,
       tipo_juicio: this.#tipoJuicio.options[this.#tipoJuicio.selectedIndex].text,
       municipio: this.#municipio.options[this.#municipio.selectedIndex].text,
-      distrito_judicial: this.#distritoJudicial.options[this.#distritoJudicial.selectedIndex].text,
-      pruebas: this.#pruebasWC.data.pruebas,
-      familiares: this.#familiaresWC.data.familiares,
-      observaciones: this.#observacionesWC.data.observaciones,
-      resoluciones: this.#resolucionesWC.data.resoluciones,
-      estadosProcesales: this.#estadosProcesalesWC.data.estadosProcesales,
+      distrito_judicial: this.#distritoJudicial.options[this.#distritoJudicial.selectedIndex].text
+      //,
+     // pruebas: this.#pruebasWC.data.pruebas,
+    //  familiares: this.#familiaresWC.data.familiares,
+    //  observaciones: this.#observacionesWC.data.observaciones,
+    //  resoluciones: this.#resolucionesWC.data.resoluciones,
+    //  estadosProcesales: this.#estadosProcesalesWC.data.estadosProcesales,
     }
     return { proceso: proceso }
 
@@ -254,10 +255,48 @@ export class ProcesoTab extends HTMLElement {
         break
     }
   }
+  #bloqueEstatus
+  #bloqueFechaEstatus
+  
+  #rol
+  #idEmpleado
+  #idUsuario   
+
+  verificadorRol(){
+    const { id_usuario, id_tipouser, id_distrito_judicial, id_empleado } = this.#api.user
+    this.#rol = id_tipouser
+    this.#idEmpleado = id_empleado
+    this.#idDistritoJudicial = id_distrito_judicial
+    this.#idUsuario = id_usuario
+    this.#bloqueEstatus.classList.add('hidden')
+    this.#bloqueFechaEstatus.classList.add('hidden')
+
+
+    if ( this.#rol === 2 || this.#rol === 4) {
+      this.#bloqueEstatus.classList.add('hidden')
+      this.#bloqueFechaEstatus.classList.add('hidden')
+    } 
+    
+    else     if (this.#rol === 1 ) {
+      this.#bloqueEstatus.classList.remove('hidden')
+      this.#bloqueFechaEstatus.classList.add('hidden')
+    } 
+    
+    else if (this.#rol === 3) {
+      this.#bloqueEstatus.classList.remove('hidden')
+      this.#bloqueFechaEstatus.classList.remove('hidden')
+    }
+  }
 
   //Metodo que se encarga de llenar los campos del formulario
   manageFormFields() {
 
+    this.#bloqueEstatus = this.shadowRoot.getElementById('bloque_estatus')
+    this.#bloqueFechaEstatus = this.shadowRoot.getElementById('bloque_fecha_estatus')
+
+    this.#bloqueEstatus.classList.add('hidden')
+    this.#bloqueFechaEstatus.classList.add('hidden')
+     this.verificadorRol()
     this.#componenteEstadoProcesal = this.shadowRoot.getElementById('estadoProcesal')
     this.#componenteFamiliar = this.shadowRoot.getElementById('familiarPromovente')
     this.#componenteObservacion = this.shadowRoot.getElementById('observacionPromovente')
@@ -381,6 +420,15 @@ export class ProcesoTab extends HTMLElement {
 
     //LLamda al metodo de manejo de entrada de texto
     this.manejadorEntradaTexto()
+    if(this.registroTab.data.proceso.estatus_proceso ==='BAJA'){
+     this.#estatusProceso.value = '1'
+    }
+     else if(this.registroTab.data.proceso.estatus_proceso ==='CONCLUIDO'){
+       this.#estatusProceso.value = '2'
+     } else {
+       this.#estatusProceso.value = '0'
+     }
+ 
 
   }
 
@@ -497,6 +545,9 @@ export class ProcesoTab extends HTMLElement {
     this.#juzgado.value = this.#idJuzgado
     this.#controlInterno.value = this.#controlInternoData
     this.#numeroExpediente.value = this.#numeroExpedienteData
+
+
+
   }
 
 

@@ -35,6 +35,12 @@ class DomicilioParticipanteDAO {
 
             logger.info("Obteniendo domicilio de participante", { id_participante })
             const domicilioParticipante = await DomicilioParticipante.findOne({ where: { id_participante: id_participante } })
+
+            if (!domicilioParticipante) {
+                logger.info("No se encontró el domicilio de participante")
+                throw new Error("No se encontró el domicilio de participante")
+            }
+
             logger.info("Domicilio de participante obtenido", { domicilioParticipante })
             return domicilioParticipante
         } catch (err) {

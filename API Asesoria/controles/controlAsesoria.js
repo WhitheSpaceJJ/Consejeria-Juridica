@@ -70,13 +70,13 @@ const obtenerAsesoriasFiltro = async (filtros) => {
       ],
       where: whereClause,
     });
-   
+
     logger.info("Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria")
     const asesorias = [];
     for (const asesoria_pre of asesorias_pre) {
       asesorias.push(await formarAseoria(asesoria_pre));
     }
-    
+
     logger.info("Se retornan las asesorias")
     return asesorias;
   } catch (error) {
@@ -113,14 +113,14 @@ const obtenerAsesorias = async () => {
       ]
     });
 
-     logger.info("Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria")
+    logger.info("Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria")
     const asesorias = [];
 
     for (const asesoria_pre of asesorias_pre) {
       const asesoria_obj = await formarAseoria(asesoria_pre);
       asesorias.push(asesoria_obj);
     }
-   logger.info("Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null")
+    logger.info("Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null")
     if (asesorias.length > 0) {
       logger.info("Se retornan las asesorias", asesorias)
       return asesorias;
@@ -130,9 +130,9 @@ const obtenerAsesorias = async () => {
       return null;
     }
   } catch (error) {
-   // console.log("Error Asesorias:", error.message);
-    logger.error("Error Asesorias:", error.message); 
-   return null;
+    // console.log("Error Asesorias:", error.message);
+    logger.error("Error Asesorias:", error.message);
+    return null;
   }
 };
 
@@ -144,7 +144,7 @@ const formarAseoria = async (asesoria_pre) => {
 
     const asesoria_obj = JSON.parse(JSON.stringify(asesoria_pre));
     delete asesoria_obj.id_empleado;
-     
+
     logger.info("Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId")
     if (asesoria_obj.detalle_asesorias_catalogos.length > 0) {
       const recibidos = [];
@@ -157,7 +157,7 @@ const formarAseoria = async (asesoria_pre) => {
       asesoria_obj.recibidos = recibidos;
       //  console.log("Paso recibidos");
     }
- 
+
     logger.info("Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId")
     if (asesoria_obj.turno !== null) {
       const defensor = await controlDefensor.obtenerDefensorPorId(asesoria_obj.turno.id_defensor);
@@ -258,7 +258,7 @@ const formarAseoria = async (asesoria_pre) => {
  *  */
 const obtenerAsesoriaPorId = async (id) => {
   try {
-    logger.info("Se obtiene la asesoria por su id", id) 
+    logger.info("Se obtiene la asesoria por su id", id)
     const asesorias_pre = await modeloAsesoria.Asesoria.findByPk(id, {
       raw: false,
       nest: true,
@@ -279,9 +279,9 @@ const obtenerAsesoriaPorId = async (id) => {
     logger.info("Se obtiene la asesoria en su forma adecuada para el front")
     return await formarAseoria(asesorias_pre);
   } catch (error) {
-   //  console.log("Error Asesorias:", error.message);
+    //  console.log("Error Asesorias:", error.message);
     logger.error("Error Asesorias:", error.message);
-   return null;
+    return null;
   }
 };
 
@@ -317,9 +317,9 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
     logger.info("Se obtiene la asesoria en su forma adecuada para el front")
     return await formarAseoria(asesoria_pre);
   } catch (error) {
-   // console.log("Error Asesorias aqui:", error.message);
+    // console.log("Error Asesorias aqui:", error.message);
     logger.error("Error Asesorias aqui:", error.message);
-    return null; 
+    return null;
   }
 };
 
@@ -332,7 +332,7 @@ const obtenerAsesoriaPorIdAsesorado = async (id_asesorado) => {
  * */
 const agregarAsesoria = async (asesoria_pre) => {
   try {
-     
+
     logger.info("Se crea un json de la asesoria,y objeto para asesorado, datos_asesoria, empleado, persona, recibidos, tipojuicio")
     const asesoria_str = JSON.stringify(asesoria_pre);
     const asesoria_obj = JSON.parse(asesoria_str);
@@ -344,7 +344,7 @@ const agregarAsesoria = async (asesoria_pre) => {
     const recibidos = asesoria_obj.recibidos;
     const tipojuicio = asesoria_obj.tipos_juicio;
 
-     logger.info("Se crea el domicilio de la persona, se agrega la persona, se agrega el asesorado, se agrega la asesoria")
+    logger.info("Se crea el domicilio de la persona, se agrega la persona, se agrega el asesorado, se agrega la asesoria")
     const domicilio_pre = await controlDomicilios.agregarDomicilio(persona.domicilio);
     const domicilio_str = JSON.stringify(domicilio_pre);
     const domicilio_obj = JSON.parse(domicilio_str);
@@ -495,7 +495,7 @@ const actualizarAsesoria = async (asesoria_pre) => {
 
     logger.info("Se actualiza la asesoria")
     const asesoria_actualizada = (await modeloAsesoria.Asesoria.update(datos_asesoria, { where: { id_asesoria: datos_asesoria.id_asesoria } }));
-     logger.info("Se crea el turno correspondiente a la asesoria")
+    logger.info("Se crea el turno correspondiente a la asesoria")
     const turno_agregado = await controlTurno.agregarTurno(turno);
     logger.info("Se manda a llamar a la funcion de obtenerAsesoriaPorIdAsesorado, con el fin de obtener la asesoria")
     return await obtenerAsesoriaPorId(datos_asesoria.id_asesoria);
@@ -560,9 +560,9 @@ const obtenerAsesoriasPorPagina = async (pageNumber) => {
       return null;
     }
   } catch (error) {
-   // console.log("Error Asesorias:", error.message);
-    logger.error("Error Asesorias:", error.message);   
-   return null;
+    // console.log("Error Asesorias:", error.message);
+    logger.error("Error Asesorias:", error.message);
+    return null;
   }
 };
 
@@ -576,8 +576,8 @@ const obtenerWhereClause = async (filtros) => {
   //} else 
 
 
-   logger.info("Se validan los filtros, si hay filtros se agregan al whereClause")
-   logger.info("Se valida si hay fecha-inicio y fecha-final, si hay se agrega al whereClause")
+  logger.info("Se validan los filtros, si hay filtros se agregan al whereClause")
+  logger.info("Se valida si hay fecha-inicio y fecha-final, si hay se agrega al whereClause")
   if (filtros['fecha-inicio'] !== "null" && filtros['fecha-final'] !== "null") {
     whereClause.fecha_registro = {
       [Op.between]: [filtros['fecha-inicio'], filtros['fecha-final']],
@@ -585,17 +585,17 @@ const obtenerWhereClause = async (filtros) => {
   }
 
 
- logger.info("Se valida si hay id distrito judicial, si hay se agrega al whereClause")
+  logger.info("Se valida si hay id distrito judicial, si hay se agrega al whereClause")
   if (filtros.id_distrito_judicial) {
     whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
   }
 
-   logger.info("Se valida si hay fecha_registro, si hay se agrega al whereClause")
+  logger.info("Se valida si hay fecha_registro, si hay se agrega al whereClause")
   if (filtros.fecha_registro !== "null") {
     whereClause.fecha_registro = filtros.fecha_registro;
   }
 
-   logger.info("Se valida la existencia de id_asesor y id_defensor, si hay se agrega al whereClause")
+  logger.info("Se valida la existencia de id_asesor y id_defensor, si hay se agrega al whereClause")
 
   if (filtros.id_asesor && filtros.id_defensor) {
     whereClause[Op.or] = [
@@ -616,8 +616,8 @@ const obtenerWhereClause = async (filtros) => {
     // y ajusta el nombre del modelo y la clave foránea según sea necesario
     //  whereClause['$empleado.distrito_judicial.id_municipio_distrito$'] = filtros.id_municipio;
   }
-  
- logger,info("Se valida la existencia de id distrito judicial, si hay se agrega al whereClause")
+
+  logger, info("Se valida la existencia de id distrito judicial, si hay se agrega al whereClause")
   if (filtros.id_distrito_judicial) {
     whereClause.id_distrito_judicial = filtros.id_distrito_judicial;
   }
@@ -681,8 +681,8 @@ const obtenerAsesoriasFiltroPagina = async (pageNumber, filtros) => {
       ],
       where: whereClause,
     });
-  
-     logger.info("Se estable la paguna,pageSize,offset,limit y ademas se verifica si hay asesorias de manera manual")
+
+    logger.info("Se estable la paguna,pageSize,offset,limit y ademas se verifica si hay asesorias de manera manual")
     const asesorias = [];
     const pageSize = 10;
     pageNumber = parseInt(pageNumber, 10);
@@ -741,7 +741,7 @@ const obtenerAsesoriaPorIdAsesorados = async (ids_asesorados) => {
     }
   } catch (error) {
     logger.error("Error Asesorias:", error.message);
-   // console.log("Error asesorias:", error.message);
+    // console.log("Error asesorias:", error.message);
     return null;
   }
 };
@@ -751,7 +751,7 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
   try {
     logger.info("Se obtienen las asesorias por nombre, apellido paterno, apellido materno, pagina y total", nombre, apellido_paterno, apellido_materno, pagina, total)
     logger.info("Se valida si total es true, se obtiene el total de asesorias caso contrario se obtienen las asesorias por pagina")
-    if (total === "true") {
+    if (total === "true") {/*
       logger.info("Se obtiene el whereClause")
       const whereClause = {};
       
@@ -797,10 +797,68 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
         ],
         where: whereClause
       });
+      console.log("Asesorias:", asesoria_pre);
       logger.info("Se retornan las asesorias", asesoria_pre)
+      return asesoria_pre;*/
+      logger.info("Se obtiene el whereClause");
+      const whereClause = {
+        estatus_asesoria: "NO_TURNADA"
+      };
+
+      logger.info("Se valida si hay nombre, apellido paterno, apellido materno, si hay se agrega al whereClause");
+
+      const personaWhereClause = {};
+
+      if (nombre) {
+        personaWhereClause.nombre = { [Op.like]: `%${nombre}%` };
+      }
+      if (apellido_paterno) {
+        personaWhereClause.apellido_paterno = { [Op.like]: `%${apellido_paterno}%` };
+      }
+      if (apellido_materno) {
+        personaWhereClause.apellido_materno = { [Op.like]: `%${apellido_materno}%` };
+      }
+
+      logger.info("Se obtiene el total de asesorias");
+      const asesoria_pre = await modeloAsesoria.Asesoria.count({
+        raw: false,
+        nest: true,
+        distinct: true,  // Asegura que solo cuente filas distintas
+        attributes: {
+          exclude: ['id_asesorado', 'id_tipo_juicio']
+        },
+        include: [
+          {
+            model: modeloAsesoria.Asesorado,
+            include: [{
+              model: modeloAsesoria.Persona,
+              where: personaWhereClause
+            }]
+          },
+          {
+            model: modeloAsesoria.DetalleAsesoriaCatalogo,
+          },
+          {
+            model: modeloAsesoria.Turno,
+          },
+          {
+            model: modeloAsesoria.DistritoJudicial,
+          },
+          {
+            model: modeloAsesoria.Empleado,
+          },
+          {
+            model: modeloAsesoria.TipoJuicio,
+          }
+        ],
+        where: whereClause
+      });
+
+      console.log("Asesorias:", asesoria_pre);
+      logger.info("Se retornan las asesorias", asesoria_pre);
       return asesoria_pre;
     } else {
-      
+
       logger.info("Se obtiene el whereClause")
       const whereClause = {};
 
@@ -878,7 +936,7 @@ const obtenerAsesoriasNombre = async (nombre, apellido_paterno, apellido_materno
     }
   } catch (error) {
     logger.error("Error Asesorias:", error.message);
-   // console.log("Error Asesorias aqui:", error.message);
+    // console.log("Error Asesorias aqui:", error.message);
     return null;
   }
 };
@@ -933,7 +991,7 @@ const obtenerTotalAsesorias = async (filtros) => {
       }
       ],
       where: whereClause,
-    }); 
+    });
     logger.info("Se retorna el total de asesorias")
     return asesorias_pre.length;
   } catch (error) {
@@ -964,7 +1022,7 @@ const obtenerAsesoriaIDSimpleMiddleware = async (id) => {
     logger.info("Se obtiene la asesoria por su id", id)
     const asesoria = await modeloAsesoria.Asesoria.findByPk(id);
     logger.info("Se retorna la asesoria")
-     return asesoria;
+    return asesoria;
   } catch (error) {
     logger.error("Error Asesorias:", error.message);
     // console.log("Error asesorias:", error.message);
@@ -991,7 +1049,7 @@ const obtenerAsesoriaIDSimpleMiddleware2WithData = async (id) => {
     return asesoria;
   } catch (error) {
     logger.error("Error Asesorias:", error.message);
-  //  console.log("Error asesorias:", error.message);
+    //  console.log("Error asesorias:", error.message);
     return null;
   }
 }
