@@ -1,11 +1,9 @@
 // Importamos los módulos necesarios
 //Variables requeridas https
-/*
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-*/
 
 const express = require('express')
 const cors = require('cors')
@@ -60,6 +58,39 @@ class Server {
     this.app.use(express.json())
     // Middleware pa ra habilitar CORS
     this.app.use(cors())
+
+
+    let allowedIPs;
+
+    try {
+      allowedIPs = JSON.parse(process.env.IPS);
+      console.log(allowedIPs);
+    } catch (error) {
+      console.error('Invalid JSON in IPS environment variable:', error.message);
+      allowedIPs = []; // O puedes manejar el error de otra manera
+    }
+    
+    // Middleware de CORS y IP Whitelisting combinado
+    const corsOptions = (req, callback) => {
+      const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+
+
+      if (allowedIPs.includes(requestIP)) {
+        // Si la IP está permitida, permite la solicitud CORS
+        callback(null, {
+          origin: true, // Permite todas las solicitudes CORS
+          methods: ['GET', 'POST', 'PUT', 'DELETE'],
+          allowedHeaders: ['Content-Type', 'Authorization'],
+          exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+        });
+      } else {
+        // Si la IP no está permitida, rechaza la solicitud CORS
+        callback(new Error('No autorizado por CORS'));
+      }
+    };
+    // Aplica el middleware de CORS/IP Whitelisting
+    this.app.use(cors(corsOptions));
+
     // Middleware para loguear cada petición con URL completa, headers, y cuerpo
     this.app.use((req, res, next) => {
       const { method, url, body, query, headers } = req;
@@ -80,7 +111,7 @@ class Server {
 
   // Método para definir las rutas de la aplicación
   routes() {
-    
+
     //A comentar ya que no se usan
     this.app.use(this.paths.estadoProcesal,
       verify_jwt,
@@ -132,20 +163,20 @@ class Server {
       this.app.listen(this.port, () => {
         logger.info(`Servidor escuchando en el puerto ${this.port}`);
       });
-    } else if (DEPLOY === 'DEPLOYB') {
+    } else if (process.env.DEPLOY  === 'DEPLOYB') {
       const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
       const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
       const credentials = { key: privateKey, cert: certificate };
-    
+
       const httpsServer = https.createServer(credentials, this.app);
       httpsServer.listen(this.port, () => {
         logger.info(`Aplicación HTTPS corriendo en el puerto ${this.port}`);
       });
     }
   }
-    
-    
-} 
+
+
+}
 
 // Exportamos la clase Server
 module.exports = Server

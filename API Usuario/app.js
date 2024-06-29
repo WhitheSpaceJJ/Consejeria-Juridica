@@ -7,7 +7,7 @@ const path = require('path');
 
 // Importamos los módulos necesarios
 const express = require('express');
-const { PORT, GRPCPORTUSUARIOS, DEPLOY } = require("./configuracion/default.js");
+const { PORT, GRPCPORTUSUARIOS, DEPLOY, IPS } = require("./configuracion/default.js");
 
 const usuariosRutas = require("./rutas/usuarioRutas");
 
@@ -23,14 +23,44 @@ const logger = require('./utilidades/logger');
 // Importamos el módulo cors para permitir solicitudes de origen cruzado
 const cors = require('cors');
 
-// Creamos una nueva aplicación express
+
 const app = express();
 
-// Usamos el middleware express.json() para analizar las solicitudes con cuerpos JSON
 app.use(express.json());
 
-// Usamos el middleware cors para permitir solicitudes de origen cruzado
-app.use(cors());
+let allowedIPs;
+
+try {
+  allowedIPs = JSON.parse(IPS);
+  console.log(allowedIPs);
+} catch (error) {
+  console.error('Invalid JSON in IPS environment variable:', error.message);
+  allowedIPs = []; // O puedes manejar el error de otra manera
+}
+
+
+// Middleware de CORS y IP Whitelisting combinado
+// Middleware de CORS y IP Whitelisting combinado
+const corsOptions = (req, callback) => {
+  const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+
+  
+  if (allowedIPs.includes(requestIP) ) {
+    // Si la IP está permitida, permite la solicitud CORS
+    callback(null, {
+      origin: true, // Permite todas las solicitudes CORS
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+    });
+  } else {
+    // Si la IP no está permitida, rechaza la solicitud CORS
+    callback(new Error('No autorizado por CORS'));
+  }
+};
+
+// Aplica el middleware de CORS/IP Whitelisting
+app.use(cors(corsOptions));
 
 // Middleware para loguear cada petición con URL completa, headers, y cuerpo
 app.use((req, res, next) => {
@@ -185,15 +215,35 @@ const controlUsuarios = require("./controles/controlUsuario");
 const { log } = require('winston');
 
 
-var server = getServer();
-server.bindAsync(
-  `localhost:${GRPCPORTUSUARIOS}`,
-  grpc.ServerCredentials.createInsecure(),
-  (err, port) => {
-    if (err != null) {
-      logger.error(`gRPC Error: ${err.message}`);
-      return console.error(err);
+
+//if (DEPLOY === 'DEPLOYA') {
+  const server = getServer();
+  server.bindAsync(`localhost:${GRPCPORTUSUARIOS}`, grpc.ServerCredentials.createInsecure(), (error, port) => {
+    if (error) {
+      console.error(`Error binding gRPC server: ${error.message}`);
+      return;
     }
-    logger.info(`gRPC listening on ${GRPCPORTUSUARIOS}`);
-  }
-);
+    console.log(`gRPC listening on ${GRPCPORTUSUARIOS}`);
+  });
+/*
+
+}
+
+else if (DEPLOY === 'DEPLOYB') {
+  const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
+  const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
+  const credentials = grpc.ServerCredentials.createSsl(null, [{
+    cert_chain: Buffer.from(certificate),
+    private_key: Buffer.from(privateKey)
+  }], true);
+
+  const server = getServer();
+  server.bindAsync(`localhost:${GRPCPORTUSUARIOS}`, credentials, (error, port) => {
+    if (error) {
+      console.error(`Error binding gRPC server with SSL: ${error.message}`);
+      return;
+    }
+    console.log(`gRPC listening on https://${GRPCPORTUSUARIOS}`);
+  });
+}
+*/

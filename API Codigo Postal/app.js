@@ -18,26 +18,43 @@ const cors = require('cors');
 const logger = require('./utilities/logger.js'); // Importa el logger
 
 
-/*
 const app = express();
 
 app.use(express.json());
 
-const allowedIPs = IPS.split(',');
 
+let allowedIPs;
+
+try {
+  allowedIPs = JSON.parse(IPS);
+  console.log(allowedIPs);
+} catch (error) {
+  console.error('Invalid JSON in IPS environment variable:', error.message);
+  allowedIPs = []; // O puedes manejar el error de otra manera
+}
+
+// Middleware de CORS y IP Whitelisting combinado
 const corsOptions = (req, callback) => {
-  const requestIP = req.connection.remoteAddress || req.socket.remoteAddress;
-  console.log(requestIP);
-  if (allowedIPs.includes(requestIP)) {
-    callback(null, true);
+  const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+
+  
+  if (allowedIPs.includes(requestIP) ) {
+    // Si la IP está permitida, permite la solicitud CORS
+    callback(null, {
+      origin: true, // Permite todas las solicitudes CORS
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+    });
   } else {
+    // Si la IP no está permitida, rechaza la solicitud CORS
     callback(new Error('No autorizado por CORS'));
   }
 };
 
-
+// Aplica el middleware de CORS/IP Whitelisting
 app.use(cors(corsOptions));
-*/
+/*
 
 const app = express();
 
@@ -46,6 +63,7 @@ app.use(express.json());
 
 // Usamos el middleware cors para permitir solicitudes de origen cruzado
 app.use(cors());
+*/
 
 
 // Middleware para loguear cada petición con URL completa, headers, y cuerpo
@@ -64,16 +82,17 @@ app.use((req, res, next) => {
 });
 
 const jwtMiddleware = async (req, res, next) => {
-  const tokenHeader = req.headers.authorization;
-
+  const tokenHeader = req.headers.authorization; // Obtener el valor del encabezado "Authorization"
+  // Verificar si el token existe en el encabezado
   if (!tokenHeader) {
     const customeError = new CustomeError('Token no proporcionado.', 401);
-    logger.warn('Token no proporcionado.');
+     logger.warn('Token no proporcionado.');
     next(customeError);
     return;
   }
 
-  const token = tokenHeader.replace('Bearer ', '');
+  // Extraer el token del encabezado "Authorization"
+  const token = tokenHeader.replace('Bearer ', ''); // Quita "Bearer " del encabezado
   const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
 
   const tokenClient = new serviciosProto.TokenService(HOSTTOKENUSUARIOS, grpc.credentials.createInsecure());
@@ -81,90 +100,30 @@ const jwtMiddleware = async (req, res, next) => {
   tokenClient.validarToken({ token: token }, (err, response) => {
     if (err) {
       const customeError = new CustomeError('Error en la validación del token.', 500);
-      logger.error('Error en la validación del token.');
       next(customeError);
       return;
     }
-
-    const permisos = response.permisos;
-    const id_distrito_judicial = response.id_distrito_judicial;
-    const id_usuario = response.id_usuario;
-    const id_empleado = response.id_empleado;
-    const id_tipouser = response.id_tipouser;
-    if (permisos === 0) {
+    //se supone response.permisos es un array, no hay metodo que lo trate como arreglo
+     const permisos =  response.permisos;
+     const id_distrito_judicial = response.id_distrito_judicial;
+     const id_usuario = response.id_usuario;
+     const id_tipouser = response.id_tipouser;
+     const id_empleado = response.id_empleado;
+    if ( permisos=== 0) {
       const customeError = new CustomeError('Token inválido, no ha iniciado sesión o no cuenta con permisos.', 401);
-      logger.warn('Token inválido.');
+       logger.warn('Token inválido.');
       next(customeError);
-    } else {
-      req.id_empleado = id_empleado;
+    } else{
       req.id_tipouser = id_tipouser;
       req.id_usuario = id_usuario;
+      req.id_empleado = id_empleado;
       req.id_distrito_judicial = id_distrito_judicial;
       req.permisos = response.permisos;
       next();
     }
+
   });
 };
-/*
-Receptor grpc 
-const jwtMiddleware = async (req, res, next) => {
-  const tokenHeader = req.headers.authorization;
-
-  if (!tokenHeader) {
-    const customeError = new CustomeError('Token no proporcionado.', 401);
-    logger.warn('Token no proporcionado.');
-    next(customeError);
-    return;
-  }
-
-  const token = tokenHeader.replace('Bearer ', '');
-  const serviciosProto = grpc.loadPackageDefinition(packageDefinition).servicios;
-
-  try {
-    // Cargar el certificado del servidor
-    const rootCert = fs.readFileSync(path.join(__dirname, 'server.cer'));
-
-    // Crear credenciales gRPC seguras con TLS/SSL
-    const credentials = grpc.credentials.createSsl(rootCert);
-
-    // Inicializar el cliente gRPC con las credenciales seguras
-    const tokenClient = new serviciosProto.TokenService(HOSTTOKENUSUARIOS, credentials);
-
-    // Validar el token utilizando el cliente gRPC seguro
-    tokenClient.validarToken({ token: token }, (err, response) => {
-      if (err) {
-        const customeError = new CustomeError('Error en la validación del token.', 500);
-        logger.error('Error en la validación del token.', err);
-        next(customeError);
-        return;
-      }
-
-      const permisos = response.permisos;
-      const id_distrito_judicial = response.id_distrito_judicial;
-      const id_usuario = response.id_usuario;
-      const id_empleado = response.id_empleado;
-      const id_tipouser = response.id_tipouser;
-      if (permisos === 0) {
-        const customeError = new CustomeError('Token inválido, no ha iniciado sesión o no cuenta con permisos.', 401);
-        logger.warn('Token inválido.');
-        next(customeError);
-      } else {
-        req.id_empleado = id_empleado;
-        req.id_tipouser = id_tipouser;
-        req.id_usuario = id_usuario;
-        req.id_distrito_judicial = id_distrito_judicial;
-        req.permisos = response.permisos;
-        next();
-      }
-    });
-  } catch (error) {
-    logger.error('Error al leer el certificado del servidor:', error);
-    const customeError = new CustomeError('Error interno del servidor.', 500);
-    next(customeError);
-  }
-};
-
-*/
 
 app.use('/colonias', jwtMiddleware, coloniasRoutes);
 app.use('/codigospostales', jwtMiddleware, codigosPostalesRoutes);
@@ -228,22 +187,18 @@ function getServer() {
 
 
 
-/* 
-if (DEPLOY === 'DEPLOYA') { */
-  var server2 = getServer();
-  server2.bindAsync(
-    `localhost:${GRPCPORTCODIGOSPOSTALES}`,
-    grpc2.ServerCredentials.createInsecure(),
-    (err, port) => {
-      if (err != null) {
-        logger.error(`gRPC Error: ${err.message}`);
-        return console.error(err);
-      }
-      logger.info(`gRPC listening on ${GRPCPORTCODIGOSPOSTALES}`);
+//if (DEPLOY === 'DEPLOYA') {
+  const server = getServer();
+  server.bindAsync(`localhost:${GRPCPORTCODIGOSPOSTALES}`, grpc2.ServerCredentials.createInsecure(), (error, port) => {
+    if (error) {
+      console.error(`Error binding gRPC server: ${error.message}`);
+      return;
     }
-  );
-/* //Codigo https secure grpc
-} else if (DEPLOY === 'DEPLOYB') {
+    console.log(`gRPC listening on ${GRPCPORTCODIGOSPOSTALES}`);
+  });
+  /*
+}
+else if (DEPLOY === 'DEPLOYB') {
   const privateKey = fs.readFileSync(path.join(__dirname, 'server.key'), 'utf8');
   const certificate = fs.readFileSync(path.join(__dirname, 'server.cer'), 'utf8');
   const credentials = grpc2.ServerCredentials.createSsl(null, [{
@@ -251,18 +206,13 @@ if (DEPLOY === 'DEPLOYA') { */
     private_key: Buffer.from(privateKey)
   }], true);
 
-  const server2 = getServer();
-  server2.bindAsync(
-    `localhost:${GRPCPORTCODIGOSPOSTALES}`,
-    credentials,
-    (err, port) => {
-      if (err) {
-        logger.error(`gRPC Error: ${err.message}`);
-        return console.error(err);
-      }
-      logger.info(`gRPC listening https on ${GRPCPORTCODIGOSPOSTALES}`);
+  const server = getServer();
+  server.bindAsync(`localhost:${GRPCPORTCODIGOSPOSTALES}`, credentials, (error, port) => {
+    if (error) {
+      console.error(`Error binding gRPC server with SSL: ${error.message}`);
+      return;
     }
-  );
-
+    console.log(`gRPC listening on https://${GRPCPORTCODIGOSPOSTALES}`);
+  });
 }
 */

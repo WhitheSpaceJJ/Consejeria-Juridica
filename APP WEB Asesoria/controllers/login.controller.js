@@ -31,8 +31,8 @@ class LoginController {
         modal.open = true
         return;
       }
-      //sessionStorage.setItem('user', JSON.stringify(user))
-      document.cookie = `user=${user}; HttpOnly; Secure; SameSite=Strict;`;
+      sessionStorage.setItem('user', JSON.stringify(user))
+     // document.cookie = `user=${user}; HttpOnly; Secure; SameSite=Strict;`;
 
       location.replace('index.html')
     } catch (error) {

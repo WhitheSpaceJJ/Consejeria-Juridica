@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 // Invocamos el metodo config de dotenv
 dotenv.config(); 
 
-
+const IPS = process.env.IPS;
 
 // Obtenemos el valor de la variable de entorno DBHOST 
 const DBHOST = process.env.DBHOST ; 
@@ -41,7 +41,7 @@ module.exports = {
     PORT,
     DBPORT,
     HOSTTOKENUSUARIOS ,  GRPCPORTASESORIAS , HOSTGRPCCODIGOSPOSTALES,
-    DEPLOY, DEPLOYA, DEPLOYB
+    DEPLOY, DEPLOYA, DEPLOYB, IPS
 }
  
 
