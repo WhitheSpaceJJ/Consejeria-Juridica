@@ -3,3 +3,23 @@
 2024-06-29 13:54:55 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
 2024-06-29 14:48:17 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
 2024-06-29 14:48:38 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 15:35:44 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 17:37:33 [32minfo[39m: Request: GET /generos/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:37:33 [32minfo[39m: Request: GET /generos/paginacion?total=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"total":"true"} - Body: {}
+2024-06-29 17:37:33 [32minfo[39m: Petición para obtener los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtienen los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Se establece el offset y el limite, y parseo de la pagina
+2024-06-29 17:37:33 [32minfo[39m: Se obtienen los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Petición para obtener los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se llama al control de géneros, y asi el de obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el total de generos
+2024-06-29 17:37:33 [32minfo[39m: Se retorna los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se retornan los géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se retorna el total de géneros

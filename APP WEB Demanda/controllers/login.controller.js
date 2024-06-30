@@ -18,10 +18,16 @@ class LoginController {
       if (!validateNonEmptyFields([correo, password])) {
         throw new ValidationError(
           'Campos obligatorios en blanco, por favor revise.'
-        )
+        ) 
       }
+     console.log('correo', correo)  
+      console.log('password ', password)
+
+
       //Aqui en este caso se procedera a cambiar el assets del navbar con respecto a los permisos del usuario
       const user = await this.model.login({ correo, password })
+       
+      console.log('user', user) 
       const userPermissions = user.permisos;
       const acceptablePermissions = this.#acceptablePermissions;
       const hasPermission = (userPermissions, acceptablePermissions) => {

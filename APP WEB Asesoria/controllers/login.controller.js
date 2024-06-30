@@ -19,6 +19,7 @@ class LoginController {
       }
       //Aqui en este caso se procedera a cambiar el assets del navbar con respecto a los permisos del usuario
       const user = await this.model.login({ correo, password })
+
       const userPermissions = user.permisos;
       const acceptablePermissions = this.#acceptablePermissions;
       const hasPermission = (userPermissions, acceptablePermissions) => {
