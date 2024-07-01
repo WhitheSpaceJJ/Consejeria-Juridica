@@ -9,7 +9,7 @@ COPY ./dist /usr/share/nginx/html_Demanda
 
 
 # Expone los puertos definidos en tu configuración
-EXPOSE 3030
+EXPOSE 3032
 
 # Inicia Nginx cuando se lance el contenedor
 CMD ["nginx", "-g", "daemon off;"]

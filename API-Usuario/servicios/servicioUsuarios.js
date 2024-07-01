@@ -185,22 +185,32 @@ async function enviarContraseñaPorCorreo(destinatario, contraseñaGenerada) {
       pass: 'gjxj gdmo sgaj cuax',
     },
   });
-  logger.info("Se manda a llamar la función sendMail, en base a las opciones del correo")
+
+  logger.info("Se manda a llamar la función sendMail, en base a las opciones del correo");
   const opcionesCorreo = {
     from: 'consejeria.juridica.1966@gmail.com',
     to: destinatario,
     subject: 'Recuperación de contraseña',
     text: `Tu nueva contraseña es: ${contraseñaGenerada}`,
   };
-  try {
-     logger.info("Se verifica si se envió el correo")
-    await transporter.sendMail(opcionesCorreo);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
 
+  let intentos = 0;
+  const maxIntentos = 3;
+
+  while (intentos < maxIntentos) {
+    try {
+      logger.info(`Intento ${intentos + 1}: Se verifica si se envió el correo`);
+      await transporter.sendMail(opcionesCorreo);
+      return true;
+    } catch (error) {
+      logger.error(`Error al enviar el correo en el intento ${intentos + 1}: ${error.message}`);
+      intentos++;
+    }
+  }
+
+  logger.error("No se pudo enviar el correo después de 3 intentos");
+  return false;
+}
 
 
 
