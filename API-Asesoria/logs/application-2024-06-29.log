@@ -1,0 +1,1170 @@
+2024-06-29 01:05:06 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 01:05:46 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 13:54:55 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 14:48:17 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 14:48:38 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 15:35:44 [32minfo[39m: Aplicación HTTPS corriendo en el puerto 3009
+2024-06-29 17:37:33 [32minfo[39m: Request: GET /generos/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:37:33 [32minfo[39m: Request: GET /generos/paginacion?total=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"total":"true"} - Body: {}
+2024-06-29 17:37:33 [32minfo[39m: Petición para obtener los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtienen los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Se establece el offset y el limite, y parseo de la pagina
+2024-06-29 17:37:33 [32minfo[39m: Se obtienen los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Petición para obtener los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-06-29 17:37:33 [32minfo[39m: Se llama al control de géneros, y asi el de obtener el total de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se obtiene el total de generos
+2024-06-29 17:37:33 [32minfo[39m: Se retorna los generos por paginación
+2024-06-29 17:37:33 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se retornan los géneros
+2024-06-29 17:37:33 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-06-29 17:37:33 [32minfo[39m: Se retorna el total de géneros
+2024-06-29 17:38:21 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:38:21 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:21 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:21 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:21 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:38:21 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:38:21 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la página
+2024-06-29 17:38:21 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:38:21 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:38:21 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:38:21 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:38:21 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:38:21 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:38:21 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:38:21 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:38:21 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:38:21 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:38:21 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:38:21 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:38:21 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:38:21 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:21 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:21 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:21 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:21 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:21 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:21 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:21 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:21 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:38:21 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:21 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:21 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:21 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:21 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:21 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:21 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:21 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:38:21 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:38:21 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:38:21 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:38:28 [32minfo[39m: Request: GET /asesorias/descargar-excel - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:28 [32minfo[39m: Middleware para validar la descarga de un archivo Excel
+2024-06-29 17:38:28 [32minfo[39m: Fin del middleware para validar la descarga de un archivo Excel
+2024-06-29 17:38:28 [32minfo[39m: Petición para obtener asesorías por filtro para exportar a excel recibida
+2024-06-29 17:38:28 [32minfo[39m: Filtros: undefined
+2024-06-29 17:38:28 [32minfo[39m: Se verifica si los filtros son nulos o indefinidos esto con el fin de obtener las asesorias con filtros o sin filtros
+2024-06-29 17:38:28 [32minfo[39m: Llamada al metodo obtenerAsesorias, para obtener las asesorías
+2024-06-29 17:38:28 [32minfo[39m: Se obtienen las asesorias
+2024-06-29 17:38:28 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:28 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:28 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:28 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:28 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:28 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:28 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:28 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:28 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:38:28 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:38:28 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:38:28 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:38:28 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:38:28 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:38:28 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:38:28 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:38:28 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:38:28 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:38:28 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:38:28 [32minfo[39m: Se verifica si los campos son nulos o indefinidos esto con el fin de obtener las asesorias con determinados campos o con todos los campos
+2024-06-29 17:38:28 [32minfo[39m: Se obtienen la asesorías con todos los campos
+2024-06-29 17:38:28 [32minfo[39m: Se agregan las asesorías al libro de excel
+2024-06-29 17:38:37 [32minfo[39m: Request: GET /defensores/zona/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:37 [32minfo[39m: Request: GET /asesores/zona/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:37 [32minfo[39m: Petición para obtener los defensores por zona
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los parametros de la petición
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los defensores por zona
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los empleados defensores por zona
+2024-06-29 17:38:37 [32minfo[39m: Petición para obtener los asesores por zona
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los asesores por zona
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los empleados tipo asesor por zona
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los empleados asesores por zona
+2024-06-29 17:38:37 [32minfo[39m: Se valida si existen defensores
+2024-06-29 17:38:37 [32minfo[39m: Se obtienen los defensores por id
+2024-06-29 17:38:37 [32minfo[39m: Se retorna los defensores
+2024-06-29 17:38:37 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-06-29 17:38:37 [32minfo[39m: No se encontraron defensores
+2024-06-29 17:38:37 [32minfo[39m: Se verifica si los asesores son nulos
+2024-06-29 17:38:37 [32minfo[39m: Se crean los asesores filtrados
+2024-06-29 17:38:37 [32minfo[39m: Se retornan los asesores filtrados
+2024-06-29 17:38:37 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-06-29 17:38:37 [32minfo[39m: No se encontraron asesores
+2024-06-29 17:38:47 [32minfo[39m: Request: GET /defensores/zona/2 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:47 [32minfo[39m: Request: GET /asesores/zona/2 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:47 [32minfo[39m: Petición para obtener los defensores por zona
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los parametros de la petición
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los defensores por zona
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los empleados defensores por zona
+2024-06-29 17:38:47 [32minfo[39m: Petición para obtener los asesores por zona
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los asesores por zona
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los empleados tipo asesor por zona
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los empleados asesores por zona
+2024-06-29 17:38:47 [32minfo[39m: Se valida si existen defensores
+2024-06-29 17:38:47 [32minfo[39m: Se obtienen los defensores por id
+2024-06-29 17:38:47 [32minfo[39m: Se retorna los defensores
+2024-06-29 17:38:47 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-06-29 17:38:47 [32minfo[39m: No se encontraron defensores
+2024-06-29 17:38:47 [32minfo[39m: Se verifica si los asesores son nulos
+2024-06-29 17:38:47 [32minfo[39m: Se crean los asesores filtrados
+2024-06-29 17:38:47 [32minfo[39m: Se retornan los asesores filtrados
+2024-06-29 17:38:47 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-06-29 17:38:47 [32minfo[39m: No se encontraron asesores
+2024-06-29 17:38:54 [32minfo[39m: Request: GET /defensores/zona/3 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:54 [32minfo[39m: Request: GET /asesores/zona/3 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:38:54 [32minfo[39m: Petición para obtener los defensores por zona
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los parametros de la petición
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los defensores por zona
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los empleados defensores por zona
+2024-06-29 17:38:54 [32minfo[39m: Petición para obtener los asesores por zona
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los asesores por zona
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los empleados tipo asesor por zona
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los empleados asesores por zona
+2024-06-29 17:38:54 [32minfo[39m: Se valida si existen defensores
+2024-06-29 17:38:54 [32minfo[39m: Se obtienen los defensores por id
+2024-06-29 17:38:54 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:54 [32minfo[39m: Se verifica si los asesores son nulos
+2024-06-29 17:38:54 [32minfo[39m: Se crean los asesores filtrados
+2024-06-29 17:38:54 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:38:54 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:38:54 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:38:54 [32minfo[39m: Se retornan los asesores filtrados
+2024-06-29 17:38:54 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-06-29 17:38:54 [32minfo[39m: Se retornan los asesores
+2024-06-29 17:38:54 [32minfo[39m: Se retorna los defensores
+2024-06-29 17:38:54 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-06-29 17:38:54 [32minfo[39m: Se retornan los defensores
+2024-06-29 17:39:14 [32minfo[39m: Request: GET /asesorias/filtro?filtros=%7B%22fecha_inicio%22%3A%222014-01-29%22%2C%22fecha_final%22%3A%222024-07-06%22%2C%22id_municipio%22%3Anull%2C%22id_zona%22%3A%223%22%2C%22id_asesor%22%3A%221%22%2C%22id_defensor%22%3Anull%2C%22id_distrito%22%3Anull%2C%22fecha_registro%22%3Anull%7D - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"filtros":"{\"fecha_inicio\":\"2014-01-29\",\"fecha_final\":\"2024-07-06\",\"id_municipio\":null,\"id_zona\":\"3\",\"id_asesor\":\"1\",\"id_defensor\":null,\"id_distrito\":null,\"fecha_registro\":null}"} - Body: {}
+2024-06-29 17:39:14 [32minfo[39m: Middleware para validar los filtros de la petición
+2024-06-29 17:40:36 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:36 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:40:36 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:36 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:36 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:40:36 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:40:36 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:40:36 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:40:36 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la página
+2024-06-29 17:40:36 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:40:36 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:40:36 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:40:36 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:40:36 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:40:36 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:40:36 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:40:36 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:40:36 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:40:36 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:40:36 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:40:36 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:36 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:36 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:36 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:36 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:36 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:36 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:36 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:36 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:40:36 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:36 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:36 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:36 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:36 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:36 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:36 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:36 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:40:36 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:40:36 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:40:36 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:40:47 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:47 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:40:47 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:47 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:40:47 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:40:47 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:40:47 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:40:47 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:40:47 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la página
+2024-06-29 17:40:47 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:40:47 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:40:47 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:40:47 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:40:47 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:40:47 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:40:47 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:40:47 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:40:47 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:40:47 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:40:47 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:47 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:47 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:47 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:47 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:47 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:47 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:47 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:47 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:40:47 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:40:47 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:40:47 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:40:47 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:40:47 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:40:47 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:40:47 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:40:47 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:40:47 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:40:47 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:40:47 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:41:14 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:14 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:41:14 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:14 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:14 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:41:14 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:41:14 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:41:14 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:41:14 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la página
+2024-06-29 17:41:14 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:41:14 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:41:14 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:41:14 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:41:14 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:41:14 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:41:14 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:14 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:41:14 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:41:14 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:41:14 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:41:14 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:14 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:14 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:14 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:14 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:14 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:14 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:14 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:14 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:14 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:14 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:14 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:14 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:14 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:14 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:14 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:14 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:41:14 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:41:14 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:41:14 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:41:40 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:40 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:41:40 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:40 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:40 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:41:40 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:41:40 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:41:40 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:41:40 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la página
+2024-06-29 17:41:40 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:41:40 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:41:40 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:41:40 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:41:40 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:41:40 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:41:40 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:41:40 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:41:40 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:40 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:41:40 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:41:40 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:40 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:40 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:40 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:40 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:40 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:40 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:40 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:40 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:40 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:40 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:40 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:40 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:40 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:40 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:40 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:40 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:41:40 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:41:40 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:41:40 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:41:46 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:46 [32minfo[39m: Request: GET /asesorias/total-asesorias - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:46 [32minfo[39m: Request: GET /zonas - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:41:46 [32minfo[39m: Request: GET /asesorias/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-06-29 17:41:46 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Se obtienen los distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Petición para obtener todas las asesorías recibida
+2024-06-29 17:41:46 [32minfo[39m: Llamada al metodo obtenerAsesorias
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el total de asesorias en el sistema
+2024-06-29 17:41:46 [32minfo[39m: Petición para obtener las zonas
+2024-06-29 17:41:46 [32minfo[39m: Se llama al control de zonas, y asi el de obtener zonas
+2024-06-29 17:41:46 [32minfo[39m: Se obtienen las zonas
+2024-06-29 17:41:46 [32minfo[39m: Middleware para validar la paginación
+2024-06-29 17:41:46 [32minfo[39m: Fin del middleware para validar la paginación
+2024-06-29 17:41:46 [32minfo[39m: Petición para obtener asesorías por página recibida
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la página
+2024-06-29 17:41:46 [32minfo[39m: Llamada al metodo obtenerAsesoriasPorPagina, para obtener las asesorías de la página
+2024-06-29 17:41:46 [32minfo[39m: Se estable la paguna,pageSize,offset,limit
+2024-06-29 17:41:46 [32minfo[39m: Se obtienen las asesorias por pagina
+2024-06-29 17:41:46 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Se retornan los distritos judiciales
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el total de asesorias
+2024-06-29 17:41:46 [32minfo[39m: Se verifica si el resultado es nulo o indefinido
+2024-06-29 17:41:46 [32minfo[39m: Asesorías obtenidas correctamente
+2024-06-29 17:41:46 [32minfo[39m: Se valida el resultado de la consulta de zonas
+2024-06-29 17:41:46 [32minfo[39m: Se retornan las zonas
+2024-06-29 17:41:46 [32minfo[39m: Se forman las asesorias, se recorre el arreglo de asesorias y se manda a llamar la funcion formarAsesoria
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:46 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:46 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:46 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:46 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:46 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:46 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:46 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:46 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el catalogo de requisito
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene la persona por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el motivo por su id
+2024-06-29 17:41:46 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el estado civil por su id
+2024-06-29 17:41:46 [32minfo[39m: Se añaden los datos de la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-06-29 17:41:46 [32minfo[39m: Se retorna el distrito judicial
+2024-06-29 17:41:46 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-06-29 17:41:46 [32minfo[39m: Se obtiene el municipio por su id
+2024-06-29 17:41:46 [32minfo[39m: Se crea un json de la asesoria 
+2024-06-29 17:41:46 [32minfo[39m: Se retorna la asesoria
+2024-06-29 17:41:46 [32minfo[39m: Se validan las asesorias, si hay asesorias se retornan, si no hay asesorias se retorna null
+2024-06-29 17:41:46 [32minfo[39m: Se retornan las asesorias
+2024-06-29 17:41:46 [32minfo[39m: Se verifica si el resultado contiene asesorías o si es nulo o indefinido
+2024-06-29 17:41:46 [32minfo[39m: Se encontraron asesorías
+2024-06-29 17:42:00 [32minfo[39m: Request: GET /defensores/zona/3 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:42:00 [32minfo[39m: Request: GET /asesores/zona/3 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {} - Body: {}
+2024-06-29 17:42:00 [32minfo[39m: Petición para obtener los defensores por zona
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los parametros de la petición
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los defensores por zona
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los empleados defensores por zona
+2024-06-29 17:42:00 [32minfo[39m: Petición para obtener los asesores por zona
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los asesores por zona
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los empleados tipo asesor por zona
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los empleados asesores por zona
+2024-06-29 17:42:00 [32minfo[39m: Se valida si existen defensores
+2024-06-29 17:42:00 [32minfo[39m: Se obtienen los defensores por id
+2024-06-29 17:42:00 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:42:00 [32minfo[39m: Se verifica si los asesores son nulos
+2024-06-29 17:42:00 [32minfo[39m: Se crean los asesores filtrados
+2024-06-29 17:42:00 [32minfo[39m: Se obtiene el asesor por su id
+2024-06-29 17:42:00 [32minfo[39m: Se obtiene el defensor por su id
+2024-06-29 17:42:00 [32minfo[39m: Se retorna el asesor
+2024-06-29 17:42:00 [32minfo[39m: Se retornan los asesores filtrados
+2024-06-29 17:42:00 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-06-29 17:42:00 [32minfo[39m: Se retornan los asesores
+2024-06-29 17:42:00 [32minfo[39m: Se retorna los defensores
+2024-06-29 17:42:00 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-06-29 17:42:00 [32minfo[39m: Se retornan los defensores
+2024-06-29 17:42:04 [32minfo[39m: Request: GET /asesorias/filtro?filtros={%22fecha-inicio%22:%222024-03-25%22,%22fecha-final%22:%222024-09-20%22,%22id_municipio%22:null,%22id_zona%22:3,%22id_defensor%22:null,%22id_asesor%22:1,%22fecha_registro%22:%22null%22,%22id_distrito_judicial%22:null} - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5NzA3ODQ0LCJleHAiOjE3MTk3MzY2NDR9.fs645rIMqP9lvtFiUEmcjF35dah3MvAf5EhM3fMUIUA","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://192.168.100.12:3038/","origin":"http://192.168.100.12:3038"} - Query: {"filtros":"{\"fecha-inicio\":\"2024-03-25\",\"fecha-final\":\"2024-09-20\",\"id_municipio\":null,\"id_zona\":3,\"id_defensor\":null,\"id_asesor\":1,\"fecha_registro\":\"null\",\"id_distrito_judicial\":null}"} - Body: {}
+2024-06-29 17:42:04 [32minfo[39m: Middleware para validar los filtros de la petición
+2024-06-29 17:42:04 [32minfo[39m: Fin del middleware para validar los filtros de la petición
+2024-06-29 17:42:04 [32minfo[39m: Petición para obtener asesorías por filtro recibida
+2024-06-29 17:42:04 [32minfo[39m: Filtros: {"fecha-inicio":"2024-03-25","fecha-final":"2024-09-20","id_municipio":null,"id_zona":3,"id_defensor":null,"id_asesor":1,"fecha_registro":"null","id_distrito_judicial":null}
+2024-06-29 17:42:04 [32minfo[39m: Llamada al metodo obtenerAsesoriasFiltro
+2024-06-29 17:42:04 [32minfo[39m: Se obtienen las asesorias por filtro
+2024-06-29 17:42:04 [32minfo[39m: Se obtiene el whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se obtiene el whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se validan los filtros, si hay filtros se agregan al whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se valida si hay fecha-inicio y fecha-final, si hay se agrega al whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se valida si hay id distrito judicial, si hay se agrega al whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se valida si hay fecha_registro, si hay se agrega al whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se valida la existencia de id_asesor y id_defensor, si hay se agrega al whereClause
+2024-06-29 17:42:04 [32minfo[39m: Se valida la existencia de id_municipio, si hay se agrega al whereClause
+2024-06-29 17:42:04 [31merror[39m: Error al consultar las asesorías:
