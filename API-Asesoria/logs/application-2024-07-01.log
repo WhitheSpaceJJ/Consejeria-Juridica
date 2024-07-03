@@ -1821,3 +1821,481 @@
 2024-07-01 01:10:02 [32minfo[39m: Se retornan los defensores
 2024-07-01 01:10:02 [32minfo[39m: Se valida el resultado de la consulta de turnos
 2024-07-01 01:10:02 [32minfo[39m: Se responde con los turnos obtenidos o el total de turnos
+2024-07-01 11:27:21 [32minfo[39m: Servidor escuchando en el puerto 3009
+2024-07-01 11:29:52 [32minfo[39m: Request: GET /catalogo-requisitos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:29:52 [32minfo[39m: Request: GET /asesores/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:29:52 [32minfo[39m: Request: GET /generos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:29:52 [32minfo[39m: Petición para obtener los requisitos del catálogo
+2024-07-01 11:29:52 [32minfo[39m: Se valida si se envió el parámetro activo en la petición, esto con el fin de obtener los requisitos del catálogo activos o inactivos
+2024-07-01 11:29:52 [32minfo[39m: Se llama al control de requisitos del catálogo, y asi el de obtener requisitos del catálogo, en base a si estan activos
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los catalogos de requisitos, en caso de que se envie un parametro activo se filtra por activo
+2024-07-01 11:29:52 [32minfo[39m: Se vakiida el parametro activo
+2024-07-01 11:29:52 [32minfo[39m: Se retorna los catalogos de requisitos activos
+2024-07-01 11:29:52 [32minfo[39m: Petición para obtener los asesores por distrito
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los parametros de la petición, id_distrito_judicial
+2024-07-01 11:29:52 [32minfo[39m: Se llama al control de asesores, y asi el de obtener asesores
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:29:52 [32minfo[39m: Se crean la clausula where
+2024-07-01 11:29:52 [32minfo[39m: Se agregan los campos a la clausula where
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:29:52 [32minfo[39m: Petición para obtener los géneros
+2024-07-01 11:29:52 [32minfo[39m: Se valida si se envió el parámetro activo en la petición
+2024-07-01 11:29:52 [32minfo[39m: Se valida si se envio el parametro activo, esto con elfin de obtener los géneros activos o inactivos
+2024-07-01 11:29:52 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros, en base a si estan activos
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los generos, con respecto a su estatus
+2024-07-01 11:29:52 [32minfo[39m: Se obtienen los generos activos
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de requisitos del catálogo
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los requisitos del catálogo
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /motivos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1&activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"id_distrito_judicial":"1","activo":"true"} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los motivos, en base a si estan activos o no
+2024-07-01 11:29:53 [32minfo[39m: Se valida si se envió el parámetro activo en la petición, esto con el fin de obtener los motivos activos o inactivos
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de motivos, y asi el de obtener motivos, en base a si estan activos
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los motivos, con respecto a su estatus
+2024-07-01 11:29:53 [32minfo[39m: Se valida si el motivo es activo
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:29:53 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los defensores activos por distrito judicial
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los motivos
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /estados-civiles?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /tipos-de-juicio?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los estados civiles, en base a si estan activos o no
+2024-07-01 11:29:53 [32minfo[39m: Se valida si se envió el parámetro activo en la petición, esto con el fin de obtener los estados civiles activos o inactivos
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de estados civiles, y asi el de obtener estados civiles, en base a si estan activos
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los estados civiles, con respecto a su estatus
+2024-07-01 11:29:53 [32minfo[39m: Se valida si el estado civil es activo
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los estados civiles activos
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los tipos de juicio, en base a si estan activos o no
+2024-07-01 11:29:53 [32minfo[39m: Se valida si se envio el parametro activo
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio, en base a si estan activos
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los tipos de juicio, con respecto a su estatus
+2024-07-01 11:29:53 [32minfo[39m: Se valida si el tipo de juicio es activo
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de estados civiles
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los estados civiles
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los tipos de juicio
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:29:53 [32minfo[39m: Request: GET /municipios-distritos/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:29:53 [32minfo[39m: Petición para obtener los municipios por distrito
+2024-07-01 11:29:53 [32minfo[39m: Se llama al control de municipios, y asi el de obtener municipios por distrito
+2024-07-01 11:29:53 [32minfo[39m: Se obtienen los municipios por distrito judicial
+2024-07-01 11:29:53 [32minfo[39m: Se valida el resultado de la consulta de municipios
+2024-07-01 11:29:53 [32minfo[39m: Se retornan los municipios
+2024-07-01 11:30:40 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:30:40 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:30:40 [32minfo[39m: Request: GET /empleados/busqueda?total=true&id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"total":"true","id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:30:40 [32minfo[39m: Request: GET /empleados/busqueda?pagina=1&id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"pagina":"1","id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:30:40 [32minfo[39m: Petición para obtener los empleados por busqueda
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los parametros de la busqueda
+2024-07-01 11:30:40 [32minfo[39m: Se valida si se requiere el total de empleados, o los empleados paginados
+2024-07-01 11:30:40 [32minfo[39m: Se llama al control de empleados, y asi el de obtener empleados por busqueda, para obtener el total de empleados
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los empleados por distrito judicial
+2024-07-01 11:30:40 [32minfo[39m: Se valida si se obtiene el total de empleados o los empleados por paginacion
+2024-07-01 11:30:40 [32minfo[39m: Se obtiene el total de empleados por distrito judicial
+2024-07-01 11:30:40 [32minfo[39m: Petición para obtener los empleados por busqueda
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los parametros de la busqueda
+2024-07-01 11:30:40 [32minfo[39m: Se valida si se requiere el total de empleados, o los empleados paginados
+2024-07-01 11:30:40 [32minfo[39m: Se llama al control de empleados, y asi el de obtener empleados por busqueda, para obtener los empleados paginados
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los empleados por distrito judicial
+2024-07-01 11:30:40 [32minfo[39m: Se valida si se obtiene el total de empleados o los empleados por paginacion
+2024-07-01 11:30:40 [32minfo[39m: Se obtienen los empleados por distrito judicial y paginacion
+2024-07-01 11:30:40 [32minfo[39m: Se valida el resultado de la consulta de empleados
+2024-07-01 11:30:40 [32minfo[39m: Se retornan el total de empleados
+2024-07-01 11:30:40 [32minfo[39m: Se recorre el ciclo for para obtener los empleados, validando si es asesor o defensor
+2024-07-01 11:30:40 [32minfo[39m: Se obtiene el asesor por su id
+2024-07-01 11:30:40 [32minfo[39m: Se retorna el asesor
+2024-07-01 11:30:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-07-01 11:30:40 [32minfo[39m: Se obtiene el defensor por su id
+2024-07-01 11:30:40 [32minfo[39m: Se obtiene el asesor por su id
+2024-07-01 11:30:40 [32minfo[39m: Se retorna el asesor
+2024-07-01 11:30:40 [32minfo[39m: Se retornan los empleados
+2024-07-01 11:30:40 [32minfo[39m: Se valida el resultado de la consulta de empleados
+2024-07-01 11:30:40 [32minfo[39m: Se retornan los empleados
+2024-07-01 11:30:48 [32minfo[39m: Request: GET /asesores/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:30:48 [32minfo[39m: Petición para obtener los asesores por distrito
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los parametros de la petición, id_distrito_judicial
+2024-07-01 11:30:48 [32minfo[39m: Se llama al control de asesores, y asi el de obtener asesores
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se crean la clausula where
+2024-07-01 11:30:48 [32minfo[39m: Se agregan los campos a la clausula where
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:30:48 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-07-01 11:30:48 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:30:48 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1&activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"id_distrito_judicial":"1","activo":"true"} - Body: {}
+2024-07-01 11:30:48 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:30:48 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los defensores activos por distrito judicial
+2024-07-01 11:30:48 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:30:48 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:30:48 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU4NTYwLCJleHAiOjE3MTk4ODczNjB9.TTcTgugXSKpNXQcx4qiEgilz6TMqzw1dfhmg639lyiw","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:30:48 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:30:48 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:30:48 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:30:48 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:30:48 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:30:48 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:32:48 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-07-01 11:32:48 [32minfo[39m: Se retorna el distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Request: GET /asesores/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:37:55 [32minfo[39m: Petición para obtener los asesores por distrito
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los parametros de la petición, id_distrito_judicial
+2024-07-01 11:37:55 [32minfo[39m: Se llama al control de asesores, y asi el de obtener asesores
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se crean la clausula where
+2024-07-01 11:37:55 [32minfo[39m: Se agregan los campos a la clausula where
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los asesores por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:37:55 [32minfo[39m: Se valida el resultado de la consulta de asesores
+2024-07-01 11:37:55 [32minfo[39m: Se retornan los asesores
+2024-07-01 11:37:55 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1&activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"id_distrito_judicial":"1","activo":"true"} - Body: {}
+2024-07-01 11:37:55 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:37:55 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los defensores activos por distrito judicial
+2024-07-01 11:37:55 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:37:55 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:37:55 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {} - Body: {}
+2024-07-01 11:37:55 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:37:55 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:37:55 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:37:55 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:37:55 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:37:55 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:38:47 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:38:47 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:38:47 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:38:47 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:38:47 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:38:47 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:38:47 [32minfo[39m: Request: GET /turnos/busqueda?id_distrito_judicial=1&pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1","pagina":"1"} - Body: {}
+2024-07-01 11:38:47 [32minfo[39m: Petición para obtener los turnos
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:38:47 [32minfo[39m: Se preparan los parametros para obtener los turnos, parseando los valores
+2024-07-01 11:38:47 [32minfo[39m: Se llama al control de turnos, y asi el de obtener turnos con respecto a los parametros
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los turnos, con respecto a su id_defensor y id_distrito_judicial
+2024-07-01 11:38:47 [32minfo[39m: Se establece el limite y el offset para la paginación
+2024-07-01 11:38:47 [32minfo[39m: Se crea la clausula where para la consulta
+2024-07-01 11:38:47 [32minfo[39m: Se valida si existen los parametros id_defensor y id_distrito_judicial, para agregarlos a la clausula where
+2024-07-01 11:38:47 [32minfo[39m: Se valida si se obtiene el total de los turnos o los turnos paginados
+2024-07-01 11:38:47 [32minfo[39m: Se obtienen los turnos paginados
+2024-07-01 11:38:47 [32minfo[39m: Se crea un arreglo de turnos
+2024-07-01 11:38:47 [32minfo[39m: Se retornar los turnos con sus respecto a la paginación , de manera manual
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene la asesoria de cada turno
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene la asesoria por su id
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene la asesoria en su forma adecuada para el front
+2024-07-01 11:38:47 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-07-01 11:38:47 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-07-01 11:38:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-07-01 11:38:47 [32minfo[39m: Se retorna el catalogo de requisito
+2024-07-01 11:38:47 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-07-01 11:38:47 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene el defensor por su id
+2024-07-01 11:38:47 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-07-01 11:38:47 [32minfo[39m: Se obtiene la persona por su id
+2024-07-01 11:38:48 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-07-01 11:38:48 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el estado civil por su id
+2024-07-01 11:38:48 [32minfo[39m: Se añaden los datos de la asesoria
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-07-01 11:38:48 [32minfo[39m: Se retorna el distrito judicial
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el municipio por su id
+2024-07-01 11:38:48 [32minfo[39m: Se crea un json de la asesoria 
+2024-07-01 11:38:48 [32minfo[39m: Se retorna la asesoria
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene la asesoria por su id
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene la asesoria en su forma adecuada para el front
+2024-07-01 11:38:48 [32minfo[39m: Se crea un json de la asesoria mas adecuado para el front
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria tiene detalle_asesorias_catalogos, si tiene se recorre el arreglo y se manda a llamar la funcion obtenerCatalogoRequisitoPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-07-01 11:38:48 [32minfo[39m: Se retorna el catalogo de requisito
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el catalogo de requisito por su id
+2024-07-01 11:38:48 [32minfo[39m: Se retorna el catalogo de requisito
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria tiene turno, si tiene se manda a llamar la funcion obtenerTurnoPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el defensor por su id
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria tiene empleado, si tiene se manda a llamar a la funcion de obtener asesor por id, o obtener defensor por id
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el asesor por su id
+2024-07-01 11:38:48 [32minfo[39m: Se retorna el asesor
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria cuenta con persona, si tiene se manda a llamar la funcion obtenerPersonaPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene la persona por su id
+2024-07-01 11:38:48 [32minfo[39m: Se valida la existencia de un motivo, si existe se manda a llamar la funcion obtenerMotivoPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el motivo por su id
+2024-07-01 11:38:48 [32minfo[39m: Se valida la existencia de un estado civil, si existe se manda a llamar la funcion obtenerEstadoCivilPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el estado civil por su id
+2024-07-01 11:38:48 [32minfo[39m: Se añaden los datos de la asesoria
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria cuenta con distrito judicial, si tiene se manda a llamar la funcion obtenerDistritoJudicial
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el distrito judicial por su id
+2024-07-01 11:38:48 [32minfo[39m: Se retorna el distrito judicial
+2024-07-01 11:38:48 [32minfo[39m: Se valida si la asesoria cuenta con municipio, si tiene se manda a llamar la funcion obtenerMunicipioPorId
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el municipio por su id
+2024-07-01 11:38:48 [32minfo[39m: Se crea un json de la asesoria 
+2024-07-01 11:38:48 [32minfo[39m: Se retorna la asesoria
+2024-07-01 11:38:48 [32minfo[39m: Se retornan los turnos en caso de que existan
+2024-07-01 11:38:48 [32minfo[39m: Se retornan los turnos
+2024-07-01 11:38:48 [32minfo[39m: Se valida el resultado de la consulta de turnos
+2024-07-01 11:38:48 [32minfo[39m: Se responde con los turnos obtenidos o el total de turnos
+2024-07-01 11:38:48 [32minfo[39m: Request: GET /turnos/busqueda?id_distrito_judicial=1&total=true&pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1","total":"true","pagina":"1"} - Body: {}
+2024-07-01 11:38:48 [32minfo[39m: Petición para obtener los turnos
+2024-07-01 11:38:48 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:38:48 [32minfo[39m: Se preparan los parametros para obtener los turnos, parseando los valores
+2024-07-01 11:38:48 [32minfo[39m: Se llama al control de turnos, y asi el de obtener turnos con respecto a los parametros
+2024-07-01 11:38:48 [32minfo[39m: Se obtienen los turnos, con respecto a su id_defensor y id_distrito_judicial
+2024-07-01 11:38:48 [32minfo[39m: Se establece el limite y el offset para la paginación
+2024-07-01 11:38:48 [32minfo[39m: Se crea la clausula where para la consulta
+2024-07-01 11:38:48 [32minfo[39m: Se valida si existen los parametros id_defensor y id_distrito_judicial, para agregarlos a la clausula where
+2024-07-01 11:38:48 [32minfo[39m: Se valida si se obtiene el total de los turnos o los turnos paginados
+2024-07-01 11:38:48 [32minfo[39m: Se obtiene el total de los turnos
+2024-07-01 11:38:48 [32minfo[39m: Se valida el resultado de la consulta de turnos
+2024-07-01 11:38:48 [32minfo[39m: Se responde con los turnos obtenidos o el total de turnos
+2024-07-01 11:38:59 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:38:59 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:38:59 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:38:59 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:38:59 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:38:59 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:38:59 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:38:59 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:38:59 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:39:08 [32minfo[39m: Request: GET /generos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:39:08 [32minfo[39m: Petición para obtener los géneros
+2024-07-01 11:39:08 [32minfo[39m: Se valida si se envió el parámetro activo en la petición
+2024-07-01 11:39:08 [32minfo[39m: Se valida si se envio el parametro activo, esto con elfin de obtener los géneros activos o inactivos
+2024-07-01 11:39:08 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros, en base a si estan activos
+2024-07-01 11:39:08 [32minfo[39m: Se obtienen los generos, con respecto a su estatus
+2024-07-01 11:39:08 [32minfo[39m: Se obtienen los generos activos
+2024-07-01 11:39:08 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:39:08 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /generos/2 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener el género por id
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de géneros, y asi el de obtener género por id
+2024-07-01 11:39:09 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta del género
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /tipos-de-juicio - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener los tipos de juicio, en base a si estan activos o no
+2024-07-01 11:39:09 [32minfo[39m: Se valida si se envio el parametro activo
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio, donde activo es nulo
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen los tipos de juicio, con respecto a su estatus
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen todos los tipos de juicio
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /generos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los tipos de juicio
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /municipios-distritos/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener los géneros
+2024-07-01 11:39:09 [32minfo[39m: Se valida si se envió el parámetro activo en la petición
+2024-07-01 11:39:09 [32minfo[39m: Se valida si se envio el parametro activo, esto con elfin de obtener los géneros activos o inactivos
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros, en base a si estan activos
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen los generos, con respecto a su estatus
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen los generos activos
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener los municipios por distrito
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de municipios, y asi el de obtener municipios por distrito
+2024-07-01 11:39:09 [32minfo[39m: Se obtienen los municipios por distrito judicial
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta de municipios
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los municipios
+2024-07-01 11:39:09 [32minfo[39m: Request: GET /generos/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:09 [32minfo[39m: Petición para obtener el género por id
+2024-07-01 11:39:09 [32minfo[39m: Se llama al control de géneros, y asi el de obtener género por id
+2024-07-01 11:39:09 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:09 [32minfo[39m: Se valida el resultado de la consulta del género
+2024-07-01 11:39:09 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:15 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:15 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:20 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:39:20 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:39:20 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:39:20 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:39:20 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:39:20 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:39:20 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:39:20 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:39:20 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:39:28 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:39:28 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:39:28 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:39:28 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:39:28 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:39:28 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:39:28 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:39:28 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:39:28 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:39:30 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:39:30 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:39:30 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:39:30 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:39:30 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:39:30 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:39:30 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:39:30 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:39:30 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:39:46 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:39:46 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:39:46 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:39:46 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:39:46 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:39:46 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:39:46 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:39:46 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:39:46 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /generos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener los géneros
+2024-07-01 11:39:49 [32minfo[39m: Se valida si se envió el parámetro activo en la petición
+2024-07-01 11:39:49 [32minfo[39m: Se valida si se envio el parametro activo, esto con elfin de obtener los géneros activos o inactivos
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros, en base a si estan activos
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los generos, con respecto a su estatus
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los generos activos
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /generos/2 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener el género por id
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de géneros, y asi el de obtener género por id
+2024-07-01 11:39:49 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /distritos-judiciales - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta del género
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener los distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de distritos judiciales, y asi el de obtener distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta de distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los distritos judiciales
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /tipos-de-juicio - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /generos?activo=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"activo":"true"} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener los tipos de juicio, en base a si estan activos o no
+2024-07-01 11:39:49 [32minfo[39m: Se valida si se envio el parametro activo
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio, donde activo es nulo
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los tipos de juicio, con respecto a su estatus
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen todos los tipos de juicio
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener los géneros
+2024-07-01 11:39:49 [32minfo[39m: Se valida si se envió el parámetro activo en la petición
+2024-07-01 11:39:49 [32minfo[39m: Se valida si se envio el parametro activo, esto con elfin de obtener los géneros activos o inactivos
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros, en base a si estan activos
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los generos, con respecto a su estatus
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los generos activos
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los tipos de juicio
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /municipios-distritos/distrito/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Request: GET /generos/1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {} - Body: {}
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener los municipios por distrito
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de municipios, y asi el de obtener municipios por distrito
+2024-07-01 11:39:49 [32minfo[39m: Se obtienen los municipios por distrito judicial
+2024-07-01 11:39:49 [32minfo[39m: Petición para obtener el género por id
+2024-07-01 11:39:49 [32minfo[39m: Se llama al control de géneros, y asi el de obtener género por id
+2024-07-01 11:39:49 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta de municipios
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los municipios
+2024-07-01 11:39:49 [32minfo[39m: Se valida el resultado de la consulta del género
+2024-07-01 11:39:49 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:39:57 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:39:57 [32minfo[39m: Se obtiene el genero por su id
+2024-07-01 11:40:00 [32minfo[39m: Request: GET /defensores/distrito?id_distrito_judicial=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MTE5LCJleHAiOjE3MTk4ODc5MTl9.mVnNmIdEpbR1gH0euetS5RhtZUxbq5x162sl7nlmnEE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3032/","origin":"http://10.178.5.138:3032"} - Query: {"id_distrito_judicial":"1"} - Body: {}
+2024-07-01 11:40:00 [32minfo[39m: Petición para obtener los defensores por distrito judicial
+2024-07-01 11:40:00 [32minfo[39m: Se obtienen los parametros de la petición
+2024-07-01 11:40:00 [32minfo[39m: Se llama al control de defensores, y asi el de obtener defensores por distrito judicial
+2024-07-01 11:40:00 [32minfo[39m: Se obtienen los defensores por distrito judicial
+2024-07-01 11:40:00 [32minfo[39m: Se valida si se obtienen los defensores activos o no activos
+2024-07-01 11:40:00 [32minfo[39m: Se obtienen los defensores no activos por distrito judicial
+2024-07-01 11:40:00 [32minfo[39m: Se valida el resultado de la consulta de defensores
+2024-07-01 11:40:00 [32minfo[39m: Se retornan los defensores
+2024-07-01 11:40:35 [32minfo[39m: Request: GET /generos/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-07-01 11:40:35 [32minfo[39m: Request: GET /generos/paginacion?total=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"total":"true"} - Body: {}
+2024-07-01 11:40:35 [32minfo[39m: Petición para obtener los géneros paginados
+2024-07-01 11:40:35 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-07-01 11:40:35 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-07-01 11:40:35 [32minfo[39m: Se llama al control de géneros, y asi el de obtener géneros paginados
+2024-07-01 11:40:35 [32minfo[39m: Se obtienen los generos por paginación
+2024-07-01 11:40:35 [32minfo[39m: Se establece el offset y el limite, y parseo de la pagina
+2024-07-01 11:40:35 [32minfo[39m: Se obtienen los generos por paginación
+2024-07-01 11:40:35 [32minfo[39m: Petición para obtener los géneros paginados
+2024-07-01 11:40:35 [32minfo[39m: Se obtiene el número de página y si se quiere obtener el total de géneros
+2024-07-01 11:40:35 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de géneros o los géneros paginados
+2024-07-01 11:40:35 [32minfo[39m: Se llama al control de géneros, y asi el de obtener el total de géneros
+2024-07-01 11:40:35 [32minfo[39m: Se obtiene el total de generos
+2024-07-01 11:40:35 [32minfo[39m: Se retorna los generos por paginación
+2024-07-01 11:40:35 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:40:35 [32minfo[39m: Se retornan los géneros
+2024-07-01 11:40:35 [32minfo[39m: Se valida el resultado de la consulta de géneros
+2024-07-01 11:40:35 [32minfo[39m: Se retorna el total de géneros
+2024-07-01 11:40:56 [32minfo[39m: Request: GET /tipos-de-juicio/paginacion?total=true - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"total":"true"} - Body: {}
+2024-07-01 11:40:56 [32minfo[39m: Request: GET /tipos-de-juicio/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-07-01 11:40:56 [32minfo[39m: Petición para obtener los tipos de juicio, en base a la paginación
+2024-07-01 11:40:56 [32minfo[39m: Se obtiene la pagina y el total de tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de tipos de juicio o los tipos de juicio paginados
+2024-07-01 11:40:56 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener el total de tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Se obtiene el total de tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Petición para obtener los tipos de juicio, en base a la paginación
+2024-07-01 11:40:56 [32minfo[39m: Se obtiene la pagina y el total de tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de tipos de juicio o los tipos de juicio paginados
+2024-07-01 11:40:56 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio paginados
+2024-07-01 11:40:56 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:56 [32minfo[39m: SE establece el offset y el limite
+2024-07-01 11:40:56 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:56 [32minfo[39m: Se retorna los tipos de juicio por paginación
+2024-07-01 11:40:56 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Se retornan los tipos de juicio
+2024-07-01 11:40:56 [32minfo[39m: Se retorna el total de tipos de juicio
+2024-07-01 11:40:57 [32minfo[39m: Request: GET /tipos-de-juicio/paginacion?pagina=2 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"pagina":"2"} - Body: {}
+2024-07-01 11:40:57 [32minfo[39m: Petición para obtener los tipos de juicio, en base a la paginación
+2024-07-01 11:40:57 [32minfo[39m: Se obtiene la pagina y el total de tipos de juicio
+2024-07-01 11:40:57 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de tipos de juicio o los tipos de juicio paginados
+2024-07-01 11:40:57 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio paginados
+2024-07-01 11:40:57 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:57 [32minfo[39m: SE establece el offset y el limite
+2024-07-01 11:40:57 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:57 [32minfo[39m: Se retorna los tipos de juicio por paginación
+2024-07-01 11:40:57 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:40:57 [32minfo[39m: Se retornan los tipos de juicio
+2024-07-01 11:40:58 [32minfo[39m: Request: GET /tipos-de-juicio/paginacion?pagina=1 - Headers: {"authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJub21icmUiOiJEUFMgVXN1YXJpbyBVbm8iLCJjb3JyZW8iOiJkZWZlbnNvcmlhLnRlc3RpbmcudXN1YXJpbzFAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkc01OdnF1U2d1a3NhaG85azM1ZXF6ZTZLZ1lOMEVzeUhVSVhxdnlxTUhBMFozaUNTeGVqeUciLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEsImlkX2VtcGxlYWRvIjpudWxsLCJlc3RhdHVzX2dlbmVyYWwiOiJBQ1RJVk8iLCJwZXJtaXNvcyI6WyJBTExfU0EiLCJBTExfU0QiXSwiaWF0IjoxNzE5ODU5MDcyLCJleHAiOjE3MTk4ODc4NzJ9.W6YgT8bu1_fQLUDNcBnPaneU-h6jy6FnXImA6Ral7aE","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36","referer":"http://10.178.5.138:3038/","origin":"http://10.178.5.138:3038"} - Query: {"pagina":"1"} - Body: {}
+2024-07-01 11:40:58 [32minfo[39m: Petición para obtener los tipos de juicio, en base a la paginación
+2024-07-01 11:40:58 [32minfo[39m: Se obtiene la pagina y el total de tipos de juicio
+2024-07-01 11:40:58 [32minfo[39m: Se valida si se envio el parametro total, para obtener el total de tipos de juicio o los tipos de juicio paginados
+2024-07-01 11:40:58 [32minfo[39m: Se llama al control de tipos de juicio, y asi el de obtener tipos de juicio paginados
+2024-07-01 11:40:58 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:58 [32minfo[39m: SE establece el offset y el limite
+2024-07-01 11:40:58 [32minfo[39m: Se obtienen los tipos de juicio por paginación
+2024-07-01 11:40:58 [32minfo[39m: Se retorna los tipos de juicio por paginación
+2024-07-01 11:40:58 [32minfo[39m: Se valida el resultado de la consulta de tipos de juicio
+2024-07-01 11:40:58 [32minfo[39m: Se retornan los tipos de juicio

@@ -45,7 +45,7 @@ class APIModel {
       const url = new URL(`${this.USERS_API_URL}/usuarios/usuario`);
       url.searchParams.append('correo', correo);
       url.searchParams.append('password', password);
-      console.log(url.toString());
+    //  console.log(url.toString());
 
       const response = await fetch(url, {
         method: 'GET',
@@ -54,7 +54,7 @@ class APIModel {
         },
       });
 
-      console.log(response);
+    //  console.log(response);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -64,7 +64,7 @@ class APIModel {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error en login:', error);
+    //  console.error('Error en login:', error);
       throw error;
     }
   }
@@ -89,7 +89,7 @@ class APIModel {
     try {
       const url = new URL(`${this.USERS_API_URL}/usuarios/recuperacion`);
       url.searchParams.append('correo', correo);
-      console.log(url.toString());
+    //  console.log(url.toString());
 
       const response = await fetch(url, {
         method: 'GET',
@@ -98,7 +98,7 @@ class APIModel {
         },
       });
 
-      console.log(response);
+    //  console.log(response);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -108,7 +108,7 @@ class APIModel {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error en recuperación:', error);
+   //   console.error('Error en recuperación:', error);
       throw error;
     }
   }
@@ -157,7 +157,7 @@ class APIModel {
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.error('Error en postProcesoJudicial:', error);
+   //  console.error('Error en postProcesoJudicial:', error);
       throw error;
     }
   }
@@ -205,7 +205,7 @@ class APIModel {
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.error('Error en putProcesoJudicial:', error);
+   //   console.error('Error en putProcesoJudicial:', error);
       throw error;
     }
 
@@ -250,7 +250,7 @@ class APIModel {
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.error('Error en getEscolaridadesTotal:', error);
+//      console.error('Error en getEscolaridadesTotal:', error);
       throw error;
     }
   }
@@ -294,7 +294,7 @@ class APIModel {
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.error('Error en getEscolaridadesPagina:', error);
+   //   console.error('Error en getEscolaridadesPagina:', error);
       throw error;
     }
   }
@@ -340,7 +340,7 @@ class APIModel {
       data = data.defensores;
       return data;
     } catch (error) {
-      console.error('Error en getDefensoresByDistrito2:', error);
+   //   console.error('Error en getDefensoresByDistrito2:', error);
       throw error;
     }
   }
@@ -382,7 +382,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getOcupacionesTotal:', error);
+    //  console.error('Error en getOcupacionesTotal:', error);
       throw error;
     }
 
@@ -426,7 +426,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getOcupacionesPagina:', error);
+    //  console.error('Error en getOcupacionesPagina:', error);
       throw error;
     }
 
@@ -470,7 +470,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEtniasTotal:', error);
+  //    console.error('Error en getEtniasTotal:', error);
       throw error;
     }
   }
@@ -513,7 +513,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEtniasPagina:', error);
+   //   console.error('Error en getEtniasPagina:', error);
       throw error;
     }
   }
@@ -556,7 +556,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getJuzgadosTotal:', error);
+   //   console.error('Error en getJuzgadosTotal:', error);
       throw error;
     }
 
@@ -600,7 +600,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getJuzgadosPagina:', error);
+   //   console.error('Error en getJuzgadosPagina:', error);
       throw error;
     }
   }
@@ -632,7 +632,7 @@ class APIModel {
     try {
       const url = `${this.DEMANDAS_API_URL}/proceso-judicial/defensor?id_defensor=${Number(id)}&estatus_proceso=${estatus}`;
          
-      console.log(url);
+   //   console.log(url);
       const response = await fetch(url, {
         method: 'GET',
         headers: { Authorization: `Bearer ${this.user.token}` },
@@ -647,7 +647,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getProcesosJudicialesByDefensor:', error);
+  //    console.error('Error en getProcesosJudicialesByDefensor:', error);
       throw error;
     }
   }
@@ -689,7 +689,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getProcesosJudicialesEnTramite:', error);
+   //   console.error('Error en getProcesosJudicialesEnTramite:', error);
       throw error;
     }
   }
@@ -743,7 +743,7 @@ class APIModel {
       url.search = params.toString();
 
 
-      console.log(url.toString());
+   //   console.log(url.toString());
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: { Authorization: `Bearer ${this.user.token}` },
@@ -758,7 +758,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getProcesosBusqueda:', error);
+    //  console.error('Error en getProcesosBusqueda:', error);
       throw error;
     }
   }
@@ -801,7 +801,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getProcesosJudiciales:', error);
+  //    console.error('Error en getProcesosJudiciales:', error);
       throw error;
     }
   }
@@ -843,7 +843,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getProcesoJudicialById:', error);
+     // console.error('Error en getProcesoJudicialById:', error);
       throw error;
     }
   }
@@ -885,7 +885,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTotalDemandas:', error);
+   //   console.error('Error en getTotalDemandas:', error);
       throw error;
     }
   }
@@ -926,7 +926,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getDemandaById:', error);
+    //  console.error('Error en getDemandaById:', error);
       throw error;
     }
   }
@@ -969,7 +969,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getJuzgadoByID:', error);
+   //   console.error('Error en getJuzgadoByID:', error);
       throw error;
     }
   }
@@ -1011,7 +1011,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getJuzgados:', error);
+   //   console.error('Error en getJuzgados:', error);
       throw error;
     }
   }
@@ -1054,7 +1054,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getJuzgados2:', error);
+    //  console.error('Error en getJuzgados2:', error);
       throw error;
     }
   }
@@ -1100,7 +1100,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putJuzgado:', error);
+    //  console.error('Error en putJuzgado:', error);
       throw error;
     }
   }
@@ -1146,7 +1146,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postJuzgado:', error);
+   //   console.error('Error en postJuzgado:', error);
       throw error;
     }
   }
@@ -1189,7 +1189,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEscolaridadByID:', error);
+    //  console.error('Error en getEscolaridadByID:', error);
       throw error;
     }
   }
@@ -1236,7 +1236,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putEscolaridad:', error);
+    //  console.error('Error en putEscolaridad:', error);
       throw error;
     }
   }
@@ -1283,7 +1283,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postEscolaridad:', error);
+    //  console.error('Error en postEscolaridad:', error);
       throw error;
     }
   }
@@ -1325,7 +1325,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEscolaridades:', error);
+    //  console.error('Error en getEscolaridades:', error);
       throw error;
     }
   }
@@ -1366,7 +1366,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEscolaridades2:', error);
+    //  console.error('Error en getEscolaridades2:', error);
       throw error;
     }
   }
@@ -1413,7 +1413,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEtniaByID:', error);
+   //   console.error('Error en getEtniaByID:', error);
       throw error;
     }
   }
@@ -1460,7 +1460,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putEtnia:', error);
+    //  console.error('Error en putEtnia:', error);
       throw error;
     }
   }
@@ -1503,7 +1503,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEtnias:', error);
+   //   console.error('Error en getEtnias:', error);
       throw error;
     }
   }
@@ -1547,7 +1547,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEtnias2:', error);
+   //   console.error('Error en getEtnias2:', error);
       throw error;
     }
   }
@@ -1593,7 +1593,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postEtnia:', error);
+  //    console.error('Error en postEtnia:', error);
       throw error;
     }
   }
@@ -1643,7 +1643,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postOcupacion:', error);
+    //  console.error('Error en postOcupacion:', error);
       throw error;
     }
   }
@@ -1685,7 +1685,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getOcupacionByID:', error);
+  //    console.error('Error en getOcupacionByID:', error);
       throw error;
     }
   }
@@ -1734,7 +1734,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putOcupacion:', error);
+   //   console.error('Error en putOcupacion:', error);
       throw error;
     }
   }
@@ -1777,7 +1777,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getOcupaciones:', error);
+    //  console.error('Error en getOcupaciones:', error);
       throw error;
     }
   }
@@ -1819,7 +1819,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getOcupaciones2:', error);
+    //  console.error('Error en getOcupaciones2:', error);
       throw error;
     }
   }
@@ -1862,7 +1862,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurno:', error);
+    //  console.error('Error en getTurno:', error);
       throw error;
     }
   }
@@ -1912,7 +1912,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putTurno:', error);
+  ////    console.error('Error en putTurno:', error);
       throw error;
     }
   }
@@ -1953,7 +1953,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurnos:', error);
+ //     console.error('Error en getTurnos:', error);
       throw error;
     }
 
@@ -2019,7 +2019,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurnosBusqueda:', error);
+ //     console.error('Error en getTurnosBusqueda:', error);
       throw error;
     }
   }
@@ -2060,7 +2060,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurnosBydIDDistrito:', error);
+  //    console.error('Error en getTurnosBydIDDistrito:', error);
       throw error;
     }
   }
@@ -2102,7 +2102,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurnoById:', error);
+    //  console.error('Error en getTurnoById:', error);
       throw error;
     }
   }
@@ -2143,7 +2143,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurno:', error);
+   //   console.error('Error en getTurno:', error);
       throw error;
     }
   }
@@ -2186,7 +2186,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTurnosByDefensor:', error);
+  //    console.error('Error en getTurnosByDefensor:', error);
       throw error;
     }
   }
@@ -2236,7 +2236,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTiposJuicioByID:', error);
+   //   console.error('Error en getTiposJuicioByID:', error);
       throw error;
     }
   }
@@ -2279,7 +2279,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTiposJuicio:', error);
+ //     console.error('Error en getTiposJuicio:', error);
       throw error;
     }
   }
@@ -2321,7 +2321,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getTiposJuicio2:', error);
+  //    console.error('Error en getTiposJuicio2:', error);
       throw error;
     }
 
@@ -2365,7 +2365,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getAsesoriaById:', error);
+    //  console.error('Error en getAsesoriaById:', error);
       throw error;
     }
   }
@@ -2409,7 +2409,7 @@ class APIModel {
       return responseData.municipios;
 
     } catch (error) {
-      console.error('Error en getMunicipiosByDistrito:', error);
+ //     console.error('Error en getMunicipiosByDistrito:', error);
       throw error;
     }
   }
@@ -2456,7 +2456,7 @@ class APIModel {
       return responseData.distritosJudiciales;
 
     } catch (error) {
-      console.error('Error en getDistritos:', error);
+  //    console.error('Error en getDistritos:', error);
       throw error;
     }
   }
@@ -2499,7 +2499,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getAsesores:', error);
+  //    console.error('Error en getAsesores:', error);
       throw error;
     }
   }
@@ -2540,7 +2540,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getAsesorID:', error);
+   //   console.error('Error en getAsesorID:', error);
       throw error;
     }
   }
@@ -2581,7 +2581,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getAsesores2:', error);
+    //  console.error('Error en getAsesores2:', error);
       throw error;
     }
   }
@@ -2623,7 +2623,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getDefensorID:', error);
+    //  console.error('Error en getDefensorID:', error);
       throw error;
     }
   }
@@ -2665,7 +2665,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getDefensores:', error);
+  //    console.error('Error en getDefensores:', error);
       throw error;
     }
 
@@ -2707,7 +2707,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getDefensores2:', error);
+   //   console.error('Error en getDefensores2:', error);
       throw error;
     }
   }
@@ -2749,7 +2749,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getGeneros:', error);
+  //    console.error('Error en getGeneros:', error);
       throw error;
     }
   }
@@ -2790,7 +2790,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getGeneros2:', error);
+    //  console.error('Error en getGeneros2:', error);
       throw error;
     }
   }
@@ -2831,7 +2831,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getGeneroByID:', error);
+   //   console.error('Error en getGeneroByID:', error);
       throw error;
     }
   }
@@ -2875,7 +2875,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getDomicilioByCP:', error);
+    //  console.error('Error en getDomicilioByCP:', error);
       throw error;
     }
   }
@@ -2914,7 +2914,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getColoniaById:', error);
+    //  console.error('Error en getColoniaById:', error);
       throw error;
     }
   }
@@ -2955,7 +2955,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getPruebaByID:', error);
+  //    console.error('Error en getPruebaByID:', error);
       throw error;
     }
   }
@@ -3016,7 +3016,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getPruebasBusqueda:', error);
+  //    console.error('Error en getPruebasBusqueda:', error);
       throw error;
     }
   }
@@ -3063,7 +3063,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postPrueba:', error);
+ //     console.error('Error en postPrueba:', error);
       throw error;
     }
   }
@@ -3111,7 +3111,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putPrueba:', error);
+  //    console.error('Error en putPrueba:', error);
       throw error;
     }
   }
@@ -3153,7 +3153,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEstadoProcesalByID:', error);
+   //   console.error('Error en getEstadoProcesalByID:', error);
       throw error;
     }
   }
@@ -3217,7 +3217,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getEstadosBusqueda:', error);
+   //   console.error('Error en getEstadosBusqueda:', error);
       throw error;
     }
   }
@@ -3265,7 +3265,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postEstadoProcesal:', error);
+    //  console.error('Error en postEstadoProcesal:', error);
       throw error;
     }
   }
@@ -3312,7 +3312,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putEstadoProcesal:', error);
+   //   console.error('Error en putEstadoProcesal:', error);
       throw error;
     }
   }
@@ -3356,7 +3356,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getObservacionByID:', error);
+  //    console.error('Error en getObservacionByID:', error);
       throw error;
     }
   }
@@ -3419,7 +3419,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getObservacionesBusqueda:', error);
+     // console.error('Error en getObservacionesBusqueda:', error);
       throw error;
     }
   }
@@ -3467,7 +3467,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postObservacion:', error);
+   //   console.error('Error en postObservacion:', error);
       throw error;
     }
   }
@@ -3515,7 +3515,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putObservacion:', error);
+   //   console.error('Error en putObservacion:', error);
       throw error;
     }
   }
@@ -3561,7 +3561,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getResolucionByID:', error);
+    //  console.error('Error en getResolucionByID:', error);
       throw error;
     }
   }
@@ -3622,7 +3622,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getResolucionesBusqueda:', error);
+   //   console.error('Error en getResolucionesBusqueda:', error);
       throw error;
     }
   }
@@ -3672,7 +3672,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postResolucion:', error);
+   //   console.error('Error en postResolucion:', error);
       throw error;
     }
   }
@@ -3720,7 +3720,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putResolucion:', error);
+  //    console.error('Error en putResolucion:', error);
       throw error;
     }
   }
@@ -3765,7 +3765,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getFamiliarByID:', error);
+     // console.error('Error en getFamiliarByID:', error);
       throw error;
     }
   }
@@ -3827,7 +3827,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en getFamiliaresBusqueda:', error);
+    //  console.error('Error en getFamiliaresBusqueda:', error);
       throw error;
     }
   }
@@ -3875,7 +3875,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en postFamiliar:', error);
+    //  console.error('Error en postFamiliar:', error);
       throw error;
     }
   }
@@ -3924,7 +3924,7 @@ class APIModel {
       return responseData;
 
     } catch (error) {
-      console.error('Error en putFamiliar:', error);
+   //   console.error('Error en putFamiliar:', error);
       throw error;
     }
   }

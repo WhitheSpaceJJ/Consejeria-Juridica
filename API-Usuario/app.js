@@ -37,10 +37,17 @@ try {
   console.error('Invalid JSON in IPS environment variable:', error.message);
   allowedIPs = []; // O puedes manejar el error de otra manera
 }
-
-
-// Middleware de CORS y IP Whitelisting combinado
-// Middleware de CORS y IP Whitelisting combinado
+// Middleware de CORS simplificado para pruebas
+/*
+const corsOptions = (req, callback) => {
+  callback(null, {
+    origin: true, // Permite todas las solicitudes CORS
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+  });
+};
+*/
 const corsOptions = (req, callback) => {
   const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
 
@@ -59,6 +66,31 @@ const corsOptions = (req, callback) => {
   }
 };
 
+/*
+// Middleware de CORS y IP Whitelisting combinado
+const corsOptions = (req, callback) => {
+  const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+  const requestOrigin = req.get('origin');
+  const cleanedRequestIP = requestIP.replace(/^.*:/, ''); // Limpiar prefijo IPv6
+
+  console.log('Request IP:', requestIP);
+  console.log('Cleaned Request IP:', cleanedRequestIP);
+  console.log('Request Origin:', requestOrigin);
+
+  if (allowedIPs.includes(cleanedRequestIP) || allowedIPs.includes(requestOrigin)) {
+    // Si la IP o el origen está permitido, permite la solicitud CORS
+    callback(null, {
+      origin: true, // Permite todas las solicitudes CORS
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
+    });
+  } else {
+    // Si la IP o el origen no está permitido, rechaza la solicitud CORS
+    callback(new Error('No autorizado por CORS'));
+  }
+};
+*/
 // Aplica el middleware de CORS/IP Whitelisting
 app.use(cors(corsOptions));
 
