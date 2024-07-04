@@ -63,19 +63,30 @@ class Server {
     let allowedIPs;
 
     try {
-      allowedIPs = JSON.parse(process.env.IPS);
+      allowedIPs = process.env.IPS.split(',').map(ip => ip.trim());
       console.log(allowedIPs);
     } catch (error) {
-      console.error('Invalid JSON in IPS environment variable:', error.message);
-      allowedIPs = []; // O puedes manejar el error de otra manera
+      console.error('Error parsing IPS environment variable:', error.message);
+      allowedIPs = []; // Maneja el error de la forma que consideres adecuada
     }
     
     // Middleware de CORS y IP Whitelisting combinado
+
+
     const corsOptions = (req, callback) => {
-      const requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
-
-
+      console.log(allowedIPs);
+    
+      let requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress;
+    
+      // Si requestIP es una dirección IPv6-mapeada-a-IPv4, la limpiamos
+      if (requestIP && requestIP.includes('::ffff:')) {
+        requestIP = requestIP.replace('::ffff:', '');
+      }
+    
+      console.log('Request IP:', requestIP);
+    
       if (allowedIPs.includes(requestIP)) {
+        console.log('Permitido');
         // Si la IP está permitida, permite la solicitud CORS
         callback(null, {
           origin: true, // Permite todas las solicitudes CORS
@@ -84,10 +95,12 @@ class Server {
           exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar']
         });
       } else {
+        console.log('No Permitido');
         // Si la IP no está permitida, rechaza la solicitud CORS
         callback(new Error('No autorizado por CORS'));
       }
     };
+    
     // Aplica el middleware de CORS/IP Whitelisting
     this.app.use(cors(corsOptions));
 

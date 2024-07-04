@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3009:3009"
+    environment:
+      DBHOST: db
+      DBUSER: root
+      DBPASSWORD: 1234
+      DATABASE: defensoria_asesorias_oficial
+      PORT: 3009
+      DBPORT: 3306
+      HOSTTOKENUSUARIOS: localhost:161
+      GRPCPORTASESORIAS: 164
+      HOSTGRPCCODIGOSPOSTALES: localhost:162
+      DEPLOY: DEPLOYA
+      DEPLOYA: http://
+      DEPLOYB: https://
+      APPWEBASESORIA: http://localhost:3030
+      APPWEBDEMANDA: http://localhost:3030
+      IPS: localhost,127.0.0.1,::1,200.58.127.244,187.251.110.240
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: defensoria_asesorias_oficial
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./asesorias.sql:/docker-entrypoint-initdb.d/asesorias.sql
+
+volumes:
+  db_data:

@@ -72,6 +72,7 @@ export default defineConfig({
         recuperacion: resolve(__dirname, 'recuperacion.html'),
         turnar: resolve(__dirname, 'turnar.html'),
         usuarios: resolve(__dirname, 'usuarios.html'),
+        //prueba: resolve(__dirname, 'prueba.html'),
       }
     },  cacheAssets: false, // Esta opción desactiva la caché de los activos generados
 
