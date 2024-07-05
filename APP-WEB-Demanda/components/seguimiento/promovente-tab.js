@@ -3,10 +3,10 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model.js'
 //  import '../codigo-postal/codigo-postal.js'
 
- 
+
 
 export class PromoventeTab extends HTMLElement {
-   //Variables de 
+  //Variables de 
   #api
   #nombre
   #apellidoPaterno
@@ -48,7 +48,7 @@ export class PromoventeTab extends HTMLElement {
   #etniaActual
   #escolaridadActual
   #ocupacionActual
-  
+
 
   #generoActual
   #editablePromovente
@@ -111,7 +111,7 @@ export class PromoventeTab extends HTMLElement {
       promovente
     }
   }
-//Metodo que establece los datos del promovente
+  //Metodo que establece los datos del promovente
   set data(value) {
     this.setAttribute('data', value)
   }
@@ -126,24 +126,24 @@ export class PromoventeTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-       //Componente de registro tab
-       this.registroTab = document.querySelector('registro-full-tab')
-       //Obtencion del formulario de codigo postal
-       this.formCP = this.shadowRoot.getElementById('buscar-cp')
-       //Asignacion de la funcion de busqueda de codigo postal
-       this.formCP.addEventListener('click', (event) => {
-         event.preventDefault();
-         if (
-           !this.#cp.value ||
-           this.#cp.value.length !== 5 ||
-           isNaN(this.#cp.value)
-         ) {
-           this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-           return
-         }
-         this.searchCP()
-       })
-       await this.campos()
+    //Componente de registro tab
+    this.registroTab = document.querySelector('registro-full-tab')
+    //Obtencion del formulario de codigo postal
+    this.formCP = this.shadowRoot.getElementById('buscar-cp')
+    //Asignacion de la funcion de busqueda de codigo postal
+    this.formCP.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (
+        !this.#cp.value ||
+        this.#cp.value.length !== 5 ||
+        isNaN(this.#cp.value)
+      ) {
+        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+        return
+      }
+      this.searchCP()
+    })
+    await this.campos()
   }
   //Constructor de la clase
   constructor() {
@@ -153,22 +153,18 @@ export class PromoventeTab extends HTMLElement {
     this.style.display = 'none'
     this.init2()
 
- 
+
   }
 
-  //Metodo que inicializa los datos del promovente, select ,etc
-  async init() {
-    //inicio de la api
-    this.#api = new APIModel()
-   //Obtencion de las etnias
+  async datosGeneralesPromovente() {
     try {
-    const etnias = await this.#api.getEtnias2()
-    this.#etnias = etnias
+      const etnias = await this.#api.getEtnias2()
+      this.#etnias = etnias
     } catch (error) {
       console.error('Error al obtener datos de la API:', error)
     }
 
-   //Obtencion de las escolaridades
+    //Obtencion de las escolaridades
     try {
       const escolaridades = await this.#api.getEscolaridades2()
       this.#escolaridades = escolaridades
@@ -176,131 +172,268 @@ export class PromoventeTab extends HTMLElement {
       console.error('Error al obtener datos de la API:', error)
     }
 
-     //Obtencion de las ocupaciones
+    //Obtencion de las ocupaciones
     try {
-    const ocupaciones = await this.#api.getOcupaciones2()
-    this.#ocupaciones = ocupaciones
-  } catch (error) {
-    console.error('Error al obtener datos de la API:', error)
+      const ocupaciones = await this.#api.getOcupaciones2()
+      this.#ocupaciones = ocupaciones
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+    //Obtencion de los generos
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      this.#generos = generos
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
   }
-  //Obtencion de los generos
-    const { generos } = await this.#api.getGeneros2()
-    this.#generos = generos
 
-   //Añadir mecanismo para que cuando se edite los campos de generos, ocupaciones etnicas ,escolaridades se presente el actual sin embargo, 
+  //Metodo que inicializa los datos del promovente, select ,etc
+  async init() {
+    //inicio de la api
+    this.#api = new APIModel()
+    //Obtencion de las etnias
 
-   //Llamada al metodo que maneja los campos del formulario
+    //Añadir mecanismo para que cuando se edite los campos de generos, ocupaciones etnicas ,escolaridades se presente el actual sin embargo, 
+   await this.datosGeneralesPromovente()
+    //Llamada al metodo que maneja los campos del formulario
     this.manageFormFields()
 
     //Llamada al metodo que llena los inputs
     this.fillInputs()
 
-     //Obtencion del genero actual
-    const { genero } = await this.#api.getGeneroByID(this.#promovente.id_genero)
-    this.#generoActual = genero
+    this.verificacionDatos()
+  }
 
-     /**
+  async verificacionDatos() {
+    //Obtencion del genero actual
+    try {
+      const { genero } = await this.#api.getGeneroByID(this.#promovente.id_genero)
+      this.#generoActual = genero
+      console.log(this.#generos)
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+  
+   if (this.#generos === undefined) { 
     const option = document.createElement('option')
     option.value = this.#generoActual.id_genero
     option.text = this.#generoActual.descripcion_genero
-    this.#sexo.appendChild(option) 
-
+    this.#sexo.appendChild(option)
     this.#sexo.value = this.#generoActual.id_genero
-
-    antes de colocar el codigo nuevamente verifica la posibilidad de que el select contenga el genero actual ya  que pues agregarlo nuevamente sin verificar esa posibilidad no seria correcto
-      */
-        
-    //Se añaade el genero actual al select y asu de igual manera todo lo relacionado se hace con los demas campos
-      const option = document.createElement('option')
-      option.value = this.#generoActual.id_genero
-      option.text = this.#generoActual.descripcion_genero
-      const optiones = this.#sexo.options
-      let existe = false
+   }else{
+     //Verificar si el genero ya esta la lista de generos
+     let existe = false
+     for (let i = 0; i < this.#generos.length; i++) {
+        if (this.#generos[i].id_genero === this.#generoActual.id_genero) {
+          existe = true
+          break
+        }
+      }
       
-      for (let i = 0; i < optiones.length; i++) {
-        if (optiones[i].value === option.value) {
+      if (existe===false) {
+        const option = document.createElement('option')
+        option.value = this.#generoActual.id_genero
+        option.text = this.#generoActual.descripcion_genero
+        this.#sexo.appendChild(option)
+        this.#sexo.value = this.#generoActual.id_genero
+      }
+   }
+
+
+
+  /*
+ 
+    const etnia = await this.#api.getEtniaByID(this.#promovente.promovente.etnia.id_etnia)
+    this.#etniaActual = etnia
+
+    const escolaridad = await this.#api.getEscolaridadByID(this.#promovente.promovente.escolaridad.id_escolaridad)
+    this.#escolaridadActual = escolaridad
+
+
+    const ocupacion = await this.#api.getOcupacionByID(this.#promovente.promovente.ocupacion.id_ocupacion)
+    this.#ocupacionActual = ocupacion
+
+    const opcionesEtnia = this.#etnia.options
+    let existeEtnia = false
+    for (let i = 0; i < opcionesEtnia.length; i++) {
+      if (opcionesEtnia[i].value === this.#etniaActual.id_etnia) {
+        existeEtnia = true
+        break
+      }
+    }
+
+    if (existeEtnia) {
+      const option = document.createElement('option')
+      option.value = this.#etniaActual.id_etnia
+      option.text = this.#etniaActual.nombre
+      this.#etnia.appendChild(option)
+    }
+
+    this.#etnia.value = this.#etniaActual.id_etnia
+
+    const opcionesEscolaridad = this.#escolaridad.options
+    let existeEscolaridad = false
+    for (let i = 0; i < opcionesEscolaridad.length; i++) {
+      if (opcionesEscolaridad[i].value === this.#escolaridadActual.id_escolaridad) {
+        existeEscolaridad = true
+        break
+      }
+    }
+
+    if (existeEscolaridad) {
+      const option = document.createElement('option')
+      option.value = this.#escolaridadActual.id_escolaridad
+      option.text = this.#escolaridadActual.descripcion
+      this.#escolaridad.appendChild(option)
+    }
+
+
+    this.#escolaridad.value = this.#escolaridadActual.id_escolaridad
+
+    const opcionesOcupacion = this.#ocupacion.options
+    let existeOcupacion = false
+
+
+    for (let i = 0; i < opcionesOcupacion.length; i++) {
+
+      if (opcionesOcupacion[i].value === this.#ocupacionActual.id_ocupacion) {
+        existeOcupacion = true
+        break
+      }
+    }
+
+    if (existeOcupacion) {
+
+      const option = document.createElement('option')
+      option.value = this.#ocupacionActual.id_ocupacion
+      option.text = this.#ocupacionActual.descripcion_ocupacion
+      this.#ocupacion.appendChild(option)
+    }
+
+    this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
+   */
+
+    
+    try {
+      const etnia = await this.#api.getEtniaByID(this.#promovente.promovente.etnia.id_etnia)
+      this.#etniaActual = etnia
+    }
+    catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+
+    if (this.#etnias === undefined) {
+      const option = document.createElement('option')
+      option.value = this.#etniaActual.id_etnia
+      option.text = this.#etniaActual.nombre
+      this.#etnia.appendChild(option)
+      this.#etnia.value = this.#etniaActual.id_etnia
+    }
+    else {
+      let existe = false
+      for (let i = 0; i < this.#etnias.length; i++) {
+        if (this.#etnias[i].id_etnia === this.#etniaActual.id_etnia) {
           existe = true
           break
         }
       }
 
-      if (existe) {
-        this.#sexo.appendChild(option)
-      }
-
-      this.#sexo.value = this.#generoActual.id_genero
-  
-    const etnia =  await this.#api.getEtniaByID(this.#promovente.promovente.etnia.id_etnia)
-    this.#etniaActual = etnia
-
-    const escolaridad= await this.#api.getEscolaridadByID(this.#promovente.promovente.escolaridad.id_escolaridad)
-    this.#escolaridadActual =  escolaridad
-
-
-    const ocupacion = await this.#api.getOcupacionByID(this.#promovente.promovente.ocupacion.id_ocupacion)
-    this.#ocupacionActual =  ocupacion
-
-     const opcionesEtnia = this.#etnia.options
-      let existeEtnia = false
-      for (let i = 0; i < opcionesEtnia.length; i++) {
-        if (opcionesEtnia[i].value === this.#etniaActual.id_etnia) {
-          existeEtnia = true
-          break
-        }
-      }
-
-      if (existeEtnia) {
+      if (existe === false) {
         const option = document.createElement('option')
         option.value = this.#etniaActual.id_etnia
         option.text = this.#etniaActual.nombre
         this.#etnia.appendChild(option)
+        this.#etnia.value = this.#etniaActual.id_etnia
       }
+    }
 
-      this.#etnia.value = this.#etniaActual.id_etnia
+    try {
+      const escolaridad = await this.#api.getEscolaridadByID(this.#promovente.promovente.escolaridad.id_escolaridad)
+      this.#escolaridadActual = escolaridad
+    }
 
-      const opcionesEscolaridad = this.#escolaridad.options
-      let existeEscolaridad = false
-      for (let i = 0; i < opcionesEscolaridad.length; i++) {
-        if (opcionesEscolaridad[i].value === this.#escolaridadActual.id_escolaridad) {
-          existeEscolaridad = true
+    catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+
+    if (this.#escolaridades === undefined) {
+      const option = document.createElement('option')
+      option.value = this.#escolaridadActual.id_escolaridad
+      option.text = this.#escolaridadActual.descripcion
+      this.#escolaridad.appendChild(option)
+      this.#escolaridad.value = this.#escolaridadActual.id_escolaridad
+    }
+
+
+    else {
+
+      let existe = false
+      for (let i = 0; i < this.#escolaridades.length; i++) {
+        if (this.#escolaridades[i].id_escolaridad === this.#escolaridadActual.id_escolaridad) {
+          existe = true
           break
         }
       }
 
-      if (existeEscolaridad) {
+      if (existe === false) {
         const option = document.createElement('option')
         option.value = this.#escolaridadActual.id_escolaridad
         option.text = this.#escolaridadActual.descripcion
         this.#escolaridad.appendChild(option)
+        this.#escolaridad.value = this.#escolaridadActual.id_escolaridad
       }
+    }
+  /*
+    const etnia = await this.#api.getEtniaByID(this.#promovente.promovente.etnia.id_etnia)
+    this.#etniaActual = etnia
+
+    const escolaridad = await this.#api.getEscolaridadByID(this.#promovente.promovente.escolaridad.id_escolaridad)
+    this.#escolaridadActual = escolaridad
 
 
-      this.#escolaridad.value = this.#escolaridadActual.id_escolaridad
+    const ocupacion = await this.#api.getOcupacionByID(this.#promovente.promovente.ocupacion.id_ocupacion)
+    this.#ocupacionActual = ocupacion
 
-      const opcionesOcupacion = this.#ocupacion.options
-      let existeOcupacion = false
+      */
+    try {
+      const ocupacion = await this.#api.getOcupacionByID(this.#promovente.promovente.ocupacion.id_ocupacion)
+      this.#ocupacionActual = ocupacion
+    }
 
+    catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
 
-      for (let i = 0; i < opcionesOcupacion.length; i++) {
+    if (this.#ocupaciones === undefined) {
+      const option = document.createElement('option')
+      option.value = this.#ocupacionActual.id_ocupacion
+      option.text = this.#ocupacionActual.descripcion_ocupacion
+      this.#ocupacion.appendChild(option)
+      this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
+    }
 
-        if (opcionesOcupacion[i].value === this.#ocupacionActual.id_ocupacion) {
-          existeOcupacion = true
+    else {
+      let existe = false
+      for (let i = 0; i < this.#ocupaciones.length; i++) {
+        if (this.#ocupaciones[i].id_ocupacion === this.#ocupacionActual.id_ocupacion) {
+          existe = true
           break
         }
       }
 
-      if (existeOcupacion) {
-
+      if (existe === false) {
         const option = document.createElement('option')
         option.value = this.#ocupacionActual.id_ocupacion
         option.text = this.#ocupacionActual.descripcion_ocupacion
         this.#ocupacion.appendChild(option)
+        this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
       }
+    }
 
-      this.#ocupacion.value = this.#ocupacionActual.id_ocupacion
-
+    
+     
   }
-
 
 
   //Metodo que maneja los campos del formulario
@@ -387,30 +520,30 @@ export class PromoventeTab extends HTMLElement {
       var nombrePattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
 
 
-        if (!nombrePattern.test(nombreInput.value)) {
-          // Si el campo contiene caracteres no válidos, lanzar una excepción
+      if (!nombrePattern.test(nombreInput.value)) {
+        // Si el campo contiene caracteres no válidos, lanzar una excepción
 
-          const modal = document.querySelector('modal-warning')
-          modal.setOnCloseCallback(() => { })
+        const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
 
-          modal.message = 'El nombre solo permite letras, verifique su respuesta.'
-          modal.title = 'Error de validación'
-          modal.open = true
+        modal.message = 'El nombre solo permite letras, verifique su respuesta.'
+        modal.title = 'Error de validación'
+        modal.open = true
 
-        } else if (nombreInput.value.length > 50) {
-          // Si el campo tiene más de 50 caracteres, lanzar una excepción
-          const modal = document.querySelector('modal-warning')
-          modal.setOnCloseCallback(() => { })
+      } else if (nombreInput.value.length > 50) {
+        // Si el campo tiene más de 50 caracteres, lanzar una excepción
+        const modal = document.querySelector('modal-warning')
+        modal.setOnCloseCallback(() => { })
 
-          modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
-          modal.title = 'Error de validación'
-          modal.open = true
-        }
+        modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
+        modal.title = 'Error de validación'
+        modal.open = true
+      }
     });
 
     apellidoPaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
- if (!apellidoPattern.test(apellidoPaternoInput.value)) {
+      if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.setOnCloseCallback(() => { })
 
@@ -430,7 +563,7 @@ export class PromoventeTab extends HTMLElement {
 
     apellidoMaternoInput.addEventListener('input', function () {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
-if (!apellidoPattern.test(apellidoMaternoInput.value)) {
+      if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
         modal.setOnCloseCallback(() => { })
 
@@ -517,33 +650,33 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
     //Obtencion de los datos del promovente
     this.#promovente = this.registroTab.data.promovente
     this.#promventeDomicilio = this.#promovente.domicilio
-    this.#etnia.innerHTML = '' 
+    this.#etnia.innerHTML = ''
 
-     //Creacion de un option para el select
-     const option = document.createElement('option')
-     option.value = 0
-     option.text = 'Seleccione una etnia'
-     this.#etnia.appendChild(option)    
-
-
-     //Recorrido de las etnias para llenar el select
-     try{
-
-    this.#etnias.forEach(etnia => {
-      const option = document.createElement('option')
-      option.value = etnia.id_etnia
-      option.text = etnia.nombre
-      this.#etnia.appendChild(option)
-    })
+    //Creacion de un option para el select
+    const option = document.createElement('option')
+    option.value = 0
+    option.text = 'Seleccione una etnia'
+    this.#etnia.appendChild(option)
 
 
-  } catch (error) {
-    console.error('Error al obtener datos de la API:', error)
-  }
+    //Recorrido de las etnias para llenar el select
+    try {
 
-  //Limpiar el select de generos
-    this.#generos.innerHTML = ''
-    
+      this.#etnias.forEach(etnia => {
+        const option = document.createElement('option')
+        option.value = etnia.id_etnia
+        option.text = etnia.nombre
+        this.#etnia.appendChild(option)
+      })
+
+
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+
+    //Limpiar el select de generos
+    this.#sexo.innerHTML = ''
+
     //Creacion de un option para el select
     const optionGenero = document.createElement('option')
     optionGenero.value = 0
@@ -552,18 +685,18 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
 
     //Recorrido de los generos para llenar el select
     try {
-    this.#generos.forEach(genero => {
-      const option = document.createElement('option')
-      option.value = genero.id_genero
-      option.text = genero.descripcion_genero
-      this.#sexo.appendChild(option)
-    })
-  } catch (error) {
-    console.error('Error al obtener datos de la API:', error)
-  }
+      this.#generos.forEach(genero => {
+        const option = document.createElement('option')
+        option.value = genero.id_genero
+        option.text = genero.descripcion_genero
+        this.#sexo.appendChild(option)
+      })
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
 
-    
-  //Limpiar el select de escolaridades
+
+    //Limpiar el select de escolaridades
     this.#escolaridad.innerHTML = ''
 
     //Creacion de un option para el select
@@ -571,22 +704,22 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
     optionEscolaridad.value = 0
     optionEscolaridad.text = 'Seleccione una escolaridad'
     this.#escolaridad.appendChild(optionEscolaridad)
- 
+
     //Recorrido de las escolaridades para llenar el select
     try {
-    this.#escolaridades.forEach(escolaridad => {
-      const option = document.createElement('option')
-      option.value = escolaridad.id_escolaridad
-      option.text = escolaridad.descripcion
-      this.#escolaridad.appendChild(option)
-    })
-  } catch (error) {
-    console.error('Error al obtener datos de la API:', error)
-  }
+      this.#escolaridades.forEach(escolaridad => {
+        const option = document.createElement('option')
+        option.value = escolaridad.id_escolaridad
+        option.text = escolaridad.descripcion
+        this.#escolaridad.appendChild(option)
+      })
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
 
     //Limpiar el select de ocupaciones
     this.#ocupacion.innerHTML = ''
-    
+
 
     //Creacion de un option para el select
     const optionOcupacion = document.createElement('option')
@@ -597,15 +730,15 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
 
     //Recorrido de las ocupaciones para llenar el select
     try {
-    this.#ocupaciones.forEach(ocupacion => {
-      const option = document.createElement('option')
-      option.value = ocupacion.id_ocupacion
-      option.text = ocupacion.descripcion_ocupacion
-      this.#ocupacion.appendChild(option)
-    })
-  } catch (error) {
-    console.error('Error al obtener datos de la API:', error)
-  }
+      this.#ocupaciones.forEach(ocupacion => {
+        const option = document.createElement('option')
+        option.value = ocupacion.id_ocupacion
+        option.text = ocupacion.descripcion_ocupacion
+        this.#ocupacion.appendChild(option)
+      })
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
 
     //Obtencion de los datos del promovente y llenado de los inputs
     this.#nombre.value = this.#promovente.nombre
@@ -613,15 +746,13 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
     this.#apellidoMaterno.value = this.#promovente.apellido_materno
     this.#edad.value = this.#promovente.edad
     this.#telefono.value = this.#promovente.telefono
-    this.#sexo.value = this.#promovente.id_genero
-    
-    
-   // this.#etnia.value = this.#promovente.promovente.etnia.id_etnia
-   // this.#escolaridad.value = this.#promovente.promovente.escolaridad.id_escolaridad
-   // this.#ocupacion.value = this.#promovente.promovente.ocupacion.id_ocupacion
+   // this.#sexo.value = this.#promovente.id_genero
+    // this.#etnia.value = this.#promovente.promovente.etnia.id_etnia
+    // this.#escolaridad.value = this.#promovente.promovente.escolaridad.id_escolaridad
+    // this.#ocupacion.value = this.#promovente.promovente.ocupacion.id_ocupacion
 
 
-     //
+    //
     if (this.#promovente.promovente.español === true) {
       this.#españolRadioYes.checked = true
     } else {
@@ -751,7 +882,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       if (espapñolRadioNo === false && espapñolRadioYes === false) {
         throw new ValidationError('Por favor seleccione si habla español o no.')
       }
- 
+
 
       //Verificacion de que si el select de etnia esta vacio
       if (etnia === '0') {
@@ -817,7 +948,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       return false
     }
   }
-  
+
   //Busqueda de codigo postal
   async searchCP() {
     try {
@@ -838,7 +969,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       this.#ciudad.innerHTML = '';
       this.#ciudad.value = data.ciudad.nombre_ciudad
       this.#colonia.innerHTML = '';
-     
+
       //Creacion de un option para el select
       const option = document.createElement('option')
       option.value = 0
@@ -873,7 +1004,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
       })
       this.dispatchEvent(event)
     })
- 
+
     //Añadir un evento al boton de atras 
     document.addEventListener('tab-change', event => {
       const tabId = event.detail.tabId
@@ -883,7 +1014,7 @@ if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }
-      if(this.#procesoSelecionado !==null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial){
+      if (this.#procesoSelecionado !== null && this.#procesoSelecionado.id_proceso_judicial !== this.registroTab.proceso.id_proceso_judicial) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
       }

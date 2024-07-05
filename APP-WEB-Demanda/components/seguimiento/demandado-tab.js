@@ -3,7 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model.js'
 //import '../codigo-postal/codigo-postal.js'
 
- 
+
 
 export class DemandadoTab extends HTMLElement {
   //Variables de la clase
@@ -108,7 +108,7 @@ export class DemandadoTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-    
+
     //Componentes del registro y promovente
     this.registroTab = document.querySelector('registro-full-tab')
     this.promoventeTab = document.querySelector('promovente-full-tab')
@@ -129,7 +129,7 @@ export class DemandadoTab extends HTMLElement {
       }
       this.searchCP()
     })
-     await this.campos()
+    await this.campos()
   }
   //Constructor de la clase
   constructor() {
@@ -144,45 +144,64 @@ export class DemandadoTab extends HTMLElement {
   //Metodo que inicializa los datos del imputads, vrianles,etc
   async init() {
     this.#api = new APIModel()
-    //Obtencion de los generos
-    const { generos } = await this.#api.getGeneros2()
-    //Asignacion de los generos
-    this.#generos = generos
-
+    this.datosGeneros()
     this.manageFormFields()
-
     this.fillInputs()
-
-    //Obtencion del genero actual
-    const { genero } = await this.#api.getGeneroByID(this.#demandado.id_genero)
-    //Asignacion del genero actual
-    this.#generoActual = genero
-
-    //Creacion de un option para el genero actual
-    const option = document.createElement('option')
-    option.value = this.#generoActual.id_genero
-    option.text = this.#generoActual.descripcion_genero
-    const optiones = this.#sexo.options
-    let existe = false
-
-    //Se recorren los generos para verificar si existe el genero actual
-    for (let i = 0; i < optiones.length; i++) {
-      if (optiones[i].value === option.value) {
-        existe = true
-        break
-      }
+    this.generoActual()
+  }
+  async datosGeneros() {
+    //Obtencion de los generos
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      //Asignacion de los generos
+      this.#generos = generos
+    } catch (error) {
+      //  console.error('Error al obtener datos de la API:', error);
     }
 
-    //Si existe el genero actual se agrega al select
-    if (existe) {
-      this.#sexo.appendChild(option)
-    }
-
-    //Se asigna el valor del genero actual al select
-    this.#sexo.value = this.#generoActual.id_genero
 
   }
 
+  async generoActual() {
+    //Obtencion del genero actual
+    try {
+      console.log(this.#demandado)
+      const { genero } = await this.#api.getGeneroByID(this.#demandado.id_genero)
+      this.#generoActual = genero
+      console.log(this.#generoActual)
+      console.log(this.#generos)
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error)
+    }
+
+    if (this.#generos === undefined) {
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      this.#sexo.appendChild(option)
+      this.#sexo.value = this.#generoActual.id_genero
+    } else {
+      //Verificar si el genero ya esta la lista de generos
+      let existe = false
+      for (let i = 0; i < this.#generos.length; i++) {
+        if (this.#generos[i].id_genero === this.#generoActual.id_genero) {
+          existe = true
+          break
+        }
+      }
+
+      if (existe === false) {
+        const option = document.createElement('option')
+        option.value = this.#generoActual.id_genero
+        option.text = this.#generoActual.descripcion_genero
+        this.#sexo.appendChild(option)
+        this.#sexo.value = this.#generoActual.id_genero
+      }
+    }
+
+
+
+  }
   //Metodo que maneja los campos del formulario
   manageFormFields() {
 
@@ -279,7 +298,7 @@ export class DemandadoTab extends HTMLElement {
 
     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     apellidoPaternoInput.addEventListener('input', function () {
-       
+
       // Expresión regular para validar el apellido
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
       // Si el campo contiene caracteres no válidos, lanzar una excepción
@@ -322,7 +341,7 @@ export class DemandadoTab extends HTMLElement {
       }
     });
 
-     // Agregar un evento 'input' al campo de entrada para validar en tiempo real
+    // Agregar un evento 'input' al campo de entrada para validar en tiempo real
     edadInput.addEventListener('input', function () {
       var edadPattern = /^\d+$/;
       if (!edadPattern.test(edadInput.value)) {
@@ -355,7 +374,7 @@ export class DemandadoTab extends HTMLElement {
   //Metodo que senecarga de llenar los campos del formulario con los datos del demandado ,etc
   fillInputs() {
     //Limpia del select de generos
-    this.#generos.innerHTML = ''
+    this.#sexo.innerHTML = ''
 
     //Creacion de un option para el select de generos
     const optionGenero = document.createElement('option')
@@ -363,13 +382,17 @@ export class DemandadoTab extends HTMLElement {
     optionGenero.text = 'Seleccione un género'
     this.#sexo.appendChild(optionGenero)
 
-    //Se recorren los generos para agregarlos al select
-    this.#generos.forEach(genero => {
-      const option = document.createElement('option')
-      option.value = genero.id_genero
-      option.text = genero.descripcion_genero
-      this.#sexo.appendChild(option)
-    })
+    try {
+      //Se recorren los generos para agregarlos al select
+      this.#generos.forEach(genero => {
+        const option = document.createElement('option')
+        option.value = genero.id_genero
+        option.text = genero.descripcion_genero
+        this.#sexo.appendChild(option)
+      })
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error);
+    }
 
     //Se obtiene los datos del demandado y su domicilio y se agregan a las variables de la clase
     this.#demandado = this.registroTab.data.demandado
@@ -380,7 +403,7 @@ export class DemandadoTab extends HTMLElement {
     this.#apellidoMaterno.value = this.#demandado.apellido_materno
     this.#edad.value = this.#demandado.edad
     this.#telefono.value = this.#demandado.telefono
-    this.#sexo.value = this.#demandado.id_genero
+   //  this.#sexo.value = this.#demandado.id_genero
 
 
     this.#calle.value = this.#demandadoDomicilio.calle_domicilio
@@ -423,10 +446,10 @@ export class DemandadoTab extends HTMLElement {
 
   }
 
-//Metodo que se encarga de validar los campos del formulario
+  //Metodo que se encarga de validar los campos del formulario
   validateInputs() {
-    try { 
-   //Obtenemos los valores de los campos del formulario
+    try {
+      //Obtenemos los valores de los campos del formulario
       const nombre = this.#nombre.value
       const apellidoPaterno = this.#apellidoPaterno.value
       const apellidoMaterno = this.#apellidoMaterno.value
@@ -442,7 +465,7 @@ export class DemandadoTab extends HTMLElement {
       var edadPattern = /^\d+$/;
 
 
-    //Validacion del nombre si esta vacio, si tiene mas de 50 caracteres, si solo tiene letras
+      //Validacion del nombre si esta vacio, si tiene mas de 50 caracteres, si solo tiene letras
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -524,7 +547,7 @@ export class DemandadoTab extends HTMLElement {
           throw new ValidationError('El número interior solo permite números, verifique su respuesta.')
         }
       }
-//Validacion de la colonia si esta vacia
+      //Validacion de la colonia si esta vacia
       if (colonia === '0') {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
@@ -544,10 +567,10 @@ export class DemandadoTab extends HTMLElement {
     }
   }
 
-//Metodo encargado de buscar el codigo postal y la informaicon relacionada a este
+  //Metodo encargado de buscar el codigo postal y la informaicon relacionada a este
   async searchCP() {
     try {
-    //Se obtiene la informacion del codigo postal
+      //Se obtiene la informacion del codigo postal
       const { colonias: data } = await this.#api.getDomicilioByCP(
         this.#cp.value
       )
@@ -601,10 +624,10 @@ export class DemandadoTab extends HTMLElement {
     })
     //Metodo encargado de la gestion de los cambios del tabs
     document.addEventListener('tab-change', event => {
-      const tabId = event.detail.tabId      
-        //Estas verificacion es de igual manera como en codigos pasados es con el fin de validar si se ha seleccionado 
-        //ahora en este caso un proceso judicial , esto con el fin de cargar los datos del demandado , caso contrario donde se seleccione 
-        //un nuevo proceso judicial se limpiaran los campos del formulario y se cargaran los datos del nuevo proceso
+      const tabId = event.detail.tabId
+      //Estas verificacion es de igual manera como en codigos pasados es con el fin de validar si se ha seleccionado 
+      //ahora en este caso un proceso judicial , esto con el fin de cargar los datos del demandado , caso contrario donde se seleccione 
+      //un nuevo proceso judicial se limpiaran los campos del formulario y se cargaran los datos del nuevo proceso
       if (this.#procesoSelecionado === null) {
         this.#procesoSelecionado = this.registroTab.proceso
         this.init()
@@ -617,7 +640,7 @@ export class DemandadoTab extends HTMLElement {
     })
   }
 
-   //Metodo que se encarga de mostrar un modal
+  //Metodo que se encarga de mostrar un modal
   #showModal(message, title, onCloseCallback) {
     const modal = document.querySelector('modal-warning')
     modal.setOnCloseCallback(() => { })

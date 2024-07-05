@@ -1,5 +1,5 @@
 import { APIModel } from '../../models/api.model.js'
- 
+
 export class AsesoradoTab extends HTMLElement {
 
   //Variables privadas  
@@ -51,7 +51,7 @@ export class AsesoradoTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-    
+
     //Se obtiene la asesoria de la sesion esto es con respecto a la busqueda
     this.#asesoria = JSON.parse(sessionStorage.getItem('asesoria'))
 
@@ -60,21 +60,61 @@ export class AsesoradoTab extends HTMLElement {
     // Se obtiene la informacion de la API
     this.#api = new APIModel()
     await this.campos()
-
-    //Se obtiene el genero de la persona 
-    this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero).then(data => {
-      this.#generoActual = data.genero
-    })
-
-    //Se obtiene los generos existentes
-    this.#api.getGeneros2().then(data => {
-      this.#generos = data.generos
-
-      this.manageFormFields()
-      this.fillInputs()
-    })
+    await this.generos()
+    this.manageFormFields()
+    this.fillInputs()
+    await this.generoActual()
 
   }
+
+   async generoActual(){
+      //Obtencion del genero actual
+      try {
+        const { genero } = await this.#api.getGeneroByID(this.#asesoria.persona.genero.id_genero)
+        this.#generoActual = genero
+        console.log(this.#generos)
+      } catch (error) {
+        console.error('Error al obtener datos de la API:', error)
+      }
+    
+     if (this.#generos === undefined) { 
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      this.#sexo.appendChild(option)
+      this.#sexo.value = this.#generoActual.id_genero
+     }else{
+       //Verificar si el genero ya esta la lista de generos
+       let existe = false
+       for (let i = 0; i < this.#generos.length; i++) {
+          if (this.#generos[i].id_genero === this.#generoActual.id_genero) {
+            existe = true
+            break
+          }
+        }
+        
+        if (existe===false) {
+          const option = document.createElement('option')
+          option.value = this.#generoActual.id_genero
+          option.text = this.#generoActual.descripcion_genero
+          this.#sexo.appendChild(option)
+          this.#sexo.value = this.#generoActual.id_genero
+        }
+     }
+   }
+
+  async generos() {
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      this.#generos = generos
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+
+
+
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('../assets/turnar/asesorado-tab.html')).text();
@@ -98,7 +138,7 @@ export class AsesoradoTab extends HTMLElement {
     this.#apellidoPaterno.value = this.#asesoria.persona.apellido_paterno
     this.#apellidoMaterno.value = this.#asesoria.persona.apellido_materno
     this.#edad.value = this.#asesoria.persona.edad
-
+ try{
     //Se rellena el select con los generos
     this.#generos.forEach(genero => {
       const option = document.createElement('option')
@@ -106,13 +146,17 @@ export class AsesoradoTab extends HTMLElement {
       option.text = genero.descripcion_genero
       this.#sexo.appendChild(option)
     })
-
+  }catch(error){
+    console.error(error)
+  }
+/*
     const option = document.createElement('option')
     option.value = this.#generoActual.id_genero
     option.text = this.#generoActual.descripcion_genero
     this.#sexo.appendChild(option)
 
     this.#sexo.value = this.#generoActual.id_genero
+   */
   }
 
 
@@ -152,7 +196,7 @@ export class AsesoradoTab extends HTMLElement {
             // Si el campo contiene caracteres no válidos, lanzar una excepción
 
             const modal = document.querySelector('modal-warning')
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El nombre solo permite letras, verifique su respuesta.'
             modal.title = 'Error de validación'
@@ -161,7 +205,7 @@ export class AsesoradoTab extends HTMLElement {
           } else if (nombreInput.value.length > 50) {
             // Si el campo tiene más de 50 caracteres, lanzar una excepción
             const modal = document.querySelector('modal-warning')
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
             modal.title = 'Error de validación'
@@ -183,14 +227,14 @@ export class AsesoradoTab extends HTMLElement {
         if (apellidoPaternoInput.value !== '') {
           if (!apellidoPattern.test(apellidoPaternoInput.value)) {
             const modal = document.querySelector('modal-warning');
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
             modal.title = 'Error de validación';
             modal.open = true;
           } else if (apellidoPaternoInput.value.length > 50) {
             const modal = document.querySelector('modal-warning');
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
             modal.title = 'Error de validación';
@@ -213,14 +257,14 @@ export class AsesoradoTab extends HTMLElement {
         if (apellidoMaternoInput.value !== '') {
           if (!apellidoPattern.test(apellidoMaternoInput.value)) {
             const modal = document.querySelector('modal-warning');
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
             modal.title = 'Error de validación';
             modal.open = true;
           } else if (apellidoMaternoInput.value.length > 50) {
             const modal = document.querySelector('modal-warning');
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
             modal.title = 'Error de validación';
@@ -244,14 +288,14 @@ export class AsesoradoTab extends HTMLElement {
           if (!edadPattern.test(edadInput.value)) {
             if (edadInput.value === '') {
               const modal = document.querySelector('modal-warning');
-              modal.setOnCloseCallback(() => {});
+              modal.setOnCloseCallback(() => { });
 
               modal.message = 'La edad no puede estar vacía, por favor ingresela.';
               modal.title = 'Error de validación';
               modal.open = true;
             } else {
               const modal = document.querySelector('modal-warning');
-              modal.setOnCloseCallback(() => {});
+              modal.setOnCloseCallback(() => { });
 
               modal.message = 'La edad solo permite números, verifique su respuesta.';
               modal.title = 'Error de validación';
@@ -259,7 +303,7 @@ export class AsesoradoTab extends HTMLElement {
             }
           } else if (edadInput.value > 200) {
             const modal = document.querySelector('modal-warning');
-            modal.setOnCloseCallback(() => {});
+            modal.setOnCloseCallback(() => { });
 
             modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
             modal.title = 'Error de validación';
@@ -275,7 +319,7 @@ export class AsesoradoTab extends HTMLElement {
 
 
   //Metodo encargado de activar los eventos del boton y el checkbox
-async  campos() {
+  async campos() {
     // Se obtienen los elementos del DOM
     this.btnNext = this.shadowRoot.getElementById('btn-asesorado-next')
     this.editCbx = this.shadowRoot.getElementById('cbx-editable-asesorado')

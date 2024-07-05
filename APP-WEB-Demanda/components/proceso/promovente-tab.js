@@ -3,7 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model.js'
 //  import '../codigo-postal/codigo-postal.js'
 
- 
+
 export class PromoventeTab extends HTMLElement {
 
   //Variables de la clase 
@@ -117,29 +117,29 @@ export class PromoventeTab extends HTMLElement {
     const templateContent = await this.fetchTemplate();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(templateContent.content.cloneNode(true));
-     //Componentes 
-     this.registroTab = document.querySelector('registro-full-tab')
+    //Componentes 
+    this.registroTab = document.querySelector('registro-full-tab')
 
-     //Variable que se encarga de buscar el codigo postal o que almacena el html con el id buscar-cp
-     this.formCP = this.shadowRoot.getElementById('buscar-cp')
- 
-     //Asignacion de eventos a la variable formCP para la busqueda del codigo postal y la informacion del mismo
-     this.formCP.addEventListener('click', (event) => {
-       event.preventDefault();
-       if (
-         !this.#cp.value ||
-         this.#cp.value.length !== 5 ||
-         //Validacion de que el codigo postal sea un numero
-         isNaN(this.#cp.value)
-       ) {
-         //Mensaje de advertencia si el codigo postal no es valido
-         this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
-         return
-       }
-       //Llamado al metodo searchCP
-       this.searchCP()
-     })
-     await this.campos()
+    //Variable que se encarga de buscar el codigo postal o que almacena el html con el id buscar-cp
+    this.formCP = this.shadowRoot.getElementById('buscar-cp')
+
+    //Asignacion de eventos a la variable formCP para la busqueda del codigo postal y la informacion del mismo
+    this.formCP.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (
+        !this.#cp.value ||
+        this.#cp.value.length !== 5 ||
+        //Validacion de que el codigo postal sea un numero
+        isNaN(this.#cp.value)
+      ) {
+        //Mensaje de advertencia si el codigo postal no es valido
+        this.#showModal('El código postal debe tener 5 dígitos', 'Advertencia')
+        return
+      }
+      //Llamado al metodo searchCP
+      this.searchCP()
+    })
+    await this.campos()
 
   }
   //Constructor de la clase
@@ -150,7 +150,7 @@ export class PromoventeTab extends HTMLElement {
     this.style.display = 'none'
     this.init2()
 
-   
+
   }
 
 
@@ -205,9 +205,12 @@ export class PromoventeTab extends HTMLElement {
       modal.open = true
 
     }
-    const { generos } = await this.#api.getGeneros2()
-    this.#generos = generos
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      this.#generos = generos
+    } catch (error) {
 
+    }
   }
 
   //Metodo que se encarga de inicializar diferentes variables y metodos
@@ -219,10 +222,49 @@ export class PromoventeTab extends HTMLElement {
     this.manageFormFields()
     //Llamado al metodo que se encarga de llenar los campos del formulario
     this.fillInputs()
+    this.generoActual()
     //Llamado al metodo que se encarga de manejar los campos de texto y select genero
     this.manejadorEntradaTextoYSelect()
   }
-
+ 
+  async generoActual(){
+    // this.#promovente.genero.id_genero
+       //Obtencion del genero actual
+       try {
+        const { genero } = await this.#api.getGeneroByID(this.#promovente.genero.id_genero)
+        this.#generoActual = genero
+     //   console.log(this.#generos)
+      } catch (error) {
+        console.error('Error al obtener datos de la API:', error)
+      }
+    
+     if (this.#generos === undefined) { 
+      const option = document.createElement('option')
+      option.value = this.#generoActual.id_genero
+      option.text = this.#generoActual.descripcion_genero
+      this.#sexo.appendChild(option)
+      this.#sexo.value = this.#generoActual.id_genero
+     }else{
+       //Verificar si el genero ya esta la lista de generos
+       let existe = false
+       for (let i = 0; i < this.#generos.length; i++) {
+          if (this.#generos[i].id_genero === this.#generoActual.id_genero) {
+            existe = true
+            break
+          }
+        }
+        
+        if (existe===false) {
+          const option = document.createElement('option')
+          option.value = this.#generoActual.id_genero
+          option.text = this.#generoActual.descripcion_genero
+          this.#sexo.appendChild(option)
+          this.#sexo.value = this.#generoActual.id_genero
+        }
+     }
+  
+  
+  }
 
   async manejadorEntradaTextoYSelect() {
     //Variables de entrada de texto para asignarle un evento
@@ -238,7 +280,7 @@ export class PromoventeTab extends HTMLElement {
         // Si el campo contiene caracteres no válidos, lanzar una excepción
 
         const modal = document.querySelector('modal-warning')
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
@@ -261,14 +303,14 @@ export class PromoventeTab extends HTMLElement {
 
       if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoPaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -281,14 +323,14 @@ export class PromoventeTab extends HTMLElement {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
       if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -302,14 +344,14 @@ export class PromoventeTab extends HTMLElement {
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad no puede estar vacía, por favor ingresela.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -317,7 +359,7 @@ export class PromoventeTab extends HTMLElement {
         }
       } else if (edadInput.value > 200) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -325,32 +367,7 @@ export class PromoventeTab extends HTMLElement {
       }
     });
 
-    //Obtencion del genero actual del promovente y asignacion al select
-    const { genero } = await this.#api.getGeneroByID(this.#promovente.genero.id_genero)
-    this.#generoActual = genero
 
-    //Opcion de genero actual
-    const option = document.createElement('option')
-    option.value = this.#generoActual.id_genero
-    option.text = this.#generoActual.descripcion_genero
-    const optiones = this.#sexo.options
-    let existe = false
-
-    //Se verifica si el genero actual ya existe en el select
-    for (let i = 0; i < optiones.length; i++) {
-      if (optiones[i].value === option.value) {
-        existe = true
-        break
-      }
-    }
-
-    //Con el fin de si existe se agrega al select
-    if (existe) {
-      this.#sexo.appendChild(option)
-    }
-
-    //Se asigna el genero actual al select
-    this.#sexo.value = this.#generoActual.id_genero
   }
 
   //Metodo que se encarga de llenar los campos del formulario
@@ -381,13 +398,17 @@ export class PromoventeTab extends HTMLElement {
     option2.text = 'Seleccione un género'
     this.#sexo.appendChild(option2)
 
-    //Se recorre el array de generos y se agregan al select
-    this.#generos.forEach(genero => {
-      const option = document.createElement('option')
-      option.value = genero.id_genero
-      option.text = genero.descripcion_genero
-      this.#sexo.appendChild(option)
-    })
+    try {
+      //Se recorre el array de generos y se agregan al select
+      this.#generos.forEach(genero => {
+        const option = document.createElement('option')
+        option.value = genero.id_genero
+        option.text = genero.descripcion_genero
+        this.#sexo.appendChild(option)
+      })
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error);
+    }
 
     //Limpia del select escolaridad
     this.#escolaridad.innerHTML = ''
@@ -436,7 +457,7 @@ export class PromoventeTab extends HTMLElement {
     this.#apellidoMaterno.value = this.#promovente.apellido_materno
     this.#edad.value = this.#promovente.edad
     this.#telefono.value = this.#promovente.telefono
-    this.#sexo.value = this.#promovente.genero.id_genero
+   //  this.#sexo.value = this.#promovente.genero.id_genero
 
 
     this.#calle.value = this.#promventeDomicilio.calle_domicilio
@@ -514,7 +535,7 @@ export class PromoventeTab extends HTMLElement {
         // Si el campo contiene caracteres no válidos, lanzar una excepción
 
         const modal = document.querySelector('modal-warning')
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
@@ -523,7 +544,7 @@ export class PromoventeTab extends HTMLElement {
       } else if (nombreInput.value.length > 50) {
         // Si el campo tiene más de 50 caracteres, lanzar una excepción
         const modal = document.querySelector('modal-warning')
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
         modal.title = 'Error de validación'
@@ -537,14 +558,14 @@ export class PromoventeTab extends HTMLElement {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
       if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoPaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -559,14 +580,14 @@ export class PromoventeTab extends HTMLElement {
       var apellidoPattern = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']+$/;
       if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -583,14 +604,14 @@ export class PromoventeTab extends HTMLElement {
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad no puede estar vacía, por favor ingresela.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -598,7 +619,7 @@ export class PromoventeTab extends HTMLElement {
         }
       } else if (edadInput.value > 200) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -612,14 +633,14 @@ export class PromoventeTab extends HTMLElement {
       if (!telefonoPattern.test(telefonoInput.value)) {
         if (telefonoInput.value === '') {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'El teléfono no puede estar vacío, por favor ingréselo.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'El teléfono solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -627,7 +648,7 @@ export class PromoventeTab extends HTMLElement {
         }
       } else if (telefonoInput.value.length > 10) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El teléfono no puede tener más de 10 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
