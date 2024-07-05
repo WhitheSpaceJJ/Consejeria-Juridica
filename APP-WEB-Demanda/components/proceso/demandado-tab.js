@@ -3,7 +3,7 @@ import { validateNonEmptyFields } from '../../lib/utils.js'
 import { APIModel } from '../../models/api.model.js'
 //import '../codigo-postal/codigo-postal.js'
 
- 
+
 
 export class DemandadoTab extends HTMLElement {
 
@@ -52,7 +52,7 @@ export class DemandadoTab extends HTMLElement {
   static get observedAttributes() {
     return ['id', 'data']
   }
- 
+
   //Metodo que obtiene el id del componente
   get id() {
     return this.getAttribute('id')
@@ -99,7 +99,7 @@ export class DemandadoTab extends HTMLElement {
     this.setAttribute('data', value)
   }
 
- 
+
   async fetchTemplate() {
     const template = document.createElement('template');
     const html = await (await fetch('./components/proceso/demandado-tab.html')).text();
@@ -137,7 +137,7 @@ export class DemandadoTab extends HTMLElement {
     this.id = 'demandado'
     this.style.display = 'none'
     this.init2()
-    
+
   }
 
   //Metodo que inicializa las variables de la clase, se obtienen los datos de la API,etc
@@ -145,7 +145,7 @@ export class DemandadoTab extends HTMLElement {
     //Inizializar la variable api
     this.#api = new APIModel()
     //Se obtienen los datos de la API
-  await  this.obtencionDatos()
+    await this.obtencionDatos()
     //Se inicializan los campos del formulario
     this.manageFormFields()
     //Se llenan los campos del formulario
@@ -156,14 +156,26 @@ export class DemandadoTab extends HTMLElement {
 
   async obtencionDatos() {
     // Se obtienen los generos de la API , los generos que se encuentren activos
-    const { generos } = await this.#api.getGeneros2()
-    //Se almacenan los generos en la variable generos
-    this.#generos = generos
+    try {
+      const { generos } = await this.#api.getGeneros2()
+      //Se almacenan los generos en la variable generos
+      this.#generos = generos
+    } catch (error) {
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al cargar los datos de generos para asignacion del demandado, por favor intenta de nuevo habilitarlos o ingresar nuevos datos.'
+      modal.title = 'Error'
+      modal.open = true
+    }
   }
 
   //Metodo que maneja los eventos inputs de los campos del formulario
   manejadorEntradaTexto() {
-   
+
     //Asingacion de variables a los campos del formulario
     var nombreInput = this.#nombre;
     var apellidoPaternoInput = this.#apellidoPaterno;
@@ -178,7 +190,7 @@ export class DemandadoTab extends HTMLElement {
         // Si el campo contiene caracteres no válidos, lanzar una excepción
 
         const modal = document.querySelector('modal-warning')
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El nombre solo permite letras, verifique su respuesta.'
         modal.title = 'Error de validación'
@@ -187,7 +199,7 @@ export class DemandadoTab extends HTMLElement {
       } else if (nombreInput.value.length > 50) {
         // Si el campo tiene más de 50 caracteres, lanzar una excepción
         const modal = document.querySelector('modal-warning')
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El nombre no puede tener más de 50 caracteres, por favor ingréselo correctamente.'
         modal.title = 'Error de validación'
@@ -200,14 +212,14 @@ export class DemandadoTab extends HTMLElement {
 
       if (!apellidoPattern.test(apellidoPaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoPaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido paterno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -220,14 +232,14 @@ export class DemandadoTab extends HTMLElement {
 
       if (!apellidoPattern.test(apellidoMaternoInput.value)) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno solo permite letras, verifique su respuesta.';
         modal.title = 'Error de validación';
         modal.open = true;
       } else if (apellidoMaternoInput.value.length > 50) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'El apellido materno no puede tener más de 50 caracteres, por favor ingréselo correctamente.';
         modal.title = 'Error de validación';
@@ -241,14 +253,14 @@ export class DemandadoTab extends HTMLElement {
       if (!edadPattern.test(edadInput.value)) {
         if (edadInput.value === '') {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad no puede estar vacía, por favor ingresela.';
           modal.title = 'Error de validación';
           modal.open = true;
         } else {
           const modal = document.querySelector('modal-warning');
-          modal.setOnCloseCallback(() => {});
+          modal.setOnCloseCallback(() => { });
 
           modal.message = 'La edad solo permite números, verifique su respuesta.';
           modal.title = 'Error de validación';
@@ -256,7 +268,7 @@ export class DemandadoTab extends HTMLElement {
         }
       } else if (edadInput.value > 200) {
         const modal = document.querySelector('modal-warning');
-        modal.setOnCloseCallback(() => {});
+        modal.setOnCloseCallback(() => { });
 
         modal.message = 'La edad no puede ser mayor a 200 años, por favor ingresela verifique su respuesta.';
         modal.title = 'Error de validación';
@@ -307,18 +319,18 @@ export class DemandadoTab extends HTMLElement {
 
   }
 
-  
+
   //Metodo que valida los campos del formulario  
   validateInputs() {
     try {
 
-    //Se valida que se haya seleccionado un turno con respecto al componente registro-tab
+      //Se valida que se haya seleccionado un turno con respecto al componente registro-tab
       if (this.registroTab.isComplete === false) {
         this.#showModal('No se ha seleccionado un turno, por favor seleccione uno.', 'Error de validación')
         return false
       }
 
-//Se valida que se haya ingresado los datos del promovente con respecto al componente promovente-tab
+      //Se valida que se haya ingresado los datos del promovente con respecto al componente promovente-tab
       if (this.promoventeTab.isComplete === false) {
         this.#showModal('No se han ingresado los datos del promovente, por favor ingreselos.', 'Error de validación')
         return false
@@ -339,8 +351,8 @@ export class DemandadoTab extends HTMLElement {
       var edadPattern = /^\d+$/;
 
 
-//Se verifica que los campos no esten vacios y que cumplan con las validaciones, en caso contrario se lanza una excepcion
-//validacion que el nombre no este vacio, que no tenga mas de 50 caracteres y que solo permita letras
+      //Se verifica que los campos no esten vacios y que cumplan con las validaciones, en caso contrario se lanza una excepcion
+      //validacion que el nombre no este vacio, que no tenga mas de 50 caracteres y que solo permita letras
       if (nombre === '') {
         throw new ValidationError('El nombre no puede estar vacío, por favor ingréselo.')
       } else if (nombre.length > 50) {
@@ -431,7 +443,7 @@ export class DemandadoTab extends HTMLElement {
         throw new ValidationError('Por favor busque una colonia y selecciónela, por favor.')
       }
 
-   //En caso de que se cumplan todas las validaciones se retorna true
+      //En caso de que se cumplan todas las validaciones se retorna true
       return true
     } catch (error) {
       //Manejo de excepciones
@@ -447,8 +459,8 @@ export class DemandadoTab extends HTMLElement {
       return false
     }
   }
-  
- //Metodo qencargado de buscar el codigo postal y llenar los campos de estado, municipio, ciudad y colonia
+
+  //Metodo qencargado de buscar el codigo postal y llenar los campos de estado, municipio, ciudad y colonia
   async searchCP() {
     try {
       //Se obtienen los datos de la API
@@ -564,7 +576,7 @@ export class DemandadoTab extends HTMLElement {
     modal.setOnCloseCallback(onCloseCallback)
   }
 
- 
+
 }
 
 customElements.define('demandado-full-tab', DemandadoTab)

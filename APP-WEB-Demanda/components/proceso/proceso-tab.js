@@ -147,8 +147,20 @@ export class ProcesoTab extends HTMLElement {
   //Metodo para la obtencion de los datos y asignacion de los mismos a las variables correspondientes
   async obtencionDatos() {
     //Obtenemos los datos de los juzgados
+    try{
     const juzgados = await this.#api.getJuzgados2()
     this.#juzgados = juzgados
+    }catch(error){
+      const modal = document.querySelector('modal-warning')
+      modal.setOnCloseCallback(() => {
+        if (modal.open === 'false') {
+          window.location = '/index.html'
+        }
+      });
+      modal.message = 'Error al cargar los datos de juzgados, por favor intenta de nuevo habilitarlos o ingresar nuevos datos.'
+      modal.title = 'Error'
+      modal.open = true
+    }  
 
     //Obtenemos los datos de los distritos judiciales
     const distritosJudiciales = await this.#api.getDistritos()

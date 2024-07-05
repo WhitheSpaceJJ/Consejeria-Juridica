@@ -154,9 +154,14 @@ export class ProcesoTab extends HTMLElement {
     //Inicializacion de la api
     this.#api = new APIModel()
 
-    //Obtencion de los juzgados
+    //Obtencion de los juzgados 
+    try{
     const juzgados = await this.#api.getJuzgados()
     this.#juzgados = juzgados
+      
+    }catch(error){  
+      console.error(error)
+    }
 
     //Obtencion de los distritos judiciales
     const distritosJudiciales = await this.#api.getDistritos()
