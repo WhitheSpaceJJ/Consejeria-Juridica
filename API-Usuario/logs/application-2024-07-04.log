@@ -1,2 +1,24 @@
 2024-07-04 00:41:21 [32minfo[39m: Servidor escuchando en el puerto 3002
 2024-07-04 00:46:27 [32minfo[39m: Servidor escuchando en el puerto 3002
+2024-07-04 12:36:56 [32minfo[39m: Servidor escuchando en el puerto 3002
+2024-07-04 22:04:13 [32minfo[39m: Servidor escuchando en el puerto 3002
+2024-07-04 22:04:45 [32minfo[39m: Request: GET /usuarios/usuario?correo=defensoria.testing.usuario1@gmail.com&password=defensoria1 - Headers: {"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxMCwibm9tYnJlIjoiRFBTIFVzdWFyaW8gRGlleiIsImNvcnJlbyI6ImRlZmVuc29yaWEudGVzdGluZy51c3VhcmlvMTBAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkenlDblpaYkNlQi5ONmNuZDVUNXNhT0cySjJMTzhXdS44Wm9ESy83NjZoeVBQQ1kvek1vU2EiLCJpZF90aXBvdXNlciI6MSwiaWRfZGlzdHJpdG9fanVkaWNpYWwiOjEwLCJpZF9lbXBsZWFkbyI6bnVsbCwiZXN0YXR1c19nZW5lcmFsIjoiQUNUSVZPIiwicGVybWlzb3MiOlsiQUxMX1NBIiwiQUxMX1NEIl0sImlhdCI6MTcxODU2MjY0NCwiZXhwIjoxNzE4NTkxNDQ0fQ.CtTy82PDDdqkX5pDe6PjNminUr9nHz7VbnKF-7owX4Y","user-agent":"PostmanRuntime/7.39.0"} - Query: {"correo":"defensoria.testing.usuario1@gmail.com","password":"defensoria1"} - Body: {}
+2024-07-04 22:04:45 [32minfo[39m: Verificando token
+2024-07-04 22:04:45 [32minfo[39m: /usuario
+2024-07-04 22:04:45 [32minfo[39m: Se evalua la ruta de usuario o recuperacion, esto es para el caso de que no se tenga token, osea inicio de sesion o recuperacion de contraseña
+2024-07-04 22:04:45 [32minfo[39m: Se permite el acceso a la ruta de usuario o recuperacion
+2024-07-04 22:04:45 [32minfo[39m: Se continua con el siguiente middleware
+2024-07-04 22:04:45 [32minfo[39m: Petición para obtener un usuario por su correo y contraseña
+2024-07-04 22:04:45 [32minfo[39m: Se manda a llamar la función obtenerUsuarioCorreoPassword, en base al correo y contraseña obtenidos en la petición
+2024-07-04 22:04:45 [32minfo[39m: Obteniendo el usuario por correo y contraseña
+2024-07-04 22:04:45 [32minfo[39m: Usuario obtenido correctamente
+2024-07-04 22:04:45 [32minfo[39m: Se verifica si el usuario es diferente de null o undefined
+2024-07-04 22:04:45 [32minfo[39m: Se verifica si la contraseña es válida
+2024-07-04 22:04:45 [32minfo[39m: La contraseña es válida
+2024-07-04 22:04:45 [32minfo[39m: Se obtienen los permisos del usuario
+2024-07-04 22:04:45 [32minfo[39m: Obteniendo permisos de un usuario en base a su id
+2024-07-04 22:04:45 [32minfo[39m: Permisos obtenidos
+2024-07-04 22:04:45 [32minfo[39m: Se verifica el resultado de la petición de obtener un usuario por su correo y contraseña
+2024-07-04 22:04:45 [32minfo[39m: Usuario obtenido correctamente
+2024-07-04 22:04:45 [32minfo[39m: Se verifica si el usuario tiene permisos
+2024-07-04 22:04:45 [32minfo[39m: El usuario tiene permisos, se genera un token
